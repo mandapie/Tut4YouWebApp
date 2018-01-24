@@ -1,0 +1,25 @@
+<ui:composition template="/WEB-INF/templates/layout.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <ui:define name="title">Login</ui:define>
+    <ui:define name="content">
+        <h1>Login</h1>
+        <c:if test="#{!empty param['error'] and param['error']}">
+            <p class="error">There was an error authenticating. You may want to try again</p>
+        </c:if>
+        <p>
+            Looks like you are not logged in to your account. You must do so to view your profile!
+        </p>
+        <p>
+            Not signed up with us? Register as a
+            <a href="/Tut4YouWebApp/authentications/registerStudent.xhtml">Student</a> or
+            <a href="/Tut4YouWebApp/authentications/registerTutor.xhtml">Tutor</a>
+            with us now!
+        </p>
+        <ui:debug hotkey='x'/>
+    </ui:define>
+</ui:composition>

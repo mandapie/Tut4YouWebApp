@@ -1,0 +1,39 @@
+<ui:composition template="/WEB-INF/templates/layout.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:b="http://bootsfaces.net/ui">
+    <ui:define name="title">Courses</ui:define>
+    <ui:define name="content">
+        <h1>Add Course</h1>
+        <b:panel title="Add a course" collapsible="false" look="info">
+            <b:form>
+                <b:row>
+                    <b:selectOneMenu span="6" label="Subject" value="#{addCourseBean.subject}">
+                        <f:selectItem itemLabel="select Subect..." noSelectionOption="true"/>
+                        <f:selectItems value="#{addCourseBean.subjectList}"
+                                       var="subject"
+                                       itemLabel="#{subject.subjectName}"
+                                       itemValue="#{subject}"/>
+                        
+                    </b:selectOneMenu>
+                </b:row>
+                <b:row>
+                    <b:column medium-screen="2">
+                        <h:outputLabel value="courseName"/>
+                    </b:column>
+                    <b:column medium-screen="4">
+                        <b:inputText id="cn" placeholder="Enter Course Name" required="true" requiredMessage="required" value="#{addCourseBean.course.courseName}">
+                        <b:message for="cn"/>
+                        </b:inputText>
+                    </b:column>  
+                </b:row>
+                <b:row>
+                    <b:commandButton span="2" value="Submit" look="primary" action="#{addCourseBean.addNewCourse}" />
+                </b:row>
+            </b:form>
+        </b:panel>
+        <ui:debug hotkey='x'/>
+    </ui:define>
+</ui:composition>

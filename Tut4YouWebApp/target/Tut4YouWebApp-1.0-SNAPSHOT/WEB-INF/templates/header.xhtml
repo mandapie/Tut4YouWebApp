@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+    <ui:composition>
+        <b:navBar brand="Home" brandHref="/Tut4YouWebApp/index.xhtml">
+            <b:navbarLinks>
+                <b:navLink value="Account" href="/Tut4YouWebApp/accounts/profile.xhtml"></b:navLink>
+                <b:navLink value="About" href="#"></b:navLink>
+            </b:navbarLinks>
+            
+            <c:choose>
+                <c:when test="#{userBean.studentAuthenticated}">
+                    <b:form styleClass="navbar-form navbar-right">
+                        <h:outputLabel value="Welcome back, #{userBean.student.firstName}!"/><span> </span>
+                        <b:commandButton action="#{userBean.logout}" value="Sign Out" look="success" iconAlign="right"/>
+                    </b:form>
+                </c:when>
+                <c:otherwise>
+                    <b:form id="login" onsubmit="document.getElementById('login').action='j_security_check';" styleClass="navbar-form navbar-right">
+                        <b:inputText name="j_username" placeholder="Email" fieldSize="sm"/>
+                        <b:inputSecret name="j_password" placeholder="Password" fieldSize="sm"/>
+                        <b:commandButton value="Sign In" look="success" iconAlign="right"/>
+                    </b:form>
+                </c:otherwise>
+            </c:choose>
+        </b:navBar>
+    </ui:composition>
+</html>

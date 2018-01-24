@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faces-config
+    xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd"
+    version="2.2">
+   <application>
+       <resource-handler>org.omnifaces.resourcehandler.CombinedResourceHandler</resource-handler>
+   </application>
+   
+   <!-- NAVIGATION RULES -->
+    <navigation-rule>
+        <from-view-id>*</from-view-id>
+        <navigation-case>
+            <from-action>#{requestBean.createNewRequest}</from-action>
+            <from-outcome>success</from-outcome>
+            <to-view-id>/students/tutorsNotified.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        
+        <navigation-case>
+            <from-action>#{registrationBean.createStudent}</from-action>
+            <from-outcome>success</from-outcome>
+            <to-view-id>/accounts/profile.xhtml?registered=true</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{registrationBean.createStudent}</from-action>
+            <from-outcome>register</from-outcome>
+            <to-view-id>/authentications/registerStudent.xhtml</to-view-id>
+        </navigation-case>
+        
+        <navigation-case>
+            <from-action>#{registrationBean.createTutor}</from-action>
+            <from-outcome>success</from-outcome>
+            <to-view-id>/accounts/profile.xhtml?registered=true</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{registrationBean.createTutor}</from-action>
+            <from-outcome>register</from-outcome>
+            <to-view-id>/authentications/registerTutor.xhtml</to-view-id>
+        </navigation-case>
+        
+        <navigation-case>
+            <from-outcome>success</from-outcome>
+            <to-view-id>/accounts/profile.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+
+        <navigation-case>
+            <from-outcome>login</from-outcome>
+            <to-view-id>/accounts/profile.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        
+        <navigation-case>
+            <from-outcome>failure</from-outcome>
+            <to-view-id>/errors/internal.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+</faces-config>

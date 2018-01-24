@@ -1,0 +1,44 @@
+<ui:composition template="/WEB-INF/templates/layout.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:b="http://bootsfaces.net/ui">
+    <ui:define name="title">Courses</ui:define>
+    <ui:define name="content">
+        <h1>Add Course</h1>
+        <b:panel title="Add a course" collapsible="false" look="info">
+            <b:form>
+                <b:row>
+                    <b:selectOneMenu span="6" label="Subject" value="#{addCourseBean.subject}">
+                        <f:selectItem itemLabel="select Subect..." noSelectionOption="true"/>
+                        <f:selectItems value="#{addCourseBean.subjectList}"
+                                       var="subject"
+                                       itemLabel="#{subject.subjectName}"
+                                       itemValue="#{subject}"/>
+                        <f:ajax render="courseList" listener="#{addCourseBean.changeSubject}"/>
+                    </b:selectOneMenu>
+
+                    <b:selectOneMenu span="6" label="Course" id="courseList" value="#{addCourseBean.course}">
+                        <f:selectItem itemLabel="select Course..." noSelectionOption="true"/>
+                        <f:selectItems value="#{addCourseBean.courseList}"
+                                       var="course"
+                                       itemLabel="#{course.courseName}"
+                                       itemValue="#{course}"/>
+                    </b:selectOneMenu>
+                </b:row>
+                <b:row>
+                    <b:container>
+                        <p>
+                            Don't see your course? <a href="/Tut4YouWebApp/tutors/addNewCourse.xhtml">Add a new one</a>!
+                        </p>
+                    </b:container>
+                </b:row>
+                <b:row>
+                    <b:commandButton span="2" value="Submit" look="primary" action="#{addCourseBean.addCourse}" />
+                </b:row>
+            </b:form>
+        </b:panel>
+        <ui:debug hotkey='x'/>
+    </ui:define>
+</ui:composition>

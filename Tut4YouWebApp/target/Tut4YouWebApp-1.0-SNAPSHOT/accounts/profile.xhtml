@@ -1,0 +1,22 @@
+<ui:composition template="/WEB-INF/templates/layout.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <ui:define name="title">Profile</ui:define>
+    <ui:define name="content">
+        <h1>Hello Person</h1>
+        <a href="/Tut4YouWebApp/students/requestTutor.xhtml">Request for a Tutor</a>
+        <br></br>
+        <c:if test="#{userBean.tutor}">
+            <a href="/Tut4YouWebApp/tutors/availability.xhtml">Add Availability</a>
+            <br></br>
+            <a href="/Tut4YouWebApp/tutors/addCourse.xhtml">Add Courses</a>
+            <br></br>
+            <a href="/Tut4YouWebApp/tutors/viewCourse.xhtml">View Courses</a>
+        </c:if>
+        <ui:debug hotkey='x'/>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,16 @@
+<ui:composition template="/WEB-INF/templates/layout.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <ui:define name="title">Profile</ui:define>
+    <ui:define name="content">
+        <h1>Courses Added</h1>
+        <b:dataTable value="#{addCourseBean.tutorCourses}" var="course">
+            <b:dataTableColumn value="#{course.courseName}" />
+        </b:dataTable>
+        <ui:debug hotkey='x'/>
+    </ui:define>
+</ui:composition>

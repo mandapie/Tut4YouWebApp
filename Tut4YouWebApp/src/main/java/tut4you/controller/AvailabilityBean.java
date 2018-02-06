@@ -26,7 +26,7 @@ import tut4you.model.*;
 import tut4you.model.Tut4YouApp;
 
 /**
- *
+ * Stores the availability of a tutor
  * @author Andrew Kaichi <Andrew.Kaichi@student.csulb.edu>
  */
 @Named
@@ -39,20 +39,33 @@ public class AvailabilityBean implements Serializable {
     private Tut4YouApp tut4youApp;
     private Availability availability;
     
+    /**
+     * Creates a new instance of the Availability entity
+     */
     public AvailabilityBean(){
         availability = new Availability();
     }
-
-//    public AvailabilityBean(Long id){
-//        availability = tut4youApp.getAvailability(id);  
-//    }
     
+    /**
+     * Gets the availability of the tutor
+     * @return the availability of the tutor
+     */
     public Availability getAvailability(){
         return availability;
     }
+    
+    /**
+     * Sets the availability of the tutor (not used)
+     * @param availability the availability of the tutor
+     */
     public void setAvailability(Availability availability){
         this.availability = availability;
     }
+    
+    /**
+     * Adds the availability to the tutor
+     * @return result based on if the availability form was filled out properly
+     */
     public String addAvailability(){
         String result = "failure";
         availability = tut4youApp.addAvailability(availability);
@@ -62,6 +75,10 @@ public class AvailabilityBean implements Serializable {
         }
         return result;
     }
+    
+    /**
+     * Updates the current availability of the tutor
+     */
     public void updateAvailability(){
         tut4youApp.updateAvailability(availability);
     }

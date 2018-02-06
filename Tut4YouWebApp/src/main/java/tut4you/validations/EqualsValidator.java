@@ -2,14 +2,18 @@
  * Licensed under the Academic Free License (AFL 3.0).
  *     http://opensource.org/licenses/AFL-3.0
  * 
- *  This code is distributed to CSULB students in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE, other than educational.
- * 
- *  2013-2017 Alvaro Monge <alvaro.monge@csulb.edu>
- * 
+ *  This code has been developed by a group of CSULB students working on their 
+ *  Computer Science senior project called Tutors4You.
+ *  
+ *  Tutors4You is a web application that students can utilize to find a tutor and
+ *  ask them to meet at any location of their choosing. Students that struggle to understand 
+ *  the courses they are taking would benefit from this peer to peer tutoring service.
+ *  
+ *  2017 Amanda Pan <daikiraidemodaisuki@gmail.com>
+ *  2017 Andrew Kaichi <ahkaichi@gmail.com>
+ *  2017 Keith Tran <keithtran25@gmail.com>
+ *  2017 Syed Haider <shayder426@gmail.com>
  */
-
 package tut4you.validations;
 
 import javax.faces.application.FacesMessage;
@@ -22,6 +26,7 @@ import javax.faces.validator.ValidatorException;
 /**
  * EqualsValidator extends the Validator class to determine if two fields are duplicates
  * @author Brian Leathem in StackOverflow
+ * Modified by Syed Haider <shayder426@gmail.com>
  * http://stackoverflow.com/questions/2909021/jsf-2-0-validate-equality-of-2-inputsecret-fields-confirm-password-without-wri
  */
 @FacesValidator(value = "equalsValidator")

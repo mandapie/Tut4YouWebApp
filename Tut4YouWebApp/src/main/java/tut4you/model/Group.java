@@ -1,7 +1,18 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Licensed under the Academic Free License (AFL 3.0).
+ *     http://opensource.org/licenses/AFL-3.0
+ * 
+ *  This code has been developed by a group of CSULB students working on their 
+ *  Computer Science senior project called Tutors4You.
+ *  
+ *  Tutors4You is a web application that students can utilize to find a tutor and
+ *  ask them to meet at any location of their choosing. Students that struggle to understand 
+ *  the courses they are taking would benefit from this peer to peer tutoring service.
+ 
+ *  2017 Amanda Pan <daikiraidemodaisuki@gmail.com>
+ *  2017 Andrew Kaichi <ahkaichi@gmail.com>
+ *  2017 Keith Tran <keithtran25@gmail.com>
+ *  2017 Syed Haider <shayder426@gmail.com>
  */
 package tut4you.model;
 
@@ -18,8 +29,9 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 /**
- *
- * @author Amanda
+ * Groups the different types of users for different roles purposes
+ * @author Alvaro Monge <alvaro.monge@csulb.edu>
+ * Modified by Amanda Pan <daikiraidemodaisuki@gmail.com>
  */
 @Entity(name="StudentGroup")
 @Table(name="groups")
@@ -34,7 +46,10 @@ public class Group implements Serializable {
     
     @Id
     private String name;
+    
     private String description;
+    
+    
     @ManyToMany
     @JoinTable(name="groups_students",
           joinColumns=@JoinColumn(name="groupname"),
@@ -48,7 +63,7 @@ public class Group implements Serializable {
     private Collection<Tutor> tutors;
 
     /**
-     * 
+     * Group Constructor
      */
     public Group() { }
 
@@ -142,14 +157,23 @@ public class Group implements Serializable {
             this.tutors = new HashSet();
         this.tutors.add(tutor);
     }
-
+    
+    /**
+     * Override hashCode
+     * @return hash
+     */
     @Override
     public int hashCode() {
         int hash = 0;
         hash += (name != null ? name.hashCode() : 0);
         return hash;
     }
-
+    
+    /**
+     * Overrides the equals method
+     * @param object 
+     * @return true if object is Group, else false
+     */
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the name fields are not set
@@ -159,7 +183,11 @@ public class Group implements Serializable {
         Group other = (Group) object;
         return (this.name != null || other.name == null) && (this.name == null || this.name.equals(other.name));
     }
-
+    
+    /**
+     * Override toString
+     * @return Group as string
+     */
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder();

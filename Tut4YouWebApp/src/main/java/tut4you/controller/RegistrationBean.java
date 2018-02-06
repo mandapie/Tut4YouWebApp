@@ -1,7 +1,18 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Licensed under the Academic Free License (AFL 3.0).
+ *     http://opensource.org/licenses/AFL-3.0
+ * 
+ *  This code has been developed by a group of CSULB students working on their 
+ *  Computer Science senior project called Tutors4You.
+ *  
+ *  Tutors4You is a web application that students can utilize to find a tutor and
+ *  ask them to meet at any location of their choosing. Students that struggle to understand 
+ *  the courses they are taking would benefit from this peer to peer tutoring service.
+ 
+ *  2017 Amanda Pan <daikiraidemodaisuki@gmail.com>
+ *  2017 Andrew Kaichi <ahkaichi@gmail.com>
+ *  2017 Keith Tran <keithtran25@gmail.com>
+ *  2017 Syed Haider <shayder426@gmail.com>
  */
 package tut4you.controller;
 
@@ -17,8 +28,10 @@ import tut4you.model.*;
 import tut4you.exception.*;
 
 /**
- *
- * @author Amanda
+ * RegistrationBean encapsulates all the functions/services involved 
+ * in registering as a Student or Tutor.
+ * @author Amanda Pan <daikiraidemodaisuki@gmail.com>
+ * @author Keith Tran <keithtran25@gmail.com>
  */
 @Named
 @RequestScoped
@@ -41,36 +54,74 @@ public class RegistrationBean implements Serializable {
         newTutor = new Tutor();
     }
     
+    /**
+     * Gets the new student who just registered
+     * @return the new Student entity
+     */
     public Student getNewStudent() {
         return newStudent;
     }
-
+    
+    /**
+     * Sets the user to be a Student
+     * @param newStudent student who has just registered
+     */
     public void setNewStudent(Student newStudent) {
         this.newStudent = newStudent;
     }
+    
+    /**
+     * Gets the tutor that has just registered
+     * @return newTutor the tutor that just registered
+     */
     public Tutor getNewTutor() {
         return newTutor;
     }
-
+    
+    /**
+     * Sets the user to be a Tutor
+     * @param newTutor the newly registered Tutor
+     */
     public void setNewTutor(Tutor newTutor) {
         this.newTutor = newTutor;
     }
+    
+    /**
+     * Gets the field of the confirm Password
+     * @return the field of the confirm Password
+     */
     public String getConfirmPassword() {
         return confirmPassword;
     }
-
+    
+    /**
+     * Sets the value in the confirm password to check if password match
+     * @param confirmPassword the password matching the typed password
+     */
     public void setConfirmPassword(String confirmPassword) {
         this.confirmPassword = confirmPassword;
     }
     
+    /**
+     * Gets the studentType
+     * @return the studentType is Tutor or Student
+     */
     public String getStudentType() {
         return studentType;
     }
-
+    
+    /**
+     * Sets the studentType
+     * @param studentType the studentType is tutor or student
+     */
     public void setStudentType(String studentType) {
         this.studentType = studentType;
     }
     
+    /**
+     * Checks to see if the user is a student
+     * @return true if user is a student
+     */
     public Boolean getIsStudent() {
         if(isStudent.equals("Student")) {
             return true;
@@ -78,6 +129,12 @@ public class RegistrationBean implements Serializable {
         return false;
     }
     
+    /**
+     * JSF Action that uses the information submitted in the registration page
+     * to add user as a registered Student user.
+     * @return either failure, success, or register depending on successful
+     * registration.
+     */
     public String createStudent() {
         String result = "failure";
         if (newStudent.isInformationValid(confirmPassword)) {
@@ -99,6 +156,12 @@ public class RegistrationBean implements Serializable {
         return result;
     }
     
+    /**
+     * JSF Action that uses the information submitted in the registration page
+     * to add user as a registered Tutor user.
+     * @return either failure, success, or register depending on successful 
+     * registration.
+     */
     public String createTutor() {
         String result = "failure";
         if (newTutor.isInformationValid(confirmPassword)) {

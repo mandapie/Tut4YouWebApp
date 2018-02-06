@@ -1,7 +1,18 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Licensed under the Academic Free License (AFL 3.0).
+ *     http://opensource.org/licenses/AFL-3.0
+ * 
+ *  This code has been developed by a group of CSULB students working on their 
+ *  Computer Science senior project called Tutors4You.
+ *  
+ *  Tutors4You is a web application that students can utilize to find a tutor and
+ *  ask them to meet at any location of their choosing. Students that struggle to understand 
+ *  the courses they are taking would benefit from this peer to peer tutoring service.
+ 
+ *  2017 Amanda Pan <daikiraidemodaisuki@gmail.com>
+ *  2017 Andrew Kaichi <ahkaichi@gmail.com>
+ *  2017 Keith Tran <keithtran25@gmail.com>
+ *  2017 Syed Haider <shayder426@gmail.com>
  */
 package tut4you.model;
 
@@ -21,12 +32,16 @@ import javax.servlet.http.HttpServletRequest;
 import tut4you.exception.*;
 
 /**
- *
- * @author Amanda
+ * This class is an EJB that handles all functionalities of the Web Application.
+ * @author Amanda Pan <daikiraidemodaisuki@gmail.com>
  */
 @Stateless
 public class Tut4YouApp {
-
+    
+    /**
+     * Gets the persistence unit name and creates an entity manager to
+     * persist data into the database. 
+     */
     @PersistenceContext(unitName = "tut4youWebAppPU")
     private EntityManager em;
     private static final Logger LOGGER = Logger.getLogger("Tut4YouApp");
@@ -87,10 +102,12 @@ public class Tut4YouApp {
     }
     
     /**
-     * Only students can see the number of tutors that tutors the requested course.
+     * Only students can see the number of tutors that tutors the requested
+     * course.
      * Finds all tutors that teaches the course.
      * @param course selected course to be tutored
      * @return the number of tutors that tutors the course
+     * @author Andrew Kaichi <ahkaichi@gmail.com>
      */
     @RolesAllowed("tut4youapp.student")
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
@@ -102,6 +119,11 @@ public class Tut4YouApp {
         return courseTutorQuery.getResultList().size();
     }
     
+    /**
+     * Only a tutor can see the list of courses added.
+     * @return the list of courses a tutor as added
+     * @author Syed Haider <shayder426@gmail.com>
+     */
     @RolesAllowed("tut4youapp.student")
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public List<Course> getCoursesFromTutor() {
@@ -114,6 +136,15 @@ public class Tut4YouApp {
         return tutorCourseQuery.getResultList();
     }
     
+    /**
+     * Only a tutor can add a course from the database. The course will be
+     * persisted to the courses_tutors table.
+     * @param course to be added
+     * @return the selected course to the bean.
+     * @throws CourseExistsException 
+     * @author Keith <keithtran25@gmail.com>
+     * Referenced code from Alvaro Monge <alvaro.monge@csulb.edu>
+     */
     @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public Course addCourse(Course course)throws CourseExistsException{
@@ -151,6 +182,15 @@ public class Tut4YouApp {
         }
     }
     
+    /**
+     * Only a tutor can add a course that is not from the database. For new course
+     * that isn't in database added by a tutor will be persisted to the course table and courses_tutors
+     * table.
+     * @param course
+     * @return the course to the bean
+     * @author Keith <keithtran25@gmail.com>
+     * Referenced code from Alvaro Monge <alvaro.monge@csulb.edu>
+     */
     @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public Course addNewCourse(Course course){
@@ -177,6 +217,11 @@ public class Tut4YouApp {
         }
     }
     
+    /**
+     * Only a tutor can view the list of courses that they can teach.
+     * @return the list of courses to the bean
+     * @author: Syed Haider <shayder426@gmail.com>
+     */
     @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public List<Course> getTutorCourses() {
@@ -194,6 +239,12 @@ public class Tut4YouApp {
         }
     }
     
+    /**
+     * Gets the availability. Only a tutor can access this method.
+     * @param id
+     * @return the availability
+     * @author Andrew <ahkaichi@gmail.com>
+     */
     @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public Availability getAvailability(Long id){
@@ -203,6 +254,12 @@ public class Tut4YouApp {
         //return availabilityQuery.getResultList();       
     }
     
+    /**
+     * Only a tutor can add availability to the database.
+     * @param availability
+     * @return the availability
+     * @author Andrew <ahkaichi@gmail.com>
+     */
     @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public Availability addAvailability(Availability availability){
@@ -227,6 +284,12 @@ public class Tut4YouApp {
         return availability;
     }
     
+    /**
+     * Only a tutor can update his/her availability times.
+     * @param availability
+     * @return the availability
+     * @author Andrew <ahkaichi@gmail.com>
+     */
     @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public Availability updateAvailability(Availability availability){
@@ -234,6 +297,12 @@ public class Tut4YouApp {
         return availability;
     }
     
+    /**
+     * Gets a logged in username by getting the username from the session.
+     * @return username
+     * Source: https://dzone.com/articles/liferay-jsf-how-get-current-lo
+     * Had further help by Subject2Change group.
+     */
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public String getUsernameFromSession() {
@@ -243,18 +312,36 @@ public class Tut4YouApp {
         return userName;
     }
     
+    /**
+     * Gets a student by finding the username student entity.
+     * @param username
+     * @return a student
+     */
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public Student find(String username) {
         return em.find(Student.class, username);
     }
     
+    /**
+     * Gets a tutor by finding the username in the tutor entity.
+     * @param username
+     * @return tutor
+     * @Keith <keithtran25@gmail.com>
+     */
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public Tutor findTutorUserName(String username) {
         return em.find(Tutor.class, username);
     }
     
+    /**
+     * Registers user as a student. The student will be added a student role.
+     * @param student
+     * @param groupName
+     * @throws StudentExistsException
+     * Referenced code from Alvaro Monge <alvaro.monge@csulb.edu>
+     */
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void registerStudent(Student student, String groupName) throws StudentExistsException {
@@ -276,6 +363,15 @@ public class Tut4YouApp {
         }
     }
     
+    /**
+     * Registers user as a tutor. The student will be added a student and tutor
+     * role.
+     * @param tutor
+     * @param groupName
+     * @param groupName2
+     * @throws StudentExistsException 
+     * Referenced code from Alvaro Monge <alvaro.monge@csulb.edu>
+     */
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void registerTutor(Tutor tutor, String groupName, String groupName2) throws StudentExistsException {

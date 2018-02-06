@@ -2,15 +2,18 @@
  * Licensed under the Academic Free License (AFL 3.0).
  *     http://opensource.org/licenses/AFL-3.0
  * 
- *  This code is distributed to CSULB students in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE, other than educational.
- * 
- *  2013-2017 Alvaro Monge <alvaro.monge@csulb.edu>
- * 
+ *  This code has been developed by a group of CSULB students working on their 
+ *  Computer Science senior project called Tutors4You.
+ *  
+ *  Tutors4You is a web application that students can utilize to find a tutor and
+ *  ask them to meet at any location of their choosing. Students that struggle to understand 
+ *  the courses they are taking would benefit from this peer to peer tutoring service.
+ *  
+ *  2017 Amanda Pan <daikiraidemodaisuki@gmail.com>
+ *  2017 Andrew Kaichi <ahkaichi@gmail.com>
+ *  2017 Keith Tran <keithtran25@gmail.com>
+ *  2017 Syed Haider <shayder426@gmail.com>
  */
-
-
 package tut4you.validations;
 
 import javax.enterprise.context.RequestScoped;
@@ -21,14 +24,16 @@ import javax.faces.validator.ValidatorException;
 import javax.inject.Named;
 
 /**
- *
+ * Validates (basic) correct format.
  * @author Alvaro Monge <alvaro.monge@csulb.edu>
  */
 @Named
 @RequestScoped
 public class BasicValidator {
 
-    /** Creates a new instance of BasicValidator */
+    /**
+     * Creates a new instance of BasicValidator
+     */
     public BasicValidator() {
     }
 

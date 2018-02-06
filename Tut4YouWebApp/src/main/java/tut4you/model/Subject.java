@@ -18,6 +18,7 @@ package tut4you.model;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.HashSet;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -35,10 +36,7 @@ import javax.persistence.OneToMany;
 @NamedQueries ({
     @NamedQuery(name = Subject.FIND_ALL_SUBJECTS, query = "SELECT s FROM Subject s")
 })
-public class Subject implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-    
+public class Subject implements Serializable {    
     /**
      * JPQL query to retrieve all subject entities
      */
@@ -56,7 +54,7 @@ public class Subject implements Serializable {
      */
     @OneToMany(mappedBy="subject", cascade={CascadeType.ALL})
     private Collection<Course> courses;
-    
+        
     /**
      * Gets subject name
      * @return subject name
@@ -87,6 +85,17 @@ public class Subject implements Serializable {
      */
     public void setCourses(Collection<Course> courses) {
         this.courses = courses;
+    }
+    
+    /**
+     * adds course to collection of courses
+     * create new HashSet if courses collection is null
+     * @param course 
+     */
+    public void addCourse(Course course) {
+        if (this.courses == null)
+            this.courses = new HashSet();
+        this.courses.add(course);
     }
     
     /**

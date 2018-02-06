@@ -62,7 +62,7 @@ public class Tutor extends Student implements Serializable {
     private int numPeopleTutored;
 
     //@Column(nullable = true)
-    private int priceRate;
+    private double priceRate;
     
     /**
      * A Tutor can tutor multiple Courses and
@@ -71,12 +71,12 @@ public class Tutor extends Student implements Serializable {
     @ManyToMany(mappedBy="tutors", cascade=CascadeType.ALL)
     private Collection<Course> courses;
     
-    /**
-     * A Tutor can be in multiple Groups and
-     * A Group can contain multiple Tutors
-     */
-    @ManyToMany(mappedBy="tutors", cascade=CascadeType.ALL)
-    private Collection<Group> groups;
+//    /**
+//     * A Tutor can be in multiple Groups and
+//     * A Group can contain multiple Tutors
+//     */
+//    @ManyToMany(mappedBy="tutors", cascade=CascadeType.ALL)
+//    private Collection<Group> groups;
     
     /**
      * A tutor can set multiple Availabilities
@@ -101,7 +101,7 @@ public class Tutor extends Student implements Serializable {
         this.dateJoined = dateJoined;
         this.numPeopleTutored = numPeopleTutored;
         this.priceRate = priceRate;
-        groups = new HashSet<>();
+        //groups = new HashSet<>();
     }
     
     /**
@@ -121,7 +121,7 @@ public class Tutor extends Student implements Serializable {
         this.dateJoined = dateJoined;
         this.numPeopleTutored = numPeopleTutored;
         this.priceRate = priceRate;
-        groups = new HashSet<>();
+        //groups = new HashSet<>();
     }
     
     /**
@@ -187,7 +187,7 @@ public class Tutor extends Student implements Serializable {
      * Sets the price rate a tutor wants to be compensated per hour
      * @param priceRate 
      */
-    public void setPriceRate(int priceRate) {
+    public void setPriceRate(double priceRate) {
         this.priceRate = priceRate;
     }
     
@@ -195,7 +195,7 @@ public class Tutor extends Student implements Serializable {
      * Gets the price rate a tutor wants to be compensated per hour
      * @return the price rate
      */
-    public int getPriceRate() {
+    public double getPriceRate() {
         return priceRate;
     }
     
@@ -215,36 +215,36 @@ public class Tutor extends Student implements Serializable {
         this.courses = courses;
     }
     
-    /**
-     * Gets a collection of groups a tutor is in
-     * @return the collection of groups
-     */
-    @Override
-    public Collection<Group> getGroups(){
-        return groups;
-    }
-    
-    /**
-     * Add a group to the tutor's set of groups
-     * if collection of groups is null, create new HashSet
-     * @param group to be added
-     */
-    @Override
-    public void setGroups(Collection<Group> groups) {
-        this.groups = groups;
-    }
-
-    /**
-     * Add a group to the tutor's set of groups
-     * if collection of groups is null, create new HashSet
-     * @param group to be added
-     */
-    @Override
-    public void addGroup(Group group) {
-        if (this.groups == null)
-            this.groups = new HashSet();
-        this.groups.add(group);
-    }
+//    /**
+//     * Gets a collection of groups a tutor is in
+//     * @return the collection of groups
+//     */
+//    @Override
+//    public Collection<Group> getGroups(){
+//        return groups;
+//    }
+//    
+//    /**
+//     * Add a group to the tutor's set of groups
+//     * if collection of groups is null, create new HashSet
+//     * @param group to be added
+//     */
+//    @Override
+//    public void setGroups(Collection<Group> groups) {
+//        this.groups = groups;
+//    }
+//
+//    /**
+//     * Add a group to the tutor's set of groups
+//     * if collection of groups is null, create new HashSet
+//     * @param group to be added
+//     */
+//    @Override
+//    public void addGroup(Group group) {
+//        if (this.groups == null)
+//            this.groups = new HashSet();
+//        this.groups.add(group);
+//    }
     
     /**
      * Add a course to a collection of Courses

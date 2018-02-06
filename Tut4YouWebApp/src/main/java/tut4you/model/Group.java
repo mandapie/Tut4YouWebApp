@@ -48,8 +48,7 @@ public class Group implements Serializable {
     private String name;
     
     private String description;
-    
-    
+
     @ManyToMany
     @JoinTable(name="groups_students",
           joinColumns=@JoinColumn(name="groupname"),

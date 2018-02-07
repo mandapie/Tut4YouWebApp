@@ -140,16 +140,13 @@ public class RegistrationBean implements Serializable {
         if (newStudent.isInformationValid(confirmPassword)) {
             String clearText = newStudent.getPassword();
             newStudent.setPassword(tut4you.controller.HashPassword.getSHA512Digest(newStudent.getPassword()));
-            LOGGER.log(Level.SEVERE, "Password: {0}\tHashed password: {1}", new Object[]{clearText, newStudent.getPassword()});
             try {
                 tut4youApp.registerStudent(newStudent, "tut4youapp.student");
                 result = "success";
             } catch (StudentExistsException see) {
-                LOGGER.log(Level.SEVERE, null, see);
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("A user with that information already exists, try again."));
                 result = "register";
             } catch (Exception e) {
-                LOGGER.log(Level.SEVERE, null, e);
                 result = "failure";
             }
         }
@@ -167,16 +164,13 @@ public class RegistrationBean implements Serializable {
         if (newTutor.isInformationValid(confirmPassword)) {
             String clearText = newTutor.getPassword();
             newTutor.setPassword(tut4you.controller.HashPassword.getSHA512Digest(newTutor.getPassword()));
-            LOGGER.log(Level.SEVERE, "Password: {0}\tHashed password: {1}", new Object[]{clearText, newTutor.getPassword()});
             try {
                 tut4youApp.registerTutor(newTutor, "tut4youapp.student", "tut4youapp.tutor");
                 result = "success";
             } catch (StudentExistsException see) {
-                LOGGER.log(Level.SEVERE, null, see);
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("A user with that information already exists, try again."));
                 result = "register";
             } catch (Exception e) {
-                LOGGER.log(Level.SEVERE, null, e);
                 result = "failure";
             }
         }

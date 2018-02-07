@@ -80,9 +80,6 @@ public class UserBean implements Serializable {
             } else {
                 this.student = tut4youapp.find(userName);
                 isAuthenticated = (this.student != null);
-                if (isAuthenticated) {
-                    LOGGER.log(Level.SEVERE, "StudentIdentiy::isStudentAuthenticated: Changed session, so now studentIdentiy object has student=authenticated student");
-                }
             }
         }
         return isAuthenticated;

@@ -19,8 +19,7 @@ package tut4you.controller;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
 /**
  * Hash passwords with SHA512.
@@ -46,7 +45,6 @@ public class HashPassword {
          }
          generatedPassword = sb.toString();
       } catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
-         Logger.getLogger(HashPassword.class.getName()).log(Level.SEVERE, null, e);
          generatedPassword = null;
       } 
       return generatedPassword;

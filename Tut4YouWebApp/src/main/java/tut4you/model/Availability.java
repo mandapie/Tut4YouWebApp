@@ -93,7 +93,7 @@ public class Availability implements Serializable {
     
     /**
      * Gets the day of the week
-     * @return a day
+     * @return dayOfWeek
      */
     public String getDayOfWeek(){
         return dayOfWeek;
@@ -109,7 +109,7 @@ public class Availability implements Serializable {
     
     /**
      * Gets the start Hour
-     * @return start hour
+     * @return startHour
      */
     public int getStartHour() {
         return startHour;
@@ -125,7 +125,7 @@ public class Availability implements Serializable {
     
     /**
      * Gets the start minute
-     * @return start minute
+     * @return startMinute
      */
     public int getStartMinute() {
         return startMinute;
@@ -141,7 +141,7 @@ public class Availability implements Serializable {
     
     /**
      * Gets the start period
-     * @return 
+     * @return startPeriod
      */
     public String getStartPeriod(){
         return startPeriod;
@@ -157,7 +157,7 @@ public class Availability implements Serializable {
     
     /**
      * Gets the end hour
-     * @return end hour
+     * @return endHour
      */
     public int getEndHour() {
         return endHour;
@@ -173,7 +173,7 @@ public class Availability implements Serializable {
     
     /**
      * Gets the end minute
-     * @return end minute
+     * @return endMinute
      */
     public int getEndMinute(){
         return endMinute;
@@ -189,7 +189,7 @@ public class Availability implements Serializable {
     
     /**
      * Gets the end period
-     * @return end period
+     * @return endPeriod
      */
     public String getEndPeriod(){
         return endPeriod;
@@ -221,7 +221,7 @@ public class Availability implements Serializable {
     
     /**
      * Gets a tutor who is going to add an availability
-     * @return 
+     * @return tutor
      */
     public Tutor getTutor(){
         return tutor;

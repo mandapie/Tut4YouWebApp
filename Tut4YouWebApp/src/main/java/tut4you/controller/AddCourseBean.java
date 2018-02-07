@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
+import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import tut4you.exception.CourseExistsException;
@@ -33,7 +34,7 @@ import tut4you.model.Tut4YouApp;
  * @author Syed Haider <shayder426@gmail.com>
  */
 @Named
-@SessionScoped
+@RequestScoped
 public class AddCourseBean implements Serializable {
 
     private static final long serialVersionUID = 1L;

@@ -20,7 +20,7 @@ package tut4you.controller;
 import java.io.Serializable;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
-import javax.enterprise.context.SessionScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 import tut4you.model.*;
 import tut4you.model.Tut4YouApp;
@@ -30,7 +30,7 @@ import tut4you.model.Tut4YouApp;
  * @author Andrew Kaichi <Andrew.Kaichi@student.csulb.edu>
  */
 @Named
-@SessionScoped
+@RequestScoped
 public class AvailabilityBean implements Serializable {
     private static final long serialVersionUID = 1L;
     private static final Logger LOGGER = Logger.getLogger("AvailabilityBean");

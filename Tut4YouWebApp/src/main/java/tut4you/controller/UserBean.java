@@ -40,7 +40,7 @@ public class UserBean implements Serializable {
     
     @EJB
     private Tut4YouApp tut4youapp;
-    private Student student;
+    private User student;
     
     /**
      * Creates a new instance of UserIdentity
@@ -50,10 +50,10 @@ public class UserBean implements Serializable {
     }
     
     /**
-     * Gets the Student object
+     * Gets the User object
      * @return the student Object
      */
-    public Student getStudent() {
+    public User getStudent() {
         return student;
     }
     
@@ -61,7 +61,7 @@ public class UserBean implements Serializable {
      * Sets the student Object
      * @param student the student 
      */
-    public void setStudent(Student student) {
+    public void setStudent(User student) {
         this.student = student;
     }
     

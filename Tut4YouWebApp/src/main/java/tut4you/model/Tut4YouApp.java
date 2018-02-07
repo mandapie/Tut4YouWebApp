@@ -87,7 +87,7 @@ public class Tut4YouApp {
             return null;
         }
         else {
-            Student student = find(userName);
+            User student = find(userName);
             if (student != null) {
                 student.addRequest(request);
                 request.setStudent(student);
@@ -319,8 +319,8 @@ public class Tut4YouApp {
      */
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-    public Student find(String username) {
-        return em.find(Student.class, username);
+    public User find(String username) {
+        return em.find(User.class, username);
     }
     
     /**
@@ -344,11 +344,11 @@ public class Tut4YouApp {
      */
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void registerStudent(Student student, String groupName) throws StudentExistsException {
+    public void registerStudent(User student, String groupName) throws StudentExistsException {
         // 1: Use security EJB to add username/password to security
         // 2: if successful, then add as a registered bookstore user
 
-        if (null == em.find(Student.class, student.getEmail())) {
+        if (null == em.find(User.class, student.getEmail())) {
             Group group = em.find(Group.class, groupName);
             if (group == null) {
                 group = new Group(groupName);

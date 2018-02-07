@@ -31,8 +31,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 /**
- * Tutor inherits all attributes of a Student class with added attributes that
- * defines a user as a tutor. A tutor is also a student.
+ * Tutor inherits all attributes of a User class with added attributes that
+ defines a user as a tutor. A tutor is also a student.
  * @author Keith Tran <keithtran25@gmail.com>
  * @author Syed Haider <shayder426@gmail.com>
  */
@@ -40,7 +40,7 @@ import javax.persistence.TemporalType;
 @NamedQueries({
     @NamedQuery(name = Tutor.FIND_TUTORS_BY_COURSE, query = "SELECT t FROM Tutor t JOIN t.courses c WHERE c.courseName = :coursename")
 })
-public class Tutor extends Student implements Serializable {   
+public class Tutor extends User implements Serializable {   
     private static final long serialVersionUID = 1L;
     
     /**
@@ -116,8 +116,8 @@ public class Tutor extends Student implements Serializable {
      * @param numPeopleTutored
      * @param priceRate 
      */
-    public Tutor(String email, String firstName, String lastName, String userName, String phoneNumber, String password, Date dateJoined, int numPeopleTutored, int priceRate) {
-        super(email, firstName, lastName, userName, phoneNumber, password);
+    public Tutor(String email, String firstName, String lastName, String userName, String phoneNumber, String password, String university, Date dateJoined, int numPeopleTutored, int priceRate) {
+        super(email, firstName, lastName, userName, phoneNumber, password, university);
         this.dateJoined = dateJoined;
         this.numPeopleTutored = numPeopleTutored;
         this.priceRate = priceRate;

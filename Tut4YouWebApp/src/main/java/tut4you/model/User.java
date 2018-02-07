@@ -27,17 +27,19 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 /**
- * Student is the most basic user type. SINGLE_TABLE is used as our inheritance
- * strategy as Tutor inherits all the attributes of a Student.
+ * User is the most basic user type. SINGLE_TABLE is used as our inheritance
+ strategy as Tutor inherits all the attributes of a User.
  * @author Keith Tran <keithtran25@gmail.com>
  * @author Syed Haider <shayder426@gmail.com> 
  */
 @Entity
+@Table(name="Users")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "user_type")
-public class Student implements Serializable {
+public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
@@ -49,6 +51,8 @@ public class Student implements Serializable {
     private String userName;
     private String phoneNumber;
     private String password;
+    //university attribute
+    private String university;
     
     /**
      * A student can submit multiple Requests
@@ -66,7 +70,7 @@ public class Student implements Serializable {
     /**
      * Student constructor
      */
-    public Student() {
+    public User() {
         
     }
     
@@ -78,17 +82,35 @@ public class Student implements Serializable {
      * @param userName
      * @param phoneNumber
      * @param password 
+     * @param university
      */
-    public Student(String email, String firstName, String lastName, String userName, String phoneNumber, String password) {
+    public User(String email, String firstName, String lastName, String userName, String phoneNumber, String password, String university) {
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
         this.userName = userName;
         this.phoneNumber = phoneNumber;
         this.password = password;
-        // ADD UNIVERSITY ATtRIBUTE
+        // ADD UNIVERSITY ATTRIBUTE
+        this.university = university;
+        
     }
     
+    /**
+     * Gets the university of a user
+     * @return the email
+     */
+    public String getUniversity() {
+        return university;
+    }
+    
+    /**
+     * Sets the university of a user
+     * @param university 
+     */
+    public void setUniversity(String university) {
+        this.university = university;
+    }
     /**
      * Gets the email of a student
      * @return the email
@@ -264,15 +286,15 @@ public class Student implements Serializable {
     /**
      * Overrides the equals method
      * @param object 
-     * @return true if object is Student, else false
+     * @return true if object is User, else false
      */
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the email fields are not set
-        if (!(object instanceof Student)) {
+        if (!(object instanceof User)) {
             return false;
         }
-        Student other = (Student) object;
+        User other = (User) object;
         if ((this.email == null && other.email != null) || (this.email != null && !this.email.equals(other.email))) {
             return false;
         }
@@ -281,7 +303,7 @@ public class Student implements Serializable {
     
     /**
      * Override toString
-     * @return Student attributes
+     * @return User attributes
      */
     @Override
     public String toString() {

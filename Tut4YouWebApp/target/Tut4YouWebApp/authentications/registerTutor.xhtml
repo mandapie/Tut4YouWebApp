@@ -56,6 +56,16 @@
                         </b:inputText>
                     </b:column>
                 </b:row>
+                <b:row>
+                    <b:column medium-screen="2">
+                        <h:outputLabel value="University"/>
+                    </b:column>
+                    <b:column medium-screen="4">
+                        <b:inputText id="uni" placeholder="Enter University" required="true" requiredMessage="required" value="#{registrationBean.newTutor.university}">
+                            <b:message for="uni"/>
+                        </b:inputText>
+                    </b:column>
+                </b:row>
                 <!-- Email that has a validator to check if email format is correct-->
                 <b:row>
                     <b:column medium-screen="2">

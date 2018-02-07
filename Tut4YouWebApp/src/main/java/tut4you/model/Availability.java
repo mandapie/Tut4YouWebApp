@@ -92,7 +92,7 @@ public class Availability implements Serializable {
     }
     
     /**
-     * Gets the day of the week
+     * Gets the day of the weeks
      * @return dayOfWeek
      */
     public String getDayOfWeek(){
@@ -131,82 +131,7 @@ public class Availability implements Serializable {
         return startMinute;
     }
     
-    /**
-     * Sets the start minute
-     * @param startMinute 
-     */
-    public void setStartMinute(int startMinute) {
-        this.startMinute = startMinute;
-    }
-    
-    /**
-     * Gets the start period
-     * @return startPeriod
-     */
-    public String getStartPeriod(){
-        return startPeriod;
-    }
-    
-    /**
-     * Sets the start period
-     * @param startPeriod 
-     */
-    public void setStartPeriod(String startPeriod) {
-        this.startPeriod = startPeriod;
-    }
-    
-    /**
-     * Gets the end hour
-     * @return endHour
-     */
-    public int getEndHour() {
-        return endHour;
-    }
-    
-    /**
-     * Sets the end hour
-     * @param endHour 
-     */
-    public void setEndHour(int endHour) {
-        this.endHour = endHour;
-    }
-    
-    /**
-     * Gets the end minute
-     * @return endMinute
-     */
-    public int getEndMinute(){
-        return endMinute;
-    }
-    
-    /**
-     * Sets the end minute
-     * @param endMinute 
-     */
-    public void setEndMinute(int endMinute) {
-        this.endMinute = endMinute;
-    }
-    
-    /**
-     * Gets the end period
-     * @return endPeriod
-     */
-    public String getEndPeriod(){
-        return endPeriod;
-    }
-    
-    /**
-     * Sets the end period
-     * @param endPeriod 
-     */
-    public void setEndPeriod(String endPeriod) {
-        this.endPeriod = endPeriod;
-    }
-    
-    /**
-     * Gets the primary key of the availability
-     * @return id
-     */
+
     public Long getId(){
         return id;
     }

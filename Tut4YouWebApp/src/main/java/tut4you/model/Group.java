@@ -53,7 +53,7 @@ public class Group implements Serializable {
     @JoinTable(name="groups_students",
           joinColumns=@JoinColumn(name="groupname"),
           inverseJoinColumns=@JoinColumn(name="email"))
-    private Collection<User> students;
+    private Collection<Student> students;
     
     @ManyToMany
     @JoinTable(name="groups_students",
@@ -110,7 +110,7 @@ public class Group implements Serializable {
      * gets the collection of students that are members of this group
      * @return the collection of students in this group
      */
-    public Collection<User> getStudents() {
+    public Collection<Student> getStudents() {
         return students;
     }
 
@@ -118,7 +118,7 @@ public class Group implements Serializable {
      * sets the collection of students in this group
      * @param students the collection of students in this group
      */
-    public void setStudents(Collection<User> students) {
+    public void setStudents(Collection<Student> students) {
         this.students = students;
     }
 
@@ -126,7 +126,7 @@ public class Group implements Serializable {
      * adds a student to this group
      * @param student is the student to be added to this group
      */
-    public void addStudent(User student) {
+    public void addStudent(Student student) {
         if (this.students == null)
             this.students = new HashSet();
         this.students.add(student);
@@ -197,4 +197,5 @@ public class Group implements Serializable {
         return sb.toString();
 
     }
+    
 }

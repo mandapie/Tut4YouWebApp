@@ -56,7 +56,7 @@ public class Request implements Serializable {
      * Multiple requests can be submitted by a student
      */
     @ManyToOne
-    private User student;
+    private Student student;
     
     /**
      * Multiple requests can be submitted under the same course
@@ -110,7 +110,7 @@ public class Request implements Serializable {
      * Gets the student who logged in to Tut4You
      * @return logged in student
      */
-    public User getStudent() {
+    public Student getStudent() {
         return student;
     }
     
@@ -118,7 +118,7 @@ public class Request implements Serializable {
      * Sets the student who logged in to Tut4You
      * @param student who logged in
      */
-    public void setStudent(User student) {
+    public void setStudent(Student student) {
         this.student = student;
     }
     
@@ -175,4 +175,5 @@ public class Request implements Serializable {
     public String toString() {
         return "tut4you.model.Request[ id=" + id + " course=" + course + " description=" + description + " ]";
     }
+
 }

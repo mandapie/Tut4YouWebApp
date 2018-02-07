@@ -19,6 +19,7 @@ package tut4you.model;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -27,6 +28,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 
 /**
  * A course encapsulates a specific class that a tutor may teach and/or a student
@@ -73,6 +75,12 @@ public class Course implements Serializable {
           inverseJoinColumns=@JoinColumn(name="email"))
     private Collection<Tutor> tutors;
     
+    /**
+     * One to many relationship
+     * Courses are contained in one to many requests
+     */
+    @OneToMany(mappedBy="course", cascade={CascadeType.ALL})
+    private Collection<Request> requests;
     /**
      * gets the name of course
      * @return courseName
@@ -130,6 +138,32 @@ public class Course implements Serializable {
         if (this.tutors == null)
             this.tutors = new HashSet();
         this.tutors.add(tutor);
+    }
+        /**
+     * Gets a collection of requests
+     * @return a collection of requests
+     */
+    public Collection<Request> getRequests() {
+        return requests;
+    }
+    
+    /**
+     * Sets a collection of requests
+     * @param requests
+     */
+    public void setCourses(Collection<Request> requests) {
+        this.requests = requests;
+    }
+    
+    /**
+     * adds request to collection of requests
+     * create new HashSet if request collection is null
+     * @param request
+     */
+    public void addCourse(Request request) {
+        if (this.requests == null)
+            this.requests = new HashSet();
+        this.requests.add(request);
     }
     
     @Override

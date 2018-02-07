@@ -26,7 +26,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
 
 /**
  * Request contains subject and course name, and a short description of a
@@ -59,11 +58,20 @@ public class Request implements Serializable {
     private User student;
     
     /**
-     * Multiple requests can be submitted under the same course
-     */
-    @OneToOne
+     * Many to One relationship
+     * Request can only contain one course
+     * 
+    */
+    @ManyToOne
     @JoinColumn(name="courseName", nullable=false)
     private Course course;
+    
+    /**
+     * Multiple requests can be submitted under the same course
+     */
+    //@OneToOne
+    //@JoinColumn(name="courseName", nullable=false)
+    //private Course course;
     
     private String description;
     

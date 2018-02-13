@@ -1,6 +1,6 @@
-INSERT INTO groups VALUES ('tut4youapp.student', 'authenticated user only')
-INSERT INTO groups VALUES ('tut4youapp.tutor', 'tutor of selected courses')
-INSERT INTO groups VALUES ('tut4youapp.moderator', 'polices tutors and students')
+INSERT INTO Groups VALUES ('tut4youapp.student', 'authenticated user only')
+INSERT INTO Groups VALUES ('tut4youapp.tutor', 'tutor of selected courses')
+INSERT INTO Groups VALUES ('tut4youapp.moderator', 'polices tutors and students')
 
 INSERT INTO Subject(subjectName) VALUES ('Arts')
 INSERT INTO Subject(subjectName) VALUES ('Math')

@@ -25,6 +25,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 
 /**
  * Availability encapsulates information of a time frame of when a Tutor is
@@ -32,6 +33,7 @@ import javax.persistence.NamedQuery;
  * @author Andrew Kaichi <ahkaichi@gmail.com>
  * @author Keith Tran <keithtran25@gmail.com>
  */
+@Table(name="Availability")
 @Entity
 @NamedQueries ({
     @NamedQuery(name = Availability.FIND_AVAILABILITY_BY_TUTOR, query = "SELECT a FROM Availability a JOIN a.tutor s WHERE s.email = :email")

@@ -27,6 +27,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 
 /**
  * A course encapsulates a specific class that a tutor may teach and/or a student
@@ -34,6 +35,7 @@ import javax.persistence.NamedQuery;
  * @author Amanda Pan <daikiraidemodaisuki@gmail.com>
  * @author Keith Tran <keithtran25@gmail.com>
  */
+@Table(name="Course")
 @Entity
 @NamedQueries({
     @NamedQuery(name = Course.FIND_ALL_COURSES, query = "SELECT c FROM Course c"),
@@ -68,7 +70,7 @@ public class Course implements Serializable {
      * Tutors Can tutor many courses
      */
     @ManyToMany
-    @JoinTable(name="courses_tutors",
+    @JoinTable(name="Courses_tutors",
           joinColumns=@JoinColumn(name="coursename"),
           inverseJoinColumns=@JoinColumn(name="email"))
     private Collection<Tutor> tutors;

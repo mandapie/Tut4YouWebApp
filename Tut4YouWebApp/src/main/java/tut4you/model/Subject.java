@@ -25,6 +25,7 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 /**
  * A Subject contains a general subject name and will be broken down into
@@ -32,6 +33,7 @@ import javax.persistence.OneToMany;
  * @author Keith Tran <keithtran25@gmail.com>
  * Modified by Amanda Pan <daikiraidemodaisuki@gmail.com>
  */
+@Table(name="Subject")
 @Entity
 @NamedQueries ({
     @NamedQuery(name = Subject.FIND_ALL_SUBJECTS, query = "SELECT s FROM Subject s")

@@ -34,7 +34,7 @@ import javax.persistence.Table;
  * Modified by Amanda Pan <daikiraidemodaisuki@gmail.com>
  */
 @Entity(name="StudentGroup")
-@Table(name="groups")
+@Table(name="Groups")
 @NamedQueries ({
     @NamedQuery(name = Group.FIND_GROUP_BY_USERNAME, query = "SELECT g FROM StudentGroup g WHERE g.name = :groupname")
 })
@@ -50,13 +50,13 @@ public class Group implements Serializable {
     private String description;
     
     @ManyToMany
-    @JoinTable(name="groups_students",
+    @JoinTable(name="Groups_students",
           joinColumns=@JoinColumn(name="groupname"),
           inverseJoinColumns=@JoinColumn(name="email"))
     private Collection<Student> students;
     
     @ManyToMany
-    @JoinTable(name="groups_students",
+    @JoinTable(name="Groups_students",
           joinColumns=@JoinColumn(name="groupname"),
           inverseJoinColumns=@JoinColumn(name="email"))
     private Collection<Tutor> tutors;

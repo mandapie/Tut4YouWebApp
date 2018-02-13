@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Context path="/Tut4YouWebApp">
-    <!-- Use the LockOutRealm to prevent attempts to guess user password via a brute-force attack -->
-    <Realm className="org.apache.catalina.realm.LockOutRealm">
-        <!-- Realm uses a DataSource which should be defined in /conf/tomee.xml -->
-        <Realm className="org.apache.catalina.realm.DataSourceRealm" 
-               dataSourceName="jdbc/tut4youWebAppDS" 
-               roleNameCol="groupname" 
-               userCredCol="password" 
-               userNameCol="email"
-               userRoleTable="groups_students" 
-               userTable="student">
-            
-            <!-- see: https://stackoverflow.com/questions/32178822/tomcat-understanding-credentialhandler -->
-            <CredentialHandler algorithm="SHA-512" className="org.apache.catalina.realm.MessageDigestCredentialHandler"/>
-        </Realm>
+  <!-- Use the LockOutRealm to prevent attempts to guess user password via a brute-force attack -->
+  <Realm className="org.apache.catalina.realm.LockOutRealm">
+    <!-- Realm uses a DataSource which should be defined in /conf/tomee.xml -->
+    <Realm className="org.apache.catalina.realm.DataSourceRealm"
+           dataSourceName="jdbc/tut4youWebAppDS"
+           roleNameCol="groupname"
+           userCredCol="PASSWORD"
+           userNameCol="EMAIL"
+           userRoleTable="Groups_students"
+           userTable="Student">
+      <!-- see: https://stackoverflow.com/questions/32178822/tomcat-understanding-credentialhandler -->
+      <CredentialHandler algorithm="SHA-512" className="org.apache.catalina.realm.MessageDigestCredentialHandler"/>
     </Realm>
+  </Realm>
 </Context>

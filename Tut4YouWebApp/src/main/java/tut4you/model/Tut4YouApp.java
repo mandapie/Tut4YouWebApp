@@ -54,7 +54,6 @@ public class Tut4YouApp {
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public List<Subject> getSubjects() {
         TypedQuery<Subject> subjectQuery = em.createNamedQuery(Subject.FIND_ALL_SUBJECTS, Subject.class);
-        LOGGER.severe("Subjects queried");
         return subjectQuery.getResultList();
     }
     
@@ -68,7 +67,6 @@ public class Tut4YouApp {
     public List<Course> getCourses(String subject) {
         TypedQuery<Course> courseQuery = em.createNamedQuery(Course.FIND_COURSE_BY_SUBJECT, Course.class);
         courseQuery.setParameter("name", subject);
-        LOGGER.severe("Course queried");
         return courseQuery.getResultList();
     }
     
@@ -114,8 +112,6 @@ public class Tut4YouApp {
     public int getTutorsFromCourse(String course) {
         TypedQuery<Tutor> courseTutorQuery = em.createNamedQuery(Tutor.FIND_TUTORS_BY_COURSE, Tutor.class);        
         courseTutorQuery.setParameter("coursename", course);
-        LOGGER.severe("Course: " + course);
-        LOGGER.severe("Tutors number: " + courseTutorQuery.getResultList().size());
         return courseTutorQuery.getResultList().size();
     }
     
@@ -131,8 +127,6 @@ public class Tut4YouApp {
         Tutor tutor = findTutorUserName(userName);
         TypedQuery<Course> tutorCourseQuery = em.createNamedQuery(Course.FIND_COURSES_BY_TUTOR, Course.class);        
         tutorCourseQuery.setParameter("email", tutor.getEmail());
-        LOGGER.severe("email: " + tutor.getEmail());
-        LOGGER.severe("Courses: " + tutorCourseQuery.getResultList().size());
         return tutorCourseQuery.getResultList();
     }
     
@@ -148,11 +142,8 @@ public class Tut4YouApp {
     @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public Course addCourse(Course course)throws CourseExistsException{
-        LOGGER.log(Level.SEVERE, "Course = {0}", course);
         String userName = getUsernameFromSession();
-        LOGGER.severe("Persisting course to DB");
         if (userName == null) {
-            LOGGER.severe("tutor is null");
             return null;
         }
         else {
@@ -167,10 +158,8 @@ public class Tut4YouApp {
                     groupCourse.addTutor(tutor);
                     em.persist(tutor);
                     em.flush();
-                    LOGGER.log(Level.SEVERE, "tutor is not null {0}", tutor);
                 }
                 else {
-                    LOGGER.log(Level.SEVERE, "{0} is already added", course.getCourseName());
                     throw new CourseExistsException();
                 }
             }
@@ -194,11 +183,8 @@ public class Tut4YouApp {
     @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public Course addNewCourse(Course course){
-        LOGGER.log(Level.SEVERE, "Course = {0}", course);
         String userName = getUsernameFromSession();
-        LOGGER.severe("Persisting course to DB");
         if (userName == null) {
-            LOGGER.severe("tutor is null");
             return null;
         }
         else {
@@ -207,7 +193,6 @@ public class Tut4YouApp {
                 tutor.addCourse(course);
                 course.addTutor(tutor);
                 //em.merge(tutor);
-                LOGGER.log(Level.SEVERE, "tutor is not null {0}", tutor);
                 em.persist(course);
             }
             else {
@@ -234,7 +219,6 @@ public class Tut4YouApp {
             email = tutor.getEmail();
             TypedQuery<Course> courseQuery = em.createNamedQuery(Course.FIND_COURSES_BY_TUTOR, Course.class);
             courseQuery.setParameter("email", email);
-            LOGGER.severe("Tutor's courses querie queried");
             return courseQuery.getResultList();
         }
     }
@@ -274,7 +258,6 @@ public class Tut4YouApp {
                 availability.setTutor(tutor);
                 em.persist(availability);
                 em.flush();
-                LOGGER.severe("Persisting availability to DB");
             }
             else {
                 return null;
@@ -346,8 +329,7 @@ public class Tut4YouApp {
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void registerStudent(Student student, String groupName) throws StudentExistsException {
         // 1: Use security EJB to add username/password to security
-        // 2: if successful, then add as a registered bookstore user
-
+        // 2: if successful, then add as a registered student
         if (null == em.find(Student.class, student.getEmail())) {
             Group group = em.find(Group.class, groupName);
             if (group == null) {
@@ -358,7 +340,6 @@ public class Tut4YouApp {
             em.persist(student);
             em.flush();
         } else {
-            Logger.getLogger(this.getClass().getName()).log(Level.INFO, "A student exists already with email addresss {0}", student.getEmail());
             throw new StudentExistsException();
         }
     }
@@ -376,8 +357,7 @@ public class Tut4YouApp {
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void registerTutor(Tutor tutor, String groupName, String groupName2) throws StudentExistsException {
         // 1: Use security EJB to add username/password to security
-        // 2: if successful, then add as a registered bookstore user
-
+        // 2: if successful, then add as a registered tutor
         if (null == em.find(Tutor.class, tutor.getEmail())) {
             Group group = em.find(Group.class, groupName);
             Group group2 = em.find(Group.class, groupName2);
@@ -392,7 +372,6 @@ public class Tut4YouApp {
             em.persist(tutor);
             em.flush();
         } else {
-            Logger.getLogger(this.getClass().getName()).log(Level.INFO, "A tutor exists already with email addresss {0}", tutor.getEmail());
             throw new StudentExistsException();
         }
     }

@@ -63,10 +63,10 @@ public class Availability implements Serializable {
     private String dayOfWeek;
 
     @Temporal(TemporalType.TIMESTAMP)
-    private Date startTime;
+    private Time startTime;
 
     @Temporal(TemporalType.TIMESTAMP)
-    private Date endTime;
+    private Time endTime;
 
     /**
      * Multiple availabilities can be added by a Tutor
@@ -116,7 +116,7 @@ public class Availability implements Serializable {
      *
      * @return startTime
      */
-    public Date getStartTime() {
+    public Time getStartTime() {
         return startTime;
     }
 
@@ -125,7 +125,7 @@ public class Availability implements Serializable {
      *
      * @param startTime
      */
-    public void setStartTime(Date startTime) {
+    public void setStartTime(Time startTime) {
         this.startTime = startTime;
 
     }
@@ -135,7 +135,7 @@ public class Availability implements Serializable {
      *
      * @return endTime
      */
-    public Date getEndTime() {
+    public Time getEndTime() {
         return endTime;
     }
 
@@ -144,7 +144,7 @@ public class Availability implements Serializable {
      *
      * @param endTime
      */
-    public void setEndTime(Date endTime) {
+    public void setEndTime(Time endTime) {
         this.endTime = endTime;
     }
 

@@ -9,10 +9,10 @@ tut4you\controller\RequestBean.class
 tut4you\controller\UserBean.class
 tut4you\model\Tut4YouApp.class
 tut4you\exception\CourseExistsException.class
-tut4you\model\Student.class
 tut4you\validations\EqualsValidator.class
 tut4you\exception\StudentExistsException.class
 tut4you\controller\HashPassword.class
 tut4you\model\Tutor.class
 tut4you\model\Availability.class
+tut4you\model\User.class
 tut4you\validations\BasicValidator.class

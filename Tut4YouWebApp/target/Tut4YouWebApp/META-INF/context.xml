@@ -8,8 +8,8 @@
            roleNameCol="groupname"
            userCredCol="PASSWORD"
            userNameCol="EMAIL"
-           userRoleTable="Groups_students"
-           userTable="Student">
+           userRoleTable="Groups_users"
+           userTable="Users">
       <!-- see: https://stackoverflow.com/questions/32178822/tomcat-understanding-credentialhandler -->
       <CredentialHandler algorithm="SHA-512" className="org.apache.catalina.realm.MessageDigestCredentialHandler"/>
     </Realm>

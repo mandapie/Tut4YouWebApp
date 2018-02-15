@@ -44,7 +44,7 @@ public class Request implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
-    public static final String FIND_REQUEST_BY_EMAIL = "Student.findRequestByEmail";
+    public static final String FIND_REQUEST_BY_EMAIL = "User.findRequestByEmail";
     
     /**
      * Primary key is generated uniquely
@@ -58,7 +58,7 @@ public class Request implements Serializable {
      * Multiple requests can be submitted by a student
      */
     @ManyToOne
-    private Student student;
+    private User student;
     
     /**
      * Multiple requests can be submitted under the same course
@@ -112,7 +112,7 @@ public class Request implements Serializable {
      * Gets the student who logged in to Tut4You
      * @return logged in student
      */
-    public Student getStudent() {
+    public User getStudent() {
         return student;
     }
     
@@ -120,7 +120,7 @@ public class Request implements Serializable {
      * Sets the student who logged in to Tut4You
      * @param student who logged in
      */
-    public void setStudent(Student student) {
+    public void setStudent(User student) {
         this.student = student;
     }
     

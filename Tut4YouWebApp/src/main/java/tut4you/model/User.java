@@ -35,10 +35,10 @@ import javax.persistence.Table;
  * @author Keith Tran <keithtran25@gmail.com>
  * @author Syed Haider <shayder426@gmail.com> 
  */
-@Entity
 @Table(name="Users")
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "user_type")
+@Entity
+@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name="user_type")
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -51,31 +51,30 @@ public class User implements Serializable {
     private String userName;
     private String phoneNumber;
     private String password;
-    //university attribute
     private String university;
     
     /**
-     * A student can submit multiple Requests
+     * A user can submit multiple Requests
      */
     @OneToMany(mappedBy="student", cascade=CascadeType.ALL)
     private Collection<Request> requests;
     
     /**
-     * A student can be in multiple Groups and
-     * A group can contain multiple Students
+     * A user can be in multiple Groups and
+     * A group can contain multiple users
      */
     @ManyToMany(mappedBy="students", cascade=CascadeType.ALL)
     private Collection<Group> groups;
     
     /**
-     * Student constructor
+     * User constructor
      */
     public User() {
         
     }
     
     /**
-     * Student overloaded constructor
+     * User overloaded constructor
      * @param email
      * @param firstName
      * @param lastName
@@ -111,8 +110,9 @@ public class User implements Serializable {
     public void setUniversity(String university) {
         this.university = university;
     }
+    
     /**
-     * Gets the email of a student
+     * Gets the email of a user
      * @return the email
      */
     public String getEmail() {
@@ -120,7 +120,7 @@ public class User implements Serializable {
     }
     
     /**
-     * Sets the email of a student
+     * Sets the email of a user
      * @param email 
      */
     public void setEmail(String email) {
@@ -128,7 +128,7 @@ public class User implements Serializable {
     }
     
     /**
-     * Gets the first name of a student
+     * Gets the first name of a user
      * @return first name
      */
     public String getFirstName() {
@@ -136,7 +136,7 @@ public class User implements Serializable {
     }
     
     /**
-     * Sets the first name of a student
+     * Sets the first name of a user
      * @param firstName 
      */
     public void setFirstName(String firstName) {
@@ -152,7 +152,7 @@ public class User implements Serializable {
     }
     
     /**
-     * Sets the last name of a student
+     * Sets the last name of a user
      * @param lastName 
      */
     public void setLastName(String lastName) {
@@ -160,7 +160,7 @@ public class User implements Serializable {
     }
     
     /**
-     * Gets the username of a student
+     * Gets the username of a user
      * @return username
      */
     public String getUserName() {
@@ -168,7 +168,7 @@ public class User implements Serializable {
     }
     
     /**
-     * Sets the username of a student
+     * Sets the username of a user
      * @param userName 
      */
     public void setUserName(String userName) {
@@ -176,7 +176,7 @@ public class User implements Serializable {
     }
     
     /**
-     * Gets the phone number of a student
+     * Gets the phone number of a user
      * @return phone number
      */
     public String getPhoneNumber() {
@@ -184,15 +184,15 @@ public class User implements Serializable {
     }
     
     /**
-     * Sets the phone number of a student
-     * @param phoneNumber 
+     * Sets the phone number of a user
+     * @param phoneNumber
      */
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
     
     /**
-     * Gets the password of a student
+     * Gets the password of a user
      * @return password
      */
     public String getPassword() {
@@ -200,7 +200,7 @@ public class User implements Serializable {
     }
     
     /**
-     * Sets the password of a student
+     * Sets the password of a user
      * @param password 
      */
     public void setPassword(String password) {
@@ -208,7 +208,7 @@ public class User implements Serializable {
     }
     
     /**
-     * Gets the collection requests submitted by a student
+     * Gets the collection requests submitted by a user
      * @return collection of Requests
      */
     public Collection<Request> getRequests() {
@@ -216,7 +216,7 @@ public class User implements Serializable {
     }
     
     /**
-     * Sets the collection requests submitted by a student
+     * Sets the collection requests submitted by a user
      * @param requests 
      */
     public void setRequests(Collection<Request> requests) {
@@ -234,23 +234,23 @@ public class User implements Serializable {
     }
     
     /**
-     * gets the groups that this student is a member of
-     * @return a collection of groups that this student belongs to
+     * gets the groups that this user is a member of
+     * @return a collection of groups that this user belongs to
      */
     public Collection<Group> getGroups() {
         return groups;
     }
 
     /**
-     * sets the groups that this student belongs to
-     * @param groups is the collection of groups that this student is a member of
+     * sets the groups that this user belongs to
+     * @param groups is the collection of groups that this user is a member of
      */
     public void setGroups(Collection<Group> groups) {
         this.groups = groups;
     }
     
     /**
-     * Add a group to the student's set of groups
+     * Add a group to the user's set of groups
      * @param group to be added
      */
     public void addGroup(Group group) {
@@ -260,9 +260,9 @@ public class User implements Serializable {
     }
 
     /**
-     * determines whether or not the information for this student is valid
+     * determines whether or not the information for this user is valid
      * @param confirmPassword the password to be confirmed
-     * @return <code>true</code> if this student has valid information; 
+     * @return <code>true</code> if this user has valid information; 
      *         <code>false</code> otherwise
      * @author Alvaro Monge <alvaro.monge@csulb.edu>
      */
@@ -307,6 +307,6 @@ public class User implements Serializable {
      */
     @Override
     public String toString() {
-        return "tut4you.model.Student[ id=" + email + " first name=" + firstName + " last name=" + lastName + " username=" + userName + " phone number=" + phoneNumber + " password=" + password + " ]";
+        return "tut4you.model.User[ id=" + email + " first name=" + firstName + " last name=" + lastName + " username=" + userName + " phone number=" + phoneNumber + " password=" + password + " ]";
     }
 }

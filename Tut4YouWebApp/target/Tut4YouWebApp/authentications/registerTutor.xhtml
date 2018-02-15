@@ -5,6 +5,8 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:b="http://bootsfaces.net/ui"
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <!-- @author Andrew Kaichi <ahkaichi@gmail.com>
+         @author Keith Tran <keithtran25@gmail.com> -->
     <ui:define name="title">Registration</ui:define>
     <ui:define name="content">
         <h1>Register</h1>
@@ -51,16 +53,6 @@
                     <b:column medium-screen="4">
                         <b:inputText id="tpn" placeholder="Enter Phone Number" required="true" requiredMessage="required" value="#{registrationBean.newTutor.phoneNumber}">
                             <b:message for="tpn"/>
-                        </b:inputText>
-                    </b:column>
-                </b:row>
-                <b:row>
-                    <b:column medium-screen="2">
-                        <h:outputLabel value="University"/>
-                    </b:column>
-                    <b:column medium-screen="4">
-                        <b:inputText id="uni" placeholder="Enter University" required="true" requiredMessage="required" value="#{registrationBean.newTutor.university}">
-                            <b:message for="uni"/>
                         </b:inputText>
                     </b:column>
                 </b:row>

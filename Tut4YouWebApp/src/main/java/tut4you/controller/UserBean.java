@@ -41,12 +41,14 @@ public class UserBean implements Serializable {
     @EJB
     private Tut4YouApp tut4youapp;
     private User student;
+    private Tutor userTutor;
     
     /**
      * Creates a new instance of UserIdentity
      */
     public UserBean() {
         student = null;
+        userTutor = null;
     }
     
     /**
@@ -64,7 +66,21 @@ public class UserBean implements Serializable {
     public void setStudent(User student) {
         this.student = student;
     }
+    /**
+     * Gets the User object
+     * @return the student Object
+     */
+    public Tutor getUserTutor() {
+        return userTutor;
+    }
     
+    /**
+     * Sets the student Object
+     * @param userTutor
+     */
+    public void setUserTutor(Tutor userTutor) {
+        this.userTutor = userTutor;
+    }
     /**
      * Determine if the student is authenticated and if so, make sure the session scope includes the User object for the authenticated student
      * @return true if the student making a request is authenticated, false otherwise.

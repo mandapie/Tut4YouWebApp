@@ -33,10 +33,10 @@ import javax.persistence.Table;
  * @author Alvaro Monge <alvaro.monge@csulb.edu>
  * Modified by Amanda Pan <daikiraidemodaisuki@gmail.com>
  */
-@Entity(name="StudentGroup")
-@Table(name="groups")
+@Entity(name="UserGroup")
+@Table(name="Groups")
 @NamedQueries ({
-    @NamedQuery(name = Group.FIND_GROUP_BY_USERNAME, query = "SELECT g FROM StudentGroup g WHERE g.name = :groupname")
+    @NamedQuery(name = Group.FIND_GROUP_BY_USERNAME, query = "SELECT g FROM UserGroup g WHERE g.name = :groupname")
 })
 public class Group implements Serializable {    
     /**
@@ -50,13 +50,13 @@ public class Group implements Serializable {
     private String description;
     
     @ManyToMany
-    @JoinTable(name="groups_students",
+    @JoinTable(name="Groups_users",
           joinColumns=@JoinColumn(name="groupname"),
           inverseJoinColumns=@JoinColumn(name="email"))
     private Collection<User> students;
     
     @ManyToMany
-    @JoinTable(name="groups_students",
+    @JoinTable(name="Groups_users",
           joinColumns=@JoinColumn(name="groupname"),
           inverseJoinColumns=@JoinColumn(name="email"))
     private Collection<Tutor> tutors;
@@ -107,24 +107,24 @@ public class Group implements Serializable {
     }
 
     /**
-     * gets the collection of students that are members of this group
-     * @return the collection of students in this group
+     * gets the collection of users that are members of this group
+     * @return the collection of users in this group
      */
     public Collection<User> getStudents() {
         return students;
     }
 
     /**
-     * sets the collection of students in this group
-     * @param students the collection of students in this group
+     * sets the collection of users in this group
+     * @param students the collection of users in this group
      */
     public void setStudents(Collection<User> students) {
         this.students = students;
     }
 
     /**
-     * adds a student to this group
-     * @param student is the student to be added to this group
+     * adds a user to this group
+     * @param student is the user to be added to this group
      */
     public void addStudent(User student) {
         if (this.students == null)
@@ -132,24 +132,24 @@ public class Group implements Serializable {
         this.students.add(student);
     }
     /**
-     * gets the collection of students that are members of this group
-     * @return the collection of students in this group
+     * gets the collection of users that are members of this group
+     * @return the collection of users in this group
      */
     public Collection<Tutor> getTutors() {
         return tutors;
     }
 
     /**
-     * sets the collection of students in this group
-     * @param tutor the collection of students in this group
+     * sets the collection of users in this group
+     * @param tutors the collection of users in this group
      */
     public void setTutors(Collection<Tutor> tutors) {
         this.tutors = tutors;
     }
 
     /**
-     * adds a student to this group
-     * @param tutor is the student to be added to this group
+     * adds a user to this group
+     * @param tutor is the user to be added to this group
      */
     public void addTutor(Tutor tutor) {
         if (this.tutors == null)

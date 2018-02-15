@@ -82,6 +82,7 @@ public class RequestBean implements Serializable {
         if (request != null) {
             numOfTutors = tut4youApp.getTutorsFromCourse(request.getCourse().getCourseName());
             result = "success";
+            LOGGER.severe("Created new request!");
         }
         return result;
     }
@@ -157,6 +158,7 @@ public class RequestBean implements Serializable {
     public List<Subject> getSubjectList() {
         if (subjectList.isEmpty()) {
             subjectList = tut4youApp.getSubjects();
+            LOGGER.severe("Retrieved list of subjects from EJB");
         }
         return subjectList;
     }
@@ -190,5 +192,6 @@ public class RequestBean implements Serializable {
      */
     public void changeSubject() {
         courseList = tut4youApp.getCourses(subject.getSubjectName());
+        LOGGER.severe("Retrieved list of courses from EJB");
     }
 }

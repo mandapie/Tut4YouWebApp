@@ -26,6 +26,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 /**
  * Request contains subject and course name, and a short description of a
@@ -33,6 +35,7 @@ import javax.persistence.NamedQuery;
  * @author Keith Tran <keithtran25@gmail.com>
  * Modified by Amanda Pan <daikiraidemodaisuki@gmail.com>
  */
+@Table(name="Request")
 @NamedQueries({
     @NamedQuery(name = Request.FIND_REQUEST_BY_EMAIL, query = "SELECT r from Request r where r.student.email = :email")
 })
@@ -41,7 +44,7 @@ public class Request implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
-    public static final String FIND_REQUEST_BY_EMAIL = "Student.findRequestByEmail";
+    public static final String FIND_REQUEST_BY_EMAIL = "User.findRequestByEmail";
     
     /**
      * Primary key is generated uniquely
@@ -58,20 +61,11 @@ public class Request implements Serializable {
     private User student;
     
     /**
-     * Many to One relationship
-     * Request can only contain one course
-     * 
-    */
-    @ManyToOne
-    @JoinColumn(name="courseName", nullable=false)
-    private Course course;
-    
-    /**
      * Multiple requests can be submitted under the same course
      */
-    //@OneToOne
-    //@JoinColumn(name="courseName", nullable=false)
-    //private Course course;
+    @OneToOne
+    @JoinColumn(name="courseName", nullable=false)
+    private Course course;
     
     private String description;
     

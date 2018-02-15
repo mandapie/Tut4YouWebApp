@@ -54,7 +54,6 @@ public class Tut4YouApp {
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public List<Subject> getSubjects() {
         TypedQuery<Subject> subjectQuery = em.createNamedQuery(Subject.FIND_ALL_SUBJECTS, Subject.class);
-        LOGGER.severe("Subjects queried");
         return subjectQuery.getResultList();
     }
     
@@ -68,7 +67,6 @@ public class Tut4YouApp {
     public List<Course> getCourses(String subject) {
         TypedQuery<Course> courseQuery = em.createNamedQuery(Course.FIND_COURSE_BY_SUBJECT, Course.class);
         courseQuery.setParameter("name", subject);
-        //LOGGER.severe("Course queried");
         return courseQuery.getResultList();
     }
     
@@ -166,6 +164,7 @@ public class Tut4YouApp {
                 }
             }
             else {
+                Logger.getLogger(this.getClass().getName()).log(Level.INFO, "A course exists already with email addresss {0}", tutor);
                 return null;
             }
             return course;
@@ -193,6 +192,7 @@ public class Tut4YouApp {
             if (tutor != null) {
                 tutor.addCourse(course);
                 course.addTutor(tutor);
+                //em.merge(tutor);
                 em.persist(course);
             }
             else {
@@ -232,7 +232,10 @@ public class Tut4YouApp {
     @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public Availability getAvailability(Long id){
+        //TypedQuery<Availability> availabilityQuery = em.createNamedQuery(Availability.FIND_AVAILABILITY_BY_TUTOR, Availability.class);
+        LOGGER.severe("availability queried");
         return em.find(Availability.class, id);
+        //return availabilityQuery.getResultList();       
     }
     
     /**
@@ -326,8 +329,7 @@ public class Tut4YouApp {
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void registerStudent(User student, String groupName) throws StudentExistsException {
         // 1: Use security EJB to add username/password to security
-        // 2: if successful, then add as a registered bookstore user
-
+        // 2: if successful, then add as a registered student
         if (null == em.find(User.class, student.getEmail())) {
             Group group = em.find(Group.class, groupName);
             if (group == null) {
@@ -355,8 +357,7 @@ public class Tut4YouApp {
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void registerTutor(Tutor tutor, String groupName, String groupName2) throws StudentExistsException {
         // 1: Use security EJB to add username/password to security
-        // 2: if successful, then add as a registered bookstore user
-
+        // 2: if successful, then add as a registered tutor
         if (null == em.find(Tutor.class, tutor.getEmail())) {
             Group group = em.find(Group.class, groupName);
             Group group2 = em.find(Group.class, groupName2);

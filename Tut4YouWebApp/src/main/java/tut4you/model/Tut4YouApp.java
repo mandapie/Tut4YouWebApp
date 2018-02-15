@@ -70,6 +70,11 @@ public class Tut4YouApp {
         return courseQuery.getResultList();
     }
     
+//    TODO
+//    @PermitAll
+//    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+//    public Request getRequest()
+            
     /**
      * This method can only be called by a student. This methods gets the username of the current session
      * and checks if the username is null, if so return null. Otherwise, find the user email to add the request

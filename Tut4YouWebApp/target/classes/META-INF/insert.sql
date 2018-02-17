@@ -55,4 +55,6 @@ INSERT INTO Courses_tutors(email,courseName) VALUES ('keith@gmail.com','Artists 
 INSERT INTO Courses_tutors(email,courseName) VALUES ('syed@gmail.com','Introduction to the Visual Arts')
 INSERT INTO Courses_tutors(email,courseName) VALUES ('brenda@gmail.com','Introduction to the Visual Arts')
 
--- INSERT INTO Availability(dayOfWeek, startTime, endTime) VALUES ('Monday', '00:00:00', '24:00:00')
+INSERT INTO Availability(dayOfWeek, startTime, endTime) VALUES ('MONDAY', '00:00:00', '24:00:00')
+
+INSERT INTO Request(id, student_email, courseName, description, dayOfWeek, currentTime) VALUES (1, 'keith@gmail.com', 'Mathematical Ideas', 'Derivatives', 'SATURDAY', '12:30:00')

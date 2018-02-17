@@ -29,6 +29,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import java.util.Calendar;
+import javax.persistence.Table;
 
 
 /**
@@ -39,6 +40,7 @@ import java.util.Calendar;
  * @author Keith Tran <keithtran25@gmail.com>
  * @author Syed Haider <shayder426@gmail.com>
  */
+@Table(name="Availability")
 @Entity
 @NamedQueries({
     @NamedQuery(name = Availability.FIND_AVAILABILITY_BY_TUTOR, query = "SELECT a FROM Availability a JOIN a.tutor s WHERE s.email = :email")
@@ -124,7 +126,6 @@ public class Availability implements Serializable {
      */
     public void setStartTime(java.util.Date startTime) {
         this.startTime = startTime;
-
     }
 
     /**

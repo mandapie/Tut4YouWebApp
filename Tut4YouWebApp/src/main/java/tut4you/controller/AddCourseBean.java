@@ -92,7 +92,6 @@ public class AddCourseBean implements Serializable {
     public List<Subject> getSubjectList() {
         if (subjectList.isEmpty()) {
             subjectList = tut4youApp.getSubjects();
-            LOGGER.severe("Retrieved list of subjects from EJB");
         }
         return subjectList;
     }
@@ -143,7 +142,6 @@ public class AddCourseBean implements Serializable {
      */
     public void changeSubject() {
         courseList = tut4youApp.getCourses(subject.getSubjectName());
-        LOGGER.severe("Retrieved list of courses from EJB");
     }
 
     public String addCourse() throws CourseExistsException {
@@ -151,7 +149,6 @@ public class AddCourseBean implements Serializable {
         course = tut4youApp.addCourse(course);
         if (course != null) {
             result = "success";
-            LOGGER.severe("added a course");
         }
         return result;
     }
@@ -159,7 +156,6 @@ public class AddCourseBean implements Serializable {
     /**
      * Adds course to the tutor's course list
      * @return success if the course was added successfully
-     * @throws CourseExistsException
      */
     public String addNewCourse() {
        String result = "failure";
@@ -167,7 +163,6 @@ public class AddCourseBean implements Serializable {
        course = tut4youApp.addNewCourse(course);
         if (course != null) {
             result = "success";
-            LOGGER.severe("added a course");
         }
         return result;
    }

@@ -21,6 +21,8 @@ import java.util.Collection;
 import java.util.HashSet;
 import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorType;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
@@ -38,11 +40,9 @@ import javax.persistence.Table;
 @Table(name="Users")
 @Entity
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name="user_type")
-public class User implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-    
+@DiscriminatorColumn(name="user_type", discriminatorType=DiscriminatorType.STRING)
+@DiscriminatorValue(value="Student")
+public class User implements Serializable {    
     @Id
     private String email;
     
@@ -252,6 +252,14 @@ public class User implements Serializable {
                  && confirmPassword.equals(password));
     }
     
+    /**
+     * gets the user type from the discriminator column
+     * https://stackoverflow.com/questions/15208793/getting-the-value-of-the-discriminator-column
+     * @return the user type
+     */
+    public String getDecriminatorValue() {
+        return this.getClass().getAnnotation(DiscriminatorValue.class).value();
+    }
     /**
      * Override hashCode
      * @return hash

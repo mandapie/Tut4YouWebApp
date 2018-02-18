@@ -208,7 +208,7 @@ public class Tut4YouApp {
      * @author: Syed Haider <shayder426@gmail.com>
      */
     @RolesAllowed("tut4youapp.tutor")
-    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public List<Course> getTutorCourses() {
         String userName = getUsernameFromSession();
         String email;
@@ -233,7 +233,6 @@ public class Tut4YouApp {
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public Availability getAvailability(Long id){
         //TypedQuery<Availability> availabilityQuery = em.createNamedQuery(Availability.FIND_AVAILABILITY_BY_TUTOR, Availability.class);
-        LOGGER.severe("availability queried");
         return em.find(Availability.class, id);
         //return availabilityQuery.getResultList();       
     }
@@ -274,7 +273,7 @@ public class Tut4YouApp {
      * @author Andrew <ahkaichi@gmail.com>
      */
     @RolesAllowed("tut4youapp.tutor")
-    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public Availability updateAvailability(Availability availability){
         em.merge(availability);
         return availability;
@@ -375,4 +374,26 @@ public class Tut4YouApp {
             throw new StudentExistsException();
         }
     }
+    
+//    /**
+//     * Converts student to be a tutor. The student will be added a tutor role.
+//     * @param user
+//     * @param groupName
+//     * https://stackoverflow.com/questions/20098791/jpa-inheritance-change-the-entity-type
+//     */
+//    //IN PROGRESS
+//    @PermitAll
+//    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+//    public void addTutorRole(User user, String groupName) {
+//        if (user.getDecriminatorValue().equals("Student")) {
+//            em.createNativeQuery("UPDATE Users SET user_type='Tutor'").setParameter("email",user.getEmail()).executeUpdate();
+//            Group group = em.find(Group.class, groupName);
+//            if (group == null) {
+//                group = new Group(groupName);
+//            }
+//            user.addGroup(group);
+//            group.addStudent(user);
+//            em.flush();
+//        }
+//    }
 }

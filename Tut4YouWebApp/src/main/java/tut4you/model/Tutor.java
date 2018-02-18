@@ -22,6 +22,9 @@ import java.util.Date;
 import java.util.HashSet;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorType;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
@@ -38,13 +41,13 @@ import javax.persistence.TemporalType;
  * @author Syed Haider <shayder426@gmail.com>
  */
 @Table(name="Tutor")
+@DiscriminatorColumn(name="user_type", discriminatorType=DiscriminatorType.STRING)
+@DiscriminatorValue(value="Tutor")
 @Entity
 @NamedQueries({
     @NamedQuery(name = Tutor.FIND_TUTORS_BY_COURSE, query = "SELECT t FROM Tutor t JOIN t.courses c WHERE c.courseName = :coursename")
 })
-public class Tutor extends User implements Serializable {   
-    private static final long serialVersionUID = 1L;
-    
+public class Tutor extends User implements Serializable {     
     /**
      * JPQL Query to obtain a list of tutors who taught a specific course
      */
@@ -90,7 +93,7 @@ public class Tutor extends User implements Serializable {
      * Tutor constructor
      */
     public Tutor() {
-        
+        priceRate = 0.00;
     }
     
     /**
@@ -99,11 +102,19 @@ public class Tutor extends User implements Serializable {
      * @param numPeopleTutored
      * @param priceRate 
      */
-    public Tutor(Date dateJoined, int numPeopleTutored, int priceRate) {
+    public Tutor(Date dateJoined, int numPeopleTutored, double priceRate) {
         this.dateJoined = dateJoined;
         this.numPeopleTutored = numPeopleTutored;
         this.priceRate = priceRate;
         //groups = new HashSet<>();
+    }
+    
+    /**
+     * Inherits existing data from User to convert user type
+     * @param user 
+     */
+    public Tutor(User user) {
+        super.setEmail(user.getEmail());
     }
     
     /**
@@ -118,7 +129,7 @@ public class Tutor extends User implements Serializable {
      * @param numPeopleTutored
      * @param priceRate 
      */
-    public Tutor(String email, String firstName, String lastName, String userName, String phoneNumber, String password, Date dateJoined, int numPeopleTutored, int priceRate) {
+    public Tutor(String email, String firstName, String lastName, String userName, String phoneNumber, String password, Date dateJoined, int numPeopleTutored, double priceRate) {
         super(email, firstName, lastName, userName, phoneNumber, password);
         this.dateJoined = dateJoined;
         this.numPeopleTutored = numPeopleTutored;
@@ -200,6 +211,7 @@ public class Tutor extends User implements Serializable {
     public double getPriceRate() {
         return priceRate;
     }
+
     
     /**
      * Gets the collection of courses a tutor can teach

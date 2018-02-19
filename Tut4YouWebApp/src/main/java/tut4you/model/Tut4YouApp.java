@@ -117,8 +117,6 @@ public class Tut4YouApp {
      * course.
      * Finds all tutors that teaches the course.
      * @param course selected course to be tutored
-     * @param dayOfWeek
-     * @param time
      * @return the number of tutors that tutors the course
      * @author Andrew Kaichi <ahkaichi@gmail.com>
      */
@@ -130,14 +128,23 @@ public class Tut4YouApp {
         return courseTutorQuery.getResultList().size();
     }
     
+    /**
+     * Only students can see the list of available tutors that tutors the requested
+     * course.
+     * Finds all tutors that teaches the course.
+     * @param course selected course to be tutored
+     * @param dayOfWeek
+     * @param time
+     * @return the number of tutors that tutors the course
+     * @author Andrew Kaichi <ahkaichi@gmail.com>
+     */
     @RolesAllowed("tut4youapp.student")
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public List<Tutor> getTutorsFromCourse(String course, String dayOfWeek, java.util.Date time) {
-        TypedQuery<Tutor> courseTutorQuery = em.createNamedQuery(Tutor.FIND_TUTORS_BY_COURSE_DAY_TIME, Tutor.class);        
+        TypedQuery<Tutor> courseTutorQuery = em.createNamedQuery(Tutor.FIND_TUTORS_BY_COURSE_DAY_TIME, Tutor.class);
         courseTutorQuery.setParameter("coursename", course);
         courseTutorQuery.setParameter("dayofweek", dayOfWeek);
         courseTutorQuery.setParameter("requestTime", time, TemporalType.TIME);
-        LOGGER.log(Level.SEVERE, "current time 1: {0}", time);
         return courseTutorQuery.getResultList();
     }    
     

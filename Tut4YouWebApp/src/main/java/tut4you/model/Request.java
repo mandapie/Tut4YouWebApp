@@ -83,8 +83,10 @@ public class Request implements Serializable {
     private Tutor tutor;
     
     private String description;
+    
     //dayOfWeek
     private String dayOfWeek;
+    
     //currentTime
     @Temporal(TemporalType.TIME)
     private java.util.Date currentTime;
@@ -95,22 +97,18 @@ public class Request implements Serializable {
     public Request() {
         
     }
-    public Request(User student, String description, Status status, java.util.Date currentTime) {
-        this.student = student;
-        this.description = description;
-        this.status = status;
-        this.currentTime = currentTime;
-    }
     /**
      * request overloaded constructor
      * @param student
      * @param description
      * @param status 
+     * @param currentTime 
      */
-    public Request(User student, String description, Status status){
+    public Request(User student, String description, Status status, java.util.Date currentTime) {
         this.student = student;
         this.description = description;
         this.status = status;
+        this.currentTime = currentTime;
     }
     
     /**
@@ -138,21 +136,23 @@ public class Request implements Serializable {
     }
     
     /**
-     *
-     * @return
+     * get currentTime
+     * @return currenTime
      */
-
     public java.util.Date getCurrentTime() {
         return currentTime;
     }
 
-
+    /**
+     * set currentTime
+     * @param currentTime 
+     */
     public void setCurrentTime(java.util.Date currentTime) {
         this.currentTime = currentTime;
 
     }
     
-        /**
+    /**
      * Gets the status of the Request
      * @return status of the Request
      */
@@ -182,6 +182,7 @@ public class Request implements Serializable {
     public void setCourse(Course course) {
         this.course = course;
     }
+    
     public Tutor getTutor(){
         return tutor;
     }

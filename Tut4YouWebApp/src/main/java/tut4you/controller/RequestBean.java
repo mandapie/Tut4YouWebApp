@@ -20,15 +20,10 @@ import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TimeZone;
-import java.util.function.Supplier;
-import java.util.logging.Level;
-import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.inject.Named;
@@ -53,12 +48,12 @@ public class RequestBean implements Serializable {
     private Subject subject;
     private Course course;
     private String time;
-    private int numOfTutors;
-    private List<Subject> subjectList = new ArrayList();
-    private List<Course> courseList = new ArrayList();
-    private List<Request> requestList = new ArrayList();
-    private List<Tutor> tutorList = new ArrayList();
-    private Tutor tutor;
+    private int numOfTutors; //number of tutors who teaches the course
+    private List<Subject> subjectList = new ArrayList(); //lit of subjects to be loaded to the request form
+    private List<Course> courseList = new ArrayList(); //list of courses based on subject to load to the request form
+    private List<Request> requestList = new ArrayList(); //list of pending requests
+    private List<Tutor> tutorList = new ArrayList(); //list of available tutors
+    private Tutor tutor; //the tutor who accepts te request
 
     
     /**
@@ -68,6 +63,7 @@ public class RequestBean implements Serializable {
     public RequestBean() {
         request = new Request();
     }
+    
     /**
      * Convert string to Time
      * @param time
@@ -76,19 +72,16 @@ public class RequestBean implements Serializable {
      */
     public java.util.Date StringToTime(String time) throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
-        
         java.util.Date date = sdf.parse(time);
-            
-        LOGGER.log(Level.SEVERE, "time = {0}", date);
         return date;
-       
-        
     }
+    
     public String getCurrentTime() throws ParseException {
-      String stringCurrentTime = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
-      //java.util.Date currentTime = StringToTime(stringCurrentTime);
-      return stringCurrentTime;
+        String stringCurrentTime = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+        //java.util.Date currentTime = StringToTime(stringCurrentTime);
+        return stringCurrentTime;
     }
+    
     /**
      * Gets current day of when the request is made
      * @return string of the current day
@@ -97,6 +90,7 @@ public class RequestBean implements Serializable {
         String currentDay = LocalDate.now().getDayOfWeek().name();
         return currentDay;
     }
+    
     /**
      * Gets the Request entity
      * @return the request entity
@@ -117,10 +111,10 @@ public class RequestBean implements Serializable {
         return tutor;
     }
     
-
     public void setTutor(Tutor tutor) {
         this.tutor = tutor;
     }
+    
     /**
      * Creates a new request. If successful, get the number of tutors that tutors the course.
      * @return result to be redirected another page
@@ -263,7 +257,8 @@ public class RequestBean implements Serializable {
 
     public void setTutorList(List<Tutor> c) {
         tutorList = c;
-    }    
+    }
+    
     /**
      * ajax calls this method to load the courses based on the selected subject
      */

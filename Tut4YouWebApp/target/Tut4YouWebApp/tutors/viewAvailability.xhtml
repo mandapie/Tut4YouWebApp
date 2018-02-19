@@ -11,9 +11,9 @@
         <h1>Availability This Week</h1>
         <!-- Bootsfaces datatable to show the data in an organized fashion -->
         <b:dataTable value="#{availabilityBean.availabilityList}" var="availability">
-            <b:dataTableColumn value="#{availability.dayOfWeek}" />
-            <b:dataTableColumn value="#{availability.startTime}" />
-            <b:dataTableColumn value="#{availability.endTime}" />
+            <b:dataTableColumn value="#{availability.dayOfWeek}"  label="Day Of Week"/>
+            <b:dataTableColumn value="#{availability.startTime}" label="Start Time" />
+            <b:dataTableColumn value="#{availability.endTime}"  label="End Time"/>
         </b:dataTable>
         <ui:debug hotkey='x'/>
     </ui:define>

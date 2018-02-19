@@ -79,7 +79,7 @@ public class Request implements Serializable {
     private Status status;
     
     @OneToOne
-    @JoinColumn(name="tutorName", nullable=false)
+    @JoinColumn(name="tutorName")
     private Tutor tutor;
     
     private String description;

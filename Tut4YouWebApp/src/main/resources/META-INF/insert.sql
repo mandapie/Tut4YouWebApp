@@ -45,6 +45,16 @@ INSERT INTO Groups_users(email,groupName) VALUES ('carmen@gmail.com','tut4youapp
 INSERT INTO Groups_users(email,groupName) VALUES ('daniel@gmail.com','tut4youapp.student')
 INSERT INTO Groups_users(email,groupName) VALUES ('evan@gmail.com','tut4youapp.student')
 
+INSERT INTO Courses_tutors(email,courseName) VALUES ('amanda@gmail.com','General Biology I')
+INSERT INTO Courses_tutors(email,courseName) VALUES ('amanda@gmail.com','General Biology II')
+INSERT INTO Courses_tutors(email,courseName) VALUES ('amanda@gmail.com','Introduction to Human Disease')
+INSERT INTO Courses_tutors(email,courseName) VALUES ('andrew@gmail.com','General Biology I')
+INSERT INTO Courses_tutors(email,courseName) VALUES ('andrew@gmail.com','Introduction to Marine Biology')
+INSERT INTO Courses_tutors(email,courseName) VALUES ('andrew@gmail.com','Mathematical Ideas')
+INSERT INTO Courses_tutors(email,courseName) VALUES ('keith@gmail.com','Artists in Their Own Words')
+INSERT INTO Courses_tutors(email,courseName) VALUES ('syed@gmail.com','Introduction to the Visual Arts')
+INSERT INTO Courses_tutors(email,courseName) VALUES ('brenda@gmail.com','Introduction to the Visual Arts')
+
 INSERT INTO Request(student_email,courseName,description,status) VALUES ('amanda@gmail.com','General Biology I','Photosynthesis process',0)
 INSERT INTO Request(student_email,courseName,description,status) VALUES ('amanda@gmail.com','General Biology I','Kreb cycle',0)
 INSERT INTO Request(student_email,courseName,description,status) VALUES ('keith@gmail.com','General Biology I','Kreb cycle',0)

@@ -9,7 +9,6 @@
     <ui:define name="title">Profile</ui:define>
     <ui:define name="content">
         <h1>Profile Page</h1>
-<<<<<<< HEAD
         <b:container fluid="true">
             <!-- profile info and links column -->
             <b:column medium-screen="one-third">
@@ -109,73 +108,6 @@
                 </b:tabView>
             </b:column>
         </b:container>
-=======
-        <a href="/Tut4YouWebApp/students/requestTutor.xhtml">Request for a Tutor</a>
-        <br></br>
-        <b:row>
-            <b:column medium-screen="2">
-                <h:outputLabel value="First Name"/>
-            </b:column>
-            <b:column medium-screen="2">
-                <h:outputLabel value="#{userBean.student.firstName}"/>
-            </b:column>
-        </b:row>
-        <b:row>
-            <b:column medium-screen="2">
-                <h:outputLabel value="Last Name"/>
-            </b:column>
-            <b:column medium-screen="2">
-                <h:outputLabel value="#{userBean.student.lastName}"/>
-            </b:column>
-        </b:row>   
-        <b:row>
-            <b:column medium-screen="2">
-                <h:outputLabel value="User Name"/>
-            </b:column>
-            <b:column medium-screen="2">
-                <h:outputLabel value="#{userBean.student.userName}"/>
-            </b:column>
-        </b:row>
-        <b:row>
-            <b:column medium-screen="2">
-                <h:outputLabel value="Email"/>
-            </b:column>
-            <b:column medium-screen="2">
-                <h:outputLabel value="#{userBean.student.email}"/>
-            </b:column>
-        </b:row>
-        <b:row>
-            <b:column medium-screen="2">
-                <h:outputLabel value="University"/>
-            </b:column>
-            <b:column medium-screen="2">
-                <h:outputLabel value="#{userBean.student.university}"/>
-            </b:column>
-        </b:row>
-        <b:row>
-            <b:column medium-screen="2">
-                <h:outputLabel value="Phone Number"/>
-            </b:column>
-            <b:column medium-screen="2">
-                <h:outputLabel value="#{userBean.student.phoneNumber}"/>
-            </b:column>
-        </b:row>
-        <c:if test="#{userBean.tutor}">
-        <b:row>
-        <b:column medium-screen="2">
-                <h:outputLabel value="price rate"/>
-            </b:column>
-            <b:column medium-screen="2">
-                <h:outputLabel value="#{userBean.userTutor.priceRate}"/>
-            </b:column>
-        </b:row>
-            <a href="/Tut4YouWebApp/tutors/availability.xhtml">Add Availability</a>
-            <br></br>
-            <a href="/Tut4YouWebApp/tutors/addCourse.xhtml">Add Courses</a>
-            <br></br>
-            <a href="/Tut4YouWebApp/tutors/viewCourse.xhtml">View Courses</a>
-        </c:if>
->>>>>>> origin/Keith
         <ui:debug hotkey='x'/>
     </ui:define>
 </ui:composition>

@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 C:\Users\Amanda\Documents\NetBeansProjects\493B\cecs493-project-big-baller-brand\Tut4YouWebApp\src\main\java\tut4you\controller\AddCourseBean.java
 C:\Users\Amanda\Documents\NetBeansProjects\493B\cecs493-project-big-baller-brand\Tut4YouWebApp\src\main\java\tut4you\model\Tut4YouApp.java
 C:\Users\Amanda\Documents\NetBeansProjects\493B\cecs493-project-big-baller-brand\Tut4YouWebApp\src\main\java\tut4you\model\Group.java
@@ -17,23 +16,3 @@ C:\Users\Amanda\Documents\NetBeansProjects\493B\cecs493-project-big-baller-brand
 C:\Users\Amanda\Documents\NetBeansProjects\493B\cecs493-project-big-baller-brand\Tut4YouWebApp\src\main\java\tut4you\validations\EqualsValidator.java
 C:\Users\Amanda\Documents\NetBeansProjects\493B\cecs493-project-big-baller-brand\Tut4YouWebApp\src\main\java\tut4you\model\User.java
 C:\Users\Amanda\Documents\NetBeansProjects\493B\cecs493-project-big-baller-brand\Tut4YouWebApp\src\main\java\tut4you\controller\UserBean.java
-=======
-/Users/Keith/Downloads/cecs493-project-big-baller-brand-master 2/Tut4YouWebApp/src/main/java/tut4you/controller/RequestBean.java
-/Users/Keith/Downloads/cecs493-project-big-baller-brand-master 2/Tut4YouWebApp/src/main/java/tut4you/controller/RegistrationBean.java
-/Users/Keith/Downloads/cecs493-project-big-baller-brand-master 2/Tut4YouWebApp/src/main/java/tut4you/model/User.java
-/Users/Keith/Downloads/cecs493-project-big-baller-brand-master 2/Tut4YouWebApp/src/main/java/tut4you/controller/HashPassword.java
-/Users/Keith/Downloads/cecs493-project-big-baller-brand-master 2/Tut4YouWebApp/src/main/java/tut4you/model/Course.java
-/Users/Keith/Downloads/cecs493-project-big-baller-brand-master 2/Tut4YouWebApp/src/main/java/tut4you/exception/CourseExistsException.java
-/Users/Keith/Downloads/cecs493-project-big-baller-brand-master 2/Tut4YouWebApp/src/main/java/tut4you/controller/UserBean.java
-/Users/Keith/Downloads/cecs493-project-big-baller-brand-master 2/Tut4YouWebApp/src/main/java/tut4you/model/Request.java
-/Users/Keith/Downloads/cecs493-project-big-baller-brand-master 2/Tut4YouWebApp/src/main/java/tut4you/controller/AddCourseBean.java
-/Users/Keith/Downloads/cecs493-project-big-baller-brand-master 2/Tut4YouWebApp/src/main/java/tut4you/exception/StudentExistsException.java
-/Users/Keith/Downloads/cecs493-project-big-baller-brand-master 2/Tut4YouWebApp/src/main/java/tut4you/validations/EqualsValidator.java
-/Users/Keith/Downloads/cecs493-project-big-baller-brand-master 2/Tut4YouWebApp/src/main/java/tut4you/model/Tutor.java
-/Users/Keith/Downloads/cecs493-project-big-baller-brand-master 2/Tut4YouWebApp/src/main/java/tut4you/controller/AvailabilityBean.java
-/Users/Keith/Downloads/cecs493-project-big-baller-brand-master 2/Tut4YouWebApp/src/main/java/tut4you/model/Subject.java
-/Users/Keith/Downloads/cecs493-project-big-baller-brand-master 2/Tut4YouWebApp/src/main/java/tut4you/validations/BasicValidator.java
-/Users/Keith/Downloads/cecs493-project-big-baller-brand-master 2/Tut4YouWebApp/src/main/java/tut4you/model/Availability.java
-/Users/Keith/Downloads/cecs493-project-big-baller-brand-master 2/Tut4YouWebApp/src/main/java/tut4you/model/Group.java
-/Users/Keith/Downloads/cecs493-project-big-baller-brand-master 2/Tut4YouWebApp/src/main/java/tut4you/model/Tut4YouApp.java
->>>>>>> origin/Keith

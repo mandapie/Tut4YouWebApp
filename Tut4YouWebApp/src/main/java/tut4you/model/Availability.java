@@ -26,10 +26,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import java.util.Calendar;
 import javax.persistence.Table;
 
 
@@ -47,9 +45,6 @@ import javax.persistence.Table;
     @NamedQuery(name = Availability.FIND_AVAILABILITY_BY_TUTOR, query = "SELECT a FROM Availability a JOIN a.tutor s WHERE s.email = :email")
 })
 public class Availability implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-
     /**
      * JPQL Query to get all availabilities of a tutor
      */

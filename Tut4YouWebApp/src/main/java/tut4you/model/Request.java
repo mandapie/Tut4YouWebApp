@@ -28,6 +28,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  * Request contains subject and course name, and a short description of a
@@ -44,7 +46,7 @@ public class Request implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
-    public static final String FIND_REQUEST_BY_EMAIL = "Student.findRequestByEmail";
+    public static final String FIND_REQUEST_BY_EMAIL = "User.findRequestByEmail";
     
     /**
      * Primary key is generated uniquely
@@ -58,7 +60,7 @@ public class Request implements Serializable {
      * Multiple requests can be submitted by a student
      */
     @ManyToOne
-    private Student student;
+    private User student;
     
     /**
      * Multiple requests can be submitted under the same course
@@ -68,6 +70,11 @@ public class Request implements Serializable {
     private Course course;
     
     private String description;
+    //dayOfWeek
+    private String dayOfWeek;
+    //currentTime
+    @Temporal(TemporalType.TIME)
+    private java.util.Date currentTime;
     
     /**
      * Request Constructor
@@ -91,7 +98,24 @@ public class Request implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
+
+    public String getDayOfWeek() {
+        return dayOfWeek;
+    }
     
+    public void setDayOfWeek(String dayOfWeek) {
+        this.dayOfWeek = dayOfWeek;
+    }
+    
+    public java.util.Date getCurrentTime() {
+        return currentTime;
+    }
+
+
+    public void setCurrentTime(java.util.Date currentTime) {
+        this.currentTime = currentTime;
+
+    }
     /**
      * Gets a course from the courseList
      * @return course from the list
@@ -112,7 +136,7 @@ public class Request implements Serializable {
      * Gets the student who logged in to Tut4You
      * @return logged in student
      */
-    public Student getStudent() {
+    public User getStudent() {
         return student;
     }
     
@@ -120,7 +144,7 @@ public class Request implements Serializable {
      * Sets the student who logged in to Tut4You
      * @param student who logged in
      */
-    public void setStudent(Student student) {
+    public void setStudent(User student) {
         this.student = student;
     }
     
@@ -175,7 +199,7 @@ public class Request implements Serializable {
      */
     @Override
     public String toString() {
-        return "tut4you.model.Request[ id=" + id + " course=" + course + " description=" + description + " ]";
+        return "tut4you.model.Request[ id=" + id + " course=" + course + " description=" + description + " dayOfWeek=" + dayOfWeek + " currentTime= " + currentTime + " ]";
     }
 
 }

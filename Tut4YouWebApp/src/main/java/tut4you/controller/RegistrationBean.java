@@ -29,7 +29,7 @@ import tut4you.exception.*;
 
 /**
  * RegistrationBean encapsulates all the functions/services involved 
- * in registering as a Student or Tutor.
+ in registering as a User or Tutor.
  * @author Amanda Pan <daikiraidemodaisuki@gmail.com>
  * @author Keith Tran <keithtran25@gmail.com>
  */
@@ -42,7 +42,7 @@ public class RegistrationBean implements Serializable {
     
     @EJB
     private Tut4YouApp tut4youApp;
-    private Student newStudent;
+    private User newStudent;
     private Tutor newTutor;
     private String confirmPassword;
     private String studentType;
@@ -50,23 +50,23 @@ public class RegistrationBean implements Serializable {
     
     /** Creates a new instance of Registration */
     public RegistrationBean() {
-        newStudent = new Student();
+        newStudent = new User();
         newTutor = new Tutor();
     }
     
     /**
      * Gets the new student who just registered
-     * @return the new Student entity
+     * @return the new User entity
      */
-    public Student getNewStudent() {
+    public User getNewStudent() {
         return newStudent;
     }
     
     /**
-     * Sets the user to be a Student
+     * Sets the user to be a User
      * @param newStudent student who has just registered
      */
-    public void setNewStudent(Student newStudent) {
+    public void setNewStudent(User newStudent) {
         this.newStudent = newStudent;
     }
     
@@ -104,7 +104,7 @@ public class RegistrationBean implements Serializable {
     
     /**
      * Gets the studentType
-     * @return the studentType is Tutor or Student
+     * @return the studentType is Tutor or User
      */
     public String getStudentType() {
         return studentType;
@@ -131,7 +131,7 @@ public class RegistrationBean implements Serializable {
     
     /**
      * JSF Action that uses the information submitted in the registration page
-     * to add user as a registered Student user.
+ to add user as a registered User user.
      * @return either failure, success, or register depending on successful
      * registration.
      */

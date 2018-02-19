@@ -17,8 +17,16 @@
 package tut4you.controller;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TimeZone;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.inject.Named;
@@ -54,7 +62,35 @@ public class RequestBean implements Serializable {
     public RequestBean() {
         request = new Request();
     }
-    
+    /**
+     * Convert string to Time
+     * @param time
+     * @return 
+     * @throws java.text.ParseException
+     */
+    public java.util.Date StringToTime(String time) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
+        
+        java.util.Date date = sdf.parse(time);
+            
+        LOGGER.log(Level.SEVERE, "time = {0}", date);
+        return date;
+       
+        
+    }
+    public String getCurrentTime() throws ParseException {
+      String stringCurrentTime = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+      //java.util.Date currentTime = StringToTime(stringCurrentTime);
+      return stringCurrentTime;
+    }
+    /**
+     * Gets current day of when the request is made
+     * @return string of the current day
+     */
+    public String getCurrentDayOfWeek() {
+        String currentDay = LocalDate.now().getDayOfWeek().name();
+        return currentDay;
+    }
     /**
      * Gets the Request entity
      * @return the request entity
@@ -74,9 +110,12 @@ public class RequestBean implements Serializable {
     /**
      * Creates a new request. If successful, get the number of tutors that tutors the course.
      * @return result to be redirected another page
+     * @throws java.text.ParseException
      */
-    public String createNewRequest() {
+    public String createNewRequest() throws ParseException {
         String result = "failure";
+        request.setCurrentTime(StringToTime(getCurrentTime()));
+        request.setDayOfWeek(getCurrentDayOfWeek());
         request = tut4youApp.newRequest(request);
         
         if (request != null) {

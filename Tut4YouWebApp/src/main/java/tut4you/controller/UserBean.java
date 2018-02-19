@@ -40,20 +40,22 @@ public class UserBean implements Serializable {
     
     @EJB
     private Tut4YouApp tut4youapp;
-    private Student student;
+    private User student;
+    private Tutor userTutor;
     
     /**
      * Creates a new instance of UserIdentity
      */
     public UserBean() {
         student = null;
+        userTutor = null;
     }
     
     /**
-     * Gets the Student object
+     * Gets the User object
      * @return the student Object
      */
-    public Student getStudent() {
+    public User getStudent() {
         return student;
     }
     
@@ -61,10 +63,24 @@ public class UserBean implements Serializable {
      * Sets the student Object
      * @param student the student 
      */
-    public void setStudent(Student student) {
+    public void setStudent(User student) {
         this.student = student;
     }
+    /**
+     * Gets the User object
+     * @return the student Object
+     */
+    public Tutor getUserTutor() {
+        return userTutor;
+    }
     
+    /**
+     * Sets the student Object
+     * @param userTutor
+     */
+    public void setUserTutor(Tutor userTutor) {
+        this.userTutor = userTutor;
+    }
     /**
      * Determine if the student is authenticated and if so, make sure the session scope includes the User object for the authenticated student
      * @return true if the student making a request is authenticated, false otherwise.
@@ -80,9 +96,6 @@ public class UserBean implements Serializable {
             } else {
                 this.student = tut4youapp.find(userName);
                 isAuthenticated = (this.student != null);
-                if (isAuthenticated) {
-                    LOGGER.log(Level.SEVERE, "StudentIdentiy::isStudentAuthenticated: Changed session, so now studentIdentiy object has student=authenticated student");
-                }
             }
         }
         return isAuthenticated;

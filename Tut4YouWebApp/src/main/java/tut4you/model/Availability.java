@@ -17,9 +17,7 @@
 package tut4you.model;
 
 import java.io.Serializable;
-import java.sql.Time;
-import java.text.ParseException;
-import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -31,8 +29,8 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import java.util.Calendar;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.persistence.Table;
+
 
 /**
  * Availability encapsulates information of a time frame of when a Tutor is
@@ -42,6 +40,7 @@ import java.util.logging.Logger;
  * @author Keith Tran <keithtran25@gmail.com>
  * @author Syed Haider <shayder426@gmail.com>
  */
+@Table(name="Availability")
 @Entity
 @NamedQueries({
     @NamedQuery(name = Availability.FIND_AVAILABILITY_BY_TUTOR, query = "SELECT a FROM Availability a JOIN a.tutor s WHERE s.email = :email")
@@ -62,11 +61,11 @@ public class Availability implements Serializable {
 
     private String dayOfWeek;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Calendar startTime;
+    @Temporal(TemporalType.TIME)
+    private java.util.Date startTime;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Calendar endTime;
+    @Temporal(TemporalType.TIME)
+    private java.util.Date endTime;
 
     /**
      * Multiple availabilities can be added by a Tutor
@@ -88,7 +87,7 @@ public class Availability implements Serializable {
      * @param startTime
      * @param endTime
      */
-    public Availability(String dayOfWeek, Calendar startTime, Calendar endTime) {
+    public Availability(String dayOfWeek, java.util.Date startTime, java.util.Date endTime) {
         this.dayOfWeek = dayOfWeek;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -116,7 +115,7 @@ public class Availability implements Serializable {
      *
      * @return startTime
      */
-    public Calendar getStartTime() {
+    public java.util.Date getStartTime() {
         return startTime;
     }
 
@@ -125,9 +124,8 @@ public class Availability implements Serializable {
      *
      * @param startTime
      */
-    public void setStartTime(Calendar startTime) {
+    public void setStartTime(java.util.Date startTime) {
         this.startTime = startTime;
-
     }
 
     /**
@@ -135,7 +133,7 @@ public class Availability implements Serializable {
      *
      * @return endTime
      */
-    public Calendar getEndTime() {
+    public java.util.Date getEndTime() {
         return endTime;
     }
 
@@ -144,7 +142,7 @@ public class Availability implements Serializable {
      *
      * @param endTime
      */
-    public void setEndTime(Calendar endTime) {
+    public void setEndTime(java.util.Date endTime) {
         this.endTime = endTime;
     }
 

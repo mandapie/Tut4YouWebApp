@@ -85,7 +85,7 @@ public class Tut4YouApp {
             return null;
         }
         else {
-            Student student = find(userName);
+            User student = find(userName);
             if (student != null) {
                 student.addRequest(request);
                 request.setStudent(student);
@@ -238,6 +238,24 @@ public class Tut4YouApp {
         //return availabilityQuery.getResultList();       
     }
     
+        
+    /**
+     * Only a tutor can see the list of availability added.
+     * @return the list of availability a tutor as added
+     * @author Syed Haider <shayder426@gmail.com>
+     */
+    @RolesAllowed("tut4youapp.tutor")
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public List<Availability> getAvailabilityList() {
+        String userName = getUsernameFromSession();
+        Tutor tutor = findTutorUserName(userName);
+        TypedQuery<Availability> availabilityQuery = em.createNamedQuery(Availability.FIND_AVAILABILITY_BY_TUTOR, Availability.class);        
+        availabilityQuery.setParameter("email", tutor.getEmail());
+        return availabilityQuery.getResultList();
+    }
+    
+    
+    
     /**
      * Only a tutor can add availability to the database.
      * @param availability
@@ -302,8 +320,8 @@ public class Tut4YouApp {
      */
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-    public Student find(String username) {
-        return em.find(Student.class, username);
+    public User find(String username) {
+        return em.find(User.class, username);
     }
     
     /**
@@ -327,10 +345,10 @@ public class Tut4YouApp {
      */
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void registerStudent(Student student, String groupName) throws StudentExistsException {
+    public void registerStudent(User student, String groupName) throws StudentExistsException {
         // 1: Use security EJB to add username/password to security
         // 2: if successful, then add as a registered student
-        if (null == em.find(Student.class, student.getEmail())) {
+        if (null == em.find(User.class, student.getEmail())) {
             Group group = em.find(Group.class, groupName);
             if (group == null) {
                 group = new Group(groupName);

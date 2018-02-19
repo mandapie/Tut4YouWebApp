@@ -27,6 +27,7 @@ import javax.ejb.TransactionAttributeType;
 import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
 import javax.servlet.http.HttpServletRequest;
 import tut4you.exception.*;
@@ -116,16 +117,29 @@ public class Tut4YouApp {
      * course.
      * Finds all tutors that teaches the course.
      * @param course selected course to be tutored
+     * @param dayOfWeek
+     * @param time
      * @return the number of tutors that tutors the course
      * @author Andrew Kaichi <ahkaichi@gmail.com>
      */
     @RolesAllowed("tut4youapp.student")
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-    public int getTutorsFromCourse(String course) {
+    public int getNumOfTutorsFromCourse(String course) {
         TypedQuery<Tutor> courseTutorQuery = em.createNamedQuery(Tutor.FIND_TUTORS_BY_COURSE, Tutor.class);        
         courseTutorQuery.setParameter("coursename", course);
         return courseTutorQuery.getResultList().size();
     }
+    
+    @RolesAllowed("tut4youapp.student")
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public List<Tutor> getTutorsFromCourse(String course, String dayOfWeek, java.util.Date time) {
+        TypedQuery<Tutor> courseTutorQuery = em.createNamedQuery(Tutor.FIND_TUTORS_BY_COURSE_DAY_TIME, Tutor.class);        
+        courseTutorQuery.setParameter("coursename", course);
+        courseTutorQuery.setParameter("dayofweek", dayOfWeek);
+        courseTutorQuery.setParameter("requestTime", time, TemporalType.TIME);
+        LOGGER.log(Level.SEVERE, "current time 1: {0}", time);
+        return courseTutorQuery.getResultList();
+    }    
     
     /**
      * 

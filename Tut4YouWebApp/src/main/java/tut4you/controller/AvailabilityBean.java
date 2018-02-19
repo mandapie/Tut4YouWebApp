@@ -18,6 +18,11 @@
 package tut4you.controller;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
@@ -38,14 +43,29 @@ public class AvailabilityBean implements Serializable {
     @EJB
     private Tut4YouApp tut4youApp;
     private Availability availability;
-    
+    private String stringStartTime;
+    private String stringEndTime;
     /**
      * Creates a new instance of the Availability entity
      */
     public AvailabilityBean(){
         availability = new Availability();
+        stringStartTime = "";
+        stringEndTime = "";
+
     }
-    
+    public void setStringStartTime(String stringStartTime) {
+        this.stringStartTime = stringStartTime;
+    }
+    public String getStringStartTime() {
+        return stringStartTime;
+    }
+    public void setStringEndTime(String stringEndTime) {
+        this.stringEndTime = stringEndTime;
+    }
+    public String getStringEndTime() {
+        return stringEndTime;
+    }
     /**
      * Gets the availability of the tutor
      * @return the availability of the tutor
@@ -65,9 +85,12 @@ public class AvailabilityBean implements Serializable {
     /**
      * Adds the availability to the tutor
      * @return result based on if the availability form was filled out properly
+     * @throws java.text.ParseException
      */
-    public String addAvailability(){
+    public String addAvailability() throws ParseException{
         String result = "failure";
+        availability.setStartTime(StringToTime(stringStartTime));
+        availability.setEndTime(StringToTime(stringEndTime));
         availability = tut4youApp.addAvailability(availability);
         if (availability != null){
             result = "success";
@@ -81,4 +104,21 @@ public class AvailabilityBean implements Serializable {
     public void updateAvailability(){
         tut4youApp.updateAvailability(availability);
     }
+    /**
+     * Convert string to Time
+     * @param time
+     * @return 
+     * @throws java.text.ParseException
+     */
+    public java.util.Date StringToTime(String time) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
+        
+        java.util.Date date = sdf.parse(time);
+            
+        LOGGER.log(Level.SEVERE, "time = {0}", date);
+        return date;
+       
+        
+    }
+    
 }

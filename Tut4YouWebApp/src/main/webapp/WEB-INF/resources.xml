@@ -10,12 +10,20 @@
         jdbcUrl=jdbc:mysql://YOUR_ENDPOINT:3306/YOUR_DB_NAME
     </Resource>-->
     <!-- LOCALHOST + DERBY-->
+<<<<<<< HEAD
   <Resource id="jdbc/tut4youWebAppDS" type="javax.sql.DataSource">
+=======
+<!--  <Resource id="jdbc/tut4youWebAppDS" type="javax.sql.DataSource">
+>>>>>>> origin/Keith
 	jdbcDriver=org.apache.derby.jdbc.ClientDriver
         jtaManaged=true
         initialSize=1
         password=app
         userName=app
         jdbcUrl=jdbc:derby://localhost:1527/tut4youWebAppDB;create=true
+<<<<<<< HEAD
   </Resource>
+=======
+  </Resource>-->
+>>>>>>> origin/Keith
 </resources>

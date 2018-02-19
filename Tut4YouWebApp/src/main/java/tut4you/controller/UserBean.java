@@ -74,7 +74,7 @@ public class UserBean implements Serializable {
     public void setStudent(User student) {
         this.student = student;
     }
-    
+
     /**
      * Determine if the student is authenticated and if so, make sure the session scope includes the User object for the authenticated student
      * @return true if the student making a request is authenticated, false otherwise.

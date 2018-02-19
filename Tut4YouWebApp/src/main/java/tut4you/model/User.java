@@ -42,7 +42,7 @@ import javax.persistence.Table;
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name="user_type", discriminatorType=DiscriminatorType.STRING)
 @DiscriminatorValue(value="Student")
-public class User implements Serializable {    
+public class User implements Serializable {
     @Id
     private String email;
     

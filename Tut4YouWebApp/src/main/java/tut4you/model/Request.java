@@ -19,8 +19,6 @@ package tut4you.model;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -30,6 +28,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  * Request contains subject and course name, and a short description of a
@@ -42,7 +42,7 @@ import javax.persistence.Table;
     @NamedQuery(name = Request.FIND_REQUEST_BY_EMAIL, query = "SELECT r from Request r JOIN r.student s WHERE s.email = :student_email AND r.status = :status")
 })
 @Entity
-public class Request implements Serializable {    
+public class Request implements Serializable {
     public static final String FIND_REQUEST_BY_EMAIL = "Request.findRequestByEmail";
     
     /**
@@ -75,13 +75,19 @@ public class Request implements Serializable {
         ACCEPTED,
         CANCELED;
     }
-    
-    /**
-     * converts enum type to int type
-     */
+
     private Status status;
     
+    @OneToOne
+    @JoinColumn(name="tutorName", nullable=false)
+    private Tutor tutor;
+    
     private String description;
+    //dayOfWeek
+    private String dayOfWeek;
+    //currentTime
+    @Temporal(TemporalType.TIME)
+    private java.util.Date currentTime;
     
     /**
      * Request Constructor
@@ -89,7 +95,12 @@ public class Request implements Serializable {
     public Request() {
         
     }
-    
+    public Request(User student, String description, Status status, java.util.Date currentTime) {
+        this.student = student;
+        this.description = description;
+        this.status = status;
+        this.currentTime = currentTime;
+    }
     /**
      * request overloaded constructor
      * @param student
@@ -117,7 +128,45 @@ public class Request implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
+
+    public String getDayOfWeek() {
+        return dayOfWeek;
+    }
     
+    public void setDayOfWeek(String dayOfWeek) {
+        this.dayOfWeek = dayOfWeek;
+    }
+    
+    /**
+     *
+     * @return
+     */
+
+    public java.util.Date getCurrentTime() {
+        return currentTime;
+    }
+
+
+    public void setCurrentTime(java.util.Date currentTime) {
+        this.currentTime = currentTime;
+
+    }
+    
+        /**
+     * Gets the status of the Request
+     * @return status of the Request
+     */
+    public Status getStatus(){
+        return status;
+    }
+    
+    /**
+     * Sets the status of the Request
+     * @param status of the Request
+     */
+    public void setStatus(Status status){
+        this.status = status;
+    }
     /**
      * Gets a course from the courseList
      * @return course from the list
@@ -133,7 +182,13 @@ public class Request implements Serializable {
     public void setCourse(Course course) {
         this.course = course;
     }
+    public Tutor getTutor(){
+        return tutor;
+    }
     
+    public void setTutor(Tutor tutor) {
+        this.tutor = tutor;
+    }
     /**
      * Gets the student who logged in to Tut4You
      * @return logged in student
@@ -164,22 +219,6 @@ public class Request implements Serializable {
      */
     public void setDescription(String description) {
         this.description = description;
-    }
-    
-    /**
-     * Gets the status of the Request
-     * @return status of the Request
-     */
-    public Status getStatus(){
-        return status;
-    }
-    
-    /**
-     * Sets the status of the Request
-     * @param status of the Request
-     */
-    public void setStatus(Status status){
-        this.status = status;
     }
     
     /**
@@ -217,7 +256,7 @@ public class Request implements Serializable {
      */
     @Override
     public String toString() {
-        return "tut4you.model.Request[ id=" + id + " course=" + course + " description=" + description + " ]";
+        return "tut4you.model.Request[ id=" + id + " course=" + course + " description=" + description + " dayOfWeek=" + dayOfWeek + " currentTime= " + currentTime + " ]";
     }
 
 }

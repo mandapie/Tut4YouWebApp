@@ -45,9 +45,14 @@ import javax.persistence.TemporalType;
 @DiscriminatorValue(value="Tutor")
 @Entity
 @NamedQueries({
+    @NamedQuery(name = Tutor.FIND_TUTORS_BY_COURSE_DAY_TIME, query = "SELECT t FROM Tutor t JOIN t.courses c JOIN t.availability a WHERE c.courseName = :coursename AND a.dayOfWeek = :dayofweek AND a.startTime <= :requestTime AND a.endTime >= :requestTime "),
     @NamedQuery(name = Tutor.FIND_TUTORS_BY_COURSE, query = "SELECT t FROM Tutor t JOIN t.courses c WHERE c.courseName = :coursename")
 })
 public class Tutor extends User implements Serializable {     
+    /**
+     * JPQL Query to obtain a list of tutors who taught a specific course and is available
+     */
+    public static final String FIND_TUTORS_BY_COURSE_DAY_TIME = "Tutor.findTutorsByCourseDayTime";
     /**
      * JPQL Query to obtain a list of tutors who taught a specific course
      */
@@ -88,6 +93,7 @@ public class Tutor extends User implements Serializable {
      */
     @OneToMany(mappedBy="tutor", cascade=CascadeType.ALL)
     private Collection<Availability> availability;
+    
     
     /**
      * Tutor constructor

@@ -91,6 +91,7 @@ public class Tutor extends User implements Serializable {
     @OneToMany(mappedBy="tutor", cascade=CascadeType.ALL)
     private Collection<Availability> availability;
     
+    
     /**
      * Tutor constructor
      */

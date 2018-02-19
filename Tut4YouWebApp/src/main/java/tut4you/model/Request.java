@@ -69,6 +69,10 @@ public class Request implements Serializable {
     @JoinColumn(name="courseName", nullable=false)
     private Course course;
     
+    @OneToOne
+    @JoinColumn(name="tutorName", nullable=false)
+    private Tutor tutor;
+    
     private String description;
     //dayOfWeek
     private String dayOfWeek;
@@ -77,12 +81,27 @@ public class Request implements Serializable {
     private java.util.Date currentTime;
     
     /**
+     * Tells whether a Request is pending, accepted or cancelled
+     */
+    public enum Status{
+        PENDING,
+        ACCEPTED,
+        CANCELLED;
+    }
+    private Status status;
+    
+    /**
      * Request Constructor
      */
     public Request() {
         
     }
-    
+    public Request(User student, String description, Status status, java.util.Date currentTime) {
+        this.student = student;
+        this.description = description;
+        this.status = status;
+        this.currentTime = currentTime;
+    }
     /**
      * Gets the id of a Request
      * @return id of the Request
@@ -121,6 +140,22 @@ public class Request implements Serializable {
         this.currentTime = currentTime;
 
     }
+    
+        /**
+     * Gets the status of the Request
+     * @return status of the Request
+     */
+    public Status getStatus(){
+        return status;
+    }
+    
+    /**
+     * Sets the status of the Request
+     * @param status of the Request
+     */
+    public void setStatus(Status status){
+        this.status = status;
+    }
     /**
      * Gets a course from the courseList
      * @return course from the list
@@ -136,7 +171,13 @@ public class Request implements Serializable {
     public void setCourse(Course course) {
         this.course = course;
     }
+    public Tutor getTutor(){
+        return tutor;
+    }
     
+    public void setTutor(Tutor tutor) {
+        this.tutor = tutor;
+    }
     /**
      * Gets the student who logged in to Tut4You
      * @return logged in student

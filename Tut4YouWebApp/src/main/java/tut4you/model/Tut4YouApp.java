@@ -116,11 +116,32 @@ public class Tut4YouApp {
     }
     
     /**
+     * 
+     * @return a list of requests from a user
+     */
+    @RolesAllowed("tut4youapp.student")
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public List<Request> getActiveRequest() {
+        String userName = getUsernameFromSession();
+        String email;
+        if (userName == null) {
+            return null;
+        }
+        else {
+            User user = findTutorUserName(userName);
+            email = user.getEmail();
+            TypedQuery<Request> requestQuery = em.createNamedQuery(Request.FIND_REQUEST_BY_EMAIL, Request.class);
+            requestQuery.setParameter("student_email", email);
+            return requestQuery.getResultList();
+        }
+    }
+    
+    /**
      * Only a tutor can see the list of courses added.
      * @return the list of courses a tutor as added
      * @author Syed Haider <shayder426@gmail.com>
      */
-    @RolesAllowed("tut4youapp.student")
+    @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public List<Course> getCoursesFromTutor() {
         String userName = getUsernameFromSession();

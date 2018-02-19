@@ -46,6 +46,7 @@ public class RequestBean implements Serializable {
     private int numOfTutors;
     private List<Subject> subjectList = new ArrayList();
     private List<Course> courseList = new ArrayList();
+    private List<Request> requestList = new ArrayList();
     
     /**
      * RequestBean encapsulates all the functions/services involved
@@ -81,9 +82,19 @@ public class RequestBean implements Serializable {
         
         if (request != null) {
             numOfTutors = tut4youApp.getTutorsFromCourse(request.getCourse().getCourseName());
+            requestList = tut4youApp.getActiveRequest();
             result = "success";
         }
         return result;
+    }
+    
+    public List<Request> getRequestList() {
+        return requestList;
+    }
+
+    public void setRequestList(List<Request> requestList) {
+        requestList = tut4youApp.getActiveRequest();
+        this.requestList = requestList;
     }
     
     /**

@@ -9,6 +9,69 @@
     <ui:define name="title">Profile</ui:define>
     <ui:define name="content">
         <h1>Profile Page</h1>
+        <b:container fluid="true">
+            <!-- profile info info column -->
+            <b:column medium-screen="one-third">
+                <b:panel>
+                    <b:row>
+                        <b:column span="5">
+                            <h:outputLabel value="Name:"/>
+                        </b:column>
+                        <b:column span="7">
+                            <h:outputLabel value="#{userBean.student.firstName}"/>
+                            <span></span> <!-- &nbsp; cause run time error -->
+                            <h:outputLabel value="#{userBean.student.lastName}"/>
+                        </b:column>
+                    </b:row>
+                    <b:row>
+                        <b:column span="5">
+                            <h:outputLabel value="Username:"/>
+                        </b:column>
+                        <b:column span="7">
+                            <h:outputLabel value="#{userBean.student.userName}"/>
+                        </b:column>
+                    </b:row>
+                    <b:row>
+                        <b:column span="5">
+                            <h:outputLabel value="Email:"/>
+                        </b:column>
+                        <b:column span="7">
+                            <h:outputLabel value="#{userBean.student.email}"/>
+                        </b:column>
+                    </b:row>
+                    <b:row>
+                        <b:column span="5">
+                            <h:outputLabel value="Phone Number:"/>
+                        </b:column>
+                        <b:column span="7">
+                            <h:outputLabel value="#{userBean.student.phoneNumber}"/>
+                        </b:column>
+                    </b:row>
+                </b:panel>
+            </b:column>
+            <!-- tab column with request list, notification list, schedule, and course list-->
+            <b:column medium-screen="two-thirds">
+                <b:tabView activeIndex="0"> <!-- number of activeIndex decides which tab show -->
+                    <b:tab title="Active Requests">
+                        <b:dataTable value="#{requestBean.requestList}" var="r">
+                            <b:dataTableColumn value="#{r.description}" />
+                        </b:dataTable>
+                    </b:tab>
+                    <c:if test="#{userBean.tutor}">
+                        <b:tab title="Notificatons">
+                        </b:tab>
+                        <b:tab title="Schedule">
+                        </b:tab>
+                        <b:tab title="Courses">
+                            <!-- Bootsfaces datatable to show the data in an organized fashion -->
+                            <b:dataTable value="#{addCourseBean.tutorCourses}" var="course">
+                                <b:dataTableColumn value="#{course.courseName}" />
+                            </b:dataTable>
+                        </b:tab>
+                    </c:if>
+                </b:tabView>
+            </b:column>
+        </b:container>
         <a href="/Tut4YouWebApp/students/requestTutor.xhtml">Request for a Tutor</a>
         <br></br>
         <c:if test="#{userBean.tutor}">
@@ -16,7 +79,6 @@
             <br></br>
             <a href="/Tut4YouWebApp/tutors/addCourse.xhtml">Add Courses</a>
             <br></br>
-            <a href="/Tut4YouWebApp/tutors/viewCourse.xhtml">View Courses</a>
         </c:if>
         <ui:debug hotkey='x'/>
     </ui:define>

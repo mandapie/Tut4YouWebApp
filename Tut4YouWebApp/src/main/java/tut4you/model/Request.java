@@ -37,14 +37,11 @@ import javax.persistence.Table;
  */
 @Table(name="Request")
 @NamedQueries({
-    @NamedQuery(name = Request.FIND_REQUEST_BY_EMAIL, query = "SELECT r from Request r where r.student.email = :email")
+    @NamedQuery(name = Request.FIND_REQUEST_BY_EMAIL, query = "SELECT r from Request r JOIN r.student s WHERE s.email = :student_email")
 })
 @Entity
-public class Request implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-    
-    public static final String FIND_REQUEST_BY_EMAIL = "User.findRequestByEmail";
+public class Request implements Serializable {    
+    public static final String FIND_REQUEST_BY_EMAIL = "Request.findRequestByEmail";
     
     /**
      * Primary key is generated uniquely

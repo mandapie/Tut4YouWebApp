@@ -54,3 +54,7 @@ INSERT INTO Courses_tutors(email,courseName) VALUES ('andrew@gmail.com','Mathema
 INSERT INTO Courses_tutors(email,courseName) VALUES ('keith@gmail.com','Artists in Their Own Words')
 INSERT INTO Courses_tutors(email,courseName) VALUES ('syed@gmail.com','Introduction to the Visual Arts')
 INSERT INTO Courses_tutors(email,courseName) VALUES ('brenda@gmail.com','Introduction to the Visual Arts')
+
+INSERT INTO Request(student_email, courseName, description) VALUES ('amanda@gmail.com','General Biology I','Photosynthesis process')
+INSERT INTO Request(student_email, courseName, description) VALUES ('amanda@gmail.com','General Biology I','Kreb cycle')
+INSERT INTO Request(student_email, courseName, description) VALUES ('keith@gmail.com','General Biology I','Kreb cycle')

@@ -111,7 +111,7 @@ public class Request implements Serializable {
      *
      * @return
      */
-    @Temporal(TemporalType.TIME)
+
     public java.util.Date getCurrentTime() {
         return currentTime;
     }

@@ -19,6 +19,8 @@ package tut4you.model;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -37,7 +39,7 @@ import javax.persistence.Table;
  */
 @Table(name="Request")
 @NamedQueries({
-    @NamedQuery(name = Request.FIND_REQUEST_BY_EMAIL, query = "SELECT r from Request r JOIN r.student s WHERE s.email = :student_email")
+    @NamedQuery(name = Request.FIND_REQUEST_BY_EMAIL, query = "SELECT r from Request r JOIN r.student s WHERE s.email = :student_email AND r.status = :status")
 })
 @Entity
 public class Request implements Serializable {    
@@ -64,6 +66,20 @@ public class Request implements Serializable {
     @JoinColumn(name="courseName", nullable=false)
     private Course course;
     
+    /**
+     * Tells whether a Request is pending, accepted or canceled
+     */    
+    public enum Status{
+        PENDING,
+        ACCEPTED,
+        CANCELED;
+    }
+    
+    /**
+     * converts enum type to int type
+     */
+    private Status status;
+    
     private String description;
     
     /**
@@ -71,6 +87,18 @@ public class Request implements Serializable {
      */
     public Request() {
         
+    }
+    
+    /**
+     * request overloaded constructor
+     * @param student
+     * @param description
+     * @param status 
+     */
+    public Request(User student, String description, Status status){
+        this.student = student;
+        this.description = description;
+        this.status = status;
     }
     
     /**
@@ -135,6 +163,22 @@ public class Request implements Serializable {
      */
     public void setDescription(String description) {
         this.description = description;
+    }
+    
+    /**
+     * Gets the status of the Request
+     * @return status of the Request
+     */
+    public Status getStatus(){
+        return status;
+    }
+    
+    /**
+     * Sets the status of the Request
+     * @param status of the Request
+     */
+    public void setStatus(Status status){
+        this.status = status;
     }
     
     /**

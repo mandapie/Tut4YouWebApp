@@ -125,12 +125,13 @@ public class Tutor extends User implements Serializable {
      * @param userName
      * @param phoneNumber
      * @param password
+     * @param university
      * @param dateJoined
      * @param numPeopleTutored
      * @param priceRate 
      */
-    public Tutor(String email, String firstName, String lastName, String userName, String phoneNumber, String password, Date dateJoined, int numPeopleTutored, double priceRate) {
-        super(email, firstName, lastName, userName, phoneNumber, password);
+    public Tutor(String email, String firstName, String lastName, String userName, String phoneNumber, String password, String university, Date dateJoined, int numPeopleTutored, double priceRate) {
+        super(email, firstName, lastName, userName, phoneNumber, password, university);
         this.dateJoined = dateJoined;
         this.numPeopleTutored = numPeopleTutored;
         this.priceRate = priceRate;
@@ -225,7 +226,7 @@ public class Tutor extends User implements Serializable {
      * Sets the collection of courses a tutor can teach
      * @param courses the list of courses
      */
-    public void setCourse(Collection<Course> couses) {
+    public void setCourse(Collection<Course> courses) {
         this.courses = courses;
     }
     

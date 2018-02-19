@@ -47,15 +47,39 @@
                             <h:outputLabel value="#{userBean.student.phoneNumber}"/>
                         </b:column>
                     </b:row>
+                    <b:row>
+                        <b:column span="5">
+                            <h:outputLabel value="University;"/>
+                        </b:column>
+                        <b:column span="7">
+                            <h:outputLabel value="#{userBean.student.university}"/>
+                        </b:column>
+                    </b:row>
+                    <c:if test="#{userBean.tutor}">
+                        <b:row>
+                            <b:column span="5">
+                                <h:outputLabel value="Price Rate:"/>
+                            </b:column>
+                            <b:column span="7">
+                                <h:outputLabel value="#{userBean.userTutor.priceRate}"/>
+                            </b:column>
+                        </b:row>
+                    </c:if>
                 </b:panel>
             </b:column>
             <!-- tab column with request list, notification list, schedule, and course list-->
             <b:column medium-screen="two-thirds">
                 <b:tabView activeIndex="0"> <!-- number of activeIndex decides which tab show -->
                     <b:tab title="Active Requests">
-                        <b:dataTable value="#{requestBean.requestList}" var="r">
-                            <b:dataTableColumn value="#{r.description}" />
-                        </b:dataTable>
+                        <h:form>
+                            <b:dataTable value="#{requestBean.requestList}" var="r">
+                                <b:dataTableColumn value="#{r.description}" />
+                                <h:column>
+                                    <f:facet name="header">Pending</f:facet>  
+                                        <b:commandButton span="2" value="Cancel" look="danger" action="#{requestBean.changeStatus(r)}" />
+                                </h:column>
+                            </b:dataTable>
+                        </h:form>
                     </b:tab>
                     <c:if test="#{userBean.tutor}">
                         <b:tab title="Notificatons">

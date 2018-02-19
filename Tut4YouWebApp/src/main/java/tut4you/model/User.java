@@ -51,6 +51,7 @@ public class User implements Serializable {
     private String userName;
     private String phoneNumber;
     private String password;
+    private String university;
     
     /**
      * A user can submit multiple Requests
@@ -80,15 +81,16 @@ public class User implements Serializable {
      * @param userName
      * @param phoneNumber
      * @param password 
+     * @param university 
      */
-    public User(String email, String firstName, String lastName, String userName, String phoneNumber, String password) {
+    public User(String email, String firstName, String lastName, String userName, String phoneNumber, String password, String university) {
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
         this.userName = userName;
         this.phoneNumber = phoneNumber;
         this.password = password;
-        // ADD UNIVERSITY ATtRIBUTE
+        this.university = university;
     }
     
     /**
@@ -185,6 +187,22 @@ public class User implements Serializable {
      */
     public void setPassword(String password) {
         this.password = password;
+    }
+    
+    /**
+     * gets the university of the user
+     * @return 
+     */
+    public String getUniversity() {
+        return university;
+    }
+    
+    /**
+     * gets the university of the user
+     * @param university 
+     */
+    public void setUniversity(String university) {
+        this.university = university;
     }
     
     /**

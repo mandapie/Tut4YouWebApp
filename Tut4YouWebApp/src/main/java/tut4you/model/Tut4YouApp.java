@@ -89,6 +89,7 @@ public class Tut4YouApp {
             if (student != null) {
                 student.addRequest(request);
                 request.setStudent(student);
+                request.setStatus(Request.Status.PENDING);
             }
             else {
                 return null;
@@ -97,6 +98,17 @@ public class Tut4YouApp {
         em.persist(request);
         em.flush();
         return request;
+    }
+    
+    /**
+     * A student can cancel pending requests
+     * @param r 
+     */
+    @RolesAllowed("tut4youapp.student")
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void setStatus(Request r) {
+        r.setStatus(Request.Status.CANCELED);
+        em.merge(r);
     }
     
     /**
@@ -132,6 +144,7 @@ public class Tut4YouApp {
             email = user.getEmail();
             TypedQuery<Request> requestQuery = em.createNamedQuery(Request.FIND_REQUEST_BY_EMAIL, Request.class);
             requestQuery.setParameter("student_email", email);
+            requestQuery.setParameter("status", Request.Status.PENDING);
             return requestQuery.getResultList();
         }
     }

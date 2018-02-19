@@ -82,18 +82,25 @@ public class RequestBean implements Serializable {
         
         if (request != null) {
             numOfTutors = tut4youApp.getTutorsFromCourse(request.getCourse().getCourseName());
-            requestList = tut4youApp.getActiveRequest();
             result = "success";
         }
         return result;
     }
     
+    /**
+     * Change the status of a request
+     * @param r
+     */
+    public void changeStatus(Request r) {
+        tut4youApp.setStatus(r);
+    }
+    
     public List<Request> getRequestList() {
+        requestList = tut4youApp.getActiveRequest();
         return requestList;
     }
 
     public void setRequestList(List<Request> requestList) {
-        requestList = tut4youApp.getActiveRequest();
         this.requestList = requestList;
     }
     

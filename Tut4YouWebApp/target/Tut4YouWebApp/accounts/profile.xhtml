@@ -10,7 +10,7 @@
     <ui:define name="content">
         <h1>Profile Page</h1>
         <b:container fluid="true">
-            <!-- profile info info column -->
+            <!-- profile info and links column -->
             <b:column medium-screen="one-third">
                 <b:panel>
                     <b:row>
@@ -66,6 +66,16 @@
                         </b:row>
                     </c:if>
                 </b:panel>
+                <b:row>
+                    <a href="/Tut4YouWebApp/students/requestTutor.xhtml">Request for a Tutor</a>
+                    <br></br>
+                    <c:if test="#{userBean.tutor}">
+                        <a href="/Tut4YouWebApp/tutors/availability.xhtml">Add Availability</a>
+                        <br></br>
+                        <a href="/Tut4YouWebApp/tutors/addCourse.xhtml">Add Courses</a>
+                        <br></br>
+                    </c:if>
+                </b:row>
             </b:column>
             <!-- tab column with request list, notification list, schedule, and course list-->
             <b:column medium-screen="two-thirds">
@@ -76,7 +86,7 @@
                                 <b:dataTableColumn value="#{r.description}" />
                                 <h:column>
                                     <f:facet name="header">Pending</f:facet>  
-                                        <b:commandButton span="2" value="Cancel" look="danger" action="#{requestBean.changeStatus(r)}" />
+                                        <b:commandButton span="6" value="Cancel" look="danger" action="#{requestBean.changeStatus(r)}" />
                                 </h:column>
                             </b:dataTable>
                         </h:form>
@@ -87,23 +97,17 @@
                         <b:tab title="Schedule">
                         </b:tab>
                         <b:tab title="Courses">
-                            <!-- Bootsfaces datatable to show the data in an organized fashion -->
-                            <b:dataTable value="#{addCourseBean.tutorCourses}" var="course">
-                                <b:dataTableColumn value="#{course.courseName}" />
-                            </b:dataTable>
+                            <h:form>
+                                <!-- Bootsfaces datatable to show the data in an organized fashion -->
+                                <b:dataTable value="#{addCourseBean.tutorCourses}" var="course">
+                                    <b:dataTableColumn value="#{course.courseName}" />
+                                </b:dataTable>
+                            </h:form>
                         </b:tab>
                     </c:if>
                 </b:tabView>
             </b:column>
         </b:container>
-        <a href="/Tut4YouWebApp/students/requestTutor.xhtml">Request for a Tutor</a>
-        <br></br>
-        <c:if test="#{userBean.tutor}">
-            <a href="/Tut4YouWebApp/tutors/availability.xhtml">Add Availability</a>
-            <br></br>
-            <a href="/Tut4YouWebApp/tutors/addCourse.xhtml">Add Courses</a>
-            <br></br>
-        </c:if>
         <ui:debug hotkey='x'/>
     </ui:define>
 </ui:composition>

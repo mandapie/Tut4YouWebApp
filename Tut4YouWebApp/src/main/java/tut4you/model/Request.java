@@ -68,7 +68,8 @@ public class Request implements Serializable {
     
     /**
      * Tells whether a Request is pending, accepted or canceled
-     */    
+     * http://tomee.apache.org/examples-trunk/jpa-enumerated/README.html
+     */
     public enum Status{
         PENDING,
         ACCEPTED,

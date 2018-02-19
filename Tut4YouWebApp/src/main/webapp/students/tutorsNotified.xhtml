@@ -9,6 +9,11 @@
     <ui:define name="content">
         <h1>Tutors Teaching the Course</h1>
         <p>The number of tutors that may help you with is: #{requestBean.numOfTutors}</p>
+        <h1>Tutors Available</h1>
+        <b:dataTable value="#{requestBean.tutorList}" var="tutor">
+            <b:dataTableColumn value="#{tutor.firstName}" />
+            <b:dataTableColumn value="#{tutor.lastName}" />
+        </b:dataTable>
         <ui:debug hotkey='x' />
     </ui:define>
 </ui:composition>

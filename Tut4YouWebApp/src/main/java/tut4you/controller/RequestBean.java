@@ -26,7 +26,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TimeZone;
+import java.util.function.Supplier;
 import java.util.logging.Level;
+import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.inject.Named;
@@ -54,6 +56,9 @@ public class RequestBean implements Serializable {
     private int numOfTutors;
     private List<Subject> subjectList = new ArrayList();
     private List<Course> courseList = new ArrayList();
+    private List<Tutor> tutorList = new ArrayList();
+    private Tutor tutor;
+    
     
     /**
      * RequestBean encapsulates all the functions/services involved
@@ -106,7 +111,15 @@ public class RequestBean implements Serializable {
     public void setRequest(Request request) {
         this.request = request;
     }
+
+    public Tutor getTutor() {
+        return tutor;
+    }
     
+
+    public void setTutor(Tutor tutor) {
+        this.tutor = tutor;
+    }
     /**
      * Creates a new request. If successful, get the number of tutors that tutors the course.
      * @return result to be redirected another page
@@ -119,9 +132,13 @@ public class RequestBean implements Serializable {
         request = tut4youApp.newRequest(request);
         
         if (request != null) {
-            numOfTutors = tut4youApp.getTutorsFromCourse(request.getCourse().getCourseName());
+            numOfTutors = tut4youApp.getNumOfTutorsFromCourse(request.getCourse().getCourseName(), request.getDayOfWeek().toUpperCase(), request.getCurrentTime());
             result = "success";
+            tutorList = tut4youApp.getTutorsFromCourse(request.getCourse().getCourseName(), request.getDayOfWeek().toUpperCase(), request.getCurrentTime());
             LOGGER.severe("Created new request!");
+            LOGGER.log(Level.SEVERE, "Course name: {0}", request.getCourse().getCourseName());
+            LOGGER.log(Level.SEVERE, "Day of week: {0}", request.getDayOfWeek().toUpperCase());
+            LOGGER.log(Level.SEVERE, "current time: {0}", request.getCurrentTime());
         }
         return result;
     }
@@ -225,7 +242,15 @@ public class RequestBean implements Serializable {
     public void setCourseList(List<Course> c) {
         courseList = c;
     }
+
+    public List<Tutor> getTutorList() {
+        return tutorList;
+    }
     
+
+    public void setTutorList(List<Tutor> c) {
+        tutorList = c;
+    }    
     /**
      * ajax calls this method to load the courses based on the selected subject
      */

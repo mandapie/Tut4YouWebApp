@@ -107,6 +107,11 @@ public class Request implements Serializable {
         this.dayOfWeek = dayOfWeek;
     }
     
+    /**
+     *
+     * @return
+     */
+    @Temporal(TemporalType.TIME)
     public java.util.Date getCurrentTime() {
         return currentTime;
     }

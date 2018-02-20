@@ -153,10 +153,15 @@ public class RequestBean implements Serializable {
     public void changeStatus(Request r) {
         tut4youApp.setStatus(r);
     }
-    
+
     public List<Request> getRequestList() {
         requestList = tut4youApp.getActiveRequest();
-        return requestList;
+        //if(requestList == null) {
+            //return requestList = new ArrayList();
+        //}
+       // else {
+            return requestList;
+        //}
     }
 
     public void setRequestList(List<Request> requestList) {

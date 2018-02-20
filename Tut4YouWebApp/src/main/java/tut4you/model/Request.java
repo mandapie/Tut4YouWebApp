@@ -66,7 +66,6 @@ public class Request implements Serializable {
     @JoinColumn(name="courseName", nullable=false)
     private Course course;
     
-<<<<<<< HEAD
     /**
      * Tells whether a Request is pending, accepted or canceled
      * http://tomee.apache.org/examples-trunk/jpa-enumerated/README.html
@@ -81,10 +80,6 @@ public class Request implements Serializable {
     
     @ManyToOne
     @JoinColumn(name="tutorName")
-=======
-    @OneToOne
-    @JoinColumn(name="tutorName", nullable=false)
->>>>>>> 9b03e183450ff512c393afe94f1ae700b7463af1
     private Tutor tutor;
     
     private String description;
@@ -98,22 +93,11 @@ public class Request implements Serializable {
     private int lengthOfSession;
     
     /**
-     * Tells whether a Request is pending, accepted or cancelled
-     */
-    public enum Status{
-        PENDING,
-        ACCEPTED,
-        CANCELLED;
-    }
-    private Status status;
-    
-    /**
      * Request Constructor
      */
     public Request() {
         
     }
-<<<<<<< HEAD
     /**
      * request overloaded constructor
      * @param student
@@ -123,20 +107,13 @@ public class Request implements Serializable {
      * @param lengthOfSession 
      */
     public Request(User student, String description, Status status, java.util.Date currentTime, int lengthOfSession) {
-=======
-    public Request(User student, String description, Status status, java.util.Date currentTime) {
->>>>>>> 9b03e183450ff512c393afe94f1ae700b7463af1
         this.student = student;
         this.description = description;
         this.status = status;
         this.currentTime = currentTime;
-<<<<<<< HEAD
         this.lengthOfSession = lengthOfSession;
     }
     
-=======
-    }
->>>>>>> 9b03e183450ff512c393afe94f1ae700b7463af1
     /**
      * Gets the id of a Request
      * @return id of the Request

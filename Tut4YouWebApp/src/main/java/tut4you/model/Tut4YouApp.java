@@ -154,12 +154,17 @@ public class Tut4YouApp {
             return null;
         }
         else {
-            User user = findTutorUserName(userName);
+            User user = find(userName);
             email = user.getEmail();
             TypedQuery<Request> requestQuery = em.createNamedQuery(Request.FIND_REQUEST_BY_EMAIL, Request.class);
             requestQuery.setParameter("student_email", email);
             requestQuery.setParameter("status", Request.Status.PENDING);
-            return requestQuery.getResultList();
+            if(requestQuery.getResultList() == null) {
+                return null;
+            }
+            else {
+                return requestQuery.getResultList();
+            }
         }
     }
     

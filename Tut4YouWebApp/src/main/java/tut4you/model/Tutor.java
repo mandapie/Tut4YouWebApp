@@ -22,6 +22,9 @@ import java.util.Date;
 import java.util.HashSet;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorType;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
@@ -38,14 +41,14 @@ import javax.persistence.TemporalType;
  * @author Syed Haider <shayder426@gmail.com>
  */
 @Table(name="Tutor")
+@DiscriminatorColumn(name="user_type", discriminatorType=DiscriminatorType.STRING)
+@DiscriminatorValue(value="Tutor")
 @Entity
 @NamedQueries({
-    @NamedQuery(name = Tutor.FIND_TUTORS_BY_COURSE_DAY_TIME, query = "SELECT t FROM Tutor t JOIN t.courses c JOIN t.availability a WHERE c.courseName = :coursename AND a.dayOfWeek = :dayofweek AND a.startTime <= :requestTime AND a.endTime >= :requestTime "),
-    @NamedQuery(name = Tutor.FIND_TUTORS_BY_COURSE_DAY_TIME, query = "SELECT t FROM Tutor t JOIN t.courses c WHERE c.courseName = :coursename")
+    @NamedQuery(name = Tutor.FIND_TUTORS_BY_COURSE_DAY_TIME, query = "SELECT t FROM Tutor t JOIN t.courses c JOIN t.availability a WHERE c.courseName = :coursename AND a.dayOfWeek = :dayofweek AND a.startTime <= :requestTime AND a.endTime >= :requestTime"),
+    @NamedQuery(name = Tutor.FIND_TUTORS_BY_COURSE, query = "SELECT t FROM Tutor t JOIN t.courses c WHERE c.courseName = :coursename")
 })
-public class Tutor extends User implements Serializable {   
-    private static final long serialVersionUID = 1L;
-    
+public class Tutor extends User implements Serializable {     
     /**
      * JPQL Query to obtain a list of tutors who taught a specific course and is available
      */
@@ -92,10 +95,17 @@ public class Tutor extends User implements Serializable {
     private Collection<Availability> availability;
     
     /**
+     * 
+     */
+    @OneToMany
+    (mappedBy="tutor", cascade={CascadeType.ALL})
+    private Collection<Request> requests;
+    
+    /**
      * Tutor constructor
      */
     public Tutor() {
-        
+        priceRate = 0.00;
     }
     
     /**
@@ -104,11 +114,19 @@ public class Tutor extends User implements Serializable {
      * @param numPeopleTutored
      * @param priceRate 
      */
-    public Tutor(Date dateJoined, int numPeopleTutored, int priceRate) {
+    public Tutor(Date dateJoined, int numPeopleTutored, double priceRate) {
         this.dateJoined = dateJoined;
         this.numPeopleTutored = numPeopleTutored;
         this.priceRate = priceRate;
         //groups = new HashSet<>();
+    }
+    
+    /**
+     * Inherits existing data from User to convert user type
+     * @param user 
+     */
+    public Tutor(User user) {
+        super.setEmail(user.getEmail());
     }
     
     /**
@@ -119,18 +137,46 @@ public class Tutor extends User implements Serializable {
      * @param userName
      * @param phoneNumber
      * @param password
+     * @param university
      * @param dateJoined
      * @param numPeopleTutored
      * @param priceRate 
      */
-    public Tutor(String email, String firstName, String lastName, String userName, String phoneNumber, String password, String university, Date dateJoined, int numPeopleTutored, int priceRate) {
+    public Tutor(String email, String firstName, String lastName, String userName, String phoneNumber, String password, String university, Date dateJoined, int numPeopleTutored, double priceRate) {
         super(email, firstName, lastName, userName, phoneNumber, password, university);
         this.dateJoined = dateJoined;
         this.numPeopleTutored = numPeopleTutored;
         this.priceRate = priceRate;
         //groups = new HashSet<>();
     }
+    /**
+     * gets the collection of requests
+     * @return collection of requests
+     */
+    @Override
+    public Collection<Request> getRequests() {
+        return requests;
+    }
+
+    /**
+     * sets the collection of request
+     * @param requests 
+     */
+    @Override
+    public void setRequests(Collection<Request> requests) {
+        this.requests = requests;
+    }
     
+    /**
+     * add request to collection of requests
+     * @param request 
+     */
+    @Override
+    public void addRequest(Request request) {
+        if (this.requests == null)
+            this.requests = new HashSet();
+        this.requests.add(request);
+    }
     /**
      * Gets a collection of a Tutor's availabilities
      * @return a collection of availabilities
@@ -205,6 +251,7 @@ public class Tutor extends User implements Serializable {
     public double getPriceRate() {
         return priceRate;
     }
+
     
     /**
      * Gets the collection of courses a tutor can teach
@@ -218,7 +265,7 @@ public class Tutor extends User implements Serializable {
      * Sets the collection of courses a tutor can teach
      * @param courses the list of courses
      */
-    public void setCourse(Collection<Course> couses) {
+    public void setCourse(Collection<Course> courses) {
         this.courses = courses;
     }
     

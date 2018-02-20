@@ -25,8 +25,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TimeZone;
-import java.util.function.Supplier;
+
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
@@ -56,9 +55,11 @@ public class RequestBean implements Serializable {
     private int numOfTutors;
     private List<Subject> subjectList = new ArrayList();
     private List<Course> courseList = new ArrayList();
+    private List<Request> requestList = new ArrayList();
     private List<Tutor> tutorList = new ArrayList();
     private Tutor tutor;
-    
+    private String stringLaterTime;
+
     
     /**
      * RequestBean encapsulates all the functions/services involved
@@ -66,17 +67,18 @@ public class RequestBean implements Serializable {
      */
     public RequestBean() {
         request = new Request();
+        //time = "";
     }
     /**
      * Convert string to Time
-     * @param time
+     * @param stringTime
      * @return 
      * @throws java.text.ParseException
      */
-    public java.util.Date StringToTime(String time) throws ParseException {
+    public java.util.Date StringToTime(String stringTime) throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
         
-        java.util.Date date = sdf.parse(time);
+        java.util.Date date = sdf.parse(stringTime);
             
         LOGGER.log(Level.SEVERE, "time = {0}", date);
         return date;
@@ -127,20 +129,38 @@ public class RequestBean implements Serializable {
      */
     public String createNewRequest() throws ParseException {
         String result = "failure";
-        request.setCurrentTime(StringToTime(getCurrentTime()));
+        if(time.equals("Later")) {
+            request.setCurrentTime(StringToTime(getStringLaterTime()));
+        }
+        else {
+            request.setCurrentTime(StringToTime(getCurrentTime()));
+        }
         request.setDayOfWeek(getCurrentDayOfWeek());
         request = tut4youApp.newRequest(request);
         
         if (request != null) {
-            numOfTutors = tut4youApp.getNumOfTutorsFromCourse(request.getCourse().getCourseName(), request.getDayOfWeek().toUpperCase(), request.getCurrentTime());
+            numOfTutors = tut4youApp.getNumOfTutorsFromCourse(request.getCourse().getCourseName());
             result = "success";
             tutorList = tut4youApp.getTutorsFromCourse(request.getCourse().getCourseName(), request.getDayOfWeek().toUpperCase(), request.getCurrentTime());
-            LOGGER.severe("Created new request!");
-            LOGGER.log(Level.SEVERE, "Course name: {0}", request.getCourse().getCourseName());
-            LOGGER.log(Level.SEVERE, "Day of week: {0}", request.getDayOfWeek().toUpperCase());
-            LOGGER.log(Level.SEVERE, "current time: {0}", request.getCurrentTime());
         }
         return result;
+    }
+    
+    /**
+     * Change the status of a request
+     * @param r
+     */
+    public void changeStatus(Request r) {
+        tut4youApp.setStatus(r);
+    }
+    
+    public List<Request> getRequestList() {
+        requestList = tut4youApp.getActiveRequest();
+        return requestList;
+    }
+
+    public void setRequestList(List<Request> requestList) {
+        this.requestList = requestList;
     }
     
     /**
@@ -200,13 +220,27 @@ public class RequestBean implements Serializable {
     }
     
     /**
-     * Sets the time of the request
+     * Sets the time of the request 
      * @param time the time of the request
      */
     public void setTime(String time) {
         this.time = time;
     }
+       /**
+     * Get the time of the request if user set for later 
+     * @return the time of the request
+     */
+    public String getStringLaterTime() {
+        return stringLaterTime;
+    }
     
+    /**
+     * Sets the time of the request if user wants a request for later
+     * @param stringLaterTime the time of the request if for later
+     */
+    public void setStringLaterTime(String stringLaterTime) {
+        this.stringLaterTime = stringLaterTime;
+    }
     /**
      * Loads all the subjects from the database.
      * @return a list of subjects
@@ -214,7 +248,6 @@ public class RequestBean implements Serializable {
     public List<Subject> getSubjectList() {
         if (subjectList.isEmpty()) {
             subjectList = tut4youApp.getSubjects();
-            LOGGER.severe("Retrieved list of subjects from EJB");
         }
         return subjectList;
     }
@@ -256,6 +289,6 @@ public class RequestBean implements Serializable {
      */
     public void changeSubject() {
         courseList = tut4youApp.getCourses(subject.getSubjectName());
-        LOGGER.severe("Retrieved list of courses from EJB");
     }
+
 }

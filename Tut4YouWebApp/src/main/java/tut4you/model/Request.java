@@ -39,14 +39,11 @@ import javax.persistence.TemporalType;
  */
 @Table(name="Request")
 @NamedQueries({
-    @NamedQuery(name = Request.FIND_REQUEST_BY_EMAIL, query = "SELECT r from Request r where r.student.email = :email")
+    @NamedQuery(name = Request.FIND_REQUEST_BY_EMAIL, query = "SELECT r from Request r JOIN r.student s WHERE s.email = :student_email AND r.status = :status")
 })
 @Entity
 public class Request implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-    
-    public static final String FIND_REQUEST_BY_EMAIL = "User.findRequestByEmail";
+    public static final String FIND_REQUEST_BY_EMAIL = "Request.findRequestByEmail";
     
     /**
      * Primary key is generated uniquely
@@ -65,9 +62,25 @@ public class Request implements Serializable {
     /**
      * Multiple requests can be submitted under the same course
      */
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name="courseName", nullable=false)
     private Course course;
+    
+    /**
+     * Tells whether a Request is pending, accepted or canceled
+     * http://tomee.apache.org/examples-trunk/jpa-enumerated/README.html
+     */
+    public enum Status{
+        PENDING,
+        ACCEPTED,
+        CANCELED;
+    }
+
+    private Status status;
+    
+    @ManyToOne
+    @JoinColumn(name="tutorName")
+    private Tutor tutor;
     
     private String description;
     //dayOfWeek
@@ -76,11 +89,29 @@ public class Request implements Serializable {
     @Temporal(TemporalType.TIME)
     private java.util.Date currentTime;
     
+    //length of session
+    private int lengthOfSession;
+    
     /**
      * Request Constructor
      */
     public Request() {
         
+    }
+    /**
+     * request overloaded constructor
+     * @param student
+     * @param description
+     * @param status 
+     * @param currentTime 
+     * @param lengthOfSession 
+     */
+    public Request(User student, String description, Status status, java.util.Date currentTime, int lengthOfSession) {
+        this.student = student;
+        this.description = description;
+        this.status = status;
+        this.currentTime = currentTime;
+        this.lengthOfSession = lengthOfSession;
     }
     
     /**
@@ -98,7 +129,17 @@ public class Request implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
-
+    /**
+     * gets the length of the tutoring session
+     * @return lengthOfSession
+     */
+    public int getLengthOfSession() {
+        return lengthOfSession;
+    }
+    public void setLengthOfSession(int lengthOfSession) {
+        this.lengthOfSession = lengthOfSession;
+    }
+    
     public String getDayOfWeek() {
         return dayOfWeek;
     }
@@ -121,6 +162,22 @@ public class Request implements Serializable {
         this.currentTime = currentTime;
 
     }
+    
+        /**
+     * Gets the status of the Request
+     * @return status of the Request
+     */
+    public Status getStatus(){
+        return status;
+    }
+    
+    /**
+     * Sets the status of the Request
+     * @param status of the Request
+     */
+    public void setStatus(Status status){
+        this.status = status;
+    }
     /**
      * Gets a course from the courseList
      * @return course from the list
@@ -136,7 +193,13 @@ public class Request implements Serializable {
     public void setCourse(Course course) {
         this.course = course;
     }
+    public Tutor getTutor(){
+        return tutor;
+    }
     
+    public void setTutor(Tutor tutor) {
+        this.tutor = tutor;
+    }
     /**
      * Gets the student who logged in to Tut4You
      * @return logged in student

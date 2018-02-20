@@ -3,6 +3,7 @@ tut4you/controller/RequestBean.class
 tut4you/model/User.class
 tut4you/validations/EqualsValidator.class
 tut4you/controller/UserBean.class
+tut4you/model/Request$Status.class
 tut4you/model/Subject.class
 tut4you/controller/AddCourseBean.class
 tut4you/exception/StudentExistsException.class

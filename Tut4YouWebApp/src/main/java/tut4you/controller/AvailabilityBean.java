@@ -94,7 +94,6 @@ public class AvailabilityBean implements Serializable {
         availability = tut4youApp.addAvailability(availability);
         if (availability != null){
             result = "success";
-            LOGGER.severe("Availability added");
         }
         return result;
     }

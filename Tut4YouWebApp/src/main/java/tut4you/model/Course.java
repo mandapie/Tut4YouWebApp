@@ -19,6 +19,7 @@ package tut4you.model;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -27,6 +28,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -74,7 +76,38 @@ public class Course implements Serializable {
           joinColumns=@JoinColumn(name="coursename"),
           inverseJoinColumns=@JoinColumn(name="email"))
     private Collection<Tutor> tutors;
+    /**
+     * One to many relationship between course and request
+     */
+    @OneToMany
+    (mappedBy="course", cascade={CascadeType.ALL})
+    private Collection<Request> requests;
     
+    /**
+     * gets the collection of requests
+     * @return collection of requests
+     */
+    public Collection<Request> getRequests() {
+        return requests;
+    }
+
+    /**
+     * sets the collection of request
+     * @param requests 
+     */
+    public void setRequests(Collection<Request> requests) {
+        this.requests = requests;
+    }
+    
+    /**
+     * add request to collection of requests
+     * @param request 
+     */
+    public void addRequest(Request request) {
+        if (this.requests == null)
+            this.requests = new HashSet();
+        this.requests.add(request);
+    }
     /**
      * gets the name of course
      * @return courseName

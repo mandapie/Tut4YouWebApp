@@ -21,6 +21,8 @@ import java.util.Collection;
 import java.util.HashSet;
 import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorType;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
@@ -38,11 +40,9 @@ import javax.persistence.Table;
 @Table(name="Users")
 @Entity
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name="user_type")
+@DiscriminatorColumn(name="user_type", discriminatorType=DiscriminatorType.STRING)
+@DiscriminatorValue(value="Student")
 public class User implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-    
     @Id
     private String email;
     
@@ -81,7 +81,7 @@ public class User implements Serializable {
      * @param userName
      * @param phoneNumber
      * @param password 
-     * @param university
+     * @param university 
      */
     public User(String email, String firstName, String lastName, String userName, String phoneNumber, String password, String university) {
         this.email = email;
@@ -90,24 +90,6 @@ public class User implements Serializable {
         this.userName = userName;
         this.phoneNumber = phoneNumber;
         this.password = password;
-        // ADD UNIVERSITY ATTRIBUTE
-        this.university = university;
-        
-    }
-    
-    /**
-     * Gets the university of a user
-     * @return the email
-     */
-    public String getUniversity() {
-        return university;
-    }
-    
-    /**
-     * Sets the university of a user
-     * @param university 
-     */
-    public void setUniversity(String university) {
         this.university = university;
     }
     
@@ -208,6 +190,22 @@ public class User implements Serializable {
     }
     
     /**
+     * gets the university of the user
+     * @return 
+     */
+    public String getUniversity() {
+        return university;
+    }
+    
+    /**
+     * gets the university of the user
+     * @param university 
+     */
+    public void setUniversity(String university) {
+        this.university = university;
+    }
+    
+    /**
      * Gets the collection requests submitted by a user
      * @return collection of Requests
      */
@@ -272,6 +270,14 @@ public class User implements Serializable {
                  && confirmPassword.equals(password));
     }
     
+    /**
+     * gets the user type from the discriminator column
+     * https://stackoverflow.com/questions/15208793/getting-the-value-of-the-discriminator-column
+     * @return the user type
+     */
+    public String getDecriminatorValue() {
+        return this.getClass().getAnnotation(DiscriminatorValue.class).value();
+    }
     /**
      * Override hashCode
      * @return hash

@@ -90,6 +90,7 @@ public class Tut4YouApp {
             if (student != null) {
                 student.addRequest(request);
                 request.setStudent(student);
+                request.setStatus(Request.Status.PENDING);
             }
             else {
                 return null;
@@ -98,6 +99,17 @@ public class Tut4YouApp {
         em.persist(request);
         em.flush();
         return request;
+    }
+    
+    /**
+     * A student can cancel pending requests
+     * @param r 
+     */
+    @RolesAllowed("tut4youapp.student")
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void setStatus(Request r) {
+        r.setStatus(Request.Status.CANCELED);
+        em.merge(r);
     }
     
     /**
@@ -112,12 +124,12 @@ public class Tut4YouApp {
      */
     @RolesAllowed("tut4youapp.student")
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-    public int getNumOfTutorsFromCourse(String course, String dayOfWeek, java.util.Date time) {
+    public int getNumOfTutorsFromCourse(String course) {
         TypedQuery<Tutor> courseTutorQuery = em.createNamedQuery(Tutor.FIND_TUTORS_BY_COURSE, Tutor.class);        
         courseTutorQuery.setParameter("coursename", course);
-        LOGGER.log(Level.SEVERE, "current time 1: {0}", time);
         return courseTutorQuery.getResultList().size();
     }
+    
     @RolesAllowed("tut4youapp.student")
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public List<Tutor> getTutorsFromCourse(String course, String dayOfWeek, java.util.Date time) {
@@ -130,11 +142,33 @@ public class Tut4YouApp {
     }    
     
     /**
+     * 
+     * @return a list of requests from a user
+     */
+    @RolesAllowed("tut4youapp.student")
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public List<Request> getActiveRequest() {
+        String userName = getUsernameFromSession();
+        String email;
+        if (userName == null) {
+            return null;
+        }
+        else {
+            User user = findTutorUserName(userName);
+            email = user.getEmail();
+            TypedQuery<Request> requestQuery = em.createNamedQuery(Request.FIND_REQUEST_BY_EMAIL, Request.class);
+            requestQuery.setParameter("student_email", email);
+            requestQuery.setParameter("status", Request.Status.PENDING);
+            return requestQuery.getResultList();
+        }
+    }
+    
+    /**
      * Only a tutor can see the list of courses added.
      * @return the list of courses a tutor as added
      * @author Syed Haider <shayder426@gmail.com>
      */
-    @RolesAllowed("tut4youapp.student")
+    @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public List<Course> getCoursesFromTutor() {
         String userName = getUsernameFromSession();
@@ -222,7 +256,7 @@ public class Tut4YouApp {
      * @author: Syed Haider <shayder426@gmail.com>
      */
     @RolesAllowed("tut4youapp.tutor")
-    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public List<Course> getTutorCourses() {
         String userName = getUsernameFromSession();
         String email;
@@ -247,7 +281,6 @@ public class Tut4YouApp {
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public Availability getAvailability(Long id){
         //TypedQuery<Availability> availabilityQuery = em.createNamedQuery(Availability.FIND_AVAILABILITY_BY_TUTOR, Availability.class);
-        LOGGER.severe("availability queried");
         return em.find(Availability.class, id);
         //return availabilityQuery.getResultList();       
     }
@@ -288,7 +321,7 @@ public class Tut4YouApp {
      * @author Andrew <ahkaichi@gmail.com>
      */
     @RolesAllowed("tut4youapp.tutor")
-    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public Availability updateAvailability(Availability availability){
         em.merge(availability);
         return availability;
@@ -389,4 +422,26 @@ public class Tut4YouApp {
             throw new StudentExistsException();
         }
     }
+    
+//    /**
+//     * Converts student to be a tutor. The student will be added a tutor role.
+//     * @param user
+//     * @param groupName
+//     * https://stackoverflow.com/questions/20098791/jpa-inheritance-change-the-entity-type
+//     */
+//    //IN PROGRESS
+//    @PermitAll
+//    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+//    public void addTutorRole(User user, String groupName) {
+//        if (user.getDecriminatorValue().equals("Student")) {
+//            em.createNativeQuery("UPDATE Users SET user_type='Tutor'").setParameter("email",user.getEmail()).executeUpdate();
+//            Group group = em.find(Group.class, groupName);
+//            if (group == null) {
+//                group = new Group(groupName);
+//            }
+//            user.addGroup(group);
+//            group.addStudent(user);
+//            em.flush();
+//        }
+//    }
 }

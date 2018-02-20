@@ -30,19 +30,96 @@
                 </b:row>
                 <b:inputTextarea label="Description/Topic:" placeholder="Enter a short description..." value="#{requestBean.request.description}"/>
                 <!-- buttons are to be implemented later -->
-<!--                <b:row>
-                    <b:panelGrid size="xs" columns="12">
-                        <b:radiobutton value="#{requestBean.time}">
-                            <f:selectItem itemValue="immediate" itemLabel="Immediate" />
-                            <f:selectItem onclick="ajax:requestBean.submit()" itemValue="later" itemLabel="Later" />
-                            <f:ajax />
-                        </b:radiobutton>
-                    </b:panelGrid>
+                <b:row>
+                    
+                        <h:selectOneRadio value="#{requestBean.time}">
+                            <f:selectItem itemLabel="Immediate" itemValue="Immediate" />
+                            <f:selectItem itemValue="Later" itemLabel="Later" />
+                            <f:ajax render="output" />
+                        </h:selectOneRadio>
+                        <h:panelGroup id="output">
+                            <h:panelGroup rendered="#{requestBean.time eq 'Later'}">
+                                <b:column>
+                                    <b:selectOneMenu class="form-control"
+                                             id="stringLaterTime"
+                                             value="#{requestBean.stringLaterTime}"
+                                             required="true">
+                                <f:selectItem itemValue="Select One..."/>
+                                <f:selectItem itemLabel="1:00 AM" itemValue="01:00:00" />
+                                <f:selectItem itemLabel="2:00 AM" itemValue="02:00:00" />
+                                <f:selectItem itemLabel="3:00 AM" itemValue="03:00:00" />
+                                <f:selectItem itemLabel="4:00 AM" itemValue="04:00:00" />
+                                <f:selectItem itemLabel="5:00 AM" itemValue="05:00:00" />
+                                <f:selectItem itemLabel="6:00 AM" itemValue="06:00:00" />
+                                <f:selectItem itemLabel="7:00 AM" itemValue="07:00:00" />
+                                <f:selectItem itemLabel="8:00 AM" itemValue="08:00:00" />
+                                <f:selectItem itemLabel="9:00 AM" itemValue="09:00:00" />
+                                <f:selectItem itemLabel="10:00 AM" itemValue="10:00:00" />
+                                <f:selectItem itemLabel="11:00 AM" itemValue="11:00:00" />
+                                <f:selectItem itemLabel="12:00 PM" itemValue="12:00:00" />
+                                <f:selectItem itemLabel="1:00 PM" itemValue="13:00:00" />
+                                <f:selectItem itemLabel="2:00 PM" itemValue="14:00:00" />
+                                <f:selectItem itemLabel="3:00 PM" itemValue="15:00:00" />
+                                <f:selectItem itemLabel="4:00 PM" itemValue="16:00:00" />
+                                <f:selectItem itemLabel="5:00 PM" itemValue="17:00:00" />
+                                <f:selectItem itemLabel="6:00 PM" itemValue="18:00:00" />
+                                <f:selectItem itemLabel="7:00 PM" itemValue="19:00:00" />
+                                <f:selectItem itemLabel="8:00 PM" itemValue="20:00:00" />
+                                <f:selectItem itemLabel="9:00 PM" itemValue="21:00:00" />
+                                <f:selectItem itemLabel="10:00 PM" itemValue="22:00:00" />
+                                <f:selectItem itemLabel="11:00 PM" itemValue="23:00:00" />
+                                <f:selectItem itemLabel="12:00 AM" itemValue="00:00:00" />                                
+                            </b:selectOneMenu>
+                                </b:column>
+                            </h:panelGroup>
+                        </h:panelGroup>
+                    
                 </b:row>
-                <b:row id="appointment" rendered="#{requestBean.time eq 'Later'}">
-                    <b:formGroup>
-                        test
-                    </b:formGroup>
+<!--                <b:row>
+                    <b:selectOneMenu class="form-control"
+                                 id="studentType"
+                                 value="#{requestBean.time}"
+                                 required="true">
+                        <f:selectItem itemLabel="Select One..."/>
+                        <f:selectItem itemValue="Immediate" />
+                        <f:selectItem itemValue="Later" />
+                    </b:selectOneMenu>
+                    <h:panelGroup id="typeChange">
+                    <h:panelGroup rendered="#{requestBean.time eq 'Later'}">
+                        <b:row>
+                           <b:selectOneMenu class="form-control"
+                                             id="startTime"
+                                             value="#{requestBean.stringLaterTime}"
+                                             required="true">
+                                <f:selectItem itemValue="Select One..."/>
+                                <f:selectItem itemLabel="1:00 AM" itemValue="01:00:00" />
+                                <f:selectItem itemLabel="2:00 AM" itemValue="02:00:00" />
+                                <f:selectItem itemLabel="3:00 AM" itemValue="03:00:00" />
+                                <f:selectItem itemLabel="4:00 AM" itemValue="04:00:00" />
+                                <f:selectItem itemLabel="5:00 AM" itemValue="05:00:00" />
+                                <f:selectItem itemLabel="6:00 AM" itemValue="06:00:00" />
+                                <f:selectItem itemLabel="7:00 AM" itemValue="07:00:00" />
+                                <f:selectItem itemLabel="8:00 AM" itemValue="08:00:00" />
+                                <f:selectItem itemLabel="9:00 AM" itemValue="09:00:00" />
+                                <f:selectItem itemLabel="10:00 AM" itemValue="10:00:00" />
+                                <f:selectItem itemLabel="11:00 AM" itemValue="11:00:00" />
+                                <f:selectItem itemLabel="12:00 PM" itemValue="12:00:00" />
+                                <f:selectItem itemLabel="1:00 PM" itemValue="13:00:00" />
+                                <f:selectItem itemLabel="2:00 PM" itemValue="14:00:00" />
+                                <f:selectItem itemLabel="3:00 PM" itemValue="15:00:00" />
+                                <f:selectItem itemLabel="4:00 PM" itemValue="16:00:00" />
+                                <f:selectItem itemLabel="5:00 PM" itemValue="17:00:00" />
+                                <f:selectItem itemLabel="6:00 PM" itemValue="18:00:00" />
+                                <f:selectItem itemLabel="7:00 PM" itemValue="19:00:00" />
+                                <f:selectItem itemLabel="8:00 PM" itemValue="20:00:00" />
+                                <f:selectItem itemLabel="9:00 PM" itemValue="21:00:00" />
+                                <f:selectItem itemLabel="10:00 PM" itemValue="22:00:00" />
+                                <f:selectItem itemLabel="11:00 PM" itemValue="23:00:00" />
+                                <f:selectItem itemLabel="12:00 AM" itemValue="00:00:00" />                                
+                            </b:selectOneMenu>
+                        </b:row>
+                    </h:panelGroup>
+                    </h:panelGroup>
                 </b:row>-->
                 <b:row>
                     <b:commandButton span="2" value="Submit" look="primary" action="#{requestBean.createNewRequest}" />
@@ -52,3 +129,5 @@
         <ui:debug hotkey='x' />
     </ui:define>
 </ui:composition>
+
+        

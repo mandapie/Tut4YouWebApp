@@ -42,11 +42,18 @@ public class UserBean implements Serializable {
     private Tut4YouApp tut4youapp;
     private User student;
     private Tutor userTutor;
-
+    
+    /**
+     * get tutor user
+     * @return userTutor
+     */
     public Tutor getUserTutor() {
         return userTutor;
     }
-
+    /**
+     * set user tutor
+     * @param tutor 
+     */
     public void setUserTutor(Tutor tutor) {
         this.userTutor = tutor;
     }

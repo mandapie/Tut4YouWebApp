@@ -18,10 +18,8 @@
 package tut4you.controller;
 
 import java.io.Serializable;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -54,15 +52,31 @@ public class AvailabilityBean implements Serializable {
         stringEndTime = "";
 
     }
+    /**
+     * sets string start time
+     * @param stringStartTime 
+     */
     public void setStringStartTime(String stringStartTime) {
         this.stringStartTime = stringStartTime;
     }
+    /**
+     * gets string start time
+     * @return stringStartTime
+     */
     public String getStringStartTime() {
         return stringStartTime;
     }
+    /**
+     * sets string end time
+     * @param stringEndTime 
+     */
     public void setStringEndTime(String stringEndTime) {
         this.stringEndTime = stringEndTime;
     }
+    /**
+     * gets stringEndTime
+     * @return stringEndTime
+     */
     public String getStringEndTime() {
         return stringEndTime;
     }

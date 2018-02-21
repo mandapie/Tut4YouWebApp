@@ -90,6 +90,12 @@ public class RequestBean implements Serializable {
        
         
     }
+    /**
+     * http://www.andrewsaguiar.com/blog/2015/10/16/java-how-to-format-and-parse-dates
+     * Gets the current time as a string
+     * @return current time
+     * @throws ParseException 
+     */
     public String getCurrentTime() throws ParseException {
       String stringCurrentTime = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
       //java.util.Date currentTime = StringToTime(stringCurrentTime);
@@ -118,12 +124,18 @@ public class RequestBean implements Serializable {
     public void setRequest(Request request) {
         this.request = request;
     }
-
+    /**
+     * gets tutor
+     * @return tutor
+     */
     public Tutor getTutor() {
         return tutor;
     }
     
-
+    /**
+     * sets tutor
+     * @param tutor 
+     */
     public void setTutor(Tutor tutor) {
         this.tutor = tutor;
     }
@@ -162,12 +174,8 @@ public class RequestBean implements Serializable {
 
     public List<Request> getRequestList() {
         requestList = tut4youApp.getActiveRequest();
-        //if(requestList == null) {
-            //return requestList = new ArrayList();
-        //}
-       // else {
+
             return requestList;
-        //}
     }
 
     public void setRequestList(List<Request> requestList) {

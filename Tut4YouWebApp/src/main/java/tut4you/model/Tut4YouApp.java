@@ -372,7 +372,26 @@ public class Tut4YouApp {
 
         return availability;
     }
-    
+    /**
+     * Only a tutor can view the list of courses that they can teach.
+     * @return the list of courses to the bean
+     * @author: Syed Haider <shayder426@gmail.com>
+     */
+    @RolesAllowed("tut4youapp.tutor")
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public List<Availability> getAvailabilityList() {
+        String userName = getUsernameFromSession();
+        String email;
+        if (userName == null) {
+            return null;
+        } else {
+            Tutor tutor = findTutorUserName(userName);
+            email = tutor.getEmail();
+            TypedQuery<Availability> availabilityQuery = em.createNamedQuery(Availability.FIND_AVAILABILITY_BY_TUTOR, Availability.class);
+            availabilityQuery.setParameter("email", email);
+            return availabilityQuery.getResultList();
+        }
+    }
     /**
      * Only a tutor can update his/her availability times.
      * @param availability

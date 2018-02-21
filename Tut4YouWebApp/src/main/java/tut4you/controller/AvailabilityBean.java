@@ -21,7 +21,9 @@ import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -46,6 +48,7 @@ public class AvailabilityBean implements Serializable {
     private String stringStartTime;
     private String stringEndTime;
     private Tutor tutor;
+    private List<Availability> availabilityList = new ArrayList();
     /**
      * Creates a new instance of the Availability entity
      */
@@ -98,7 +101,15 @@ public class AvailabilityBean implements Serializable {
         }
         return result;
     }
-    
+    /**
+     * Gets a list of the availabilities of the Tutor in the EJB
+     *
+     * @return a list of subjects
+     */
+    public List<Availability> getAvailabilityList() {
+        availabilityList = tut4youApp.getAvailabilityList();
+        return availabilityList;
+    }
     /**
      * Updates the current availability of the tutor
      */

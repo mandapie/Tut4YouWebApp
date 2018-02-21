@@ -54,7 +54,7 @@ public class Availability implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, unique = true)
     private Long id;
-
+    private boolean editable;
     private String dayOfWeek;
 
     @Temporal(TemporalType.TIME)
@@ -172,7 +172,13 @@ public class Availability implements Serializable {
     public void setTutor(Tutor tutor) {
         this.tutor = tutor;
     }
+    public boolean isEditable() {
+        return editable;
+    }
 
+    public void setEditable(boolean editable) {
+        this.editable = editable;
+    }
     @Override
     public int hashCode() {
         int hash = 0;

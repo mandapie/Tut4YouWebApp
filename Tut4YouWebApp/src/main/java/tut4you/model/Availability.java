@@ -17,6 +17,7 @@
 package tut4you.model;
 
 import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -25,218 +26,162 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Table;
+
 
 /**
  * Availability encapsulates information of a time frame of when a Tutor is
  * available. Only a Tutor can add an availability.
+ *
  * @author Andrew Kaichi <ahkaichi@gmail.com>
  * @author Keith Tran <keithtran25@gmail.com>
+ * @author Syed Haider <shayder426@gmail.com>
  */
 @Table(name="Availability")
 @Entity
-@NamedQueries ({
+@NamedQueries({
     @NamedQuery(name = Availability.FIND_AVAILABILITY_BY_TUTOR, query = "SELECT a FROM Availability a JOIN a.tutor s WHERE s.email = :email")
 })
 public class Availability implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-    
     /**
      * JPQL Query to get all availabilities of a tutor
      */
     public static final String FIND_AVAILABILITY_BY_TUTOR = "Availability.findAvailabilityByTutor";
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, unique = true)
     private Long id;
-    
+
     private String dayOfWeek;
-    private int startHour;
-    private int startMinute;
-    private int endHour;
-    private int endMinute;
-    private String startPeriod;
-    private String endPeriod;
-    
+    @Temporal(TemporalType.TIME)
+    private java.util.Date startTime;
+    @Temporal(TemporalType.TIME)
+    private java.util.Date endTime;
+    private boolean editable;
     /**
      * Multiple availabilities can be added by a Tutor
      */
     @ManyToOne
     private Tutor tutor;
-    
+
     /**
      * Availability constructor
      */
     public Availability() {
-        
+
+    }
+
+    /**
+     * Availability overloaded constructor
+     *
+     * @param dayOfWeek
+     * @param startTime
+     * @param endTime
+     */
+    public Availability(String dayOfWeek, java.util.Date startTime, java.util.Date endTime) {
+        this.dayOfWeek = dayOfWeek;
+        this.startTime = startTime;
+        this.endTime = endTime;
     }
     
     /**
-     * Availability overloaded constructor
-     * @param dayOfWeek
-     * @param startHour
-     * @param startMinute
-     * @param startPeriod
-     * @param endHour
-     * @param endMinute
-     * @param endPeriod 
+     * Gets the Id of availability
+     * @return id
      */
-    public Availability(String dayOfWeek, int startHour, int startMinute, String startPeriod, int endHour, int endMinute, String endPeriod) {
-        this.dayOfWeek = dayOfWeek;
-        this.startHour = startHour;
-        this.startMinute = startMinute;
-        this.startPeriod = startPeriod;
-        this.endHour = endHour;
-        this.endMinute = endMinute;
-        this.endPeriod = endPeriod;
+    public Long getId() {
+        return id;
+    }
+
+    /**
+     * Sets the primary key of the availability
+     * @param id
+     */
+    public void setId(Long id) {
+        this.id = id;
+    }
+    
+    /**
+     * Gets the state of Editable
+     * @return editable
+     */
+    public boolean isEditable() {
+        return editable;
+    }
+    
+    /**
+     * Sets the state of Editable
+     * @param editable 
+     */
+    public void setEditable(boolean editable) {
+        this.editable = editable;
     }
     
     /**
      * Gets the day of the week
      * @return dayOfWeek
      */
-    public String getDayOfWeek(){
-        return dayOfWeek;
-    }
-    
+    public String getDayOfWeek() {
+        return dayOfWeek;    }
+
     /**
      * Sets the day of the week
-     * @param dayOfWeek 
+     * @param dayOfWeek
      */
-    public void setDayOfWeek(String dayOfWeek){
+    public void setDayOfWeek(String dayOfWeek) {
         this.dayOfWeek = dayOfWeek;
     }
-    
+
     /**
-     * Gets the start Hour
-     * @return startHour
+     * Gets the start time
+     * @return startTime
      */
-    public int getStartHour() {
-        return startHour;
+    public java.util.Date getStartTime() {
+        return startTime;
     }
-    
+
     /**
-     * Sets the start Hour
-     * @param startHour 
+     * Sets the start time
+     * @param startTime
      */
-    public void setStartHour(int startHour) {
-        this.startHour = startHour;
+    public void setStartTime(java.util.Date startTime) {
+        this.startTime = startTime;
     }
-    
+
     /**
-     * Gets the start minute
-     * @return startMinute
+     * Gets the end time
+     * @return endTime
      */
-    public int getStartMinute() {
-        return startMinute;
+    public java.util.Date getEndTime() {
+        return endTime;
     }
-    
+
     /**
-     * Sets the start minute
-     * @param startMinute 
+     * Sets the end time
+     * @param endTime
      */
-    public void setStartMinute(int startMinute) {
-        this.startMinute = startMinute;
+    public void setEndTime(java.util.Date endTime) {
+        this.endTime = endTime;
     }
-    
-    /**
-     * Gets the start period
-     * @return startPeriod
-     */
-    public String getStartPeriod(){
-        return startPeriod;
-    }
-    
-    /**
-     * Sets the start period
-     * @param startPeriod 
-     */
-    public void setStartPeriod(String startPeriod) {
-        this.startPeriod = startPeriod;
-    }
-    
-    /**
-     * Gets the end hour
-     * @return endHour
-     */
-    public int getEndHour() {
-        return endHour;
-    }
-    
-    /**
-     * Sets the end hour
-     * @param endHour 
-     */
-    public void setEndHour(int endHour) {
-        this.endHour = endHour;
-    }
-    
-    /**
-     * Gets the end minute
-     * @return endMinute
-     */
-    public int getEndMinute(){
-        return endMinute;
-    }
-    
-    /**
-     * Sets the end minute
-     * @param endMinute 
-     */
-    public void setEndMinute(int endMinute) {
-        this.endMinute = endMinute;
-    }
-    
-    /**
-     * Gets the end period
-     * @return endPeriod
-     */
-    public String getEndPeriod(){
-        return endPeriod;
-    }
-    
-    /**
-     * Sets the end period
-     * @param endPeriod 
-     */
-    public void setEndPeriod(String endPeriod) {
-        this.endPeriod = endPeriod;
-    }
-    
-    /**
-     * Gets the primary key of the availability
-     * @return id
-     */
-    public Long getId(){
-        return id;
-    }
-    
-    /**
-     * Sets the primary key of the availability
-     * @param id 
-     */
-    public void setId(Long id){
-        this.id = id;
-    }
-    
+
     /**
      * Gets a tutor who is going to add an availability
      * @return tutor
      */
-    public Tutor getTutor(){
+    public Tutor getTutor() {
         return tutor;
     }
-    
+
     /**
      * Sets a tutor who is going to add an availability
-     * @param tutor 
+     * @param tutor
      */
     public void setTutor(Tutor tutor) {
         this.tutor = tutor;
     }
-    
+
     @Override
     public int hashCode() {
         int hash = 0;

@@ -27,6 +27,7 @@ import javax.ejb.TransactionAttributeType;
 import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
 import javax.servlet.http.HttpServletRequest;
 import tut4you.exception.*;
@@ -37,7 +38,6 @@ import tut4you.exception.*;
  */
 @Stateless
 public class Tut4YouApp {
-    
     /**
      * Gets the persistence unit name and creates an entity manager to
      * persist data into the database. 
@@ -50,7 +50,7 @@ public class Tut4YouApp {
      * Query all subjects from the database
      * @return List of subjects
      */
-    @PermitAll
+    @RolesAllowed("tut4youapp.student")
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public List<Subject> getSubjects() {
         TypedQuery<Subject> subjectQuery = em.createNamedQuery(Subject.FIND_ALL_SUBJECTS, Subject.class);
@@ -62,7 +62,7 @@ public class Tut4YouApp {
      * @param subject takes in the subject name
      * @return List of courses
      */
-    @PermitAll
+    @RolesAllowed("tut4youapp.student")
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public List<Course> getCourses(String subject) {
         TypedQuery<Course> courseQuery = em.createNamedQuery(Course.FIND_COURSE_BY_SUBJECT, Course.class);
@@ -89,6 +89,7 @@ public class Tut4YouApp {
             if (student != null) {
                 student.addRequest(request);
                 request.setStudent(student);
+                request.setStatus(Request.Status.PENDING);
             }
             else {
                 return null;
@@ -100,6 +101,40 @@ public class Tut4YouApp {
     }
     
     /**
+     * 
+     * @return a list of requests from a user
+     */
+    @RolesAllowed("tut4youapp.student")
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public List<Request> getActiveRequest() {
+        String userName = getUsernameFromSession();
+        String email;
+        if (userName == null) {
+            return null;
+        }
+        else {
+            User user = find(userName);
+            email = user.getEmail();
+            TypedQuery<Request> requestQuery = em.createNamedQuery(Request.FIND_REQUEST_BY_EMAIL, Request.class);
+            requestQuery.setParameter("student_email", email);
+            requestQuery.setParameter("status", Request.Status.PENDING);
+            return requestQuery.getResultList();
+        }
+    }
+    
+    /**
+     * A student can cancel pending requests
+     * @param r 
+     */
+    @RolesAllowed("tut4youapp.student")
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void cancelRequest(Request r) {
+        r.setStatus(Request.Status.CANCELED);
+        removeRequestFromNotification(r);
+        em.merge(r);
+    }
+        
+    /**
      * Only students can see the number of tutors that tutors the requested
      * course.
      * Finds all tutors that teaches the course.
@@ -109,27 +144,101 @@ public class Tut4YouApp {
      */
     @RolesAllowed("tut4youapp.student")
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-    public int getTutorsFromCourse(String course) {
+    public int getNumOfTutorsFromCourse(String course) {
         TypedQuery<Tutor> courseTutorQuery = em.createNamedQuery(Tutor.FIND_TUTORS_BY_COURSE, Tutor.class);        
         courseTutorQuery.setParameter("coursename", course);
         return courseTutorQuery.getResultList().size();
     }
     
     /**
-     * Only a tutor can see the list of courses added.
-     * @return the list of courses a tutor as added
-     * @author Syed Haider <shayder426@gmail.com>
+     * Only students can see the list of available tutors that tutors the requested
+     * course.
+     * Finds all tutors that teaches the course.
+     * @param course selected course to be tutored
+     * @param dayOfWeek
+     * @param time
+     * @param doNotDisturb
+     * @return the number of tutors that tutors the course
+     * @author Andrew Kaichi <ahkaichi@gmail.com>
      */
     @RolesAllowed("tut4youapp.student")
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-    public List<Course> getCoursesFromTutor() {
-        String userName = getUsernameFromSession();
-        Tutor tutor = findTutorUserName(userName);
-        TypedQuery<Course> tutorCourseQuery = em.createNamedQuery(Course.FIND_COURSES_BY_TUTOR, Course.class);        
-        tutorCourseQuery.setParameter("email", tutor.getEmail());
-        return tutorCourseQuery.getResultList();
+    public List<Tutor> getTutorsFromCourse(String course, String dayOfWeek, java.util.Date time, Boolean doNotDisturb) {
+        TypedQuery<Tutor> courseTutorQuery = em.createNamedQuery(Tutor.FIND_TUTORS_BY_COURSE_DAY_TIME, Tutor.class);
+        courseTutorQuery.setParameter("coursename", course);
+        courseTutorQuery.setParameter("dayofweek", dayOfWeek);
+        courseTutorQuery.setParameter("requestTime", time, TemporalType.TIME);
+        courseTutorQuery.setParameter("doNotDisturb", false);
+        return courseTutorQuery.getResultList();
+    }   
+        
+    /**
+     * the selected tutor will be added to a pending request and vice versa.
+     * @param tutor
+     * @param pending 
+     */
+    @RolesAllowed("tut4youapp.student")
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void addPendingRequest(Tutor tutor, Request pending) {
+        Request pendingRequest = em.find(Request.class, pending.getId());
+        if (pendingRequest == null) {
+            pendingRequest = pending;
+        }
+        tutor.addPendingRequest(pendingRequest);
+        pendingRequest.addAvailableTutor(tutor);
+        em.merge(tutor);
+        em.flush();
     }
     
+    /**
+     * Sets a tutor to the request when a tutor accepts the request.
+     * @param r 
+     */
+    @RolesAllowed("tut4youapp.tutor")
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void setTutorToRequest(Request r) {
+        String userName = getUsernameFromSession();
+        Tutor tutor = findTutorUserName(userName);
+        r.setStatus(Request.Status.ACCEPTED);
+        r.setTutor(tutor);
+        em.merge(r);
+        em.flush();
+        removeRequestFromNotification(r);
+    }
+    
+    /**
+     * Pending request wil be removed from te notification list when a tutor declines it.
+     * @param r 
+     */
+    @RolesAllowed("tut4youapp.tutor")
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void removeRequestFromNotification(Request r) {
+        Request pendingRequest = em.find(Request.class, r.getId());
+        if (pendingRequest == null) {
+            pendingRequest = r;
+        }
+        String userName = getUsernameFromSession();
+        Tutor tutor = findTutorUserName(userName);
+        tutor.removePendingRequest(pendingRequest);
+        pendingRequest.removeAvailableTutor(tutor);
+        em.merge(tutor);
+        em.flush();
+    }
+    
+    /**
+     * Tutors are able to view pending requests.
+     * @return 
+     */
+    @RolesAllowed("tut4youapp.tutor")
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public List<Request> getPendingRequestForTutor() {
+        String userName = getUsernameFromSession();
+        Tutor tutor = findTutorUserName(userName);
+        TypedQuery<Request> requestTutorQuery = em.createNamedQuery(Request.FIND_REQUESTS_BY_TUTOR, Request.class);
+        requestTutorQuery.setParameter("email",tutor.getEmail());
+        return requestTutorQuery.getResultList();
+    }
+        
     /**
      * Only a tutor can add a course from the database. The course will be
      * persisted to the courses_tutors table.
@@ -238,6 +347,27 @@ public class Tut4YouApp {
     }
     
     /**
+     * Only a tutor can view the list of courses that they can teach.
+     * @return the list of courses to the bean
+     * @author: Syed Haider <shayder426@gmail.com>
+     */
+    @RolesAllowed("tut4youapp.tutor")
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public List<Availability> getAvailabilityList() {
+        String userName = getUsernameFromSession();
+        String email;
+        if (userName == null) {
+            return null;
+        } else {
+            Tutor tutor = findTutorUserName(userName);
+            email = tutor.getEmail();
+            TypedQuery<Availability> availabilityQuery = em.createNamedQuery(Availability.FIND_AVAILABILITY_BY_TUTOR, Availability.class);
+            availabilityQuery.setParameter("email", email);
+            return availabilityQuery.getResultList();
+        }
+    }
+    
+    /**
      * Only a tutor can add availability to the database.
      * @param availability
      * @return the availability
@@ -273,12 +403,36 @@ public class Tut4YouApp {
      * @author Andrew <ahkaichi@gmail.com>
      */
     @RolesAllowed("tut4youapp.tutor")
-    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public Availability updateAvailability(Availability availability){
         em.merge(availability);
         return availability;
     }
     
+    /**
+     * A tutor can set their status to be available to receive notifications
+     * and set their status to be not available to not receive notifications.
+     * @param doNotDisturb
+     * @return 
+     */
+    @RolesAllowed("tut4youapp.tutor")
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public boolean updateDoNotDisturb(Boolean doNotDisturb){
+        String userName = getUsernameFromSession();
+        Tutor tutor = findTutorUserName(userName);
+        doNotDisturb = tutor.isDoNotDisturb();
+        if (doNotDisturb == true){
+            tutor.setDoNotDisturb(false);
+            em.merge(tutor);
+            return doNotDisturb;
+        }
+        else {
+            tutor.setDoNotDisturb(true);
+            em.merge(tutor);
+            return doNotDisturb;
+        }
+    }
+
     /**
      * Gets a logged in username by getting the username from the session.
      * @return username

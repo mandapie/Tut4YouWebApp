@@ -33,7 +33,7 @@ import javax.persistence.Table;
 
 /**
  * User is the most basic user type. SINGLE_TABLE is used as our inheritance
- strategy as Tutor inherits all the attributes of a User.
+ * strategy as Tutor inherits all the attributes of a User.
  * @author Keith Tran <keithtran25@gmail.com>
  * @author Syed Haider <shayder426@gmail.com> 
  */
@@ -42,7 +42,7 @@ import javax.persistence.Table;
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name="user_type", discriminatorType=DiscriminatorType.STRING)
 @DiscriminatorValue(value="Student")
-public class User implements Serializable {    
+public class User implements Serializable {
     @Id
     private String email;
     
@@ -51,6 +51,7 @@ public class User implements Serializable {
     private String userName;
     private String phoneNumber;
     private String password;
+    private String university;
     
     /**
      * A user can submit multiple Requests
@@ -80,15 +81,16 @@ public class User implements Serializable {
      * @param userName
      * @param phoneNumber
      * @param password 
+     * @param university 
      */
-    public User(String email, String firstName, String lastName, String userName, String phoneNumber, String password) {
+    public User(String email, String firstName, String lastName, String userName, String phoneNumber, String password, String university) {
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
         this.userName = userName;
         this.phoneNumber = phoneNumber;
         this.password = password;
-        // ADD UNIVERSITY ATtRIBUTE
+        this.university = university;
     }
     
     /**
@@ -188,6 +190,22 @@ public class User implements Serializable {
     }
     
     /**
+     * gets the university of the user
+     * @return 
+     */
+    public String getUniversity() {
+        return university;
+    }
+    
+    /**
+     * gets the university of the user
+     * @param university 
+     */
+    public void setUniversity(String university) {
+        this.university = university;
+    }
+    
+    /**
      * Gets the collection requests submitted by a user
      * @return collection of Requests
      */
@@ -204,16 +222,6 @@ public class User implements Serializable {
     }
     
     /**
-     * Adds a request submitted to the collection of Requests
-     * @param request 
-     */
-    public void addRequest(Request request) {
-        if (this.requests == null)
-            this.requests = new HashSet();
-        this.requests.add(request);
-    }
-    
-    /**
      * gets the groups that this user is a member of
      * @return a collection of groups that this user belongs to
      */
@@ -227,6 +235,16 @@ public class User implements Serializable {
      */
     public void setGroups(Collection<Group> groups) {
         this.groups = groups;
+    }
+    
+    /**
+     * Adds a request submitted to the collection of Requests
+     * @param request 
+     */
+    public void addRequest(Request request) {
+        if (this.requests == null)
+            this.requests = new HashSet();
+        this.requests.add(request);
     }
     
     /**
@@ -260,6 +278,7 @@ public class User implements Serializable {
     public String getDecriminatorValue() {
         return this.getClass().getAnnotation(DiscriminatorValue.class).value();
     }
+    
     /**
      * Override hashCode
      * @return hash

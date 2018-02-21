@@ -3,73 +3,59 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
-                xmlns:b="http://bootsfaces.net/ui">
-    <ui:define name="title">Availability</ui:define>
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <!-- @author Amanda Pan <daikiraidemodaisuki@gmail.com> -->
+    <ui:define name="title">Profile</ui:define>
     <ui:define name="content">
-        <h1>Update Availability</h1>
-        <b:panel title="Enter Your Availability" collapsible="false" look="info">
-            <b:form>
-                <b:container>
-                    <b:row>
-                        <b:column medium-screen="2">
-                            <!-- Drop-down menu disply Monday-Sunday -->
-                            <h:outputLabel value="Select a day:"/>
-                            <b:selectOneMenu class="form-control"
-                                             id="dayOfWeek"
-                                             value="#{availabilityBean.availability.dayOfWeek}"
-                                             required="true">
-                                <f:selectItem itemValue="Select One..."/>
-                                <f:selectItem itemValue="Monday" />
-                                <f:selectItem itemValue="Tuesday" />
-                                <f:selectItem itemValue="Wednesday" />
-                                <f:selectItem itemValue="Thursday" />
-                                <f:selectItem itemValue="Friday" />
-                                <f:selectItem itemValue="Saturday" />
-                                <f:selectItem itemValue="Sunday" />
-                            </b:selectOneMenu>
-                            <!-- Start Hour -->
-                            <h:outputLabel value="Start Time:"/>
-                            <b:inputText id="startHourM" placeholder="Enter Start Hour" required="true" requiredMessage="required" value="#{availabilityBean.availability.startHour}">
-                                <b:message for="startHourM"/>
-                            </b:inputText>  
-                            <!-- Start Minute -->
-                            <b:inputText id="startMinuteM" placeholder="Enter Start Minute" required="true" requiredMessage="required" value="#{availabilityBean.availability.startMinute}">
-                                <b:message for="startMinuteM"/>
-                            </b:inputText>
-                            <!-- Choose AM or PM -->
-                            <b:selectOneMenu class="form-control"
-                                             id="startPeriod"
-                                             value="#{availabilityBean.availability.startPeriod}"
-                                             required="true">
-                                <f:selectItem itemValue="Select One..."/>
-                                <f:selectItem itemValue="AM" />
-                                <f:selectItem itemValue="PM" />
-                            </b:selectOneMenu>
-                            <!-- End Hour -->
-                            <h:outputLabel value="End Time:"/>
-                            <b:inputText id="endHourM" placeholder="Enter End Hour" required="true" requiredMessage="required" value="#{availabilityBean.availability.endHour}">
-                                <b:message for="endHourM"/>
-                            </b:inputText>
-                            <!-- End Minute -->
-                            <b:inputText id="endMinuteM" placeholder="Enter End Minute" required="true" requiredMessage="required" value="#{availabilityBean.availability.endMinute}">
-                                <b:message for="endMinuteM"/>
-                            </b:inputText>
-                            <!-- Choose AM or PM -->
-                            <b:selectOneMenu class="form-control"
-                                             id="endPeriod"
-                                             value="#{availabilityBean.availability.endPeriod}"
-                                             required="true">
-                                <f:selectItem itemValue="Select One..."/>
-                                <f:selectItem itemValue="AM" />
-                                <f:selectItem itemValue="PM" />
-                            </b:selectOneMenu>
-                            <!-- Adds to availability in -->
-                            <b:commandButton value="Add Availability" look="primary" style="width:100%" action="#{availabilityBean.addAvailability}"/>
-                        </b:column>
-                    </b:row>
-                </b:container>
-            </b:form>
-        </b:panel>
+        <h1>Availability This Week</h1>
+        <!-- Bootsfaces datatable to show the data in an organized fashion -->
+        <h:form>
+            <b:dataTable value = "#{availabilityBean.availabilityList}" var = "avail">
+                <b:dataTableColumn>
+                    <f:facet name = "header">Day of Week</f:facet>
+                    <h:inputText value = "#{avail.dayOfWeek}" 
+                                 size = "20" rendered = "#{avail.editable}" />
+                    <h:outputText value = "#{avail.dayOfWeek}" 
+                                  rendered = "#{not avail.editable}"/>
+
+                </b:dataTableColumn>
+
+                <b:dataTableColumn>
+                    <f:facet name = "header">Start Time</f:facet>
+                    <h:inputText value = "#{availabilityBean.stringStartTime}" size = "20"
+                                 rendered = "#{avail.editable}" />
+                    <h:outputText value = "#{avail.startTime}" 
+                                  rendered = "#{not avail.editable}">                        
+                        <f:convertDateTime pattern ="hh:mm:ss a"></f:convertDateTime>
+                    </h:outputText>
+                </b:dataTableColumn>
+
+                <b:dataTableColumn>
+                    <f:facet name = "header">End Time</f:facet>
+                    <h:inputText value = "#{availabilityBean.stringEndTime}" 
+                                 size = "20" rendered = "#{avail.editable}" />
+                    <h:outputText value = "#{avail.endTime}"
+                                  rendered = "#{not avail.editable}">
+                        <f:convertDateTime pattern ="hh:mm:ss a"></f:convertDateTime>
+                    </h:outputText>
+                </b:dataTableColumn>
+
+<!--                <b:dataTableColumn>
+                    <f:facet name = "header">Edit</f:facet>
+                    <b:commandButton value = "Edit" 
+                                     action = "#{availabilityBean.edit(avail)}" 
+                                     rendered = "#{not avail.editable}">        
+                        <f:setPropertyActionListener
+                            target = "#{availabilityBean.availability}" value = "#{availability}" />
+                    </b:commandButton>
+                </b:dataTableColumn>-->
+            </b:dataTable>  
+            <br/>
+
+            <b:commandButton value = "Save"
+                             action = "#{availabilityBean.saveAction}" />	  
+        </h:form>
         <ui:debug hotkey='x'/>
     </ui:define>
 </ui:composition>

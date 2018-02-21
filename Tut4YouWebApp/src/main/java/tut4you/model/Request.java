@@ -17,17 +17,23 @@
 package tut4you.model;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.HashSet;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  * Request contains subject and course name, and a short description of a
@@ -37,14 +43,29 @@ import javax.persistence.Table;
  */
 @Table(name="Request")
 @NamedQueries({
-    @NamedQuery(name = Request.FIND_REQUEST_BY_EMAIL, query = "SELECT r from Request r where r.student.email = :email")
+    @NamedQuery(name = Request.FIND_REQUEST_BY_EMAIL, query = "SELECT r from Request r JOIN r.student s WHERE s.email = :student_email AND r.status = :status"),
+    @NamedQuery(name = Request.FIND_REQUESTS_BY_TUTOR, query = "SELECT r FROM Request r JOIN r.availableTutors t WHERE t.email = :email")
 })
 @Entity
 public class Request implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+    /**
+     * Tells whether a Request is pending, accepted or canceled
+     * http://tomee.apache.org/examples-trunk/jpa-enumerated/README.html
+     */
+    public enum Status{
+        PENDING,
+        ACCEPTED,
+        CANCELED;
+    }
     
-    public static final String FIND_REQUEST_BY_EMAIL = "User.findRequestByEmail";
+    /**
+     * JPQL Query to find Requests by user email
+     */
+    public static final String FIND_REQUEST_BY_EMAIL = "Request.findRequestByEmail";
+    /**
+     * JPQL Query to find requests from available/selected tutors
+     */
+    public static final String FIND_REQUESTS_BY_TUTOR = "Request.findRequestsByTutor";
     
     /**
      * Primary key is generated uniquely
@@ -59,21 +80,55 @@ public class Request implements Serializable {
      */
     @ManyToOne
     private User student;
-    
     /**
-     * Multiple requests can be submitted under the same course
+     * only one course can be associated with one request
      */
     @OneToOne
     @JoinColumn(name="courseName", nullable=false)
-    private Course course;
-    
+    private Course course;    
+    /**
+     * Association class between request and tutor.
+     * One tutor can receive many pending requests and
+     * One request can be sent to many tutors.
+     */
+    @ManyToMany
+    @JoinTable(name="Requests_tutors",
+          joinColumns={
+              @JoinColumn(name="id")
+          },
+          inverseJoinColumns=@JoinColumn(name="email"))
+    private Collection<Tutor> availableTutors;
+    @OneToOne
+    @JoinColumn(name="tutorName")
+    private Tutor tutor;
     private String description;
+    private String dayOfWeek;
+    @Temporal(TemporalType.TIME)
+    private java.util.Date currentTime;
+    private Status status;
+    private int lengthOfSession;
     
     /**
      * Request Constructor
      */
     public Request() {
         
+    }
+    
+    /**
+     * request overloaded constructor
+     * @param student
+     * @param description
+     * @param status 
+     * @param currentTime 
+     * @param lengthOfSession 
+     */
+    public Request(User student, String description, Status status, java.util.Date currentTime, int lengthOfSession) {
+        this.student = student;
+        this.description = description;
+        this.status = status;
+        this.currentTime = currentTime;
+        this.lengthOfSession = lengthOfSession;
     }
     
     /**
@@ -91,7 +146,47 @@ public class Request implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
+
+    public String getDayOfWeek() {
+        return dayOfWeek;
+    }
     
+    public void setDayOfWeek(String dayOfWeek) {
+        this.dayOfWeek = dayOfWeek;
+    }
+    
+    /**
+     * get currentTime
+     * @return currenTime
+     */
+    public java.util.Date getCurrentTime() {
+        return currentTime;
+    }
+
+    /**
+     * set currentTime
+     * @param currentTime 
+     */
+    public void setCurrentTime(java.util.Date currentTime) {
+        this.currentTime = currentTime;
+
+    }
+    
+    /**
+     * Gets the status of the Request
+     * @return status of the Request
+     */
+    public Status getStatus(){
+        return status;
+    }
+    
+    /**
+     * Sets the status of the Request
+     * @param status of the Request
+     */
+    public void setStatus(Status status){
+        this.status = status;
+    }
     /**
      * Gets a course from the courseList
      * @return course from the list
@@ -106,6 +201,22 @@ public class Request implements Serializable {
      */
     public void setCourse(Course course) {
         this.course = course;
+    }
+    
+    /**
+     * Gets a tutor
+     * @return tutor
+     */
+    public Tutor getTutor(){
+        return tutor;
+    }
+    
+    /**
+     * Sets a tutor
+     * @param tutor 
+     */
+    public void setTutor(Tutor tutor) {
+        this.tutor = tutor;
     }
     
     /**
@@ -138,6 +249,56 @@ public class Request implements Serializable {
      */
     public void setDescription(String description) {
         this.description = description;
+    }
+    
+    /**
+     * gets the length of the tutoring session
+     * @return lengthOfSession
+     */
+    public int getLengthOfSession() {
+        return lengthOfSession;
+    }
+    
+    /**
+     * sets the length of the tutoring session
+     * @param lengthOfSession 
+     */
+    public void setLengthOfSession(int lengthOfSession) {
+        this.lengthOfSession = lengthOfSession;
+    }
+    
+    /**
+     * Gets a collection of available tutors
+     * @return availableTutors
+     */
+    public Collection<Tutor> getAvailableTutors() {
+        return availableTutors;
+    }
+    
+    /**
+     * Sets a collection of available tutors
+     * @param availableTutors 
+     */
+    public void setAvailableTutors(Collection<Tutor> availableTutors) {
+        this.availableTutors = availableTutors;
+    }
+    
+    /**
+     * Adds an available tutor to the collection of available tutors
+     * @param at 
+     */
+    public void addAvailableTutor(Tutor at) {
+        if (this.availableTutors == null)
+            this.availableTutors = new HashSet();
+        this.availableTutors.add(at);
+    }
+    
+    /**
+     * removes an available tutor to the collection of available tutors
+     * @param at 
+     */
+    public void removeAvailableTutor(Tutor at) {
+        availableTutors.remove(at);
     }
     
     /**
@@ -175,7 +336,7 @@ public class Request implements Serializable {
      */
     @Override
     public String toString() {
-        return "tut4you.model.Request[ id=" + id + " course=" + course + " description=" + description + " ]";
+        return "tut4you.model.Request[ id=" + id + " course=" + course + " description=" + description + " dayOfWeek=" + dayOfWeek + " currentTime= " + currentTime + " ]";
     }
 
 }

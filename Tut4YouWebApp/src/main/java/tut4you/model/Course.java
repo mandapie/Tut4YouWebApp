@@ -38,18 +38,17 @@ import javax.persistence.Table;
 @Table(name="Course")
 @Entity
 @NamedQueries({
-    @NamedQuery(name = Course.FIND_ALL_COURSES, query = "SELECT c FROM Course c"),
     @NamedQuery(name = Course.FIND_COURSE_BY_SUBJECT, query = "SELECT c FROM Course c JOIN c.subject s WHERE s.subjectName = :name"),
     @NamedQuery(name = Course.FIND_COURSES_BY_TUTOR, query = "SELECT c FROM Course c JOIN c.tutors t WHERE t.email = :email")
 })
-public class Course implements Serializable {
-    private static final long serialVersionUID = 1L;
-    
+public class Course implements Serializable {  
     /**
      * JPQL Query to find courses by their subject name
      */
-    public static final String FIND_ALL_COURSES = "Course.findAllCourses";
     public static final String FIND_COURSE_BY_SUBJECT = "Course.findCourseBySubject";
+    /**
+     * JPQL Query to find courses by tutor
+     */
     public static final String FIND_COURSES_BY_TUTOR = "Tutor.findCoursesByTutor";
     
     @Id
@@ -63,7 +62,6 @@ public class Course implements Serializable {
     @ManyToOne
     @JoinColumn(name="subjectName", nullable=false)
     private Subject subject;
-    
     /**
      * Many to many relationship
      * Courses are tutored by many tutors
@@ -151,5 +149,4 @@ public class Course implements Serializable {
     public String toString() {
         return "tut4you.model.Course[ id=" + courseName + " ]";
     }
-    
 }

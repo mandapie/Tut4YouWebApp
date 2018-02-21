@@ -45,8 +45,8 @@ import javax.persistence.TemporalType;
 @DiscriminatorValue(value="Tutor")
 @Entity
 @NamedQueries({
-    @NamedQuery(name = Tutor.FIND_TUTORS_BY_COURSE_DAY_TIME, query = "SELECT t FROM Tutor t JOIN t.courses c JOIN t.availability a WHERE c.courseName = :coursename AND a.dayOfWeek = :dayofweek AND a.startTime <= :requestTime AND a.endTime >= :requestTime"),
-    @NamedQuery(name = Tutor.FIND_TUTORS_BY_COURSE, query = "SELECT t FROM Tutor t JOIN t.courses c WHERE c.courseName = :coursename")
+    @NamedQuery(name = Tutor.FIND_TUTORS_BY_COURSE_DAY_TIME, query = "SELECT t FROM Tutor t JOIN t.courses c JOIN t.availability a WHERE c.courseName = :coursename AND a.dayOfWeek = :dayofweek AND a.startTime <= :requestTime AND a.endTime >= :requestTime AND t.doNotDisturb = :doNotDisturb"),
+    @NamedQuery(name = Tutor.FIND_TUTORS_BY_COURSE, query = "SELECT t FROM Tutor t JOIN t.courses c WHERE c.courseName = :coursename"),
 })
 public class Tutor extends User implements Serializable {     
     /**
@@ -61,19 +61,24 @@ public class Tutor extends User implements Serializable {
     /**
      * dateJoined the date a tutor joins
      */
-    @Column(nullable = true)
-    @Temporal( TemporalType.DATE )
+    @Temporal(TemporalType.DATE)
     private Date dateJoined;
     
     /**
      * numPeopleTutored the number of people a tutor tutored
      */
-    @Column(nullable = true)
     private int numPeopleTutored;
-
-    //@Column(nullable = true)
     private double priceRate;
-    
+    private boolean doNotDisturb;
+
+    public boolean isDoNotDisturb() {
+        return doNotDisturb;
+    }
+
+    public void setDoNotDisturb(boolean doNotDisturb) {
+        this.doNotDisturb = doNotDisturb;
+    }
+
     /**
      * A Tutor can tutor multiple Courses and
      * a Course can be tutored by multiple Tutors.
@@ -81,31 +86,45 @@ public class Tutor extends User implements Serializable {
     @ManyToMany(mappedBy="tutors", cascade=CascadeType.ALL)
     private Collection<Course> courses;
     
-//    /**
-//     * A Tutor can be in multiple Groups and
-//     * A Group can contain multiple Tutors
-//     */
-//    @ManyToMany(mappedBy="tutors", cascade=CascadeType.ALL)
-//    private Collection<Group> groups;
-    
     /**
      * A tutor can set multiple Availabilities
      */
     @OneToMany(mappedBy="tutor", cascade=CascadeType.ALL)
     private Collection<Availability> availability;
     
+//    @ManyToOne
+//    private Tutor availableTutor;
+    
     /**
-     * 
+     * Many tutors can view many requests
      */
-    @OneToMany
-    (mappedBy="tutor", cascade={CascadeType.ALL})
-    private Collection<Request> requests;
+    @ManyToMany(mappedBy="availableTutors", cascade=CascadeType.ALL)
+    private Collection<Request> pendingRequests;
+
+    public Collection<Request> getPendingRequests() {
+        return pendingRequests;
+    }
+
+    public void setPendingRequests(Collection<Request> pendingRequests) {
+        this.pendingRequests = pendingRequests;
+    }
+    
+    public void addPendingRequest(Request pr) {
+        if (this.pendingRequests == null)
+            this.pendingRequests = new HashSet();
+        this.pendingRequests.add(pr);
+    }
+    
+    public void removePendingRequest(Request pr) {
+        pendingRequests.remove(pr);
+    }
     
     /**
      * Tutor constructor
      */
     public Tutor() {
         priceRate = 0.00;
+        doNotDisturb = false;
     }
     
     /**
@@ -113,12 +132,13 @@ public class Tutor extends User implements Serializable {
      * @param dateJoined
      * @param numPeopleTutored
      * @param priceRate 
+     * @param doNotDisturb 
      */
-    public Tutor(Date dateJoined, int numPeopleTutored, double priceRate) {
+    public Tutor(Date dateJoined, int numPeopleTutored, double priceRate, boolean doNotDisturb) {
         this.dateJoined = dateJoined;
         this.numPeopleTutored = numPeopleTutored;
         this.priceRate = priceRate;
-        //groups = new HashSet<>();
+        this.doNotDisturb = doNotDisturb;
     }
     
     /**
@@ -129,7 +149,7 @@ public class Tutor extends User implements Serializable {
         super.setEmail(user.getEmail());
     }
     
-    /**
+     /**
      * Tutor overloaded constructor with inherited and existing attributes
      * @param email
      * @param firstName
@@ -141,42 +161,16 @@ public class Tutor extends User implements Serializable {
      * @param dateJoined
      * @param numPeopleTutored
      * @param priceRate 
+     * @param doNotDisturb 
      */
-    public Tutor(String email, String firstName, String lastName, String userName, String phoneNumber, String password, String university, Date dateJoined, int numPeopleTutored, double priceRate) {
+    public Tutor(String email, String firstName, String lastName, String userName, String phoneNumber, String password, String university, Date dateJoined, int numPeopleTutored, double priceRate, boolean doNotDisturb) {
         super(email, firstName, lastName, userName, phoneNumber, password, university);
         this.dateJoined = dateJoined;
         this.numPeopleTutored = numPeopleTutored;
         this.priceRate = priceRate;
-        //groups = new HashSet<>();
-    }
-    /**
-     * gets the collection of requests
-     * @return collection of requests
-     */
-    @Override
-    public Collection<Request> getRequests() {
-        return requests;
-    }
-
-    /**
-     * sets the collection of request
-     * @param requests 
-     */
-    @Override
-    public void setRequests(Collection<Request> requests) {
-        this.requests = requests;
+        this.doNotDisturb = doNotDisturb;
     }
     
-    /**
-     * add request to collection of requests
-     * @param request 
-     */
-    @Override
-    public void addRequest(Request request) {
-        if (this.requests == null)
-            this.requests = new HashSet();
-        this.requests.add(request);
-    }
     /**
      * Gets a collection of a Tutor's availabilities
      * @return a collection of availabilities
@@ -252,7 +246,6 @@ public class Tutor extends User implements Serializable {
         return priceRate;
     }
 
-    
     /**
      * Gets the collection of courses a tutor can teach
      * @return the list of courses
@@ -268,37 +261,6 @@ public class Tutor extends User implements Serializable {
     public void setCourse(Collection<Course> courses) {
         this.courses = courses;
     }
-    
-//    /**
-//     * Gets a collection of groups a tutor is in
-//     * @return the collection of groups
-//     */
-//    @Override
-//    public Collection<Group> getGroups(){
-//        return groups;
-//    }
-//    
-//    /**
-//     * Add a group to the tutor's set of groups
-//     * if collection of groups is null, create new HashSet
-//     * @param group to be added
-//     */
-//    @Override
-//    public void setGroups(Collection<Group> groups) {
-//        this.groups = groups;
-//    }
-//
-//    /**
-//     * Add a group to the tutor's set of groups
-//     * if collection of groups is null, create new HashSet
-//     * @param group to be added
-//     */
-//    @Override
-//    public void addGroup(Group group) {
-//        if (this.groups == null)
-//            this.groups = new HashSet();
-//        this.groups.add(group);
-//    }
     
     /**
      * Add a course to a collection of Courses

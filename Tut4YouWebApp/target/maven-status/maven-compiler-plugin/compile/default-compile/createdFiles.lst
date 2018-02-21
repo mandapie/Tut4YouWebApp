@@ -1,5 +1,6 @@
 tut4you/model/Course.class
 tut4you/controller/RequestBean.class
+tut4you/controller/NotifyBean.class
 tut4you/model/User.class
 tut4you/validations/EqualsValidator.class
 tut4you/controller/UserBean.class

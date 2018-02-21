@@ -18,8 +18,10 @@
 package tut4you.controller;
 
 import java.io.Serializable;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -43,6 +45,7 @@ public class AvailabilityBean implements Serializable {
     private Availability availability;
     private String stringStartTime;
     private String stringEndTime;
+    private Tutor tutor;
     /**
      * Creates a new instance of the Availability entity
      */
@@ -52,31 +55,15 @@ public class AvailabilityBean implements Serializable {
         stringEndTime = "";
 
     }
-    /**
-     * sets string start time
-     * @param stringStartTime 
-     */
     public void setStringStartTime(String stringStartTime) {
         this.stringStartTime = stringStartTime;
     }
-    /**
-     * gets string start time
-     * @return stringStartTime
-     */
     public String getStringStartTime() {
         return stringStartTime;
     }
-    /**
-     * sets string end time
-     * @param stringEndTime 
-     */
     public void setStringEndTime(String stringEndTime) {
         this.stringEndTime = stringEndTime;
     }
-    /**
-     * gets stringEndTime
-     * @return stringEndTime
-     */
     public String getStringEndTime() {
         return stringEndTime;
     }
@@ -118,6 +105,10 @@ public class AvailabilityBean implements Serializable {
     public void updateAvailability(){
         tut4youApp.updateAvailability(availability);
     }
+    public void updateDoNotDisturb(){
+        tut4youApp.updateDoNotDisturb(tutor.isDoNotDisturb());
+        
+    }    
     /**
      * Convert string to Time
      * @param time

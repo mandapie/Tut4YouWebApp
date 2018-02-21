@@ -107,9 +107,37 @@ public class Tut4YouApp {
      */
     @RolesAllowed("tut4youapp.student")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void setStatus(Request r) {
+    public void cancelRequest(Request r) {
         r.setStatus(Request.Status.CANCELED);
+        removeRequestFromNotification(r);
         em.merge(r);
+    }
+    
+    @RolesAllowed("tut4youapp.tutor")
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void setTutorToRequest(Request r) {
+        String userName = getUsernameFromSession();
+        Tutor tutor = findTutorUserName(userName);
+        r.setStatus(Request.Status.ACCEPTED);
+        r.setTutor(tutor);
+        em.merge(r);
+        em.flush();
+        removeRequestFromNotification(r);
+    }
+    
+    @RolesAllowed("tut4youapp.tutor")
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void removeRequestFromNotification(Request r) {
+        Request pendingRequest = em.find(Request.class, r.getId());
+        if (pendingRequest == null) {
+            pendingRequest = r;
+        }
+        String userName = getUsernameFromSession();
+        Tutor tutor = findTutorUserName(userName);
+        tutor.removePendingRequest(pendingRequest);
+        pendingRequest.removeAvailableTutor(tutor);
+        em.merge(tutor);
+        em.flush();
     }
     
     /**
@@ -117,8 +145,6 @@ public class Tut4YouApp {
      * course.
      * Finds all tutors that teaches the course.
      * @param course selected course to be tutored
-     * @param dayOfWeek
-     * @param time
      * @return the number of tutors that tutors the course
      * @author Andrew Kaichi <ahkaichi@gmail.com>
      */
@@ -130,14 +156,24 @@ public class Tut4YouApp {
         return courseTutorQuery.getResultList().size();
     }
     
+    /**
+     * Only students can see the list of available tutors that tutors the requested
+     * course.
+     * Finds all tutors that teaches the course.
+     * @param course selected course to be tutored
+     * @param dayOfWeek
+     * @param time
+     * @return the number of tutors that tutors the course
+     * @author Andrew Kaichi <ahkaichi@gmail.com>
+     */
     @RolesAllowed("tut4youapp.student")
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-    public List<Tutor> getTutorsFromCourse(String course, String dayOfWeek, java.util.Date time) {
-        TypedQuery<Tutor> courseTutorQuery = em.createNamedQuery(Tutor.FIND_TUTORS_BY_COURSE_DAY_TIME, Tutor.class);        
+    public List<Tutor> getTutorsFromCourse(String course, String dayOfWeek, java.util.Date time, Boolean doNotDisturb) {
+        TypedQuery<Tutor> courseTutorQuery = em.createNamedQuery(Tutor.FIND_TUTORS_BY_COURSE_DAY_TIME, Tutor.class);
         courseTutorQuery.setParameter("coursename", course);
         courseTutorQuery.setParameter("dayofweek", dayOfWeek);
         courseTutorQuery.setParameter("requestTime", time, TemporalType.TIME);
-        LOGGER.log(Level.SEVERE, "current time 1: {0}", time);
+        courseTutorQuery.setParameter("doNotDisturb", doNotDisturb);
         return courseTutorQuery.getResultList();
     }    
     
@@ -159,13 +195,31 @@ public class Tut4YouApp {
             TypedQuery<Request> requestQuery = em.createNamedQuery(Request.FIND_REQUEST_BY_EMAIL, Request.class);
             requestQuery.setParameter("student_email", email);
             requestQuery.setParameter("status", Request.Status.PENDING);
-            if(requestQuery.getResultList() == null) {
-                return null;
-            }
-            else {
-                return requestQuery.getResultList();
-            }
+            return requestQuery.getResultList();
         }
+    }
+    
+    @RolesAllowed("tut4youapp.tutor")
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public List<Request> getPendingRequestForTutor() {
+        String userName = getUsernameFromSession();
+        Tutor tutor = findTutorUserName(userName);
+        TypedQuery<Request> requestTutorQuery = em.createNamedQuery(Request.FIND_REQUESTS_BY_TUTOR, Request.class);
+        requestTutorQuery.setParameter("email",tutor.getEmail());
+        return requestTutorQuery.getResultList();
+    }
+    
+    @RolesAllowed("tut4youapp.tutor")
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void addPendingRequest(Tutor tutor, Request pending) {
+        Request pendingRequest = em.find(Request.class, pending.getId());
+        if (pendingRequest == null) {
+            pendingRequest = pending;
+        }
+        tutor.addPendingRequest(pendingRequest);
+        pendingRequest.addAvailableTutor(tutor);
+        em.merge(tutor);
+        em.flush();
     }
     
     /**
@@ -326,12 +380,30 @@ public class Tut4YouApp {
      * @author Andrew <ahkaichi@gmail.com>
      */
     @RolesAllowed("tut4youapp.tutor")
-    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public Availability updateAvailability(Availability availability){
         em.merge(availability);
         return availability;
     }
     
+    @RolesAllowed("tut4youapp.tutor")
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public boolean updateDoNotDisturb(Boolean doNotDisturb){
+        String userName = getUsernameFromSession();
+        Tutor tutor = findTutorUserName(userName);
+        doNotDisturb = tutor.isDoNotDisturb();
+        if (doNotDisturb == true){
+            tutor.setDoNotDisturb(false);
+            em.merge(tutor);
+            return doNotDisturb;
+        }
+        else {
+            tutor.setDoNotDisturb(true);
+            em.merge(tutor);
+            return doNotDisturb;
+        }
+    }
+
     /**
      * Gets a logged in username by getting the username from the session.
      * @return username

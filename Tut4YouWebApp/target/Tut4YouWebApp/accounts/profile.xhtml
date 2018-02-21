@@ -66,6 +66,13 @@
                         </b:row>
                     </c:if>
                 </b:panel>
+                <c:if test="#{userBean.tutor}">
+                    <h:form id="doNotDisturb">
+                        <b:switch label="Do Not Disturb" value="#{userBean.student.doNotDisturb}" id="doNotDisturb" update="@form">
+                            <f:ajax event="change" render="doNotDisturb" listener="#{userBean.updateDoNotDisturb(userBean.student.doNotDisturb)}" />
+                        </b:switch>
+                    </h:form>
+                </c:if>
                 <b:row>
                     <a href="/Tut4YouWebApp/students/requestTutor.xhtml">Request for a Tutor</a>
                     <br></br>
@@ -83,16 +90,41 @@
                     <b:tab title="Active Requests">
                         <h:form>
                             <b:dataTable value="#{requestBean.requestList}" var="r">
+                                <h:column>
+                                    <f:facet name="header">Date and Time</f:facet>
+                                    <h:outputText value="#{r.currentTime}">
+                                        <!-- sets the date and time to a certain format-->
+                                        <f:convertDateTime pattern = "dd/mm hh:mm:ss a" />
+                                    </h:outputText>
+                                </h:column>
                                 <b:dataTableColumn value="#{r.description}" />
                                 <h:column>
-                                    <f:facet name="header">Pending</f:facet>  
-                                        <b:commandButton span="6" value="Cancel" look="danger" action="#{requestBean.changeStatus(r)}" />
+                                    <f:facet name="header">Pending</f:facet>
+                                    <b:commandButton span="6" value="Cancel" look="danger" action="#{requestBean.cancelRequest(r)}" />
                                 </h:column>
                             </b:dataTable>
                         </h:form>
                     </b:tab>
                     <c:if test="#{userBean.tutor}">
                         <b:tab title="Notificatons">
+                            <!-- NOT WORKING PROPERLY -->
+<!--                            <c:if test="#{notifyBean.hasNotif}">
+                                <f:facet name="anchor"><b:badge value="#{notifyBean.numofNotif}"/></f:facet>
+                            </c:if>-->
+                            <h:form>
+                                <b:dataTable value="#{notifyBean.pendingRequestList}" var="req">
+                                    <b:dataTableColumn value="#{req.course.courseName}" />
+                                    <b:dataTableColumn value="#{req.description}" />
+                                    <h:column>
+                                        <f:facet name="header">Action</f:facet>  
+                                        <b:commandButton value="Accept" look="success" action="#{requestBean.setTutorToRequest(req)}"/>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">Action</f:facet>  
+                                        <b:commandButton value="Decline" look="danger" action="#{requestBean.removeRequestFromTutor(req)}"/>
+                                    </h:column>
+                                </b:dataTable>
+                            </h:form>
                         </b:tab>
                         <b:tab title="Schedule">
                         </b:tab>

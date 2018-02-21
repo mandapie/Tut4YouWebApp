@@ -46,6 +46,8 @@ public class RequestBean implements Serializable {
     private Subject subject;
     private Course course;
     private String time;
+    private String stringLaterTime;
+    private String stringLengthOfSession;
     private int numOfTutors; //number of tutors who teaches the course
     private List<Subject> subjectList = new ArrayList(); //list of subjects to be loaded to the request form
     private List<Course> courseList = new ArrayList(); //list of courses based on subject to load to the request form
@@ -174,6 +176,38 @@ public class RequestBean implements Serializable {
     }
     
     /**
+     * Get the time of the request if user set for later 
+     * @return the time of the request
+     */
+    public String getStringLaterTime() {
+        return stringLaterTime;
+    }
+    
+    /**
+     * Sets the time of the request if user wants a request for later
+     * @param stringLaterTime the time of the request if for later
+     */
+    public void setStringLaterTime(String stringLaterTime) {
+        this.stringLaterTime = stringLaterTime;
+    }
+    
+    /**
+     * gets string length of session
+     * @return stringLengthOfSession
+     */
+    public String getStringLengthOfSession() {
+        return stringLengthOfSession;
+    }
+    
+    /**
+     * sets string length of session
+     * @param stringLengthOfSession 
+     */
+    public void setStringLengthOfSession(String stringLengthOfSession) {
+        this.stringLengthOfSession = stringLengthOfSession;
+    }
+    
+    /**
      * Loads all the subjects from the database.
      * @return a list of subjects
      */
@@ -236,20 +270,36 @@ public class RequestBean implements Serializable {
     }
     
     /**
+     * converts String to int type
+     * @param string
+     * @return 
+     */
+    public int StringToInt(String string) {
+        int integer = Integer.parseInt(string);
+        return integer;
+    }
+    
+    /**
      * Creates a new request. If successful, get the number of tutors that tutors the course.
      * @return result to be redirected another page
      * @throws java.text.ParseException
      */
     public String createNewRequest() throws ParseException {
         String result = "failure";
-        request.setCurrentTime(StringToTime(getCurrentTime()));
+        if(time.equals("Later")) {
+            request.setCurrentTime(StringToTime(getStringLaterTime()));
+        }
+        else {
+            request.setCurrentTime(StringToTime(getCurrentTime()));
+        }
         request.setDayOfWeek(getCurrentDayOfWeek());
+        request.setLengthOfSession(StringToInt(stringLengthOfSession));
         request = tut4youApp.newRequest(request);
         
         if (request != null) {
             numOfTutors = tut4youApp.getNumOfTutorsFromCourse(request.getCourse().getCourseName());
             result = "success";
-            tutorList = tut4youApp.getTutorsFromCourse(request.getCourse().getCourseName(), request.getDayOfWeek().toUpperCase(), request.getCurrentTime());
+            tutorList = tut4youApp.getTutorsFromCourse(request.getCourse().getCourseName(), request.getDayOfWeek().toUpperCase(), request.getCurrentTime(), true);
         }
         return result;
     }
@@ -263,7 +313,7 @@ public class RequestBean implements Serializable {
     }
     
     /**
-     * 
+     * Sets a tutor to the request if tutor accepts
      * @param r 
      */
     public void setTutorToRequest(Request r) {

@@ -106,6 +106,7 @@ public class Request implements Serializable {
     @Temporal(TemporalType.TIME)
     private java.util.Date currentTime;
     private Status status;
+    private int lengthOfSession;
     
     /**
      * Request Constructor
@@ -120,12 +121,14 @@ public class Request implements Serializable {
      * @param description
      * @param status 
      * @param currentTime 
+     * @param lengthOfSession 
      */
-    public Request(User student, String description, Status status, java.util.Date currentTime) {
+    public Request(User student, String description, Status status, java.util.Date currentTime, int lengthOfSession) {
         this.student = student;
         this.description = description;
         this.status = status;
         this.currentTime = currentTime;
+        this.lengthOfSession = lengthOfSession;
     }
     
     /**
@@ -247,6 +250,23 @@ public class Request implements Serializable {
     public void setDescription(String description) {
         this.description = description;
     }
+    
+    /**
+     * gets the length of the tutoring session
+     * @return lengthOfSession
+     */
+    public int getLengthOfSession() {
+        return lengthOfSession;
+    }
+    
+    /**
+     * sets the length of the tutoring session
+     * @param lengthOfSession 
+     */
+    public void setLengthOfSession(int lengthOfSession) {
+        this.lengthOfSession = lengthOfSession;
+    }
+    
     /**
      * Gets a collection of available tutors
      * @return availableTutors

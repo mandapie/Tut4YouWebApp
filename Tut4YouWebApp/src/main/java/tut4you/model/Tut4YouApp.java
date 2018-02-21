@@ -157,18 +157,20 @@ public class Tut4YouApp {
      * @param course selected course to be tutored
      * @param dayOfWeek
      * @param time
+     * @param doNotDisturb
      * @return the number of tutors that tutors the course
      * @author Andrew Kaichi <ahkaichi@gmail.com>
      */
     @RolesAllowed("tut4youapp.student")
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-    public List<Tutor> getTutorsFromCourse(String course, String dayOfWeek, java.util.Date time) {
+    public List<Tutor> getTutorsFromCourse(String course, String dayOfWeek, java.util.Date time, Boolean doNotDisturb) {
         TypedQuery<Tutor> courseTutorQuery = em.createNamedQuery(Tutor.FIND_TUTORS_BY_COURSE_DAY_TIME, Tutor.class);
         courseTutorQuery.setParameter("coursename", course);
         courseTutorQuery.setParameter("dayofweek", dayOfWeek);
         courseTutorQuery.setParameter("requestTime", time, TemporalType.TIME);
+        courseTutorQuery.setParameter("doNotDisturb", false);
         return courseTutorQuery.getResultList();
-    }    
+    }   
         
     /**
      * the selected tutor will be added to a pending request and vice versa.

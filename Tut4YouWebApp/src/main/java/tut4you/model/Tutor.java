@@ -63,18 +63,23 @@ public class Tutor extends User implements Serializable {
     /**
      * dateJoined the date a tutor joins
      */
-    @Column(nullable = true)
     @Temporal(TemporalType.DATE)
     private Date dateJoined;
     
     /**
      * numPeopleTutored the number of people a tutor tutored
      */
-    @Column(nullable = true)
     private int numPeopleTutored;
-
-    //@Column(nullable = true)
     private double priceRate;
+    private boolean doNotDisturb;
+
+    public boolean isDoNotDisturb() {
+        return doNotDisturb;
+    }
+
+    public void setDoNotDisturb(boolean doNotDisturb) {
+        this.doNotDisturb = doNotDisturb;
+    }
     
     /**
      * A Tutor can tutor multiple Courses and
@@ -82,13 +87,6 @@ public class Tutor extends User implements Serializable {
      */
     @ManyToMany(mappedBy="tutors", cascade=CascadeType.ALL)
     private Collection<Course> courses;
-    
-    /**
-     * A Tutor can be in multiple Groups and
-     * A Group can contain multiple Tutors
-     */
-//    @ManyToMany(mappedBy="tutors", cascade=CascadeType.ALL)
-    private Collection<Group> groups;
     
     /**
      * A tutor can set multiple Availabilities
@@ -128,6 +126,7 @@ public class Tutor extends User implements Serializable {
      */
     public Tutor() {
         priceRate = 0.00;
+        doNotDisturb = false;
     }
     
     /**
@@ -135,12 +134,13 @@ public class Tutor extends User implements Serializable {
      * @param dateJoined
      * @param numPeopleTutored
      * @param priceRate 
+     * @param doNotDisturb 
      */
-    public Tutor(Date dateJoined, int numPeopleTutored, double priceRate) {
+    public Tutor(Date dateJoined, int numPeopleTutored, double priceRate, boolean doNotDisturb) {
         this.dateJoined = dateJoined;
         this.numPeopleTutored = numPeopleTutored;
         this.priceRate = priceRate;
-        //groups = new HashSet<>();
+        this.doNotDisturb = doNotDisturb;
     }
     
     /**
@@ -163,13 +163,14 @@ public class Tutor extends User implements Serializable {
      * @param dateJoined
      * @param numPeopleTutored
      * @param priceRate 
+     * @param doNotDisturb 
      */
-    public Tutor(String email, String firstName, String lastName, String userName, String phoneNumber, String password, String university, Date dateJoined, int numPeopleTutored, double priceRate) {
+    public Tutor(String email, String firstName, String lastName, String userName, String phoneNumber, String password, String university, Date dateJoined, int numPeopleTutored, double priceRate, boolean doNotDisturb) {
         super(email, firstName, lastName, userName, phoneNumber, password, university);
         this.dateJoined = dateJoined;
         this.numPeopleTutored = numPeopleTutored;
         this.priceRate = priceRate;
-        //groups = new HashSet<>();
+        this.doNotDisturb = doNotDisturb;
     }
     
     /**

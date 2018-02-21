@@ -42,21 +42,35 @@ public class UserBean implements Serializable {
     private Tut4YouApp tut4youapp;
     private User student;
     private Tutor userTutor;
-
-    public Tutor getUserTutor() {
-        return userTutor;
-    }
-
-    public void setUserTutor(Tutor tutor) {
-        this.userTutor = tutor;
-    }
+    boolean doNotDisturb;
     
     /**
      * Creates a new instance of UserIdentity
      */
     public UserBean() {
-        student = null;
-        userTutor = null;
+        student = userTutor;
+        userTutor = (Tutor)student;
+    }
+    
+    public boolean isDoNotDisturb() {
+        return doNotDisturb;
+    }
+
+    public void setDoNotDisturb(boolean doNotDisturb) {
+        this.doNotDisturb = doNotDisturb;
+    }
+    
+    public void updateDoNotDisturb(Boolean d) {
+        System.out.println(d);
+        tut4youapp.updateDoNotDisturb(doNotDisturb);
+    }
+
+    public Tutor getUserTutor() {
+        return userTutor;
+    }
+
+    public void setUserTutor(User tutor) {
+        this.userTutor = (Tutor) tutor;
     }
     
     /**

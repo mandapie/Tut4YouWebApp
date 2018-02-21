@@ -379,10 +379,30 @@ public class Tut4YouApp {
      * @author Andrew <ahkaichi@gmail.com>
      */
     @RolesAllowed("tut4youapp.tutor")
-    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public Availability updateAvailability(Availability availability){
         em.merge(availability);
         return availability;
+    }
+    
+    @RolesAllowed("tut4youapp.tutor")
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public boolean updateDoNotDisturb(Boolean doNotDisturb){
+        String userName = getUsernameFromSession();
+        Tutor tutor = findTutorUserName(userName);
+        doNotDisturb = tutor.isDoNotDisturb();
+        if (doNotDisturb == true){
+            tutor.setDoNotDisturb(false);
+            //em.merge(doNotDisturb);
+            em.merge(tutor);
+            return doNotDisturb;
+        }
+        else {
+            tutor.setDoNotDisturb(true);
+            //em.merge(doNotDisturb);
+            em.merge(tutor);
+            return doNotDisturb;
+        }
     }
     
     /**

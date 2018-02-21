@@ -29,6 +29,23 @@
                     </b:selectOneMenu>
                 </b:row>
                 <b:inputTextarea label="Description/Topic:" placeholder="Enter a short description..." value="#{requestBean.request.description}"/>
+                <b:row>
+                    <b:selectOneMenu span="6"
+                                             label="Length of Session"
+                                             id="stringLengthOfSession"
+                                             value="#{requestBean.stringLengthOfSession}"
+                                             required="true">
+                                <f:selectItem itemValue="Select One..."/>
+                                <f:selectItem itemLabel="30min" itemValue="30" /> 
+                                <f:selectItem itemLabel="1 hour" itemValue="60" />
+                                <f:selectItem itemLabel="1.5 hours" itemValue="90" />
+                                <f:selectItem itemLabel="2 hours" itemValue="120" />
+                                <f:selectItem itemLabel="2.5 hours" itemValue="150" />
+                                <f:selectItem itemLabel="3 hours" itemValue="180" />
+                                <f:selectItem itemLabel="3.5 hours" itemValue="210" />
+                                <f:selectItem itemLabel="4 hours" itemValue="240" />                 
+                    </b:selectOneMenu>
+                </b:row>
                 <!-- buttons are to be implemented later -->
                 <b:row>
                     
@@ -45,6 +62,7 @@
                                              value="#{requestBean.stringLaterTime}"
                                              required="true">
                                 <f:selectItem itemValue="Select One..."/>
+                                <f:selectItem itemLabel="12:00 AM" itemValue="00:00:00" /> 
                                 <f:selectItem itemLabel="1:00 AM" itemValue="01:00:00" />
                                 <f:selectItem itemLabel="2:00 AM" itemValue="02:00:00" />
                                 <f:selectItem itemLabel="3:00 AM" itemValue="03:00:00" />
@@ -67,8 +85,7 @@
                                 <f:selectItem itemLabel="8:00 PM" itemValue="20:00:00" />
                                 <f:selectItem itemLabel="9:00 PM" itemValue="21:00:00" />
                                 <f:selectItem itemLabel="10:00 PM" itemValue="22:00:00" />
-                                <f:selectItem itemLabel="11:00 PM" itemValue="23:00:00" />
-                                <f:selectItem itemLabel="12:00 AM" itemValue="00:00:00" />                                
+                                <f:selectItem itemLabel="11:00 PM" itemValue="23:00:00" />                      
                             </b:selectOneMenu>
                                 </b:column>
                             </h:panelGroup>

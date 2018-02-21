@@ -55,8 +55,8 @@ public class UserBean implements Serializable {
      * Creates a new instance of UserIdentity
      */
     public UserBean() {
-        student = null;
-        userTutor = null;
+        student = userTutor;
+        userTutor = (Tutor)student;
     }
     
     /**

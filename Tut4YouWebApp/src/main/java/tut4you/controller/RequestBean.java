@@ -59,7 +59,8 @@ public class RequestBean implements Serializable {
     private List<Tutor> tutorList = new ArrayList();
     private Tutor tutor;
     private String stringLaterTime;
-
+    
+    private String stringLengthOfSession;
     
     /**
      * RequestBean encapsulates all the functions/services involved
@@ -68,6 +69,10 @@ public class RequestBean implements Serializable {
     public RequestBean() {
         request = new Request();
         //time = "";
+    }
+    public int StringToInt(String string) {
+        int integer = Integer.parseInt(string);
+        return integer;
     }
     /**
      * Convert string to Time
@@ -136,6 +141,7 @@ public class RequestBean implements Serializable {
             request.setCurrentTime(StringToTime(getCurrentTime()));
         }
         request.setDayOfWeek(getCurrentDayOfWeek());
+        request.setLengthOfSession(StringToInt(stringLengthOfSession));
         request = tut4youApp.newRequest(request);
         
         if (request != null) {
@@ -294,6 +300,21 @@ public class RequestBean implements Serializable {
      */
     public void changeSubject() {
         courseList = tut4youApp.getCourses(subject.getSubjectName());
+    }
+    /**
+     * gets string length of session
+     * @return stringLengthOfSession
+     */
+    public String getStringLengthOfSession() {
+        return stringLengthOfSession;
+    }
+    
+    /**
+     * sets string length of session
+     * @param stringLengthOfSession 
+     */
+    public void setStringLengthOfSession(String stringLengthOfSession) {
+        this.stringLengthOfSession = stringLengthOfSession;
     }
 
 }

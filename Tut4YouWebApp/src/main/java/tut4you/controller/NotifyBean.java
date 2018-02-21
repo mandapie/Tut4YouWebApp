@@ -27,6 +27,19 @@ public class NotifyBean implements Serializable{
     private Tut4YouApp tut4youApp;
     private Request request;
     private List<Request> pendingRequestList;
+    private int numofNotif;
+    
+    public boolean isHasNotif() {
+        return numofNotif != 0;
+    }
+
+    public int getNumofNotif() {
+        return numofNotif;
+    }
+
+    public void setNumofNotif(int numofNotif) {
+        this.numofNotif = numofNotif;
+    }
 
     public Request getRequest() {
         return request;
@@ -38,6 +51,7 @@ public class NotifyBean implements Serializable{
 
     public List<Request> getPendingRequestList() {
         pendingRequestList = tut4youApp.getPendingRequestForTutor();
+        numofNotif = pendingRequestList.size();
         return pendingRequestList;
     }
 

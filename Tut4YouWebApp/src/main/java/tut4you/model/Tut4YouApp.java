@@ -109,6 +109,7 @@ public class Tut4YouApp {
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void cancelRequest(Request r) {
         r.setStatus(Request.Status.CANCELED);
+        removeRequestFromNotification(r);
         em.merge(r);
     }
     

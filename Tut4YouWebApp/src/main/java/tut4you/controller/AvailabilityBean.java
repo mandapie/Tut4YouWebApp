@@ -45,6 +45,7 @@ public class AvailabilityBean implements Serializable {
     private Availability availability;
     private String stringStartTime;
     private String stringEndTime;
+    private Tutor tutor;
     /**
      * Creates a new instance of the Availability entity
      */
@@ -104,6 +105,10 @@ public class AvailabilityBean implements Serializable {
     public void updateAvailability(){
         tut4youApp.updateAvailability(availability);
     }
+    public void updateDoNotDisturb(){
+        tut4youApp.updateDoNotDisturb(tutor.isDoNotDisturb());
+        
+    }    
     /**
      * Convert string to Time
      * @param time

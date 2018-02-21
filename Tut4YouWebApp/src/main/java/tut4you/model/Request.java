@@ -48,7 +48,23 @@ import javax.persistence.TemporalType;
 })
 @Entity
 public class Request implements Serializable {
+    /**
+     * Tells whether a Request is pending, accepted or canceled
+     * http://tomee.apache.org/examples-trunk/jpa-enumerated/README.html
+     */
+    public enum Status{
+        PENDING,
+        ACCEPTED,
+        CANCELED;
+    }
+    
+    /**
+     * JPQL Query to find Requests by user email
+     */
     public static final String FIND_REQUEST_BY_EMAIL = "Request.findRequestByEmail";
+    /**
+     * JPQL Query to find requests from available/selected tutors
+     */
     public static final String FIND_REQUESTS_BY_TUTOR = "Request.findRequestsByTutor";
     
     /**
@@ -64,25 +80,12 @@ public class Request implements Serializable {
      */
     @ManyToOne
     private User student;
-    
     /**
      * only one course can be associated with one request
      */
     @OneToOne
     @JoinColumn(name="courseName", nullable=false)
-    private Course course;
-    
-    /**
-     * Tells whether a Request is pending, accepted or canceled
-     * http://tomee.apache.org/examples-trunk/jpa-enumerated/README.html
-     */
-    public enum Status{
-        PENDING,
-        ACCEPTED,
-        CANCELED;
-    }
-    private Status status;
-    
+    private Course course;    
     /**
      * Association class between request and tutor.
      * One tutor can receive many pending requests and
@@ -95,39 +98,14 @@ public class Request implements Serializable {
           },
           inverseJoinColumns=@JoinColumn(name="email"))
     private Collection<Tutor> availableTutors;
-
-    public Collection<Tutor> getAvailableTutors() {
-        return availableTutors;
-    }
-
-    public void setAvailableTutors(Collection<Tutor> availableTutors) {
-        this.availableTutors = availableTutors;
-    }
-    
-    public void addAvailableTutor(Tutor at) {
-        if (this.availableTutors == null)
-            this.availableTutors = new HashSet();
-        this.availableTutors.add(at);
-    }
-    
-    public void removeAvailableTutor(Tutor at) {
-        availableTutors.remove(at);
-    }
-//    @ManyToOne
-//    Request pendingRequest;
-    
     @OneToOne
     @JoinColumn(name="tutorName")
     private Tutor tutor;
-    
     private String description;
-    
-    //dayOfWeek
     private String dayOfWeek;
-    
-    //currentTime
     @Temporal(TemporalType.TIME)
     private java.util.Date currentTime;
+    private Status status;
     
     /**
      * Request Constructor
@@ -135,6 +113,7 @@ public class Request implements Serializable {
     public Request() {
         
     }
+    
     /**
      * request overloaded constructor
      * @param student
@@ -221,13 +200,22 @@ public class Request implements Serializable {
         this.course = course;
     }
     
+    /**
+     * Gets a tutor
+     * @return tutor
+     */
     public Tutor getTutor(){
         return tutor;
     }
     
+    /**
+     * Sets a tutor
+     * @param tutor 
+     */
     public void setTutor(Tutor tutor) {
         this.tutor = tutor;
     }
+    
     /**
      * Gets the student who logged in to Tut4You
      * @return logged in student
@@ -258,6 +246,39 @@ public class Request implements Serializable {
      */
     public void setDescription(String description) {
         this.description = description;
+    }
+    /**
+     * Gets a collection of available tutors
+     * @return availableTutors
+     */
+    public Collection<Tutor> getAvailableTutors() {
+        return availableTutors;
+    }
+    
+    /**
+     * Sets a collection of available tutors
+     * @param availableTutors 
+     */
+    public void setAvailableTutors(Collection<Tutor> availableTutors) {
+        this.availableTutors = availableTutors;
+    }
+    
+    /**
+     * Adds an available tutor to the collection of available tutors
+     * @param at 
+     */
+    public void addAvailableTutor(Tutor at) {
+        if (this.availableTutors == null)
+            this.availableTutors = new HashSet();
+        this.availableTutors.add(at);
+    }
+    
+    /**
+     * removes an available tutor to the collection of available tutors
+     * @param at 
+     */
+    public void removeAvailableTutor(Tutor at) {
+        availableTutors.remove(at);
     }
     
     /**

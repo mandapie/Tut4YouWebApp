@@ -18,11 +18,8 @@
 package tut4you.controller;
 
 import java.io.Serializable;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
@@ -37,15 +34,15 @@ import tut4you.model.Tut4YouApp;
 @Named
 @SessionScoped
 public class AvailabilityBean implements Serializable {
-    private static final long serialVersionUID = 1L;
     private static final Logger LOGGER = Logger.getLogger("AvailabilityBean");
     
     @EJB
     private Tut4YouApp tut4youApp;
+   
     private Availability availability;
     private String stringStartTime;
     private String stringEndTime;
-    private Tutor tutor;
+    
     /**
      * Creates a new instance of the Availability entity
      */
@@ -55,18 +52,7 @@ public class AvailabilityBean implements Serializable {
         stringEndTime = "";
 
     }
-    public void setStringStartTime(String stringStartTime) {
-        this.stringStartTime = stringStartTime;
-    }
-    public String getStringStartTime() {
-        return stringStartTime;
-    }
-    public void setStringEndTime(String stringEndTime) {
-        this.stringEndTime = stringEndTime;
-    }
-    public String getStringEndTime() {
-        return stringEndTime;
-    }
+    
     /**
      * Gets the availability of the tutor
      * @return the availability of the tutor
@@ -81,6 +67,38 @@ public class AvailabilityBean implements Serializable {
      */
     public void setAvailability(Availability availability){
         this.availability = availability;
+    }
+    
+    /**
+     * Sets the start time of the tutor
+     * @return stringStartTime of the tutor
+     */
+    public String getStringStartTime() {
+        return stringStartTime;
+    }
+    
+    /**
+     * Gets the start time of the tutor
+     * @param stringStartTime
+     */
+    public void setStringStartTime(String stringStartTime) {
+        this.stringStartTime = stringStartTime;
+    }
+    
+    /**
+     * Gets the end time of the tutor
+     * @return stringEndTime of the tutor
+     */
+    public String getStringEndTime() {
+        return stringEndTime;
+    }
+    
+    /**
+     * Sets the end time of the tutor
+     * @param stringEndTime
+     */
+    public void setStringEndTime(String stringEndTime) {
+        this.stringEndTime = stringEndTime;
     }
     
     /**
@@ -105,10 +123,7 @@ public class AvailabilityBean implements Serializable {
     public void updateAvailability(){
         tut4youApp.updateAvailability(availability);
     }
-    public void updateDoNotDisturb(){
-        tut4youApp.updateDoNotDisturb(tutor.isDoNotDisturb());
-        
-    }    
+    
     /**
      * Convert string to Time
      * @param time
@@ -117,13 +132,7 @@ public class AvailabilityBean implements Serializable {
      */
     public java.util.Date StringToTime(String time) throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
-        
         java.util.Date date = sdf.parse(time);
-            
-        LOGGER.log(Level.SEVERE, "time = {0}", date);
         return date;
-       
-        
-    }
-    
+    }  
 }

@@ -21,7 +21,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.DiscriminatorValue;
@@ -36,7 +35,7 @@ import javax.persistence.TemporalType;
 
 /**
  * Tutor inherits all attributes of a User class with added attributes that
- defines a user as a tutor. A tutor is also a student.
+ * defines a user as a tutor. A tutor is also a student.
  * @author Keith Tran <keithtran25@gmail.com>
  * @author Syed Haider <shayder426@gmail.com>
  */
@@ -57,68 +56,29 @@ public class Tutor extends User implements Serializable {
      * JPQL Query to obtain a list of tutors who taught a specific course
      */
     public static final String FIND_TUTORS_BY_COURSE = "Tutor.findTutorsByCourse";
-    
-    /**
-     * dateJoined the date a tutor joins
-     */
+
     @Temporal(TemporalType.DATE)
     private Date dateJoined;
-    
-    /**
-     * numPeopleTutored the number of people a tutor tutored
-     */
     private int numPeopleTutored;
     private double priceRate;
     private boolean doNotDisturb;
-
-    public boolean isDoNotDisturb() {
-        return doNotDisturb;
-    }
-
-    public void setDoNotDisturb(boolean doNotDisturb) {
-        this.doNotDisturb = doNotDisturb;
-    }
-
     /**
      * A Tutor can tutor multiple Courses and
      * a Course can be tutored by multiple Tutors.
      */
     @ManyToMany(mappedBy="tutors", cascade=CascadeType.ALL)
     private Collection<Course> courses;
-    
     /**
      * A tutor can set multiple Availabilities
      */
     @OneToMany(mappedBy="tutor", cascade=CascadeType.ALL)
     private Collection<Availability> availability;
-    
-//    @ManyToOne
-//    private Tutor availableTutor;
-    
     /**
      * Many tutors can view many requests
      */
     @ManyToMany(mappedBy="availableTutors", cascade=CascadeType.ALL)
     private Collection<Request> pendingRequests;
-
-    public Collection<Request> getPendingRequests() {
-        return pendingRequests;
-    }
-
-    public void setPendingRequests(Collection<Request> pendingRequests) {
-        this.pendingRequests = pendingRequests;
-    }
-    
-    public void addPendingRequest(Request pr) {
-        if (this.pendingRequests == null)
-            this.pendingRequests = new HashSet();
-        this.pendingRequests.add(pr);
-    }
-    
-    public void removePendingRequest(Request pr) {
-        pendingRequests.remove(pr);
-    }
-    
+        
     /**
      * Tutor constructor
      */
@@ -140,16 +100,8 @@ public class Tutor extends User implements Serializable {
         this.priceRate = priceRate;
         this.doNotDisturb = doNotDisturb;
     }
-    
+        
     /**
-     * Inherits existing data from User to convert user type
-     * @param user 
-     */
-    public Tutor(User user) {
-        super.setEmail(user.getEmail());
-    }
-    
-     /**
      * Tutor overloaded constructor with inherited and existing attributes
      * @param email
      * @param firstName
@@ -169,6 +121,38 @@ public class Tutor extends User implements Serializable {
         this.numPeopleTutored = numPeopleTutored;
         this.priceRate = priceRate;
         this.doNotDisturb = doNotDisturb;
+    }
+    
+    /**
+     * Gets the state of doNotDistrub
+     * @return doNotDisturb
+     */
+    public boolean isDoNotDisturb() {
+        return doNotDisturb;
+    }
+    
+    /**
+     * Sets the state of doNotDistrub
+     * @param doNotDisturb 
+     */
+    public void setDoNotDisturb(boolean doNotDisturb) {
+        this.doNotDisturb = doNotDisturb;
+    }
+    
+    /**
+     * Gets the list of pending requests
+     * @return list of pendingRequests
+     */
+    public Collection<Request> getPendingRequests() {
+        return pendingRequests;
+    }
+    
+    /**
+     * Sets the list of pending requests
+     * @param pendingRequests 
+     */
+    public void setPendingRequests(Collection<Request> pendingRequests) {
+        this.pendingRequests = pendingRequests;
     }
     
     /**
@@ -271,5 +255,23 @@ public class Tutor extends User implements Serializable {
         if (this.courses == null)
             this.courses = new HashSet();
         this.courses.add(course);
+    }
+    
+    /**
+     * Adds a pending request to the list
+     * @param pr 
+     */
+    public void addPendingRequest(Request pr) {
+        if (this.pendingRequests == null)
+            this.pendingRequests = new HashSet();
+        this.pendingRequests.add(pr);
+    }
+    
+    /**
+     * removes a pending request from the list
+     * @param pr 
+     */
+    public void removePendingRequest(Request pr) {
+        pendingRequests.remove(pr);
     }
 }

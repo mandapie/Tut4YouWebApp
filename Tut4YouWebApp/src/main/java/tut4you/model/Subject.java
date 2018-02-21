@@ -137,5 +137,4 @@ public class Subject implements Serializable {
     public String toString() {
         return "tut4you.model.Subject[ id=" + subjectName + " ]";
     }
-    
 }

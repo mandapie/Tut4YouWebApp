@@ -37,8 +37,6 @@ import tut4you.model.*;
 @Named
 @SessionScoped
 public class RequestBean implements Serializable {
-
-    private static final long serialVersionUID = 1L;
     private static final Logger LOGGER = Logger.getLogger("RequestBean");
 
     @EJB
@@ -62,19 +60,7 @@ public class RequestBean implements Serializable {
     public RequestBean() {
         request = new Request();
     }
-    
-    /**
-     * Convert string to Time
-     * @param time
-     * @return 
-     * @throws java.text.ParseException
-     */
-    public java.util.Date StringToTime(String time) throws ParseException {
-        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
-        java.util.Date date = sdf.parse(time);
-        return date;
-    }
-    
+        
     public String getCurrentTime() throws ParseException {
         String stringCurrentTime = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
         //java.util.Date currentTime = StringToTime(stringCurrentTime);
@@ -113,46 +99,7 @@ public class RequestBean implements Serializable {
     public void setTutor(Tutor tutor) {
         this.tutor = tutor;
     }
-    
-    /**
-     * Creates a new request. If successful, get the number of tutors that tutors the course.
-     * @return result to be redirected another page
-     * @throws java.text.ParseException
-     */
-    public String createNewRequest() throws ParseException {
-        String result = "failure";
-        request.setCurrentTime(StringToTime(getCurrentTime()));
-        request.setDayOfWeek(getCurrentDayOfWeek());
-        request = tut4youApp.newRequest(request);
         
-        if (request != null) {
-            numOfTutors = tut4youApp.getNumOfTutorsFromCourse(request.getCourse().getCourseName());
-            result = "success";
-            tutorList = tut4youApp.getTutorsFromCourse(request.getCourse().getCourseName(), request.getDayOfWeek().toUpperCase(), request.getCurrentTime());
-        }
-        return result;
-    }
-    
-    public void sendToTutor(Tutor t) {
-        tut4youApp.addPendingRequest(t, request);
-    }
-    
-    /**
-     * Change the status of a request
-     * @param r
-     */
-    public void cancelRequest(Request r) {
-        tut4youApp.cancelRequest(r);
-    }
-    
-    public void removeRequestFromTutor(Request r) {
-        tut4youApp.removeRequestFromNotification(r);
-    }
-    
-    public void setTutorToRequest(Request r) {
-        tut4youApp.setTutorToRequest(r);
-    }
-    
     public List<Request> getRequestList() {
         requestList = tut4youApp.getActiveRequest();
         return requestList;
@@ -265,7 +212,6 @@ public class RequestBean implements Serializable {
         return tutorList;
     }
     
-
     public void setTutorList(List<Tutor> c) {
         tutorList = c;
     }
@@ -275,5 +221,68 @@ public class RequestBean implements Serializable {
      */
     public void changeSubject() {
         courseList = tut4youApp.getCourses(subject.getSubjectName());
+    }
+    
+    /**
+     * Convert string to Time
+     * @param time
+     * @return 
+     * @throws java.text.ParseException
+     */
+    public java.util.Date StringToTime(String time) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
+        java.util.Date date = sdf.parse(time);
+        return date;
+    }
+    
+    /**
+     * Creates a new request. If successful, get the number of tutors that tutors the course.
+     * @return result to be redirected another page
+     * @throws java.text.ParseException
+     */
+    public String createNewRequest() throws ParseException {
+        String result = "failure";
+        request.setCurrentTime(StringToTime(getCurrentTime()));
+        request.setDayOfWeek(getCurrentDayOfWeek());
+        request = tut4youApp.newRequest(request);
+        
+        if (request != null) {
+            numOfTutors = tut4youApp.getNumOfTutorsFromCourse(request.getCourse().getCourseName());
+            result = "success";
+            tutorList = tut4youApp.getTutorsFromCourse(request.getCourse().getCourseName(), request.getDayOfWeek().toUpperCase(), request.getCurrentTime());
+        }
+        return result;
+    }
+    
+    /**
+     * Send request to a specific tutor
+     * @param t 
+     */
+    public void sendToTutor(Tutor t) {
+        tut4youApp.addPendingRequest(t, request);
+    }
+    
+    /**
+     * 
+     * @param r 
+     */
+    public void setTutorToRequest(Request r) {
+        tut4youApp.setTutorToRequest(r);
+    }
+    
+    /**
+     * Change the status of a request
+     * @param r
+     */
+    public void cancelRequest(Request r) {
+        tut4youApp.cancelRequest(r);
+    }
+
+    /**
+     * Remove the request from the notification list
+     * @param r 
+     */
+    public void removeRequestFromTutor(Request r) {
+        tut4youApp.removeRequestFromNotification(r);
     }
 }

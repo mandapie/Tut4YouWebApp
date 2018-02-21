@@ -35,11 +35,11 @@ import tut4you.model.Tut4YouApp;
 @Named
 @SessionScoped
 public class AddCourseBean implements Serializable {
-
-    private static final long serialVersionUID = 1L;
     private static final Logger LOGGER = Logger.getLogger("AddCourseBean");
+    
     @EJB
     private Tut4YouApp tut4youApp;
+    
     private Course course;
     private Subject subject;
     private List<Subject> subjectList = new ArrayList();
@@ -109,8 +109,8 @@ public class AddCourseBean implements Serializable {
      * @return list of courses of tutor
      */
     public List<Course> getTutorCourses() {
-        courseList = tut4youApp.getTutorCourses();
-        return courseList;
+        tutorCourses = tut4youApp.getTutorCourses();
+        return tutorCourses;
     }
     
     /**

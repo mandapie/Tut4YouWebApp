@@ -90,11 +90,12 @@
                     <b:tab title="Active Requests">
                         <h:form>
                             <b:dataTable value="#{requestBean.requestList}" var="r">
+                                <b:dataTableColumn value="#{r.dayOfWeek}"/>
                                 <h:column>
                                     <f:facet name="header">Date and Time</f:facet>
                                     <h:outputText value="#{r.currentTime}">
                                         <!-- sets the date and time to a certain format-->
-                                        <f:convertDateTime pattern = "dd/mm hh:mm:ss a" />
+                                        <f:convertDateTime pattern = "hh:mm:ss a" />
                                     </h:outputText>
                                 </h:column>
                                 <b:dataTableColumn value="#{r.description}" />

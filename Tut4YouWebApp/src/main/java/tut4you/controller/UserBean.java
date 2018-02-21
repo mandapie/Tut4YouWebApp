@@ -47,16 +47,16 @@ public class UserBean implements Serializable {
         return userTutor;
     }
 
-    public void setUserTutor(Tutor tutor) {
-        this.userTutor = tutor;
+    public void setUserTutor(User tutor) {
+        this.userTutor = (Tutor)tutor;
     }
     
     /**
      * Creates a new instance of UserIdentity
      */
     public UserBean() {
-        student = null;
-        userTutor = null;
+        student = userTutor;
+        userTutor = (Tutor)student;
     }
     
     /**

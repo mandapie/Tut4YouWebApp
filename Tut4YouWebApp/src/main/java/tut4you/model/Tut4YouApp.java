@@ -385,6 +385,25 @@ public class Tut4YouApp {
         return availability;
     }
     
+    @RolesAllowed("tut4youapp.tutor")
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public boolean updateDoNotDisturb(Boolean doNotDisturb){
+        String userName = getUsernameFromSession();
+        Tutor tutor = findTutorUserName(userName);
+        doNotDisturb = tutor.isDoNotDisturb();
+        if (doNotDisturb == true){
+            tutor.setDoNotDisturb(false);
+            em.merge(doNotDisturb);
+            em.merge(tutor);
+            return doNotDisturb;
+        }
+        else {
+            tutor.setDoNotDisturb(true);
+            em.merge(doNotDisturb);
+            em.merge(tutor);
+            return doNotDisturb;
+        }
+    }
     /**
      * Gets a logged in username by getting the username from the session.
      * @return username

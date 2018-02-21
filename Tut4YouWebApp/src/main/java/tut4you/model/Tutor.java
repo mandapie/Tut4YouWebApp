@@ -75,7 +75,7 @@ public class Tutor extends User implements Serializable {
 
     //@Column(nullable = true)
     private double priceRate;
-    
+    private boolean doNotDisturb;    
     /**
      * A Tutor can tutor multiple Courses and
      * a Course can be tutored by multiple Tutors.
@@ -135,11 +135,13 @@ public class Tutor extends User implements Serializable {
      * @param dateJoined
      * @param numPeopleTutored
      * @param priceRate 
+     * @param doNotDisturb 
      */
-    public Tutor(Date dateJoined, int numPeopleTutored, double priceRate) {
+    public Tutor(Date dateJoined, int numPeopleTutored, double priceRate, boolean doNotDisturb) {
         this.dateJoined = dateJoined;
         this.numPeopleTutored = numPeopleTutored;
         this.priceRate = priceRate;
+        this.doNotDisturb = doNotDisturb;
         //groups = new HashSet<>();
     }
     
@@ -151,7 +153,7 @@ public class Tutor extends User implements Serializable {
         super.setEmail(user.getEmail());
     }
     
-    /**
+     /**
      * Tutor overloaded constructor with inherited and existing attributes
      * @param email
      * @param firstName
@@ -163,12 +165,14 @@ public class Tutor extends User implements Serializable {
      * @param dateJoined
      * @param numPeopleTutored
      * @param priceRate 
+     * @param doNotDisturb 
      */
-    public Tutor(String email, String firstName, String lastName, String userName, String phoneNumber, String password, String university, Date dateJoined, int numPeopleTutored, double priceRate) {
+    public Tutor(String email, String firstName, String lastName, String userName, String phoneNumber, String password, String university, Date dateJoined, int numPeopleTutored, double priceRate, boolean doNotDisturb) {
         super(email, firstName, lastName, userName, phoneNumber, password, university);
         this.dateJoined = dateJoined;
         this.numPeopleTutored = numPeopleTutored;
         this.priceRate = priceRate;
+        this.doNotDisturb = doNotDisturb;
         //groups = new HashSet<>();
     }
     
@@ -247,7 +251,12 @@ public class Tutor extends User implements Serializable {
         return priceRate;
     }
 
-    
+    public boolean isDoNotDisturb() {
+        return this.doNotDisturb;
+    }
+    public void setDoNotDisturb(boolean doNotDisturb) {
+        this.doNotDisturb = doNotDisturb;
+    }
     /**
      * Gets the collection of courses a tutor can teach
      * @return the list of courses

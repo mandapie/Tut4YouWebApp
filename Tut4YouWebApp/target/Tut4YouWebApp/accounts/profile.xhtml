@@ -64,6 +64,25 @@
                                 <h:outputLabel value="#{userBean.userTutor.priceRate}"/>
                             </b:column>
                         </b:row>
+                        <b:row>
+                            <b:column span="5">
+                                <h:outputLabel value="Do Not Disturb:"/>
+                            </b:column>
+                            <b:column span="7">
+                                <b:form id="doNotDisturb">
+                                    <b:panelGrid colSpans="6,6">
+                                        <b:switch value="#{userBean.student.doNotDisturb}"
+                                                  id="doNotDisturb"
+                                                  update="@form"
+                                                  >
+                                            <f:ajax event="change" render="doNotDisturb" listener="#{availabilityBean.updateDoNotDisturb}" />
+                                        </b:switch>                                  
+                                    </b:panelGrid> 
+                                </b:form>
+                                <h:outputLabel value="#{userBean.student.doNotDisturb}"/>
+
+                            </b:column>
+                        </b:row>
                     </c:if>
                 </b:panel>
                 <b:row>

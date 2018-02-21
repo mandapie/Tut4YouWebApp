@@ -393,18 +393,16 @@ public class Tut4YouApp {
         doNotDisturb = tutor.isDoNotDisturb();
         if (doNotDisturb == true){
             tutor.setDoNotDisturb(false);
-            //em.merge(doNotDisturb);
             em.merge(tutor);
             return doNotDisturb;
         }
         else {
             tutor.setDoNotDisturb(true);
-            //em.merge(doNotDisturb);
             em.merge(tutor);
             return doNotDisturb;
         }
     }
-    
+
     /**
      * Gets a logged in username by getting the username from the session.
      * @return username

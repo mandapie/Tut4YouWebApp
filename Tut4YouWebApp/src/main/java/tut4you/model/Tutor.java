@@ -26,9 +26,7 @@ import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -80,7 +78,7 @@ public class Tutor extends User implements Serializable {
     public void setDoNotDisturb(boolean doNotDisturb) {
         this.doNotDisturb = doNotDisturb;
     }
-    
+
     /**
      * A Tutor can tutor multiple Courses and
      * a Course can be tutored by multiple Tutors.
@@ -151,7 +149,7 @@ public class Tutor extends User implements Serializable {
         super.setEmail(user.getEmail());
     }
     
-    /**
+     /**
      * Tutor overloaded constructor with inherited and existing attributes
      * @param email
      * @param firstName
@@ -248,7 +246,6 @@ public class Tutor extends User implements Serializable {
         return priceRate;
     }
 
-    
     /**
      * Gets the collection of courses a tutor can teach
      * @return the list of courses
@@ -264,37 +261,6 @@ public class Tutor extends User implements Serializable {
     public void setCourse(Collection<Course> courses) {
         this.courses = courses;
     }
-    
-//    /**
-//     * Gets a collection of groups a tutor is in
-//     * @return the collection of groups
-//     */
-//    @Override
-//    public Collection<Group> getGroups(){
-//        return groups;
-//    }
-//    
-//    /**
-//     * Add a group to the tutor's set of groups
-//     * if collection of groups is null, create new HashSet
-//     * @param group to be added
-//     */
-//    @Override
-//    public void setGroups(Collection<Group> groups) {
-//        this.groups = groups;
-//    }
-//
-//    /**
-//     * Add a group to the tutor's set of groups
-//     * if collection of groups is null, create new HashSet
-//     * @param group to be added
-//     */
-//    @Override
-//    public void addGroup(Group group) {
-//        if (this.groups == null)
-//            this.groups = new HashSet();
-//        this.groups.add(group);
-//    }
     
     /**
      * Add a course to a collection of Courses

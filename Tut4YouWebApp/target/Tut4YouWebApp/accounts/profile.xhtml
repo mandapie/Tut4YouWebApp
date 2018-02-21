@@ -49,7 +49,7 @@
                     </b:row>
                     <b:row>
                         <b:column span="5">
-                            <h:outputLabel value="University;"/>
+                            <h:outputLabel value="University:"/>
                         </b:column>
                         <b:column span="7">
                             <h:outputLabel value="#{userBean.student.university}"/>
@@ -64,15 +64,15 @@
                                 <h:outputLabel value="#{userBean.student.priceRate}"/>
                             </b:column>
                         </b:row>
-                        <b:row>
-                            <h:form id="doNotDisturb">
-                                <b:switch value="#{userBean.student.doNotDisturb}" id="doNotDisturb" update="@form">
-                                    <f:ajax event="change" render="doNotDisturb" listener="#{userBean.updateDoNotDisturb(userBean.student.doNotDisturb)}" />
-                                </b:switch>
-                            </h:form>
-                        </b:row>
                     </c:if>
                 </b:panel>
+                <c:if test="#{userBean.tutor}">
+                    <h:form id="doNotDisturb">
+                        <b:switch value="#{userBean.student.doNotDisturb}" id="doNotDisturb" update="@form">
+                            <f:ajax event="change" render="doNotDisturb" listener="#{userBean.updateDoNotDisturb(userBean.student.doNotDisturb)}" />
+                        </b:switch>
+                    </h:form>
+                </c:if>
                 <b:row>
                     <a href="/Tut4YouWebApp/students/requestTutor.xhtml">Request for a Tutor</a>
                     <br></br>
@@ -93,6 +93,7 @@
                                 <h:column>
                                     <f:facet name="header">Date and Time</f:facet>
                                     <h:outputText value="#{r.currentTime}">
+                                        <!-- sets the date and time to a certain format-->
                                         <f:convertDateTime pattern = "dd/mm hh:mm:ss a" />
                                     </h:outputText>
                                 </h:column>

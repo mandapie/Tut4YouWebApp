@@ -31,7 +31,6 @@ import javax.persistence.TemporalType;
 import java.util.Calendar;
 import javax.persistence.Table;
 
-
 /**
  * Availability encapsulates information of a time frame of when a Tutor is
  * available. Only a Tutor can add an availability.
@@ -40,7 +39,7 @@ import javax.persistence.Table;
  * @author Keith Tran <keithtran25@gmail.com>
  * @author Syed Haider <shayder426@gmail.com>
  */
-@Table(name="Availability")
+@Table(name = "Availability")
 @Entity
 @NamedQueries({
     @NamedQuery(name = Availability.FIND_AVAILABILITY_BY_TUTOR, query = "SELECT a FROM Availability a JOIN a.tutor s WHERE s.email = :email")
@@ -60,6 +59,7 @@ public class Availability implements Serializable {
     private Long id;
 
     private String dayOfWeek;
+    private boolean editable;
 
     @Temporal(TemporalType.TIME)
     private java.util.Date startTime;
@@ -99,7 +99,8 @@ public class Availability implements Serializable {
      * @return dayOfWeek
      */
     public String getDayOfWeek() {
-        return dayOfWeek;    }
+        return dayOfWeek;
+    }
 
     /**
      * Sets the day of the week
@@ -177,6 +178,14 @@ public class Availability implements Serializable {
         this.tutor = tutor;
     }
 
+    public boolean isEditable() {
+        return editable;
+    }
+
+    public void setEditable(boolean editable) {
+        this.editable = editable;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -201,4 +210,5 @@ public class Availability implements Serializable {
     public String toString() {
         return "tut4you.entities.Availability[ id=" + id + " ]";
     }
+
 }

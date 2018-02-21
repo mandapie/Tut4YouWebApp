@@ -94,16 +94,14 @@ public class AvailabilityBean implements Serializable {
     public void setAvailability(Availability availability) {
         this.availability = availability;
     }
-    
-      /**
+
+    /**
      * Gets a list of the availabilities of the Tutor in the EJB
+     *
      * @return a list of subjects
      */
     public List<Availability> getAvailabilityList() {
-        if (availabilityList.isEmpty()) {
-            availabilityList = tut4youApp.getAvailabilityList();
-            LOGGER.severe("Retrieved list of availabilities for tutor from EJB");
-        }
+        availabilityList = tut4youApp.getAvailabilityList();
         return availabilityList;
     }
 
@@ -114,6 +112,7 @@ public class AvailabilityBean implements Serializable {
      * @throws java.text.ParseException
      */
     public String addAvailability() throws ParseException {
+
         String result = "failure";
         availability.setStartTime(StringToTime(stringStartTime));
         availability.setEndTime(StringToTime(stringEndTime));
@@ -127,9 +126,20 @@ public class AvailabilityBean implements Serializable {
 
     /**
      * Updates the current availability of the tutor
+     *
+     * @return
+     * @throws java.text.ParseException
      */
-    public void updateAvailability() {
+    public String updateAvailability() throws ParseException {
+        String result = "failure";
+        availability.setStartTime(StringToTime(stringStartTime));
+        availability.setEndTime(StringToTime(stringEndTime));
         tut4youApp.updateAvailability(availability);
+        if (availability != null) {
+            result = "success";
+            LOGGER.severe("Availability added");
+        }
+        return result;
     }
 
     /**
@@ -148,5 +158,22 @@ public class AvailabilityBean implements Serializable {
         return date;
 
     }
+
+    public String saveAction() {
+
+        for (Availability avail : availabilityList) {
+            avail.setEditable(false);
+        }
+        return null;
+
+    }
+    
+    public String edit(Availability avail) {
+        avail.setEditable(true);
+      
+        return null;
+    }
+    
+
 
 }

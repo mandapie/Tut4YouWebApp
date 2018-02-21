@@ -10,11 +10,52 @@
     <ui:define name="content">
         <h1>Availability This Week</h1>
         <!-- Bootsfaces datatable to show the data in an organized fashion -->
-        <b:dataTable value="#{availabilityBean.availabilityList}" var="availability">
-            <b:dataTableColumn value="#{availability.dayOfWeek}"  label="Day Of Week"/>
-            <b:dataTableColumn value="#{availability.startTime}" label="Start Time" />
-            <b:dataTableColumn value="#{availability.endTime}"  label="End Time"/>
-        </b:dataTable>
+        <h:form>
+            <b:dataTable value = "#{availabilityBean.availabilityList}" var = "avail">
+                <b:dataTableColumn>
+                    <f:facet name = "header">Day of Week</f:facet>
+                    <h:inputText value = "#{avail.dayOfWeek}" 
+                                 size = "20" rendered = "#{avail.editable}" />
+                    <h:outputText value = "#{avail.dayOfWeek}" 
+                                  rendered = "#{not avail.editable}"/>
+
+                </b:dataTableColumn>
+
+                <b:dataTableColumn>
+                    <f:facet name = "header">Start Time</f:facet>
+                    <h:inputText value = "#{availabilityBean.stringStartTime}" size = "20"
+                                 rendered = "#{avail.editable}" />
+                    <h:outputText value = "#{avail.startTime}" 
+                                  rendered = "#{not avail.editable}">                        
+                        <f:convertDateTime pattern ="hh:mm:ss a"></f:convertDateTime>
+                    </h:outputText>
+                </b:dataTableColumn>
+
+                <b:dataTableColumn>
+                    <f:facet name = "header">End Time</f:facet>
+                    <h:inputText value = "#{availabilityBean.stringEndTime}" 
+                                 size = "20" rendered = "#{avail.editable}" />
+                    <h:outputText value = "#{avail.endTime}"
+                                  rendered = "#{not avail.editable}">
+                        <f:convertDateTime pattern ="hh:mm:ss a"></f:convertDateTime>
+                    </h:outputText>
+                </b:dataTableColumn>
+
+                <b:dataTableColumn>
+                    <f:facet name = "header">Edit</f:facet>
+                    <b:commandButton value = "Edit" 
+                                     action = "#{availabilityBean.edit(avail)}" 
+                                     rendered = "#{not avail.editable}">        
+                        <f:setPropertyActionListener 
+                            target = "#{availabilityBean.availability}" value = "#{availability}" />
+                    </b:commandButton>
+                </b:dataTableColumn>
+            </b:dataTable>  
+            <br/>
+
+            <b:commandButton value = "Save Employees"
+                             action = "#{availabilityBean.saveAction}" />	  
+        </h:form>
         <ui:debug hotkey='x'/>
     </ui:define>
 </ui:composition>

@@ -107,9 +107,36 @@ public class Tut4YouApp {
      */
     @RolesAllowed("tut4youapp.student")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void setStatus(Request r) {
+    public void cancelRequest(Request r) {
         r.setStatus(Request.Status.CANCELED);
         em.merge(r);
+    }
+    
+    @RolesAllowed("tut4youapp.tutor")
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void setTutorToRequest(Request r) {
+        String userName = getUsernameFromSession();
+        Tutor tutor = findTutorUserName(userName);
+        r.setStatus(Request.Status.ACCEPTED);
+        r.setTutor(tutor);
+        em.merge(r);
+        em.flush();
+        removeRequestFromNotification(r);
+    }
+    
+    @RolesAllowed("tut4youapp.tutor")
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void removeRequestFromNotification(Request r) {
+        Request pendingRequest = em.find(Request.class, r.getId());
+        if (pendingRequest == null) {
+            pendingRequest = r;
+        }
+        String userName = getUsernameFromSession();
+        Tutor tutor = findTutorUserName(userName);
+        tutor.removePendingRequest(pendingRequest);
+        pendingRequest.removeAvailableTutor(tutor);
+        em.merge(tutor);
+        em.flush();
     }
     
     /**
@@ -161,13 +188,36 @@ public class Tut4YouApp {
             return null;
         }
         else {
-            User user = findTutorUserName(userName);
+            User user = find(userName);
             email = user.getEmail();
             TypedQuery<Request> requestQuery = em.createNamedQuery(Request.FIND_REQUEST_BY_EMAIL, Request.class);
             requestQuery.setParameter("student_email", email);
             requestQuery.setParameter("status", Request.Status.PENDING);
             return requestQuery.getResultList();
         }
+    }
+    
+    @RolesAllowed("tut4youapp.tutor")
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public List<Request> getPendingRequestForTutor() {
+        String userName = getUsernameFromSession();
+        Tutor tutor = findTutorUserName(userName);
+        TypedQuery<Request> requestTutorQuery = em.createNamedQuery(Request.FIND_REQUESTS_BY_TUTOR, Request.class);
+        requestTutorQuery.setParameter("email",tutor.getEmail());
+        return requestTutorQuery.getResultList();
+    }
+    
+    @RolesAllowed("tut4youapp.tutor")
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void addPendingRequest(Tutor tutor, Request pending) {
+        Request pendingRequest = em.find(Request.class, pending.getId());
+        if (pendingRequest == null) {
+            pendingRequest = pending;
+        }
+        tutor.addPendingRequest(pendingRequest);
+        pendingRequest.addAvailableTutor(tutor);
+        em.merge(tutor);
+        em.flush();
     }
     
     /**

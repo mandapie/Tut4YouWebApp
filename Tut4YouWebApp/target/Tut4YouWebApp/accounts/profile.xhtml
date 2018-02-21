@@ -86,13 +86,27 @@
                                 <b:dataTableColumn value="#{r.description}" />
                                 <h:column>
                                     <f:facet name="header">Pending</f:facet>  
-                                        <b:commandButton span="6" value="Cancel" look="danger" action="#{requestBean.changeStatus(r)}" />
+                                    <b:commandButton span="6" value="Cancel" look="danger" action="#{requestBean.cancelRequest(r)}" />
                                 </h:column>
                             </b:dataTable>
                         </h:form>
                     </b:tab>
                     <c:if test="#{userBean.tutor}">
                         <b:tab title="Notificatons">
+                            <h:form>
+                                <b:dataTable value="#{notifyBean.pendingRequestList}" var="req">
+                                    <b:dataTableColumn value="#{req.course.courseName}" />
+                                    <b:dataTableColumn value="#{req.description}" />
+                                    <h:column>
+                                        <f:facet name="header">Action</f:facet>  
+                                        <b:commandButton value="Accept" look="success" action="#{requestBean.setTutorToRequest(req)}"/>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">Action</f:facet>  
+                                        <b:commandButton value="Decline" look="danger" action="#{requestBean.removeRequestFromTutor(req)}"/>
+                                    </h:column>
+                                </b:dataTable>
+                            </h:form>
                         </b:tab>
                         <b:tab title="Schedule">
                         </b:tab>

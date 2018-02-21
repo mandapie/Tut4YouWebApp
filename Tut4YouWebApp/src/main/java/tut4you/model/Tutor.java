@@ -26,7 +26,9 @@ import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -46,7 +48,7 @@ import javax.persistence.TemporalType;
 @Entity
 @NamedQueries({
     @NamedQuery(name = Tutor.FIND_TUTORS_BY_COURSE_DAY_TIME, query = "SELECT t FROM Tutor t JOIN t.courses c JOIN t.availability a WHERE c.courseName = :coursename AND a.dayOfWeek = :dayofweek AND a.startTime <= :requestTime AND a.endTime >= :requestTime "),
-    @NamedQuery(name = Tutor.FIND_TUTORS_BY_COURSE, query = "SELECT t FROM Tutor t JOIN t.courses c WHERE c.courseName = :coursename")
+    @NamedQuery(name = Tutor.FIND_TUTORS_BY_COURSE, query = "SELECT t FROM Tutor t JOIN t.courses c WHERE c.courseName = :coursename"),
 })
 public class Tutor extends User implements Serializable {     
     /**
@@ -62,7 +64,7 @@ public class Tutor extends User implements Serializable {
      * dateJoined the date a tutor joins
      */
     @Column(nullable = true)
-    @Temporal( TemporalType.DATE )
+    @Temporal(TemporalType.DATE)
     private Date dateJoined;
     
     /**
@@ -81,12 +83,12 @@ public class Tutor extends User implements Serializable {
     @ManyToMany(mappedBy="tutors", cascade=CascadeType.ALL)
     private Collection<Course> courses;
     
-//    /**
-//     * A Tutor can be in multiple Groups and
-//     * A Group can contain multiple Tutors
-//     */
+    /**
+     * A Tutor can be in multiple Groups and
+     * A Group can contain multiple Tutors
+     */
 //    @ManyToMany(mappedBy="tutors", cascade=CascadeType.ALL)
-//    private Collection<Group> groups;
+    private Collection<Group> groups;
     
     /**
      * A tutor can set multiple Availabilities
@@ -94,6 +96,32 @@ public class Tutor extends User implements Serializable {
     @OneToMany(mappedBy="tutor", cascade=CascadeType.ALL)
     private Collection<Availability> availability;
     
+//    @ManyToOne
+//    private Tutor availableTutor;
+    
+    /**
+     * Many tutors can view many requests
+     */
+    @ManyToMany(mappedBy="availableTutors", cascade=CascadeType.ALL)
+    private Collection<Request> pendingRequests;
+
+    public Collection<Request> getPendingRequests() {
+        return pendingRequests;
+    }
+
+    public void setPendingRequests(Collection<Request> pendingRequests) {
+        this.pendingRequests = pendingRequests;
+    }
+    
+    public void addPendingRequest(Request pr) {
+        if (this.pendingRequests == null)
+            this.pendingRequests = new HashSet();
+        this.pendingRequests.add(pr);
+    }
+    
+    public void removePendingRequest(Request pr) {
+        pendingRequests.remove(pr);
+    }
     
     /**
      * Tutor constructor

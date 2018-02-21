@@ -17,12 +17,16 @@
 package tut4you.model;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.HashSet;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -39,11 +43,13 @@ import javax.persistence.TemporalType;
  */
 @Table(name="Request")
 @NamedQueries({
-    @NamedQuery(name = Request.FIND_REQUEST_BY_EMAIL, query = "SELECT r from Request r JOIN r.student s WHERE s.email = :student_email AND r.status = :status")
+    @NamedQuery(name = Request.FIND_REQUEST_BY_EMAIL, query = "SELECT r from Request r JOIN r.student s WHERE s.email = :student_email AND r.status = :status"),
+    @NamedQuery(name = Request.FIND_REQUESTS_BY_TUTOR, query = "SELECT r FROM Request r JOIN r.availableTutors t WHERE t.email = :email")
 })
 @Entity
 public class Request implements Serializable {
     public static final String FIND_REQUEST_BY_EMAIL = "Request.findRequestByEmail";
+    public static final String FIND_REQUESTS_BY_TUTOR = "Request.findRequestsByTutor";
     
     /**
      * Primary key is generated uniquely
@@ -60,7 +66,7 @@ public class Request implements Serializable {
     private User student;
     
     /**
-     * Multiple requests can be submitted under the same course
+     * only one course can be associated with one request
      */
     @OneToOne
     @JoinColumn(name="courseName", nullable=false)
@@ -75,8 +81,40 @@ public class Request implements Serializable {
         ACCEPTED,
         CANCELED;
     }
-
     private Status status;
+    
+    /**
+     * Association class between request and tutor.
+     * One tutor can receive many pending requests and
+     * One request can be sent to many tutors.
+     */
+    @ManyToMany
+    @JoinTable(name="Requests_tutors",
+          joinColumns={
+              @JoinColumn(name="id")
+          },
+          inverseJoinColumns=@JoinColumn(name="email"))
+    private Collection<Tutor> availableTutors;
+
+    public Collection<Tutor> getAvailableTutors() {
+        return availableTutors;
+    }
+
+    public void setAvailableTutors(Collection<Tutor> availableTutors) {
+        this.availableTutors = availableTutors;
+    }
+    
+    public void addAvailableTutor(Tutor at) {
+        if (this.availableTutors == null)
+            this.availableTutors = new HashSet();
+        this.availableTutors.add(at);
+    }
+    
+    public void removeAvailableTutor(Tutor at) {
+        availableTutors.remove(at);
+    }
+//    @ManyToOne
+//    Request pendingRequest;
     
     @OneToOne
     @JoinColumn(name="tutorName")

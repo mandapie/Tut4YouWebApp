@@ -49,12 +49,11 @@ public class RequestBean implements Serializable {
     private Course course;
     private String time;
     private int numOfTutors; //number of tutors who teaches the course
-    private List<Subject> subjectList = new ArrayList(); //lit of subjects to be loaded to the request form
+    private List<Subject> subjectList = new ArrayList(); //list of subjects to be loaded to the request form
     private List<Course> courseList = new ArrayList(); //list of courses based on subject to load to the request form
     private List<Request> requestList = new ArrayList(); //list of pending requests
     private List<Tutor> tutorList = new ArrayList(); //list of available tutors
     private Tutor tutor; //the tutor who accepts te request
-
     
     /**
      * RequestBean encapsulates all the functions/services involved
@@ -134,12 +133,24 @@ public class RequestBean implements Serializable {
         return result;
     }
     
+    public void sendToTutor(Tutor t) {
+        tut4youApp.addPendingRequest(t, request);
+    }
+    
     /**
      * Change the status of a request
      * @param r
      */
-    public void changeStatus(Request r) {
-        tut4youApp.setStatus(r);
+    public void cancelRequest(Request r) {
+        tut4youApp.cancelRequest(r);
+    }
+    
+    public void removeRequestFromTutor(Request r) {
+        tut4youApp.removeRequestFromNotification(r);
+    }
+    
+    public void setTutorToRequest(Request r) {
+        tut4youApp.setTutorToRequest(r);
     }
     
     public List<Request> getRequestList() {

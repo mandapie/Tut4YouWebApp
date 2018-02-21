@@ -60,6 +60,7 @@ public class Availability implements Serializable {
     private java.util.Date startTime;
     @Temporal(TemporalType.TIME)
     private java.util.Date endTime;
+    private boolean editable;
     /**
      * Multiple availabilities can be added by a Tutor
      */
@@ -100,6 +101,22 @@ public class Availability implements Serializable {
      */
     public void setId(Long id) {
         this.id = id;
+    }
+    
+    /**
+     * Gets the state of Editable
+     * @return editable
+     */
+    public boolean isEditable() {
+        return editable;
+    }
+    
+    /**
+     * Sets the state of Editable
+     * @param editable 
+     */
+    public void setEditable(boolean editable) {
+        this.editable = editable;
     }
     
     /**

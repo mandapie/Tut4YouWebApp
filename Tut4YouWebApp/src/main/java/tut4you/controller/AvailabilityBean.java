@@ -20,6 +20,8 @@ package tut4you.controller;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
@@ -42,6 +44,7 @@ public class AvailabilityBean implements Serializable {
     private Availability availability;
     private String stringStartTime;
     private String stringEndTime;
+    private List<Availability> availabilityList = new ArrayList();
     
     /**
      * Creates a new instance of the Availability entity
@@ -99,6 +102,16 @@ public class AvailabilityBean implements Serializable {
      */
     public void setStringEndTime(String stringEndTime) {
         this.stringEndTime = stringEndTime;
+    }
+    
+    /**
+     * Gets a list of the availabilities of the Tutor in the EJB
+     *
+     * @return a list of subjects
+     */
+    public List<Availability> getAvailabilityList() {
+        availabilityList = tut4youApp.getAvailabilityList();
+        return availabilityList;
     }
     
     /**

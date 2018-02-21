@@ -68,7 +68,7 @@
                 </b:panel>
                 <c:if test="#{userBean.tutor}">
                     <h:form id="doNotDisturb">
-                        <b:switch value="#{userBean.student.doNotDisturb}" id="doNotDisturb" update="@form">
+                        <b:switch label="Do Not Disturb" value="#{userBean.student.doNotDisturb}" id="doNotDisturb" update="@form">
                             <f:ajax event="change" render="doNotDisturb" listener="#{userBean.updateDoNotDisturb(userBean.student.doNotDisturb)}" />
                         </b:switch>
                     </h:form>
@@ -101,7 +101,7 @@
                                 <b:dataTableColumn value="#{r.description}" />
                                 <h:column>
                                     <f:facet name="header">Pending</f:facet>
-                                    <b:commandButton span="6" value="Cancel" look="danger" action="#{requestBean.cancelRequest(r)}" />
+                                    <b:commandButton value="Cancel" look="danger" action="#{requestBean.cancelRequest(r)}" />
                                 </h:column>
                             </b:dataTable>
                         </h:form>
@@ -128,6 +128,46 @@
                             </h:form>
                         </b:tab>
                         <b:tab title="Schedule">
+                            <h:form>
+                                <b:dataTable value = "#{availabilityBean.availabilityList}" var = "avail">
+                                    <b:dataTableColumn>
+                                        <f:facet name = "header">Day of Week</f:facet>
+                                        <h:inputText value = "#{avail.dayOfWeek}" 
+                                                     size = "20" rendered = "#{avail.editable}" />
+                                        <h:outputText value = "#{avail.dayOfWeek}" 
+                                                      rendered = "#{not avail.editable}"/>
+                                    </b:dataTableColumn>
+                                    <b:dataTableColumn>
+                                        <f:facet name = "header">Start Time</f:facet>
+                                        <h:inputText value = "#{availabilityBean.stringStartTime}" size = "20"
+                                                     rendered = "#{avail.editable}" />
+                                        <h:outputText value = "#{avail.startTime}" 
+                                                      rendered = "#{not avail.editable}">                        
+                                            <f:convertDateTime pattern ="hh:mm:ss a"></f:convertDateTime>
+                                        </h:outputText>
+                                    </b:dataTableColumn>
+                                    <b:dataTableColumn>
+                                        <f:facet name = "header">End Time</f:facet>
+                                        <h:inputText value = "#{availabilityBean.stringEndTime}" 
+                                                     size = "20" rendered = "#{avail.editable}" />
+                                        <h:outputText value = "#{avail.endTime}"
+                                                      rendered = "#{not avail.editable}">
+                                            <f:convertDateTime pattern ="hh:mm:ss a"></f:convertDateTime>
+                                        </h:outputText>
+                                    </b:dataTableColumn>
+                    <!--                <b:dataTableColumn>
+                                        <f:facet name = "header">Edit</f:facet>
+                                        <b:commandButton value = "Edit" 
+                                                         action = "#{availabilityBean.edit(avail)}" 
+                                                         rendered = "#{not avail.editable}">        
+                                            <f:setPropertyActionListener
+                                                target = "#{availabilityBean.availability}" value = "#{availability}" />
+                                        </b:commandButton>
+                                    </b:dataTableColumn>-->
+                                </b:dataTable>  
+                                <br/>
+                                <b:commandButton value = "Save" action = "#{availabilityBean.saveAction}" />	  
+                            </h:form>
                         </b:tab>
                         <b:tab title="Courses">
                             <h:form>

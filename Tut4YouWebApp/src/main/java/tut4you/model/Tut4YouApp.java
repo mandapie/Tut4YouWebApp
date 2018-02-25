@@ -409,6 +409,22 @@ public class Tut4YouApp {
         return availability;
     }
     
+   
+
+        /**
+     * Only a tutor can delete his/her availability times.
+     * @param availability
+     * @return the availability
+     * @author Syed Haider <shayder426@gmail.com>
+     */
+    @RolesAllowed("tut4youapp.tutor")
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public Availability deleteAvailability(Availability availability){
+        em.remove(em.merge(availability));
+        return availability;
+    }
+    
+    
     /**
      * A tutor can set their status to be available to receive notifications
      * and set their status to be not available to not receive notifications.

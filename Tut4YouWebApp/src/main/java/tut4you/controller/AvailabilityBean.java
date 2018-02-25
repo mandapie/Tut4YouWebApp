@@ -130,12 +130,50 @@ public class AvailabilityBean implements Serializable {
         return result;
     }
     
-    /**
+        /**
      * Updates the current availability of the tutor
+     *
+     * @return
+     * @throws java.text.ParseException
      */
-    public void updateAvailability(){
+    public String updateAvailability() throws ParseException {
+        for (Availability avail : availabilityList) {
+            avail.setEditable(true);
+        }
+        String result = "failure";
+        availability.setStartTime(StringToTime(stringStartTime));
+        availability.setEndTime(StringToTime(stringEndTime));
         tut4youApp.updateAvailability(availability);
+        if (availability != null) {
+            result = "success";
+            LOGGER.severe("Availability added");
+        }
+        return result;
     }
+
+    /**
+     * Delete the availability from the tutor
+     *
+     * @param avail
+     * @return result based on if the availability form was filled out properly
+     * @throws java.text.ParseException
+     */
+    public String deleteAvailability(Availability avail) throws ParseException {
+        availabilityList.remove(avail);
+        String result = "failure";
+        availability = tut4youApp.deleteAvailability(availability);
+        if (availability != null) {
+            result = "success";
+            LOGGER.severe("Availability added");
+        }
+        return result;
+    }
+
+        public String edit() {
+        availability.setEditable(true);
+        return null;
+    }
+
     
     /**
      * Convert string to Time

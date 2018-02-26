@@ -15,6 +15,7 @@ tut4you/exception/CourseExistsException.class
 tut4you/validations/BasicValidator.class
 tut4you/model/Request.class
 tut4you/model/Tutor.class
+tut4you/validations/TimeValidator.class
 tut4you/controller/AvailabilityBean.class
 tut4you/controller/RegistrationBean.class
 tut4you/model/Tut4YouApp.class

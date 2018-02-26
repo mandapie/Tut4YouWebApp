@@ -195,7 +195,5 @@ public class Group implements Serializable {
         sb.append(", description='").append(description);
         sb.append('}');
         return sb.toString();
-
     }
-    
 }

@@ -36,12 +36,11 @@ import tut4you.exception.*;
 @Named
 @RequestScoped
 public class RegistrationBean implements Serializable {
-
-    private static final long serialVersionUID = 1L;
     private static final Logger LOGGER = Logger.getLogger("RequestBean");
     
     @EJB
     private Tut4YouApp tut4youApp;
+    
     private User newStudent;
     private Tutor newTutor;
     private String confirmPassword;

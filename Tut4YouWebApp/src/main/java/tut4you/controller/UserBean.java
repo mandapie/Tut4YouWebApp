@@ -40,6 +40,7 @@ public class UserBean implements Serializable {
     
     @EJB
     private Tut4YouApp tut4youapp;
+    
     private User student;
     private Tutor userTutor;
     boolean doNotDisturb;
@@ -52,23 +53,18 @@ public class UserBean implements Serializable {
         userTutor = (Tutor)student;
     }
     
-    public boolean isDoNotDisturb() {
-        return doNotDisturb;
-    }
-
-    public void setDoNotDisturb(boolean doNotDisturb) {
-        this.doNotDisturb = doNotDisturb;
-    }
-    
-    public void updateDoNotDisturb(Boolean d) {
-        System.out.println(d);
-        tut4youapp.updateDoNotDisturb(doNotDisturb);
-    }
-
+    /**
+     * Gets the Tutor object
+     * @return 
+     */
     public Tutor getUserTutor() {
         return userTutor;
     }
-
+    
+    /**
+     * Sets the User object
+     * @param tutor 
+     */
     public void setUserTutor(User tutor) {
         this.userTutor = (Tutor) tutor;
     }
@@ -87,6 +83,44 @@ public class UserBean implements Serializable {
      */
     public void setStudent(User student) {
         this.student = student;
+    }
+    
+    /**
+     * Gets the state of doNotDisturb is on or off
+     * @return true/false
+     */
+    public boolean isDoNotDisturb() {
+        return doNotDisturb;
+    }
+    
+    /**
+     * Sets the state of doNotDisturb
+     * @param doNotDisturb 
+     */
+    public void setDoNotDisturb(boolean doNotDisturb) {
+        this.doNotDisturb = doNotDisturb;
+    }
+    
+    /**
+     * Called the EJG to update the state of doNotDisturb
+     * @param d 
+     */
+    public void updateDoNotDisturb(Boolean d) {
+        tut4youapp.updateDoNotDisturb(doNotDisturb);
+    }
+    
+    /**
+     * Determine if current authenticated user has the role of tutor
+     * @return true if user has role of tutor, false otherwise.
+     */
+    public boolean isTutor() {
+        boolean isTutor = false;
+        if (this.isStudentAuthenticated()) {
+            FacesContext context = FacesContext.getCurrentInstance();
+            HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+            isTutor = request.isUserInRole("tut4youapp.tutor");
+        }
+        return isTutor;
     }
 
     /**
@@ -107,20 +141,6 @@ public class UserBean implements Serializable {
             }
         }
         return isAuthenticated;
-    }
-    
-    /**
-     * Determine if current authenticated user has the role of tutor
-     * @return true if user has role of tutor, false otherwise.
-     */
-    public boolean isTutor() {
-        boolean isTutor = false;
-        if (this.isStudentAuthenticated()) {
-            FacesContext context = FacesContext.getCurrentInstance();
-            HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-            isTutor = request.isUserInRole("tut4youapp.tutor");
-        }
-        return isTutor;
     }
     
     /**

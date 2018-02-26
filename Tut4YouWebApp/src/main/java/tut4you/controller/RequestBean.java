@@ -37,8 +37,6 @@ import tut4you.model.*;
 @Named
 @SessionScoped
 public class RequestBean implements Serializable {
-
-    private static final long serialVersionUID = 1L;
     private static final Logger LOGGER = Logger.getLogger("RequestBean");
 
     @EJB
@@ -48,14 +46,15 @@ public class RequestBean implements Serializable {
     private Subject subject;
     private Course course;
     private String time;
+    private String stringLaterTime;
+    private String stringLengthOfSession;
     private int numOfTutors; //number of tutors who teaches the course
     private List<Subject> subjectList = new ArrayList(); //list of subjects to be loaded to the request form
     private List<Course> courseList = new ArrayList(); //list of courses based on subject to load to the request form
     private List<Request> requestList = new ArrayList(); //list of pending requests
     private List<Tutor> tutorList = new ArrayList(); //list of available tutors
     private Tutor tutor; //the tutor who accepts te request
-    private String stringLaterTime;
-    private String stringLengthOfSession;
+    
     /**
      * RequestBean encapsulates all the functions/services involved
      * in making a request
@@ -63,22 +62,7 @@ public class RequestBean implements Serializable {
     public RequestBean() {
         request = new Request();
     }
-    public int StringToInt(String string) {
-        int integer = Integer.parseInt(string);
-        return integer;
-    }
-    /**
-     * Convert string to Time
-     * @param time
-     * @return 
-     * @throws java.text.ParseException
-     */
-    public java.util.Date StringToTime(String time) throws ParseException {
-        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
-        java.util.Date date = sdf.parse(time);
-        return date;
-    }
-    
+        
     public String getCurrentTime() throws ParseException {
         String stringCurrentTime = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
         //java.util.Date currentTime = StringToTime(stringCurrentTime);
@@ -117,52 +101,7 @@ public class RequestBean implements Serializable {
     public void setTutor(Tutor tutor) {
         this.tutor = tutor;
     }
-    
-    /**
-     * Creates a new request. If successful, get the number of tutors that tutors the course.
-     * @return result to be redirected another page
-     * @throws java.text.ParseException
-     */
-    public String createNewRequest() throws ParseException {
-        String result = "failure";
-        if(time.equals("Later")) {
-            request.setCurrentTime(StringToTime(getStringLaterTime()));
-        }
-        else {
-            request.setCurrentTime(StringToTime(getCurrentTime()));
-        }
-        request.setDayOfWeek(getCurrentDayOfWeek());
-        request.setLengthOfSession(StringToInt(stringLengthOfSession));
-        request = tut4youApp.newRequest(request);
         
-        if (request != null) {
-            numOfTutors = tut4youApp.getNumOfTutorsFromCourse(request.getCourse().getCourseName());
-            result = "success";
-            tutorList = tut4youApp.getTutorsFromCourse(request.getCourse().getCourseName(), request.getDayOfWeek().toUpperCase(), request.getCurrentTime(), true);
-        }
-        return result;
-    }
-    
-    public void sendToTutor(Tutor t) {
-        tut4youApp.addPendingRequest(t, request);
-    }
-    
-    /**
-     * Change the status of a request
-     * @param r
-     */
-    public void cancelRequest(Request r) {
-        tut4youApp.cancelRequest(r);
-    }
-    
-    public void removeRequestFromTutor(Request r) {
-        tut4youApp.removeRequestFromNotification(r);
-    }
-    
-    public void setTutorToRequest(Request r) {
-        tut4youApp.setTutorToRequest(r);
-    }
-    
     public List<Request> getRequestList() {
         requestList = tut4youApp.getActiveRequest();
         return requestList;
@@ -237,6 +176,38 @@ public class RequestBean implements Serializable {
     }
     
     /**
+     * Get the time of the request if user set for later 
+     * @return the time of the request
+     */
+    public String getStringLaterTime() {
+        return stringLaterTime;
+    }
+    
+    /**
+     * Sets the time of the request if user wants a request for later
+     * @param stringLaterTime the time of the request if for later
+     */
+    public void setStringLaterTime(String stringLaterTime) {
+        this.stringLaterTime = stringLaterTime;
+    }
+    
+    /**
+     * gets string length of session
+     * @return stringLengthOfSession
+     */
+    public String getStringLengthOfSession() {
+        return stringLengthOfSession;
+    }
+    
+    /**
+     * sets string length of session
+     * @param stringLengthOfSession 
+     */
+    public void setStringLengthOfSession(String stringLengthOfSession) {
+        this.stringLengthOfSession = stringLengthOfSession;
+    }
+    
+    /**
      * Loads all the subjects from the database.
      * @return a list of subjects
      */
@@ -275,7 +246,6 @@ public class RequestBean implements Serializable {
         return tutorList;
     }
     
-
     public void setTutorList(List<Tutor> c) {
         tutorList = c;
     }
@@ -286,35 +256,83 @@ public class RequestBean implements Serializable {
     public void changeSubject() {
         courseList = tut4youApp.getCourses(subject.getSubjectName());
     }
-           /**
-     * Get the time of the request if user set for later 
-     * @return the time of the request
+    
+    /**
+     * Convert string to Time
+     * @param time
+     * @return 
+     * @throws java.text.ParseException
      */
-    public String getStringLaterTime() {
-        return stringLaterTime;
+    public java.util.Date StringToTime(String time) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
+        java.util.Date date = sdf.parse(time);
+        return date;
     }
     
     /**
-     * Sets the time of the request if user wants a request for later
-     * @param stringLaterTime the time of the request if for later
+     * converts String to int type
+     * @param string
+     * @return 
      */
-    public void setStringLaterTime(String stringLaterTime) {
-        this.stringLaterTime = stringLaterTime;
-    }
-        /**
-     * gets string length of session
-     * @return stringLengthOfSession
-     */
-    public String getStringLengthOfSession() {
-        return stringLengthOfSession;
+    public int StringToInt(String string) {
+        int integer = Integer.parseInt(string);
+        return integer;
     }
     
     /**
-     * sets string length of session
-     * @param stringLengthOfSession 
+     * Creates a new request. If successful, get the number of tutors that tutors the course.
+     * @return result to be redirected another page
+     * @throws java.text.ParseException
      */
-    public void setStringLengthOfSession(String stringLengthOfSession) {
-        this.stringLengthOfSession = stringLengthOfSession;
+    public String createNewRequest() throws ParseException {
+        String result = "failure";
+        if(time.equals("Later")) {
+            request.setCurrentTime(StringToTime(getStringLaterTime()));
+        }
+        else {
+            request.setCurrentTime(StringToTime(getCurrentTime()));
+        }
+        request.setDayOfWeek(getCurrentDayOfWeek());
+        request.setLengthOfSession(StringToInt(stringLengthOfSession));
+        request = tut4youApp.newRequest(request);
+        
+        if (request != null) {
+            numOfTutors = tut4youApp.getNumOfTutorsFromCourse(request.getCourse().getCourseName());
+            result = "success";
+            tutorList = tut4youApp.getTutorsFromCourse(request.getCourse().getCourseName(), request.getDayOfWeek().toUpperCase(), request.getCurrentTime(), true);
+        }
+        return result;
+    }
+    
+    /**
+     * Send request to a specific tutor
+     * @param t 
+     */
+    public void sendToTutor(Tutor t) {
+        tut4youApp.addPendingRequest(t, request);
+    }
+    
+    /**
+     * Sets a tutor to the request if tutor accepts
+     * @param r 
+     */
+    public void setTutorToRequest(Request r) {
+        tut4youApp.setTutorToRequest(r);
+    }
+    
+    /**
+     * Change the status of a request
+     * @param r
+     */
+    public void cancelRequest(Request r) {
+        tut4youApp.cancelRequest(r);
     }
 
+    /**
+     * Remove the request from the notification list
+     * @param r 
+     */
+    public void removeRequestFromTutor(Request r) {
+        tut4youApp.removeRequestFromNotification(r);
+    }
 }

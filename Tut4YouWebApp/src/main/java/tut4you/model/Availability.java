@@ -54,15 +54,13 @@ public class Availability implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, unique = true)
     private Long id;
-    private boolean editable;
-    private String dayOfWeek;
 
+    private String dayOfWeek;
     @Temporal(TemporalType.TIME)
     private java.util.Date startTime;
-
     @Temporal(TemporalType.TIME)
     private java.util.Date endTime;
-
+    private boolean editable;
     /**
      * Multiple availabilities can be added by a Tutor
      */
@@ -88,10 +86,41 @@ public class Availability implements Serializable {
         this.startTime = startTime;
         this.endTime = endTime;
     }
+    
+    /**
+     * Gets the Id of availability
+     * @return id
+     */
+    public Long getId() {
+        return id;
+    }
 
     /**
+     * Sets the primary key of the availability
+     * @param id
+     */
+    public void setId(Long id) {
+        this.id = id;
+    }
+    
+    /**
+     * Gets the state of Editable
+     * @return editable
+     */
+    public boolean isEditable() {
+        return editable;
+    }
+    
+    /**
+     * Sets the state of Editable
+     * @param editable 
+     */
+    public void setEditable(boolean editable) {
+        this.editable = editable;
+    }
+    
+    /**
      * Gets the day of the week
-     *
      * @return dayOfWeek
      */
     public String getDayOfWeek() {
@@ -99,7 +128,6 @@ public class Availability implements Serializable {
 
     /**
      * Sets the day of the week
-     *
      * @param dayOfWeek
      */
     public void setDayOfWeek(String dayOfWeek) {
@@ -108,7 +136,6 @@ public class Availability implements Serializable {
 
     /**
      * Gets the start time
-     *
      * @return startTime
      */
     public java.util.Date getStartTime() {
@@ -117,7 +144,6 @@ public class Availability implements Serializable {
 
     /**
      * Sets the start time
-     *
      * @param startTime
      */
     public void setStartTime(java.util.Date startTime) {
@@ -126,7 +152,6 @@ public class Availability implements Serializable {
 
     /**
      * Gets the end time
-     *
      * @return endTime
      */
     public java.util.Date getEndTime() {
@@ -135,29 +160,14 @@ public class Availability implements Serializable {
 
     /**
      * Sets the end time
-     *
      * @param endTime
      */
     public void setEndTime(java.util.Date endTime) {
         this.endTime = endTime;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    /**
-     * Sets the primary key of the availability
-     *
-     * @param id
-     */
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     /**
      * Gets a tutor who is going to add an availability
-     *
      * @return tutor
      */
     public Tutor getTutor() {
@@ -166,19 +176,12 @@ public class Availability implements Serializable {
 
     /**
      * Sets a tutor who is going to add an availability
-     *
      * @param tutor
      */
     public void setTutor(Tutor tutor) {
         this.tutor = tutor;
     }
-    public boolean isEditable() {
-        return editable;
-    }
 
-    public void setEditable(boolean editable) {
-        this.editable = editable;
-    }
     @Override
     public int hashCode() {
         int hash = 0;

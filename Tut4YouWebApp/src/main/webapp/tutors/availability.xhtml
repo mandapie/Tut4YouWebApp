@@ -16,7 +16,7 @@
                         <b:column medium-screen="2">
                             <!-- Drop-down menu display Monday-Sunday -->
                             <h:outputLabel value="Select a day:"/>
-                            <b:selectOneMenu class="form-control"
+                            <b:selectOneMenu                           
                                              id="dayOfWeek"
                                              value="#{availabilityBean.availability.dayOfWeek}"
                                              required="true">
@@ -30,10 +30,12 @@
                                 <f:selectItem itemValue="SUNDAY" />
                             </b:selectOneMenu>
                             <!-- Start Time -->
+                            
                             <h:outputLabel value="Start Time:"/>
-                            <b:selectOneMenu class="form-control"
+                           <b:selectOneMenu class="form-control"
                                              id="startTime"
                                              value="#{availabilityBean.stringStartTime}"
+                                             binding="#{passwordComponent}"
                                              required="true">
                                 <f:selectItem itemValue="Select One..."/>
                                 <f:selectItem itemLabel="12:00 AM" itemValue="00:00:00" />
@@ -61,7 +63,7 @@
                                 <f:selectItem itemLabel="10:00 PM" itemValue="22:00:00" />
                                 <f:selectItem itemLabel="11:00 PM" itemValue="23:00:00" />                               
                             </b:selectOneMenu>
-                            <!-- End Time -->
+
                             <h:outputLabel value="End Time:"/>
                             <b:selectOneMenu class="form-control"
                                              id="endTime"
@@ -92,6 +94,10 @@
                                 <f:selectItem itemLabel="9:00 PM" itemValue="21:00:00" />
                                 <f:selectItem itemLabel="10:00 PM" itemValue="22:00:00" />
                                 <f:selectItem itemLabel="11:00 PM" itemValue="23:00:00" />
+                                
+                                <b:message for="endTime"/>
+                                <f:validator validatorId="timeValidator" />
+                                <f:attribute name="otherValue" value="#{passwordComponent.value}" />
                             </b:selectOneMenu>
                             <!-- Adds to availability in -->
                             <b:commandButton value="Add Availability" look="primary" style="width:100%" action="#{availabilityBean.addAvailability}"/>

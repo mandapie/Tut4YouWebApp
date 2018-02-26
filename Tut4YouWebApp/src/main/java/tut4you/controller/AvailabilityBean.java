@@ -18,13 +18,10 @@
 package tut4you.controller;
 
 import java.io.Serializable;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
@@ -39,16 +36,16 @@ import tut4you.model.Tut4YouApp;
 @Named
 @SessionScoped
 public class AvailabilityBean implements Serializable {
-    private static final long serialVersionUID = 1L;
     private static final Logger LOGGER = Logger.getLogger("AvailabilityBean");
     
     @EJB
     private Tut4YouApp tut4youApp;
+   
     private Availability availability;
     private String stringStartTime;
     private String stringEndTime;
-    private Tutor tutor;
     private List<Availability> availabilityList = new ArrayList();
+    
     /**
      * Creates a new instance of the Availability entity
      */
@@ -58,18 +55,7 @@ public class AvailabilityBean implements Serializable {
         stringEndTime = "";
 
     }
-    public void setStringStartTime(String stringStartTime) {
-        this.stringStartTime = stringStartTime;
-    }
-    public String getStringStartTime() {
-        return stringStartTime;
-    }
-    public void setStringEndTime(String stringEndTime) {
-        this.stringEndTime = stringEndTime;
-    }
-    public String getStringEndTime() {
-        return stringEndTime;
-    }
+    
     /**
      * Gets the availability of the tutor
      * @return the availability of the tutor
@@ -87,6 +73,48 @@ public class AvailabilityBean implements Serializable {
     }
     
     /**
+     * Sets the start time of the tutor
+     * @return stringStartTime of the tutor
+     */
+    public String getStringStartTime() {
+        return stringStartTime;
+    }
+    
+    /**
+     * Gets the start time of the tutor
+     * @param stringStartTime
+     */
+    public void setStringStartTime(String stringStartTime) {
+        this.stringStartTime = stringStartTime;
+    }
+    
+    /**
+     * Gets the end time of the tutor
+     * @return stringEndTime of the tutor
+     */
+    public String getStringEndTime() {
+        return stringEndTime;
+    }
+    
+    /**
+     * Sets the end time of the tutor
+     * @param stringEndTime
+     */
+    public void setStringEndTime(String stringEndTime) {
+        this.stringEndTime = stringEndTime;
+    }
+    
+    /**
+     * Gets a list of the availabilities of the Tutor in the EJB
+     *
+     * @return a list of subjects
+     */
+    public List<Availability> getAvailabilityList() {
+        availabilityList = tut4youApp.getAvailabilityList();
+        return availabilityList;
+    }
+    
+    /**
      * Adds the availability to the tutor
      * @return result based on if the availability form was filled out properly
      * @throws java.text.ParseException
@@ -101,25 +129,52 @@ public class AvailabilityBean implements Serializable {
         }
         return result;
     }
-    /**
-     * Gets a list of the availabilities of the Tutor in the EJB
-     *
-     * @return a list of subjects
-     */
-    public List<Availability> getAvailabilityList() {
-        availabilityList = tut4youApp.getAvailabilityList();
-        return availabilityList;
-    }
-    /**
+    
+        /**
      * Updates the current availability of the tutor
+     *
+     * @return
+     * @throws java.text.ParseException
      */
-    public void updateAvailability(){
+    public String updateAvailability() throws ParseException {
+        for (Availability avail : availabilityList) {
+            avail.setEditable(true);
+        }
+        String result = "failure";
+        availability.setStartTime(StringToTime(stringStartTime));
+        availability.setEndTime(StringToTime(stringEndTime));
         tut4youApp.updateAvailability(availability);
+        if (availability != null) {
+            result = "success";
+            LOGGER.severe("Availability added");
+        }
+        return result;
     }
-    public void updateDoNotDisturb(){
-        tut4youApp.updateDoNotDisturb(tutor.isDoNotDisturb());
-        
-    }    
+
+    /**
+     * Delete the availability from the tutor
+     *
+     * @param avail
+     * @return result based on if the availability form was filled out properly
+     * @throws java.text.ParseException
+     */
+    public String deleteAvailability(Availability avail) throws ParseException {
+        availabilityList.remove(avail);
+        String result = "failure";
+        availability = tut4youApp.deleteAvailability(availability);
+        if (availability != null) {
+            result = "success";
+            LOGGER.severe("Availability added");
+        }
+        return result;
+    }
+
+        public String edit() {
+        availability.setEditable(true);
+        return null;
+    }
+
+    
     /**
      * Convert string to Time
      * @param time
@@ -127,14 +182,8 @@ public class AvailabilityBean implements Serializable {
      * @throws java.text.ParseException
      */
     public java.util.Date StringToTime(String time) throws ParseException {
-        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
-        
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
         java.util.Date date = sdf.parse(time);
-            
-        LOGGER.log(Level.SEVERE, "time = {0}", date);
         return date;
-       
-        
-    }
-    
+    }  
 }

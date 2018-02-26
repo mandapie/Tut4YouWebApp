@@ -33,7 +33,7 @@ import javax.persistence.Table;
 
 /**
  * User is the most basic user type. SINGLE_TABLE is used as our inheritance
- strategy as Tutor inherits all the attributes of a User.
+ * strategy as Tutor inherits all the attributes of a User.
  * @author Keith Tran <keithtran25@gmail.com>
  * @author Syed Haider <shayder426@gmail.com> 
  */
@@ -222,16 +222,6 @@ public class User implements Serializable {
     }
     
     /**
-     * Adds a request submitted to the collection of Requests
-     * @param request 
-     */
-    public void addRequest(Request request) {
-        if (this.requests == null)
-            this.requests = new HashSet();
-        this.requests.add(request);
-    }
-    
-    /**
      * gets the groups that this user is a member of
      * @return a collection of groups that this user belongs to
      */
@@ -245,6 +235,16 @@ public class User implements Serializable {
      */
     public void setGroups(Collection<Group> groups) {
         this.groups = groups;
+    }
+    
+    /**
+     * Adds a request submitted to the collection of Requests
+     * @param request 
+     */
+    public void addRequest(Request request) {
+        if (this.requests == null)
+            this.requests = new HashSet();
+        this.requests.add(request);
     }
     
     /**
@@ -278,6 +278,7 @@ public class User implements Serializable {
     public String getDecriminatorValue() {
         return this.getClass().getAnnotation(DiscriminatorValue.class).value();
     }
+    
     /**
      * Override hashCode
      * @return hash

@@ -143,27 +143,18 @@ public class AddCourseBean implements Serializable {
     public void changeSubject() {
         courseList = tut4youApp.getCourses(subject.getSubjectName());
     }
-
+    
+    /**
+     * Adds a new course to the tutor
+     * @return
+     * @throws CourseExistsException 
+     */
     public String addCourse() throws CourseExistsException {
         String result = "failure";
         course = tut4youApp.addCourse(course);
-        if (course != null) {
+        if (this.course != null) {
             result = "success";
         }
         return result;
     }
-    
-    /**
-     * Adds course to the tutor's course list
-     * @return success if the course was added successfully
-     */
-    public String addNewCourse() {
-       String result = "failure";
-       course.setSubject(subject);
-       course = tut4youApp.addNewCourse(course);
-        if (course != null) {
-            result = "success";
-        }
-        return result;
-   }
 }

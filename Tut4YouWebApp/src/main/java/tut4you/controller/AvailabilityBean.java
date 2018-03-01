@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
-import javax.enterprise.context.SessionScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 import tut4you.model.*;
 import tut4you.model.Tut4YouApp;
@@ -34,7 +34,7 @@ import tut4you.model.Tut4YouApp;
  * @author Andrew Kaichi <Andrew.Kaichi@student.csulb.edu>
  */
 @Named
-@SessionScoped
+@RequestScoped
 public class AvailabilityBean implements Serializable {
     private static final Logger LOGGER = Logger.getLogger("AvailabilityBean");
     
@@ -45,7 +45,8 @@ public class AvailabilityBean implements Serializable {
     private String stringStartTime;
     private String stringEndTime;
     private List<Availability> availabilityList = new ArrayList();
-    
+    private boolean editable = false;
+
     /**
      * Creates a new instance of the Availability entity
      */
@@ -53,7 +54,7 @@ public class AvailabilityBean implements Serializable {
         availability = new Availability();
         stringStartTime = "";
         stringEndTime = "";
-
+        editable = false;
     }
     
     /**
@@ -130,48 +131,35 @@ public class AvailabilityBean implements Serializable {
         return result;
     }
     
-        /**
+    public void changeEditable() {
+        editable = editable==false;
+    }
+    
+    /**
      * Updates the current availability of the tutor
-     *
-     * @return
+     * @param avail
      * @throws java.text.ParseException
      */
-    public String updateAvailability() throws ParseException {
-        for (Availability avail : availabilityList) {
-            avail.setEditable(true);
-        }
-        String result = "failure";
-        availability.setStartTime(StringToTime(stringStartTime));
-        availability.setEndTime(StringToTime(stringEndTime));
-        tut4youApp.updateAvailability(availability);
-        if (availability != null) {
-            result = "success";
-            LOGGER.severe("Availability added");
-        }
-        return result;
+    public void updateAvailability(Availability avail) throws ParseException {
+        tut4youApp.updateAvailability(avail, avail.getStartTime(), avail.getEndTime());
+        System.out.println("test");
+        changeEditable();
     }
 
     /**
      * Delete the availability from the tutor
-     *
      * @param avail
-     * @return result based on if the availability form was filled out properly
-     * @throws java.text.ParseException
      */
-    public String deleteAvailability(Availability avail) throws ParseException {
-        availabilityList.remove(avail);
-        String result = "failure";
-        availability = tut4youApp.deleteAvailability(availability);
-        if (availability != null) {
-            result = "success";
-            LOGGER.severe("Availability added");
-        }
-        return result;
+    public void deleteAvailability(Availability avail) {
+        tut4youApp.deleteAvailability(avail);
+    }
+    
+    public boolean isEditable() {
+        return editable;
     }
 
-        public String edit() {
-        availability.setEditable(true);
-        return null;
+    public void setEditable(boolean editable) {
+        this.editable = editable;
     }
 
     
@@ -180,9 +168,11 @@ public class AvailabilityBean implements Serializable {
      * @param time
      * @return 
      * @throws java.text.ParseException
+     * https://stackoverflow.com/questions/6842245/converting-date-time-to-24-hour-format
+     * assisted by Amanda
      */
     public java.util.Date StringToTime(String time) throws ParseException {
-        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm"); //HH = 1-23, hh = 1-12
         java.util.Date date = sdf.parse(time);
         return date;
     }  

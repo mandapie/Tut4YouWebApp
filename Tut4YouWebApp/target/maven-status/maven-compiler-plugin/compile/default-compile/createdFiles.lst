@@ -1,4 +1,5 @@
 tut4you\model\Request$Status.class
+tut4you\controller\AddNewCourseBean.class
 tut4you\model\Request.class
 tut4you\model\Subject.class
 tut4you\model\Group.class

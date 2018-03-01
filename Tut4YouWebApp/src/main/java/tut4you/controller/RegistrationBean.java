@@ -19,6 +19,8 @@ package tut4you.controller;
 import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
@@ -48,11 +50,19 @@ public class RegistrationBean implements Serializable {
     private Boolean isStudent;
     
     /** Creates a new instance of Registration */
+    //@PostConstruct
     public RegistrationBean() {
-        newStudent = new User();
-        newTutor = new Tutor();
+        
     }
-    
+    //EXAMPLE
+//    @PostConstruct
+//    public void createBookstoreBean() {
+//        LOGGER.severe("New BookstoreBean!" + this);
+//    }
+//    @PreDestroy
+//    public void destroyBookstoreBean() {
+//        LOGGER.severe("Destroy BookstoreBean!" + this);
+//    }
     /**
      * Gets the new student who just registered
      * @return the new User entity
@@ -182,25 +192,22 @@ public class RegistrationBean implements Serializable {
      * registration.
      */
     // IN PROGRESS
-//    public String createUser() {
-//        String result = "failure";
-//        if (newStudent.isInformationValid(confirmPassword)) {
-//            newStudent.setPassword(tut4you.controller.HashPassword.getSHA512Digest(newStudent.getPassword()));
-//            try {
-//                tut4youApp.registerStudent(newStudent, "tut4youapp.student");
-//                //if (userType == "Tutor") {
-//                    //newTutor = (Tutor) newStudent;
-//                    tut4youApp.addTutorRole(newStudent, "tut4youapp.tutor");
-//                //}
-//                result = "success";
-//            } catch (StudentExistsException see) {
-//                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("A user with that information already exists, try again."));
-//                result = "register";
-//            } catch (Exception e) {
-//                LOGGER.log(Level.SEVERE, null, e);
-//                result = "failure";
-//            }
-//        }
-//        return result;
-//    }
+    public String createUser() {
+        String result = "failure";
+        if (newStudent.isInformationValid(confirmPassword)) {
+            newStudent.setPassword(tut4you.controller.HashPassword.getSHA512Digest(newStudent.getPassword()));
+            try {
+                System.out.println("New Student: " + newStudent.getEmail());
+                tut4youApp.registerUser(newStudent, userType);
+                result = "success";
+            } catch (StudentExistsException see) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("A user with that information already exists, try again."));
+                result = "register";
+            } catch (Exception e) {
+                LOGGER.log(Level.SEVERE, null, e);
+                result = "failure";
+            }
+        }
+        return result;
+    }
 }

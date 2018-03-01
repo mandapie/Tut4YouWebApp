@@ -26,8 +26,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
+import javax.enterprise.context.RequestScoped;
+import javax.faces.bean.ViewScoped;
 import javax.inject.Named;
-import javax.enterprise.context.SessionScoped;
 import tut4you.model.*;
 
 /**
@@ -35,7 +36,7 @@ import tut4you.model.*;
  * @author Amanda Pan <daikiraidemodaisuki@gmail.com>
  */
 @Named
-@SessionScoped
+@RequestScoped
 public class RequestBean implements Serializable {
     private static final Logger LOGGER = Logger.getLogger("RequestBean");
 
@@ -65,7 +66,6 @@ public class RequestBean implements Serializable {
         
     public String getCurrentTime() throws ParseException {
         String stringCurrentTime = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
-        //java.util.Date currentTime = StringToTime(stringCurrentTime);
         return stringCurrentTime;
     }
     
@@ -264,7 +264,7 @@ public class RequestBean implements Serializable {
      * @throws java.text.ParseException
      */
     public java.util.Date StringToTime(String time) throws ParseException {
-        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
         java.util.Date date = sdf.parse(time);
         return date;
     }
@@ -285,6 +285,7 @@ public class RequestBean implements Serializable {
      * @throws java.text.ParseException
      */
     public String createNewRequest() throws ParseException {
+        System.out.println("new request here");
         String result = "failure";
         if(time.equals("Later")) {
             request.setCurrentTime(StringToTime(getStringLaterTime()));

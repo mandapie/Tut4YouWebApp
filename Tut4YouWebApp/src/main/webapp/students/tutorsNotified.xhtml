@@ -12,8 +12,11 @@
         <h1>Tutors Available</h1>
         <h:form>
             <b:dataTable value="#{requestBean.tutorList}" var="tutor">
-                <b:dataTableColumn value="#{tutor.firstName}"/>
-                <b:dataTableColumn value="#{tutor.lastName}"/>
+                <b:dataTableColumn>
+                    <f:facet name="header">Tutor Name</f:facet>
+                    #{tutor.firstName}
+                    #{tutor.lastName}
+                </b:dataTableColumn>
                 <h:column>
                     <f:facet name="header">Request</f:facet>
                     <b:commandButton span="6" value="Request" look="info" action="#{requestBean.sendToTutor(tutor)}"/>

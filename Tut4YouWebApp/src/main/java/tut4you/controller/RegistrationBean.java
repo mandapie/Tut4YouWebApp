@@ -141,56 +141,6 @@ public class RegistrationBean implements Serializable {
      * @return either failure, success, or register depending on successful
      * registration.
      */
-    public String createStudent() {
-        String result = "failure";
-        if (newStudent.isInformationValid(confirmPassword)) {
-            newStudent.setPassword(tut4you.controller.HashPassword.getSHA512Digest(newStudent.getPassword()));
-            try {
-                tut4youApp.registerStudent(newStudent, "tut4youapp.student");
-                result = "success";
-            } catch (StudentExistsException see) {
-                LOGGER.log(Level.SEVERE, null, see);
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("A user with that information already exists, try again."));
-                result = "register";
-            } catch (Exception e) {
-                LOGGER.log(Level.SEVERE, null, e);
-                result = "failure";
-            }
-        }
-        return result;
-    }
-    
-    /**
-     * JSF Action that uses the information submitted in the registration page
-     * to add user as a registered Tutor user.
-     * @return either failure, success, or register depending on successful 
-     * registration.
-     */
-    public String createTutor() {
-        String result = "failure";
-        if (newTutor.isInformationValid(confirmPassword)) {
-            newTutor.setPassword(tut4you.controller.HashPassword.getSHA512Digest(newTutor.getPassword()));
-            try {
-                tut4youApp.registerTutor(newTutor, "tut4youapp.student", "tut4youapp.tutor");
-                result = "success";
-            } catch (StudentExistsException see) {
-                LOGGER.log(Level.SEVERE, null, see);
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("A user with that information already exists, try again."));
-                result = "register";
-            } catch (Exception e) {
-                LOGGER.log(Level.SEVERE, null, e);
-                result = "failure";
-            }
-        }
-        return result;
-    }
-    
-    /**
-     * JSF Action that uses the information submitted in the registration page
-     * to add user as a registered User user.
-     * @return either failure, success, or register depending on successful
-     * registration.
-     */
     // IN PROGRESS
     public String createUser() {
         String result = "failure";
@@ -210,4 +160,54 @@ public class RegistrationBean implements Serializable {
         }
         return result;
     }
+    
+//    /**
+//     * JSF Action that uses the information submitted in the registration page
+//     * to add user as a registered User user.
+//     * @return either failure, success, or register depending on successful
+//     * registration.
+//     */
+//    public String createStudent() {
+//        String result = "failure";
+//        if (newStudent.isInformationValid(confirmPassword)) {
+//            newStudent.setPassword(tut4you.controller.HashPassword.getSHA512Digest(newStudent.getPassword()));
+//            try {
+//                tut4youApp.registerStudent(newStudent, "tut4youapp.student");
+//                result = "success";
+//            } catch (StudentExistsException see) {
+//                LOGGER.log(Level.SEVERE, null, see);
+//                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("A user with that information already exists, try again."));
+//                result = "register";
+//            } catch (Exception e) {
+//                LOGGER.log(Level.SEVERE, null, e);
+//                result = "failure";
+//            }
+//        }
+//        return result;
+//    }
+//    
+//    /**
+//     * JSF Action that uses the information submitted in the registration page
+//     * to add user as a registered Tutor user.
+//     * @return either failure, success, or register depending on successful 
+//     * registration.
+//     */
+//    public String createTutor() {
+//        String result = "failure";
+//        if (newTutor.isInformationValid(confirmPassword)) {
+//            newTutor.setPassword(tut4you.controller.HashPassword.getSHA512Digest(newTutor.getPassword()));
+//            try {
+//                tut4youApp.registerTutor(newTutor, "tut4youapp.student", "tut4youapp.tutor");
+//                result = "success";
+//            } catch (StudentExistsException see) {
+//                LOGGER.log(Level.SEVERE, null, see);
+//                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("A user with that information already exists, try again."));
+//                result = "register";
+//            } catch (Exception e) {
+//                LOGGER.log(Level.SEVERE, null, e);
+//                result = "failure";
+//            }
+//        }
+//        return result;
+//    }
 }

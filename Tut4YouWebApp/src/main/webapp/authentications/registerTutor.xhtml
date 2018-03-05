@@ -51,7 +51,7 @@
                         <h:outputLabel value="Phone Number"/>
                     </b:column>
                     <b:column medium-screen="4">
-                        <b:inputText id="tpn" placeholder="Enter Phone Number" required="true" requiredMessage="required" value="#{registrationBean.newTutor.phoneNumber}">
+                        <b:inputText id="tpn" placeholder="Enter Phone Number" required="true" requiredMessage="required" value="#{registrationBean.newTutor.phoneNumber}" validator="#{basicValidator.validatePhoneNumber}">
                             <b:message for="tpn"/>
                         </b:inputText>
                     </b:column>
@@ -64,6 +64,7 @@
                     <b:column medium-screen="4">
                         <b:inputText id="tem" placeholder="Enter Email Address" required="true" requiredMessage="required" value="#{registrationBean.newTutor.email}" validator="#{basicValidator.validateEmail}">
                             <b:message for="tem"/>
+                            <f:validateLength minimum="10"/>
                         </b:inputText>
                     </b:column>
                 </b:row>

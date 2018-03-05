@@ -28,7 +28,10 @@
                                        itemValue="#{course}"/>
                     </b:selectOneMenu>
                 </b:row>
-                <b:inputTextarea label="Description/Topic:" placeholder="Enter a short description..." value="#{requestBean.request.description}"/>
+                <b:inputTextarea label="Description/Topic:" placeholder="Enter a short description..." value="#{requestBean.request.description}"
+                                 required="true"
+                                 <f:validateLength minimum="10"/>
+                </b:inputTextarea>
                 <!-- length of session -->
                 <b:row>
                     <b:selectOneMenu span="6"

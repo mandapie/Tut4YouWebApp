@@ -107,7 +107,8 @@ public class Request implements Serializable {
     private java.util.Date currentTime;
     private Status status;
     private int lengthOfSession;
-    
+    private String zipCode;
+    private int maxRadius;
     /**
      * Request Constructor
      */
@@ -122,15 +123,46 @@ public class Request implements Serializable {
      * @param status 
      * @param currentTime 
      * @param lengthOfSession 
+     * @param zipCode 
+     * @param maxRadius 
      */
-    public Request(User student, String description, Status status, java.util.Date currentTime, int lengthOfSession) {
+    public Request(User student, String description, Status status, java.util.Date currentTime, int lengthOfSession, String zipCode, int maxRadius) {
         this.student = student;
         this.description = description;
         this.status = status;
         this.currentTime = currentTime;
         this.lengthOfSession = lengthOfSession;
+        this.zipCode = zipCode;
+        this.maxRadius = maxRadius;
     }
-    
+    /**
+     * sets the zip code
+     * @param zipCode 
+     */
+    public void setZipCode(String zipCode) {
+        this.zipCode = zipCode;
+    }
+    /**
+     * gets the zip code
+     * @return zip code
+     */
+    public String getZipCode() {
+        return zipCode;
+    }
+    /**
+     * set max radius
+     * @param maxRadius 
+     */
+    public void setMaxRadius(int maxRadius) {
+        this.maxRadius = maxRadius;
+    }
+    /**
+     * get max radius
+     * @return maxRadius
+     */
+    public int getMaxRadius() {
+        return maxRadius;
+    }
     /**
      * Gets the id of a Request
      * @return id of the Request

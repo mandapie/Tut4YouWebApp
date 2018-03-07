@@ -55,17 +55,24 @@ public class BasicValidator {
             throw new ValidatorException(message);
         }
     }
-    
+    /**
+     * https://stackoverflow.com/questions/42104546/java-regular-expressions-to-validate-phone-numbers
+     * 
+     * @param context the FacesContext
+     * @param toValidate the UIComponent being validated (e-mail field)
+     * @param value the value (email address) of the component
+     */
     public void validatePhoneNumber(FacesContext context, UIComponent toValidate, Object value) {
         String phoneNum = (String) value;
         String pattern = "\\d{10}|(?:\\d{3}-){2}\\d{4}|\\(\\d{3}\\)\\d{3}-?\\d{4}";
         if (phoneNum.matches(pattern)) {     
-                    //System.out.println("Valid"); 
+            
         } else {     
             FacesMessage message = new FacesMessage("Invalid phone number");
             throw new ValidatorException(message);
         }
         
     }
+
 
 }

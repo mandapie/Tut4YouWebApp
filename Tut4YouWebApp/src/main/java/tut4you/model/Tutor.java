@@ -62,6 +62,8 @@ public class Tutor extends User implements Serializable {
     private int numPeopleTutored;
     private double priceRate;
     private boolean doNotDisturb;
+    
+    private String zipCode;
     /**
      * A Tutor can tutor multiple Courses and
      * a Course can be tutored by multiple Tutors.
@@ -85,6 +87,7 @@ public class Tutor extends User implements Serializable {
     public Tutor() {
         priceRate = 0.00;
         doNotDisturb = false;
+        zipCode = "00000";
     }
     
     /**
@@ -94,11 +97,12 @@ public class Tutor extends User implements Serializable {
      * @param priceRate 
      * @param doNotDisturb 
      */
-    public Tutor(Date dateJoined, int numPeopleTutored, double priceRate, boolean doNotDisturb) {
+    public Tutor(Date dateJoined, int numPeopleTutored, double priceRate, boolean doNotDisturb, String zipCode) {
         this.dateJoined = dateJoined;
         this.numPeopleTutored = numPeopleTutored;
         this.priceRate = priceRate;
         this.doNotDisturb = doNotDisturb;
+        this.zipCode = zipCode;
     }
         
     /**
@@ -115,12 +119,13 @@ public class Tutor extends User implements Serializable {
      * @param priceRate 
      * @param doNotDisturb 
      */
-    public Tutor(String email, String firstName, String lastName, String userName, String phoneNumber, String password, String university, Date dateJoined, int numPeopleTutored, double priceRate, boolean doNotDisturb) {
+    public Tutor(String email, String firstName, String lastName, String userName, String phoneNumber, String password, String university, Date dateJoined, int numPeopleTutored, double priceRate, boolean doNotDisturb, String zipCode) {
         super(email, firstName, lastName, userName, phoneNumber, password, university);
         this.dateJoined = dateJoined;
         this.numPeopleTutored = numPeopleTutored;
         this.priceRate = priceRate;
         this.doNotDisturb = doNotDisturb;
+        this.zipCode = zipCode;
     }
     
     /**
@@ -273,5 +278,19 @@ public class Tutor extends User implements Serializable {
      */
     public void removePendingRequest(Request pr) {
         pendingRequests.remove(pr);
+    }
+    /**
+     * sets the zip code
+     * @param zipCode 
+     */
+    public void setZipCode(String zipCode) {
+        this.zipCode = zipCode;
+    }
+    /**
+     * gets the zip code
+     * @return zip code
+     */
+    public String getZipCode() {
+        return zipCode;
     }
 }

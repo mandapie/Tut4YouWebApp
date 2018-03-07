@@ -44,7 +44,7 @@ import javax.persistence.TemporalType;
 @DiscriminatorValue(value="Tutor")
 @Entity
 @NamedQueries({
-    @NamedQuery(name = Tutor.FIND_TUTORS_BY_COURSE_DAY_TIME, query = "SELECT t FROM Tutor t JOIN t.courses c JOIN t.availability a WHERE c.courseName = :coursename AND a.dayOfWeek = :dayofweek AND a.startTime <= :requestTime AND a.endTime >= :requestTime AND t.doNotDisturb = :doNotDisturb"),
+    @NamedQuery(name = Tutor.FIND_TUTORS_BY_COURSE_DAY_TIME, query = "SELECT t FROM Tutor t JOIN t.courses c JOIN t.availability a WHERE c.courseName = :coursename AND a.dayOfWeek = :dayofweek AND a.startTime <= :requestTime AND a.endTime >= :requestTime AND t.doNotDisturb = :doNotDisturb AND t.zipCode = :zipCode"),
     @NamedQuery(name = Tutor.FIND_TUTORS_BY_COURSE, query = "SELECT t FROM Tutor t JOIN t.courses c WHERE c.courseName = :coursename"),
 })
 public class Tutor extends User implements Serializable {     
@@ -118,6 +118,7 @@ public class Tutor extends User implements Serializable {
      * @param numPeopleTutored
      * @param priceRate 
      * @param doNotDisturb 
+     * @param zipCode 
      */
     public Tutor(String email, String firstName, String lastName, String userName, String phoneNumber, String password, String university, Date dateJoined, int numPeopleTutored, double priceRate, boolean doNotDisturb, String zipCode) {
         super(email, firstName, lastName, userName, phoneNumber, password, university);

@@ -9,6 +9,7 @@ import com.google.gson.Gson;
 import okhttp3.OkHttpClient;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -30,6 +31,8 @@ public class Main {
         int maxRadius = scan.nextInt();
         for(String str : getData(maxRadius, zipCode) ) {
             System.out.println(str);
+            List<String> result = Arrays.asList(str.substring(1, str.length() - 1).split(","));
+            System.out.print(result);
         }
         
     }

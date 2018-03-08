@@ -126,12 +126,24 @@ public class Tut4YouApp {
      * A student can cancel pending requests
      * @param r 
      */
-    @RolesAllowed("tut4youapp.student")
+    @PermitAll
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void cancelRequest(Request r) {
+        Request pendingRequest = em.find(Request.class, r.getId());
         r.setStatus(Request.Status.CANCELED);
-        removeRequestFromNotification(r);
-        em.merge(r);
+        if (r.getTutor() == null){
+           r = em.merge(r);
+           em.remove(r); 
+        }
+        else if (r.getTutor() != null){
+            Tutor tutor = r.getTutor();
+            tutor.removePendingRequest(pendingRequest);
+            pendingRequest.removeAvailableTutor(tutor);
+            r = em.merge(r);
+            em.remove(r); 
+            em.merge(tutor);
+            em.flush();
+        }
     }
         
     /**
@@ -207,7 +219,7 @@ public class Tut4YouApp {
     }
     
     /**
-     * Pending request wil be removed from te notification list when a tutor declines it.
+     * Pending request will be removed from the notification list when a tutor declines it.
      * @param r 
      */
     @RolesAllowed("tut4youapp.tutor")

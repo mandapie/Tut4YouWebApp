@@ -543,29 +543,32 @@ public class Tut4YouApp {
      * Converts student to be a tutor. The student will be added a tutor role.
      * @param user
      * @param userType
+     * @param priceRate
      * @throws tut4you.exception.StudentExistsException
      */
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void registerUser(User user, String userType) throws StudentExistsException {
-            Group group = em.find(Group.class, "tut4youapp.student");
-            if (group == null) {
-                group = new Group("tut4youapp.student");
-            }
-            if (userType == "Student") {
-                user.addGroup(group);
-                group.addStudent(user);
-                em.persist(user);
-            }
-            else {
-                Tutor newTutor = new Tutor(user);
-                newTutor.addGroup(group);
-                group.addTutor(newTutor);
-                group = em.find(Group.class, "tut4youapp.tutor");
-                newTutor.addGroup(group);
-                group.addTutor(newTutor);
-                em.persist(newTutor);
-            }
-            em.flush();
+    public void registerUser(User user, String userType, double priceRate) throws StudentExistsException {
+        Group group = em.find(Group.class, "tut4youapp.student");
+        User newStudent = new User(user);
+        if (group == null) {
+            group = new Group("tut4youapp.student");
+        }
+        if (userType.equals("Student")) {
+            newStudent.addGroup(group);
+            group.addStudent(newStudent);
+            em.persist(newStudent);
+        }
+        else {
+            Tutor newTutor = new Tutor(user);
+            newTutor.setPriceRate(priceRate);
+            newTutor.addGroup(group);
+            group.addTutor(newTutor);
+            group = em.find(Group.class, "tut4youapp.tutor");
+            newTutor.addGroup(group);
+            group.addTutor(newTutor);
+            em.persist(newTutor);
+        }
+        em.flush();
     }
 }

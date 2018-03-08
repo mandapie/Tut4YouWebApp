@@ -4,8 +4,8 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:b="http://bootsfaces.net/ui">
-    <!-- @author Andrew Kaichi <ahkaichi@gmail.com> -->
-
+    <!-- @Author Keith Tran <keithtran25@gmail.com>
+         @author Andrew Kaichi <ahkaichi@gmail.com> -->
     <ui:define name="title">Availability</ui:define>
     <ui:define name="content">
         <h1>Add Availability</h1>
@@ -14,13 +14,13 @@
                 <b:container>
                     <b:row>
                         <b:column medium-screen="2">
-                            <!-- Drop-down menu disply Monday-Sunday -->
+                            <!-- Drop-down menu display Monday-Sunday -->
                             <h:outputLabel value="Select a day:"/>
                             <b:selectOneMenu class="form-control"
                                              id="dayOfWeek"
                                              value="#{availabilityBean.availability.dayOfWeek}"
                                              required="true">
-                                <f:selectItem itemValue="Select One..."/>
+                                <f:selectItem itemValue="#{availabilityBean.availabilityList[id].dayOfWeek}"/>
                                 <f:selectItem itemValue="MONDAY" />
                                 <f:selectItem itemValue="TUESDAY" />
                                 <f:selectItem itemValue="WEDNESDAY" />
@@ -29,76 +29,52 @@
                                 <f:selectItem itemValue="SATURDAY" />
                                 <f:selectItem itemValue="SUNDAY" />
                             </b:selectOneMenu>
-                            
-                            <!-- Start Time -->
+
+
+
+                            <!-- Start Hour -->
                             <h:outputLabel value="Start Time:"/>
+                            <b:inputText id="startHourM" placeholder="Enter Start Hour" required="true" requiredMessage="required" value="#{availabilityBean.startHour}">
+                                <b:message for="startHourM"/>
+
+                                <!-- Start Minute -->
+                            </b:inputText>                                
+                            <b:inputText id="startMinuteM" placeholder="Enter Start Minute" required="true" requiredMessage="required" value="#{availabilityBean.startMinute}">
+                                <b:message for="startMinuteM"/>
+                            </b:inputText>
+
+                            <!-- Choose AM or PM -->
                             <b:selectOneMenu class="form-control"
-                                             id="startTime"
-                                             value="#{availabilityBean.stringStartTime}"
+                                             id="startPeriod"
+                                             value="#{availabilityBean.startPeriod}"
                                              required="true">
                                 <f:selectItem itemValue="Select One..."/>
-                                <f:selectItem itemLabel="1:00 AM" itemValue="01:00:00" />
-                                <f:selectItem itemLabel="2:00 AM" itemValue="02:00:00" />
-                                <f:selectItem itemLabel="3:00 AM" itemValue="03:00:00" />
-                                <f:selectItem itemLabel="4:00 AM" itemValue="04:00:00" />
-                                <f:selectItem itemLabel="5:00 AM" itemValue="05:00:00" />
-                                <f:selectItem itemLabel="6:00 AM" itemValue="06:00:00" />
-                                <f:selectItem itemLabel="7:00 AM" itemValue="07:00:00" />
-                                <f:selectItem itemLabel="8:00 AM" itemValue="08:00:00" />
-                                <f:selectItem itemLabel="9:00 AM" itemValue="09:00:00" />
-                                <f:selectItem itemLabel="10:00 AM" itemValue="10:00:00" />
-                                <f:selectItem itemLabel="11:00 AM" itemValue="11:00:00" />
-                                <f:selectItem itemLabel="12:00 PM" itemValue="12:00:00" />
-                                <f:selectItem itemLabel="1:00 PM" itemValue="13:00:00" />
-                                <f:selectItem itemLabel="2:00 PM" itemValue="14:00:00" />
-                                <f:selectItem itemLabel="3:00 PM" itemValue="15:00:00" />
-                                <f:selectItem itemLabel="4:00 PM" itemValue="16:00:00" />
-                                <f:selectItem itemLabel="5:00 PM" itemValue="17:00:00" />
-                                <f:selectItem itemLabel="6:00 PM" itemValue="18:00:00" />
-                                <f:selectItem itemLabel="7:00 PM" itemValue="19:00:00" />
-                                <f:selectItem itemLabel="8:00 PM" itemValue="20:00:00" />
-                                <f:selectItem itemLabel="9:00 PM" itemValue="21:00:00" />
-                                <f:selectItem itemLabel="10:00 PM" itemValue="22:00:00" />
-                                <f:selectItem itemLabel="11:00 PM" itemValue="23:00:00" />
-                                <f:selectItem itemLabel="12:00 AM" itemValue="00:00:00" />                                
+                                <f:selectItem itemValue="AM" />
+                                <f:selectItem itemValue="PM" />
                             </b:selectOneMenu>
-               
-                                        
-                            
-                            <!-- End Time -->
+
+                            <!-- End Hour -->
                             <h:outputLabel value="End Time:"/>
+                            <b:inputText id="endHourM" placeholder="Enter End Hour" required="true" requiredMessage="required" value="#{availabilityBean.endHour}">
+                                <b:message for="endHourM"/>
+                            </b:inputText>
+
+                            <!-- End Minute -->
+                            <b:inputText id="endMinuteM" placeholder="Enter End Minute" required="true" requiredMessage="required" value="#{availabilityBean.endMinute}">
+                                <b:message for="endMinuteM"/>
+                            </b:inputText>
+
+                            <!-- Choose AM or PM -->
                             <b:selectOneMenu class="form-control"
-                                             id="endTime"
-                                             value="#{availabilityBean.stringEndTime}"
+                                             id="endPeriod"
+                                             value="#{availabilityBean.endPeriod}"
                                              required="true">
                                 <f:selectItem itemValue="Select One..."/>
-                                <f:selectItem itemLabel="1:00 AM" itemValue="01:00:00" />
-                                <f:selectItem itemLabel="2:00 AM" itemValue="02:00:00" />
-                                <f:selectItem itemLabel="3:00 AM" itemValue="03:00:00" />
-                                <f:selectItem itemLabel="4:00 AM" itemValue="04:00:00" />
-                                <f:selectItem itemLabel="5:00 AM" itemValue="05:00:00" />
-                                <f:selectItem itemLabel="6:00 AM" itemValue="06:00:00" />
-                                <f:selectItem itemLabel="7:00 AM" itemValue="07:00:00" />
-                                <f:selectItem itemLabel="8:00 AM" itemValue="08:00:00" />
-                                <f:selectItem itemLabel="9:00 AM" itemValue="09:00:00" />
-                                <f:selectItem itemLabel="10:00 AM" itemValue="10:00:00" />
-                                <f:selectItem itemLabel="11:00 AM" itemValue="11:00:00" />
-                                <f:selectItem itemLabel="12:00 PM" itemValue="12:00:00" />
-                                <f:selectItem itemLabel="1:00 PM" itemValue="13:00:00" />
-                                <f:selectItem itemLabel="2:00 PM" itemValue="14:00:00" />
-                                <f:selectItem itemLabel="3:00 PM" itemValue="15:00:00" />
-                                <f:selectItem itemLabel="4:00 PM" itemValue="16:00:00" />
-                                <f:selectItem itemLabel="5:00 PM" itemValue="17:00:00" />
-                                <f:selectItem itemLabel="6:00 PM" itemValue="18:00:00" />
-                                <f:selectItem itemLabel="7:00 PM" itemValue="19:00:00" />
-                                <f:selectItem itemLabel="8:00 PM" itemValue="20:00:00" />
-                                <f:selectItem itemLabel="9:00 PM" itemValue="21:00:00" />
-                                <f:selectItem itemLabel="10:00 PM" itemValue="22:00:00" />
-                                <f:selectItem itemLabel="11:00 PM" itemValue="23:00:00" />
-                                <f:selectItem itemLabel="12:00 AM" itemValue="00:00:00" />                                
+                                <f:selectItem itemValue="AM" />
+                                <f:selectItem itemValue="PM" />
                             </b:selectOneMenu>
-                           
                             <!-- Adds to availability in -->
+
                             <b:commandButton value="Add Availability" look="primary" style="width:100%" action="#{availabilityBean.addAvailability}"/>
                         </b:column>
                     </b:row>

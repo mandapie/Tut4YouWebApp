@@ -40,15 +40,40 @@ public class UserBean implements Serializable {
     
     @EJB
     private Tut4YouApp tut4youapp;
+    
     private User student;
     private Tutor userTutor;
+    boolean doNotDisturb;
+    int tabIndex;
     
     /**
      * Creates a new instance of UserIdentity
+     * 
+     * FIXME: Avoid using constructors... instead, @PostConstruct annotated method
      */
     public UserBean() {
-        student = null;
-        userTutor = null;
+        /* FIXME: THese instructions have NO effect for two reasons: 
+           (1) they're like saying: a = b followed by b = a
+           (2) all fields are null as this is done in a constructor
+        */
+        student = userTutor;
+        userTutor = (Tutor)student;
+    }
+    
+    /**
+     * Gets the Tutor object
+     * @return 
+     */
+    public Tutor getUserTutor() {
+        return userTutor;
+    }
+    
+    /**
+     * Sets the User object
+     * @param tutor 
+     */
+    public void setUserTutor(User tutor) {
+        this.userTutor = (Tutor) tutor;
     }
     
     /**
@@ -66,21 +91,61 @@ public class UserBean implements Serializable {
     public void setStudent(User student) {
         this.student = student;
     }
+    
     /**
-     * Gets the User object
-     * @return the student Object
+     * Gets the state of doNotDisturb is on or off
+     * @return true/false
      */
-    public Tutor getUserTutor() {
-        return userTutor;
+    public boolean isDoNotDisturb() {
+        return doNotDisturb;
     }
     
     /**
-     * Sets the student Object
-     * @param userTutor
+     * Sets the state of doNotDisturb
+     * @param doNotDisturb 
      */
-    public void setUserTutor(Tutor userTutor) {
-        this.userTutor = userTutor;
+    public void setDoNotDisturb(boolean doNotDisturb) {
+        this.doNotDisturb = doNotDisturb;
     }
+    
+    /**
+     * Gets the index of the tab
+     * @return tabIndex
+     */
+    public int getTabIndex() {
+        return tabIndex;
+    }
+    
+    /**
+     * Sets the index of the tab
+     * @param tabIndex
+     */
+    public void setTabIndex(int tabIndex) {
+        this.tabIndex = tabIndex;
+    }
+    
+    /**
+     * Called the EJG to update the state of doNotDisturb
+     * @param d 
+     */
+    public void updateDoNotDisturb(Boolean d) {
+        tut4youapp.updateDoNotDisturb(doNotDisturb);
+    }
+    
+    /**
+     * Determine if current authenticated user has the role of tutor
+     * @return true if user has role of tutor, false otherwise.
+     */
+    public boolean isTutor() {
+        boolean isTutor = false;
+        if (this.isStudentAuthenticated()) {
+            FacesContext context = FacesContext.getCurrentInstance();
+            HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+            isTutor = request.isUserInRole("tut4youapp.tutor");
+        }
+        return isTutor;
+    }
+
     /**
      * Determine if the student is authenticated and if so, make sure the session scope includes the User object for the authenticated student
      * @return true if the student making a request is authenticated, false otherwise.
@@ -99,20 +164,6 @@ public class UserBean implements Serializable {
             }
         }
         return isAuthenticated;
-    }
-    
-    /**
-     * Determine if current authenticated user has the role of tutor
-     * @return true if user has role of tutor, false otherwise.
-     */
-    public boolean isTutor() {
-        boolean isTutor = false;
-        if (this.isStudentAuthenticated()) {
-            FacesContext context = FacesContext.getCurrentInstance();
-            HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-            isTutor = request.isUserInRole("tut4youapp.tutor");
-        }
-        return isTutor;
     }
     
     /**

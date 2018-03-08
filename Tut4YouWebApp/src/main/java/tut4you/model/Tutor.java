@@ -21,7 +21,9 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorType;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
@@ -33,64 +35,64 @@ import javax.persistence.TemporalType;
 
 /**
  * Tutor inherits all attributes of a User class with added attributes that
- defines a user as a tutor. A tutor is also a student.
+ * defines a user as a tutor. A tutor is also a student.
  * @author Keith Tran <keithtran25@gmail.com>
  * @author Syed Haider <shayder426@gmail.com>
  */
 @Table(name="Tutor")
+@DiscriminatorColumn(name="user_type", discriminatorType=DiscriminatorType.STRING)
+@DiscriminatorValue(value="Tutor")
 @Entity
 @NamedQueries({
-    @NamedQuery(name = Tutor.FIND_TUTORS_BY_COURSE, query = "SELECT t FROM Tutor t JOIN t.courses c WHERE c.courseName = :coursename")
+    @NamedQuery(name = Tutor.FIND_TUTORS_BY_COURSE_DAY_TIME, query = "SELECT t FROM Tutor t JOIN t.courses c JOIN t.availabilities a WHERE c.courseName = :coursename AND a.dayOfWeek = :dayofweek AND a.startTime <= :requestTime AND a.endTime >= :requestTime AND t.doNotDisturb = :doNotDisturb"),
+    @NamedQuery(name = Tutor.FIND_TUTORS_BY_COURSE, query = "SELECT t FROM Tutor t JOIN t.courses c WHERE c.courseName = :coursename"),
 })
-public class Tutor extends User implements Serializable {   
-    private static final long serialVersionUID = 1L;
-    
+public class Tutor extends User implements Serializable {     
+    /**
+     * JPQL Query to obtain a list of tutors who taught a specific course and is available
+     */
+    public static final String FIND_TUTORS_BY_COURSE_DAY_TIME = "Tutor.findTutorsByCourseDayTime";
     /**
      * JPQL Query to obtain a list of tutors who taught a specific course
      */
     public static final String FIND_TUTORS_BY_COURSE = "Tutor.findTutorsByCourse";
-    
-    /**
-     * dateJoined the date a tutor joins
-     */
-    @Column(nullable = true)
-    @Temporal( TemporalType.DATE )
-    private Date dateJoined;
-    
-    /**
-     * numPeopleTutored the number of people a tutor tutored
-     */
-    @Column(nullable = true)
-    private int numPeopleTutored;
 
-    //@Column(nullable = true)
+    @Temporal(TemporalType.DATE)
+    private Date dateJoined;
+    private int numPeopleTutored;
     private double priceRate;
-    
+    private boolean doNotDisturb;
     /**
      * A Tutor can tutor multiple Courses and
      * a Course can be tutored by multiple Tutors.
      */
     @ManyToMany(mappedBy="tutors", cascade=CascadeType.ALL)
     private Collection<Course> courses;
-    
-//    /**
-//     * A Tutor can be in multiple Groups and
-//     * A Group can contain multiple Tutors
-//     */
-//    @ManyToMany(mappedBy="tutors", cascade=CascadeType.ALL)
-//    private Collection<Group> groups;
-    
     /**
      * A tutor can set multiple Availabilities
      */
     @OneToMany(mappedBy="tutor", cascade=CascadeType.ALL)
-    private Collection<Availability> availability;
-    
+    private Collection<Availability> availabilities;
+    /**
+     * Many tutors can view many requests
+     */
+    @ManyToMany(mappedBy="availableTutors", cascade=CascadeType.ALL)
+    private Collection<Request> pendingRequests;
+        
     /**
      * Tutor constructor
      */
     public Tutor() {
-        
+        priceRate = 0.00;
+        doNotDisturb = false;
+    }
+    
+    /**
+     * Copy constructor
+     * @param newTutor 
+     */
+    public Tutor(User newTutor) {
+        super(newTutor);
     }
     
     /**
@@ -98,14 +100,15 @@ public class Tutor extends User implements Serializable {
      * @param dateJoined
      * @param numPeopleTutored
      * @param priceRate 
+     * @param doNotDisturb 
      */
-    public Tutor(Date dateJoined, int numPeopleTutored, int priceRate) {
+    public Tutor(Date dateJoined, int numPeopleTutored, double priceRate, boolean doNotDisturb) {
         this.dateJoined = dateJoined;
         this.numPeopleTutored = numPeopleTutored;
         this.priceRate = priceRate;
-        //groups = new HashSet<>();
+        this.doNotDisturb = doNotDisturb;
     }
-    
+        
     /**
      * Tutor overloaded constructor with inherited and existing attributes
      * @param email
@@ -114,45 +117,67 @@ public class Tutor extends User implements Serializable {
      * @param userName
      * @param phoneNumber
      * @param password
+     * @param university
      * @param dateJoined
      * @param numPeopleTutored
      * @param priceRate 
+     * @param doNotDisturb 
      */
-    public Tutor(String email, String firstName, String lastName, String userName, String phoneNumber, String password, String university, Date dateJoined, int numPeopleTutored, int priceRate) {
+    public Tutor(String email, String firstName, String lastName, String userName, String phoneNumber, String password, String university, Date dateJoined, int numPeopleTutored, double priceRate, boolean doNotDisturb) {
         super(email, firstName, lastName, userName, phoneNumber, password, university);
         this.dateJoined = dateJoined;
         this.numPeopleTutored = numPeopleTutored;
         this.priceRate = priceRate;
-        //groups = new HashSet<>();
+        this.doNotDisturb = doNotDisturb;
     }
     
     /**
-     * Gets a collection of a Tutor's availabilities
-     * @return a collection of availabilities
+     * Gets the state of doNotDistrub
+     * @return doNotDisturb
      */
-    public Collection<Availability> getAvailability() {
-        return availability;
-    }
-
-    /**
-     * Sets a collection of a Tutor's availabilities
-     * @param availability the availability of a tutor
-     */
-    public void setAvailability(Collection<Availability> availability) {
-        this.availability = availability;
+    public boolean isDoNotDisturb() {
+        return doNotDisturb;
     }
     
     /**
-     * Adds an availability to a collection
-     * if availability is null, create new HashSet
-     * @param availability 
+     * Sets the state of doNotDistrub
+     * @param doNotDisturb 
      */
-    public void addAvailability(Availability availability) {
-        if (this.availability == null)
-            this.availability = new HashSet();
-        this.availability.add(availability);
+    public void setDoNotDisturb(boolean doNotDisturb) {
+        this.doNotDisturb = doNotDisturb;
     }
     
+    /**
+     * Gets the list of pending requests
+     * @return list of pendingRequests
+     */
+    public Collection<Request> getPendingRequests() {
+        return pendingRequests;
+    }
+    
+    /**
+     * Sets the list of pending requests
+     * @param pendingRequests 
+     */
+    public void setPendingRequests(Collection<Request> pendingRequests) {
+        this.pendingRequests = pendingRequests;
+    }
+    
+    /**
+     * Gets the list of availabilities
+     * @return availabilities
+     */
+    public Collection<Availability> getAvailabilities() {
+        return availabilities;
+    }
+    
+    /**
+     * Sets the list of availabilities
+     * @param availabilities 
+     */
+    public void setAvailabilities(Collection<Availability> availabilities) {
+        this.availabilities = availabilities;
+    }
     /**
      * Sets the date joined by a tutor
      * @param dateJoined 
@@ -200,7 +225,7 @@ public class Tutor extends User implements Serializable {
     public double getPriceRate() {
         return priceRate;
     }
-    
+
     /**
      * Gets the collection of courses a tutor can teach
      * @return the list of courses
@@ -213,40 +238,9 @@ public class Tutor extends User implements Serializable {
      * Sets the collection of courses a tutor can teach
      * @param courses the list of courses
      */
-    public void setCourse(Collection<Course> couses) {
+    public void setCourse(Collection<Course> courses) {
         this.courses = courses;
     }
-    
-//    /**
-//     * Gets a collection of groups a tutor is in
-//     * @return the collection of groups
-//     */
-//    @Override
-//    public Collection<Group> getGroups(){
-//        return groups;
-//    }
-//    
-//    /**
-//     * Add a group to the tutor's set of groups
-//     * if collection of groups is null, create new HashSet
-//     * @param group to be added
-//     */
-//    @Override
-//    public void setGroups(Collection<Group> groups) {
-//        this.groups = groups;
-//    }
-//
-//    /**
-//     * Add a group to the tutor's set of groups
-//     * if collection of groups is null, create new HashSet
-//     * @param group to be added
-//     */
-//    @Override
-//    public void addGroup(Group group) {
-//        if (this.groups == null)
-//            this.groups = new HashSet();
-//        this.groups.add(group);
-//    }
     
     /**
      * Add a course to a collection of Courses
@@ -258,4 +252,43 @@ public class Tutor extends User implements Serializable {
             this.courses = new HashSet();
         this.courses.add(course);
     }
-}
+    
+    /**
+     * Adds a pending request to the list
+     * @param pr 
+     */
+    public void addPendingRequest(Request pr) {
+        if (this.pendingRequests == null)
+            this.pendingRequests = new HashSet();
+        this.pendingRequests.add(pr);
+    }
+    
+    /**
+     * removes a pending request from the list
+     * @param pr 
+     */
+    public void removePendingRequest(Request pr) {
+        pendingRequests.remove(pr);
+    }
+    
+    /**
+     * Adds an availability to a collection
+     * if availability is null, create new HashSet
+     * @param availability 
+     */
+    public void addAvailability(Availability availability) {
+        if (this.availabilities == null)
+            this.availabilities = new HashSet();
+        this.availabilities.add(availability);
+    }
+    
+    /**
+     * Removes availability from the collection
+     * @param a 
+     */
+    public void removeAvailability(Availability a) {
+        System.out.println("Have I made it here?");
+        availabilities.remove(a);
+        System.out.println(availabilities.size());
+    }
+ }

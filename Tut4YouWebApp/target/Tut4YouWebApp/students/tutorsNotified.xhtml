@@ -8,7 +8,21 @@
     <ui:define name="title">Tutors Notified</ui:define>
     <ui:define name="content">
         <h1>Tutors Teaching the Course</h1>
-        <p>The number of tutors that may help you with is: #{requestBean.numOfTutors}</p>
+        <p>The number of tutors has taken this course: #{requestBean.numOfTutors}</p>
+        <h1>Tutors Available</h1>
+        <h:form>
+            <b:dataTable value="#{requestBean.tutorList}" var="tutor">
+                <b:dataTableColumn>
+                    <f:facet name="header">Tutor Name</f:facet>
+                    #{tutor.firstName}
+                    #{tutor.lastName}
+                </b:dataTableColumn>
+                <h:column>
+                    <f:facet name="header">Request</f:facet>
+                    <b:commandButton span="6" value="Request" look="info" action="#{requestBean.sendToTutor(tutor)}"/>
+                </h:column>
+            </b:dataTable>
+        </h:form>
         <ui:debug hotkey='x' />
     </ui:define>
 </ui:composition>

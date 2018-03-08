@@ -35,11 +35,11 @@ import tut4you.model.Tut4YouApp;
 @Named
 @SessionScoped
 public class AddCourseBean implements Serializable {
-
-    private static final long serialVersionUID = 1L;
     private static final Logger LOGGER = Logger.getLogger("AddCourseBean");
+    
     @EJB
     private Tut4YouApp tut4youApp;
+    
     private Course course;
     private Subject subject;
     private List<Subject> subjectList = new ArrayList();
@@ -92,7 +92,6 @@ public class AddCourseBean implements Serializable {
     public List<Subject> getSubjectList() {
         if (subjectList.isEmpty()) {
             subjectList = tut4youApp.getSubjects();
-            LOGGER.severe("Retrieved list of subjects from EJB");
         }
         return subjectList;
     }
@@ -110,8 +109,8 @@ public class AddCourseBean implements Serializable {
      * @return list of courses of tutor
      */
     public List<Course> getTutorCourses() {
-        courseList = tut4youApp.getTutorCourses();
-        return courseList;
+        tutorCourses = tut4youApp.getTutorCourses();
+        return tutorCourses;
     }
     
     /**
@@ -143,32 +142,19 @@ public class AddCourseBean implements Serializable {
      */
     public void changeSubject() {
         courseList = tut4youApp.getCourses(subject.getSubjectName());
-        LOGGER.severe("Retrieved list of courses from EJB");
-    }
-
-    public String addCourse() throws CourseExistsException {
-        String result = "failure";
-        course = tut4youApp.addCourse(course);
-        if (course != null) {
-            result = "success";
-            LOGGER.severe("added a course");
-        }
-        return result;
     }
     
     /**
-     * Adds course to the tutor's course list
-     * @return success if the course was added successfully
-     * @throws CourseExistsException
+     * Adds a new course to the tutor
+     * @return
+     * @throws CourseExistsException 
      */
-    public String addNewCourse() {
-       String result = "failure";
-       course.setSubject(subject);
-       course = tut4youApp.addNewCourse(course);
-        if (course != null) {
+    public String addCourse() throws CourseExistsException {
+        String result = "failure";
+        course = tut4youApp.addCourse(course);
+        if (this.course != null) {
             result = "success";
-            LOGGER.severe("added a course");
         }
         return result;
-   }
+    }
 }

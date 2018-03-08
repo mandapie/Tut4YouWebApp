@@ -67,6 +67,17 @@
                         </b:inputText>
                     </b:column>
                 </b:row>
+                <!-- University -->
+                <b:row>
+                    <b:column medium-screen="2">
+                        <h:outputLabel value="University"/>
+                    </b:column>
+                    <b:column medium-screen="4">
+                        <b:inputText id="u" placeholder="Enter University" required="true" requiredMessage="required" value="#{registrationBean.newStudent.university}">
+                            <b:message for="u"/>
+                        </b:inputText>
+                    </b:column>
+                </b:row>
                 <!-- Password that has a validator to check if password is 8 characters or more-->
                 <b:row>
                     <b:column medium-screen="2">
@@ -95,7 +106,7 @@
                 <!-- Registers User as a Student -->
                 <b:row>
                     <b:column span="2" offset="2">
-                        <b:commandButton value="Register" look="primary" style="width:100%" action="#{registrationBean.createStudent}"/>
+                        <b:commandButton value="Register" look="primary" style="width:100%" action="#{registrationBean.createUser}"/>
                     </b:column>
                     <b:column span="2">
                         <b:button value="Cancel" look="danger" style="width:100%" href="/Tut4YouWebApp/index.xhtml"/>

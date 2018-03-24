@@ -6,6 +6,14 @@
                 xmlns:b="http://bootsfaces.net/ui"
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <!-- @author Amanda Pan <daikiraidemodaisuki@gmail.com> -->
+    <ui:define name="metadata">
+        <c:if test="#{userBean.isUserAuthenticated}">
+            <f:metadata>
+                <f:viewParam name="username" value="#{profileBean.userName}"/> <!--required="true" requiredMessage="Bad request. Please use a link from within the system."/>-->
+                <f:event type="preRenderView" listener="#{profileBean.showUserName}"/>
+            </f:metadata>
+        </c:if>
+   </ui:define>
     <ui:define name="title">Profile</ui:define>
     <ui:define name="content">
         <h1>Profile Page</h1>
@@ -169,7 +177,7 @@
                             <b:tab title="Courses">
                                 <br></br> <!-- for better spacing -->
                                 <!-- Bootsfaces datatable to show the data in an organized fashion -->
-                                <b:dataTable value="#{addCourseBean.tutorCourses}" var="course">
+                                <b:dataTable value="#{addCourseBean.coursesAddedByTutor}" var="course">
                                     <b:dataTableColumn>
                                         <f:facet name="header">Courses You Have Taken</f:facet>
                                         #{course.courseName}

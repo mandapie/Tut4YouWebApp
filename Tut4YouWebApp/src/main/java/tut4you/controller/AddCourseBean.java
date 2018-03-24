@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import tut4you.exception.CourseExistsException;
 import tut4you.model.*;
@@ -43,8 +45,8 @@ public class AddCourseBean implements Serializable {
     private Course course;
     private Subject subject;
     private List<Subject> subjectList = new ArrayList();
-    private List<Course> courseList = new ArrayList();
-    private List<Course> tutorCourses = new ArrayList();
+    private List<Course> courseListBasedOnSubject = new ArrayList();
+    private List<Course> coursesAddedByTutor = new ArrayList();
     
     /**
      * Creates an instance of the courseBean
@@ -108,52 +110,60 @@ public class AddCourseBean implements Serializable {
      * Gets the courses of the tutor
      * @return list of courses of tutor
      */
-    public List<Course> getTutorCourses() {
-        tutorCourses = tut4youApp.getTutorCourses();
-        return tutorCourses;
+    public List<Course> getCoursesAddedByTutor() {
+        coursesAddedByTutor = tut4youApp.getTutorCourses();
+        return coursesAddedByTutor;
     }
     
     /**
      * Sets the courses of the tutor
-     * @param tutorCourses
+     * @param coursesAddedByTutor
      */
-    public void setTutorCourses(List<Course> tutorCourses) {
-        this.tutorCourses = tutorCourses;
+    public void setCoursesAddedByTutor(List<Course> coursesAddedByTutor) {
+        this.coursesAddedByTutor = coursesAddedByTutor;
     }
     
     /**
      * Gets the list of courses
      * @return the list of courses
      */
-    public List<Course> getCourseList() {
-        return courseList;
+    public List<Course> getCourseListBasedOnSubject() {
+        return courseListBasedOnSubject;
     }
     
     /**
      * Sets the list of courses
-     * @param courseList list of courses
+     * @param courseListBasedOnSubject list of courses
      */
-    public void setCourseList(List<Course> courseList) {
-        this.courseList = courseList;
+    public void setCourseListBasedOnSubject(List<Course> courseListBasedOnSubject) {
+        this.courseListBasedOnSubject = courseListBasedOnSubject;
     }
     
      /**
      * Change the subject of the course
      */
     public void changeSubject() {
-        courseList = tut4youApp.getCourses(subject.getSubjectName());
+        courseListBasedOnSubject = tut4youApp.getCourses(subject.getSubjectName());
     }
     
     /**
      * Adds a new course to the tutor
      * @return
-     * @throws CourseExistsException 
      */
-    public String addCourse() throws CourseExistsException {
+    public String addCourse() {
         String result = "failure";
-        course = tut4youApp.addCourse(course);
-        if (this.course != null) {
-            result = "success";
+        try {
+            course = tut4youApp.addCourse(course);
+            if (this.course != null) {
+                result = "success";
+            }
+        }
+        catch (CourseExistsException cee) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("This course is already in your list, select another one."));
+            result = "courseExist";
+        }
+        catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("A user with that information already exists, try again."));
         }
         return result;
     }

@@ -17,6 +17,8 @@
 package tut4you.controller;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -44,8 +46,28 @@ public class UserBean implements Serializable {
     private Tut4YouApp tut4youapp;
     
     private User user;
-    boolean doNotDisturb;
-    int tabIndex;
+    private boolean doNotDisturb;
+    private int tabIndex;
+    private String userName;
+    private String email;
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    private String password;
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    private List<Course> coursesAddedByTutor = new ArrayList();
     
     /**
      * Creates a new instance of UserIdentity
@@ -111,6 +133,39 @@ public class UserBean implements Serializable {
     }
     
     /**
+     * Gets the userName of the current logged in user
+     * @return userName
+     */
+    public String getUserName() {
+        return userName;
+    }
+    
+    /**
+     * Sets the userName of the current logged in user 
+     * @param userName
+     */
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+    
+    /**
+     * Gets the courses of the tutor
+     * @return list of courses of tutor
+     */
+    public List<Course> getCoursesAddedByTutor() {
+        coursesAddedByTutor = tut4youapp.getTutorCourses();
+        return coursesAddedByTutor;
+    }
+    
+    /**
+     * Sets the courses of the tutor
+     * @param coursesAddedByTutor
+     */
+    public void setCoursesAddedByTutor(List<Course> coursesAddedByTutor) {
+        this.coursesAddedByTutor = coursesAddedByTutor;
+    }
+    
+    /**
      * Called the EJG to update the state of doNotDisturb
      * @param d 
      */
@@ -141,11 +196,11 @@ public class UserBean implements Serializable {
         if (null == this.user) {
             FacesContext context = FacesContext.getCurrentInstance();
             HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-            String userName = request.getRemoteUser();
-            if (userName == null) {
+            String username = request.getRemoteUser();
+            if (username == null) {
                 isAuthenticated = false;
             } else {
-                this.user = tut4youapp.find(userName);
+                this.user = tut4youapp.find(username);
                 isAuthenticated = (this.user != null);
             }
         }
@@ -153,20 +208,33 @@ public class UserBean implements Serializable {
     }
     
     /**
+     * Gets the email address from login in user
+     * @return userEmail
+     */
+    public String returnUserEmailFromSession() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+        String userEmail = request.getRemoteUser();
+        return userEmail;
+    }
+
+    /**
      * Logout the user and invalidate the session
      * @return success if user is logged out and session invalidated, failure otherwise.
      */
     public String logout() {
-        String result = "failure";
+        String result = "success";
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
         try {
             request.logout();
             user = null;
             result = "success";
-        } catch (ServletException ex) {
+        }
+        catch (ServletException ex) {
             LOGGER.log(Level.SEVERE, null, ex);
-        } finally {
+        }
+        finally {
             HttpSession session = request.getSession(false);
             if (session != null) {
                 session.invalidate();

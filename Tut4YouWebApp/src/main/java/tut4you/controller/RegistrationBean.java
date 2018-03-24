@@ -111,34 +111,44 @@ public class RegistrationBean implements Serializable {
         this.userType = userType;
     }
     
+    /**
+     * Gets the price rate
+     * @return 
+     */
     public String getPriceRate() {
         return priceRate;
     }
-
+    
+    /**
+     * Sets the price rate
+     * @param priceRate
+     */
     public void setPriceRate(String priceRate) {
         this.priceRate = priceRate;
     }
     
     /**
      * JSF Action that uses the information submitted in the registration page
-     * to add user as a registered User user.
+     * to add user as a registered user.
      * @return either failure, success, or register depending on successful
      * registration.
      */
-    // IN PROGRESS
     public String createUser() {
         String result = "failure";
         if (newStudent.isInformationValid(confirmPassword)) {
             newStudent.setPassword(tut4you.controller.HashPassword.getSHA512Digest(newStudent.getPassword()));
             try {
-                double pr = Double.parseDouble(priceRate);
+                double pr = 0;
+                if(priceRate != null) {
+                    pr = Double.parseDouble(priceRate);
+                }
                 tut4youApp.registerUser(newStudent, userType, pr);
                 result = "success";
             } catch (StudentExistsException see) {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("A user with that information already exists, try again."));
                 result = "register";
             } catch (Exception e) {
-                LOGGER.log(Level.SEVERE, null, e);
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(e.getMessage().toString()));
                 result = "failure";
             }
         }

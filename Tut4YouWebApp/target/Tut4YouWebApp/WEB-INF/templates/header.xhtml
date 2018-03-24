@@ -13,7 +13,7 @@
                 <c:choose>
                     <c:when test="#{userBean.isUserAuthenticated}">
                         <b:navLink value="Account" href="/Tut4YouWebApp/accounts/profile.xhtml">
-                            <f:param name="username" value="#{userBean.usernameFromSession}"/>
+                            <f:param name="username" value="#{userBean.returnUserEmailFromSession}"/>
                         </b:navLink>
                     </c:when>
                     <c:otherwise>

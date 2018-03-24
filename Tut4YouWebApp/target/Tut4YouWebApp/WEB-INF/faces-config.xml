@@ -17,43 +17,38 @@
             <to-view-id>/students/tutorsNotified.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
-        
         <navigation-case>
-            <from-action>#{registrationBean.createStudent}</from-action>
+            <from-action>#{registrationBean.createUser}</from-action>
             <from-outcome>success</from-outcome>
             <to-view-id>/accounts/profile.xhtml?registered=true</to-view-id>
             <redirect/>
         </navigation-case>
         <navigation-case>
-            <from-action>#{registrationBean.createStudent}</from-action>
+            <from-action>#{registrationBean.createUser}</from-action>
             <from-outcome>register</from-outcome>
-            <to-view-id>/authentications/registerStudent.xhtml</to-view-id>
-        </navigation-case>
-        
-        <navigation-case>
-            <from-action>#{registrationBean.createTutor}</from-action>
-            <from-outcome>success</from-outcome>
-            <to-view-id>/accounts/profile.xhtml?registered=true</to-view-id>
-            <redirect/>
+            <to-view-id>/authentications/registration.xhtml</to-view-id>
         </navigation-case>
         <navigation-case>
-            <from-action>#{registrationBean.createTutor}</from-action>
-            <from-outcome>register</from-outcome>
-            <to-view-id>/authentications/registerTutor.xhtml</to-view-id>
-        </navigation-case>
-        
-        <navigation-case>
+            <from-action>#{userBean.logout}</from-action>
             <from-outcome>success</from-outcome>
             <to-view-id>/accounts/profile.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
-
+        <navigation-case>
+            <from-outcome>success</from-outcome>
+            <to-view-id>/accounts/profile.xhtml</to-view-id>
+            <redirect>
+                <view-param>
+                    <name>username</name>
+                    <value>#{profileBean.showUsername}</value>
+                </view-param>
+            </redirect>
+        </navigation-case>
         <navigation-case>
             <from-outcome>login</from-outcome>
             <to-view-id>/accounts/profile.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
-        
         <navigation-case>
             <from-outcome>failure</from-outcome>
             <to-view-id>/errors/internal.xhtml</to-view-id>

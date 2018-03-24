@@ -251,7 +251,7 @@ public class Tut4YouApp {
      */
     @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public Course addCourse(Course course)throws CourseExistsException{
+    public Course addCourse(Course course) throws CourseExistsException{
         String userName = getUsernameFromSession();
         if (userName == null) {
             return null;
@@ -272,10 +272,6 @@ public class Tut4YouApp {
                 else {
                     throw new CourseExistsException();
                 }
-            }
-            else {
-                Logger.getLogger(this.getClass().getName()).log(Level.INFO, "A course exists already with email addresss {0}", tutor);
-                return null;
             }
             return course;
         }
@@ -485,12 +481,12 @@ public class Tut4YouApp {
      * Registers user as a student. The student will be added a student role.
      * @param student
      * @param groupName
-     * @throws StudentExistsException
+     * @throws UserExistsException
      * Referenced code from Alvaro Monge <alvaro.monge@csulb.edu>
      */
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void registerStudent(User student, String groupName) throws StudentExistsException {
+    public void registerStudent(User student, String groupName) throws UserExistsException {
         // 1: Use security EJB to add username/password to security
         // 2: if successful, then add as a registered student
         if (null == em.find(User.class, student.getEmail())) {
@@ -503,7 +499,7 @@ public class Tut4YouApp {
             em.persist(student);
             em.flush();
         } else {
-            throw new StudentExistsException();
+            throw new UserExistsException();
         }
     }
     
@@ -513,12 +509,12 @@ public class Tut4YouApp {
      * @param tutor
      * @param groupName
      * @param groupName2
-     * @throws StudentExistsException 
+     * @throws UserExistsException 
      * Referenced code from Alvaro Monge <alvaro.monge@csulb.edu>
      */
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void registerTutor(Tutor tutor, String groupName, String groupName2) throws StudentExistsException {
+    public void registerTutor(Tutor tutor, String groupName, String groupName2) throws UserExistsException {
         // 1: Use security EJB to add username/password to security
         // 2: if successful, then add as a registered tutor
         if (null == em.find(Tutor.class, tutor.getEmail())) {
@@ -535,7 +531,7 @@ public class Tut4YouApp {
             em.persist(tutor);
             em.flush();
         } else {
-            throw new StudentExistsException();
+            throw new UserExistsException();
         }
     }
     
@@ -544,31 +540,36 @@ public class Tut4YouApp {
      * @param user
      * @param userType
      * @param priceRate
-     * @throws tut4you.exception.StudentExistsException
+     * @throws tut4you.exception.UserExistsException
      */
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void registerUser(User user, String userType, double priceRate) throws StudentExistsException {
-        Group group = em.find(Group.class, "tut4youapp.student");
-        User newStudent = new User(user);
-        if (group == null) {
-            group = new Group("tut4youapp.student");
-        }
-        if (userType.equals("Student")) {
-            newStudent.addGroup(group);
-            group.addStudent(newStudent);
-            em.persist(newStudent);
+    public void registerUser(User user, String userType, double priceRate) throws UserExistsException {
+        if (null == em.find(User.class, user.getEmail())) {
+            Group group = em.find(Group.class, "tut4youapp.student");
+            User newStudent = new User(user);
+            if (group == null) {
+                group = new Group("tut4youapp.student");
+            }
+            if (userType.equals("Student")) {
+                newStudent.addGroup(group);
+                group.addStudent(newStudent);
+                em.persist(newStudent);
+            }
+            else {
+                Tutor newTutor = new Tutor(user);
+                newTutor.setPriceRate(priceRate);
+                newTutor.addGroup(group);
+                group.addTutor(newTutor);
+                group = em.find(Group.class, "tut4youapp.tutor");
+                newTutor.addGroup(group);
+                group.addTutor(newTutor);
+                em.persist(newTutor);
+            }
+            em.flush();
         }
         else {
-            Tutor newTutor = new Tutor(user);
-            newTutor.setPriceRate(priceRate);
-            newTutor.addGroup(group);
-            group.addTutor(newTutor);
-            group = em.find(Group.class, "tut4youapp.tutor");
-            newTutor.addGroup(group);
-            group.addTutor(newTutor);
-            em.persist(newTutor);
+            throw new UserExistsException();
         }
-        em.flush();
     }
 }

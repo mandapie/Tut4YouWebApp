@@ -152,6 +152,19 @@ public class UserBean implements Serializable {
         return isAuthenticated;
     }
     
+    /***
+     * Gets a logged in email from the session.
+     * Source: https://dzone.com/articles/liferay-jsf-how-get-current-lo
+     * Had further help by Subject2Change group.
+     * @return emailFromSession
+     */
+    public String returnEmailFromSession() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+        String emailFromSession = request.getRemoteUser();
+        return emailFromSession;
+    }
+    
     /**
      * Logout the user and invalidate the session
      * @return success if user is logged out and session invalidated, failure otherwise.

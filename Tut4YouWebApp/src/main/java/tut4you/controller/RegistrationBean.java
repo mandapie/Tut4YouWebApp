@@ -137,8 +137,8 @@ public class RegistrationBean implements Serializable {
                 }
                 tut4youApp.registerUser(newStudent, userType, pr);
                 result = "success";
-            } catch (StudentExistsException see) {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("A user with that information already exists, try again."));
+            } catch (UserExistsException see) {
+                FacesContext.getCurrentInstance().addMessage("registrationForm:email", new FacesMessage("A user with that information already exists, try again."));
                 result = "register";
             } catch (Exception e) {
                 LOGGER.log(Level.SEVERE, null, e);

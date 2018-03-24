@@ -23,7 +23,7 @@
 
                     <b:selectOneMenu span="6" label="Course" id="courseList" value="#{addCourseBean.course}">
                         <f:selectItem itemLabel="select Course..." noSelectionOption="true"/>
-                        <f:selectItems value="#{addCourseBean.courseListBasedOnSubject}"
+                        <f:selectItems value="#{addCourseBean.courseList}"
                                        var="course"
                                        itemLabel="#{course.courseName}"
                                        itemValue="#{course}"/>

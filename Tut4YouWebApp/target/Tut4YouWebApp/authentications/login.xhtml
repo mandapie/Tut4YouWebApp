@@ -11,7 +11,6 @@
         <h1>Login</h1>
         <b:panel title="Enter Your Information To Log In " collapsible="false" look="info">
             <b:form id="login" onsubmit="document.getElementById('login').action='j_security_check';">
-            <!--<b:form>-->
                 <b:row>
                     <b:column medium-screen="2">
                         <h:outputLabel value="Email"/>
@@ -44,7 +43,6 @@
         <c:if test="#{!empty param['error'] and param['error']}">
             <p class="error" style="color:red">There was an error authenticating. You may want to try again</p>
         </c:if>
-        <!--<h:messages errorClass="errorMessage" layout="table" style="color:red"/>-->
         
         <!-- Redirect to the registration page -->
         <p>

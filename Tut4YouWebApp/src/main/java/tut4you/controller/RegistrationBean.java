@@ -131,7 +131,10 @@ public class RegistrationBean implements Serializable {
         if (newStudent.isInformationValid(confirmPassword)) {
             newStudent.setPassword(tut4you.controller.HashPassword.getSHA512Digest(newStudent.getPassword()));
             try {
-                double pr = Double.parseDouble(priceRate);
+                double pr = 0;
+                if (priceRate != null) {
+                    pr = Double.parseDouble(priceRate);
+                }
                 tut4youApp.registerUser(newStudent, userType, pr);
                 result = "success";
             } catch (StudentExistsException see) {

@@ -9,28 +9,26 @@
     <ui:define name="content">
         <h1>Add Course</h1>
         <b:panel title="Add a course" collapsible="false" look="info">
-            <b:form>
+            <b:form id="addNewCourseForm">
                 <!-- Choosing the subject of the course -->
                 <b:row>
-                    <b:selectOneMenu span="6" label="Subject" value="#{addNewCourseBean.subject}">
-                        <f:selectItem itemLabel="select Subject..." noSelectionOption="true"/>
-                        <f:selectItems value="#{addNewCourseBean.subjects}"
-                                       var="subject"
-                                       itemLabel="#{subject.subjectName}"
-                                       itemValue="#{subject}"/>
-                        
-                    </b:selectOneMenu>
-                </b:row>
-                <!-- Inputting the new course -->
-                <b:row>
-                    <b:column medium-screen="2">
-                        <h:outputLabel value="courseName"/>
+                    <b:column medium-screen="6" style="padding:0">
+                        <b:selectOneMenu span="12" label="Subject" value="#{addNewCourseBean.subject}">
+                            <f:selectItem itemLabel="select Subject..." noSelectionOption="true"/>
+                            <f:selectItems value="#{addNewCourseBean.subjects}"
+                                           var="subject"
+                                           itemLabel="#{subject.subjectName}"
+                                           itemValue="#{subject}"/>
+
+                        </b:selectOneMenu>
                     </b:column>
-                    <b:column medium-screen="4">
+                    <!-- Inputting the new course -->
+                    <b:column medium-screen="6">
+                        <h:outputLabel value="Course"/>
                         <b:inputText id="cn" placeholder="Enter Course Name" required="true" requiredMessage="required" value="#{addNewCourseBean.course.courseName}">
-                        <b:message for="cn"/>
+                            <b:message for="cn"/>
                         </b:inputText>
-                    </b:column>  
+                    </b:column>
                 </b:row>
                 <!-- Add new course into database -->
                 <b:row>

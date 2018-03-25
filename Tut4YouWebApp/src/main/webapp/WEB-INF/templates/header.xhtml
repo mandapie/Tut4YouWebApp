@@ -17,8 +17,8 @@
                         </b:navLink>
                     </c:when>
                     <c:otherwise>
-                        <b:navLink value="Login" outcome="/accounts/profile.xhtml" include-view-params="true">
-                            <f:param name="username" value="#{userBean.user.userName}"/>
+                        <b:navLink value="Login" outcome="/accounts/profile.xhtml"> <!--include-view-params="true">-->
+                            <!--<f:param name="username" value=""/>-->
                         </b:navLink>
                     </c:otherwise>
                 </c:choose>

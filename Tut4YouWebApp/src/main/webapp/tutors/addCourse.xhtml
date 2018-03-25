@@ -9,7 +9,7 @@
     <ui:define name="content">
         <h1>Add Course</h1>
         <b:panel title="Add a course" collapsible="false" look="info">
-            <b:form>
+            <b:form id="addCourseForm">
                 <b:row>
                     <b:selectOneMenu span="6" label="Subject" value="#{addCourseBean.subject}">
                         <f:selectItem itemLabel="select Subject..." noSelectionOption="true"/>
@@ -23,12 +23,13 @@
 
                     <b:selectOneMenu span="6" label="Course" id="courseList" value="#{addCourseBean.course}">
                         <f:selectItem itemLabel="select Course..." noSelectionOption="true"/>
-                        <f:selectItems value="#{addCourseBean.courseList}"
+                        <f:selectItems id= "courses" value="#{addCourseBean.courseList}"
                                        var="course"
                                        itemLabel="#{course.courseName}"
                                        itemValue="#{course}"/>
                     </b:selectOneMenu>
                 </b:row>
+                <b:message for="courses"/>
                 <!-- If the course is not available, this redirects you the add new courses page -->
                 <b:row>
                     <b:container>

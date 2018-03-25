@@ -8,10 +8,15 @@ package tut4you.controller;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+import tut4you.exception.CourseExistsException;
+import tut4you.exception.UserExistsException;
 import tut4you.model.*;
 
 /**
@@ -78,11 +83,21 @@ public class AddNewCourseBean implements Serializable {
      */
     public String addNewCourse() {
         String result = "failure";
-        this.course.setSubject(subject);
-        this.course = tut4youApp.addNewCourse(course);
-         if (this.course != null) {
-             result = "success";
-         }
-         return result;
+        try {
+            this.course.setSubject(subject);
+            this.course = tut4youApp.addNewCourse(course);
+            if (this.course != null) {
+                result = "success";
+            }
+        }
+        catch (CourseExistsException see) {
+            FacesContext.getCurrentInstance().addMessage("addNewCourseForm:cn", new FacesMessage("This course already exists."));
+            result = "addNewCourse";
+        }
+        catch (Exception e) {
+            LOGGER.log(Level.SEVERE, null, e);
+            result = "failure";
+        }
+        return result;
    }
 }

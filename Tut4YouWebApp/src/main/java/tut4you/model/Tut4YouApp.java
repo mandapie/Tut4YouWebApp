@@ -251,7 +251,7 @@ public class Tut4YouApp {
      */
     @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public Course addCourse(Course course) throws CourseExistsException{
+    public Course addCourse(Course course) throws CourseExistsException {
         String userName = getUsernameFromSession();
         if (userName == null) {
             return null;
@@ -285,10 +285,11 @@ public class Tut4YouApp {
      * @return the course to the bean
      * @author Keith <keithtran25@gmail.com>
      * Referenced code from Alvaro Monge <alvaro.monge@csulb.edu>
+     * @throws tut4you.exception.CourseExistsException
      */
     @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public Course addNewCourse(Course course){
+    public Course addNewCourse(Course course) throws CourseExistsException {
         String userName = getUsernameFromSession();
         if (userName == null) {
             return null;
@@ -296,13 +297,16 @@ public class Tut4YouApp {
         else {
             Tutor tutor = findTutorUserName(userName);
             if (tutor != null) {
-                tutor.addCourse(course);
-                course.addTutor(tutor);
-                em.merge(tutor);
-                em.persist(course);
-            }
-            else {
-                return null;
+                Course groupCourse = em.find(Course.class, course.getCourseName());
+                if (groupCourse == null) {
+                    tutor.addCourse(course);
+                    course.addTutor(tutor);
+                    em.merge(tutor);
+                    em.persist(course);
+                }
+                else {
+                    throw new CourseExistsException();
+                }
             }
             return course;
         }

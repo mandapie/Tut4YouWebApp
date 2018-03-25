@@ -125,7 +125,6 @@ public class RegistrationBean implements Serializable {
      * @return either failure, success, or register depending on successful
      * registration.
      */
-    // IN PROGRESS
     public String createUser() {
         String result = "failure";
         if (newStudent.isInformationValid(confirmPassword)) {
@@ -137,10 +136,12 @@ public class RegistrationBean implements Serializable {
                 }
                 tut4youApp.registerUser(newStudent, userType, pr);
                 result = "success";
-            } catch (UserExistsException see) {
-                FacesContext.getCurrentInstance().addMessage("registrationForm:email", new FacesMessage("A user with that information already exists, try again."));
+            }
+            catch (UserExistsException see) {
+                FacesContext.getCurrentInstance().addMessage("registrationForm:em", new FacesMessage("A user with that information already exists, try again."));
                 result = "register";
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 LOGGER.log(Level.SEVERE, null, e);
                 result = "failure";
             }

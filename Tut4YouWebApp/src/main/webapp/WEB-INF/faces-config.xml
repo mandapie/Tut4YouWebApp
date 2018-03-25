@@ -12,6 +12,16 @@
     <navigation-rule>
         <from-view-id>*</from-view-id>
         <navigation-case>
+            <from-action>3{addCourseBean.addCourse}</from-action>
+            <from-outcome>addCourse</from-outcome>
+            <to-view-id>/tutors/addCourse.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-action>3{addNewCourseBean.addNewCourse}</from-action>
+            <from-outcome>addNewCourse</from-outcome>
+            <to-view-id>/tutors/addNewCourse.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
             <from-action>#{requestBean.createNewRequest}</from-action>
             <from-outcome>success</from-outcome>
             <to-view-id>/students/tutorsNotified.xhtml</to-view-id>
@@ -29,11 +39,24 @@
             <to-view-id>/authentications/registration.xhtml</to-view-id>
         </navigation-case>
         <navigation-case>
+            <from-action>#{addCourseBean.addCourse}</from-action>
+            <from-outcome>success</from-outcome>
+            <to-view-id>/accounts/profile.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{addNewCourseBean.addNewCourse}</from-action>
+            <from-outcome>success</from-outcome>
+            <to-view-id>/accounts/profile.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
             <from-action>#{userBean.logout}</from-action>
             <from-outcome>success</from-outcome>
             <to-view-id>/accounts/profile.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
+        <!-- source:https://stackoverflow.com/questions/27149787/passing-redirect-param-in-faces-config-in-jsf-2-2 -->
         <navigation-case>
             <from-outcome>success</from-outcome>
             <to-view-id>/accounts/profile.xhtml</to-view-id>
@@ -43,11 +66,6 @@
                     <value>#{profileBean.showUsername}</value>
                 </view-param>
             </redirect>
-        </navigation-case>
-        <navigation-case>
-            <from-outcome>login</from-outcome>
-            <to-view-id>/accounts/profile.xhtml</to-view-id>
-            <redirect/>
         </navigation-case>
         <navigation-case>
             <from-outcome>failure</from-outcome>

@@ -1,0 +1,36 @@
+<ui:composition template="/WEB-INF/templates/layout.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:b="http://bootsfaces.net/ui">
+    <!-- @author Keith Tran <keithtran25@gmail.com> -->
+    <ui:define name="title">Courses</ui:define>
+    <ui:define name="content">
+        <h1>Previous Sessions</h1>
+        <b:dataTable value="#{requestBean.requestList}" var="request" id="requestListTable">
+            <b:dataTableColumn>
+                <f:facet name="header">Time Of Request</f:facet>
+                <h:outputText value="#{request.currentTime}"/>
+            </b:dataTableColumn>
+            
+            <b:dataTableColumn>
+                <f:facet name="header">Description</f:facet>
+                <h:outputText value="#{request.description}"/>
+            </b:dataTableColumn>
+            
+            <b:dataTableColumn>
+                <f:facet name="header">Tutor</f:facet>
+                <b:inputText value="#{request.tutor}"/>
+            </b:dataTableColumn>
+            <b:dataTableColumn>
+                <f:facet name="header">Rating</f:facet>
+                <b:commandButton value="Write a Review" action="#{ratingBean}">
+                </b:commandButton>
+            </b:dataTableColumn>
+        </b:dataTable>  
+        <ui:debug hotkey='x'/>
+    </ui:define>
+</ui:composition>
+
+

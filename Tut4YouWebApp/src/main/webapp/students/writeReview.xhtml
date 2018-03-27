@@ -1,0 +1,30 @@
+<ui:composition template="/WEB-INF/templates/layout.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:p="http://primefaces.org/ui">
+    <!-- @author Amanda Pan <daikiraidemodaisuki@gmail.com> -->
+
+
+    <ui:define name="title">Request</ui:define>
+    <ui:define name="content">
+        <b:panel title="Write a Review" collapsible="false" look="info">
+            <b:form>
+                <h:outputLabel value="Select your rating"/>
+                <p:rating id="rating" value="#{ratingBean.rating.ratingValue}" required="true" requiredMessage="A rating must be input."/>
+                <br></br>
+                <b:inputTextarea id="description" label="Description/Topic:" placeholder="Enter a short description..." required="true" value="#{ratingBean.rating.description}" requiredMessage="A description must be inputted."/>
+
+                <!-- length of session -->
+                <!-- radio button to select for now or later -->
+                <b:row>
+                    <b:commandButton span="2" value="Submit" look="primary" action="#{ratingBean.createNewRating(ratingBean.tutor)}" />
+                </b:row>
+            </b:form>
+        </b:panel>
+
+        <ui:debug hotkey='x' />
+    </ui:define>
+</ui:composition>

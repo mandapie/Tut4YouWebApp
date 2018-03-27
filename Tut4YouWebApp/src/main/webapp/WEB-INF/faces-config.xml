@@ -60,6 +60,15 @@
             <redirect/>
         </navigation-case>
         
+                
+        <navigation-case>
+            <from-outcome>writeReview</from-outcome>
+            <to-view-id>/students/writeReview.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        
+        
+
         <navigation-case>
             <from-outcome>failure</from-outcome>
             <to-view-id>/errors/internal.xhtml</to-view-id>

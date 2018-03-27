@@ -28,80 +28,91 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
- * A Subject contains a general subject name and will be broken down into
- * course names.
+ * A Subject contains a general subject name and will be broken down into course
+ * names.
+ *
  * @author Keith Tran <keithtran25@gmail.com>
  * Modified by Amanda Pan <daikiraidemodaisuki@gmail.com>
  */
-@Table(name="Subject")
+@Table(name = "Subject")
 @Entity
-@NamedQueries ({
+@NamedQueries({
     @NamedQuery(name = Subject.FIND_ALL_SUBJECTS, query = "SELECT s FROM Subject s")
 })
-public class Subject implements Serializable {    
+public class Subject implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     /**
      * JPQL query to retrieve all subject entities
      */
     public static final String FIND_ALL_SUBJECTS = "Subject.findAllSubjects";
-    
+
     /**
      * subjectName is subject's name
      */
     @Id
     private String subjectName;
-    
+
     /**
-     * A subject contains multiple courses.
-     * Maps a collection of courses to a Subject
+     * A subject contains multiple courses. Maps a collection of courses to a
+     * Subject
      */
-    @OneToMany(mappedBy="subject", cascade={CascadeType.ALL})
+    @OneToMany(mappedBy = "subject", cascade = {CascadeType.ALL})
     private Collection<Course> courses;
-        
+
     /**
      * Gets subject name
+     *
      * @return subject name
      */
     public String getSubjectName() {
         return subjectName;
     }
-    
+
     /**
      * Sets subject name
-     * @param subjectName 
+     *
+     * @param subjectName
      */
     public void setSubjectName(String subjectName) {
         this.subjectName = subjectName;
     }
-    
+
     /**
      * Gets a collection of courses
+     *
      * @return a collection of courses
      */
     public Collection<Course> getCourses() {
         return courses;
     }
-    
+
     /**
      * Sets a collection of courses
-     * @param courses 
+     *
+     * @param courses
      */
     public void setCourses(Collection<Course> courses) {
         this.courses = courses;
     }
-    
+
     /**
-     * adds course to collection of courses
-     * create new HashSet if courses collection is null
-     * @param course 
+     * adds course to collection of courses create new HashSet if courses
+     * collection is null
+     *
+     * @param course
      */
     public void addCourse(Course course) {
-        if (this.courses == null)
+        if (this.courses == null) {
             this.courses = new HashSet();
+        }
         this.courses.add(course);
     }
-    
+
     /**
      * Override hashCode
+     *
      * @return hash
      */
     @Override
@@ -110,10 +121,11 @@ public class Subject implements Serializable {
         hash += (subjectName != null ? subjectName.hashCode() : 0);
         return hash;
     }
-    
+
     /**
      * Overrides the equals method
-     * @param object 
+     *
+     * @param object
      * @return true if object is Subject, else false
      */
     @Override
@@ -128,9 +140,10 @@ public class Subject implements Serializable {
         }
         return true;
     }
-    
+
     /**
      * Override toString
+     *
      * @return SubjectName
      */
     @Override

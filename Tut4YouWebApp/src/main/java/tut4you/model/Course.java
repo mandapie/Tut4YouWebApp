@@ -30,18 +30,23 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 /**
- * A course encapsulates a specific class that a tutor may teach and/or a student
- * may take.
+ * A course encapsulates a specific class that a tutor may teach and/or a
+ * student may take.
+ *
  * @author Amanda Pan <daikiraidemodaisuki@gmail.com>
  * @author Keith Tran <keithtran25@gmail.com>
  */
-@Table(name="Course")
+@Table(name = "Course")
 @Entity
 @NamedQueries({
-    @NamedQuery(name = Course.FIND_COURSE_BY_SUBJECT, query = "SELECT c FROM Course c JOIN c.subject s WHERE s.subjectName = :name"),
+    @NamedQuery(name = Course.FIND_COURSE_BY_SUBJECT, query = "SELECT c FROM Course c JOIN c.subject s WHERE s.subjectName = :name")
+    ,
     @NamedQuery(name = Course.FIND_COURSES_BY_TUTOR, query = "SELECT c FROM Course c JOIN c.tutors t WHERE t.email = :email")
 })
-public class Course implements Serializable {  
+public class Course implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     /**
      * JPQL Query to find courses by their subject name
      */
@@ -50,88 +55,94 @@ public class Course implements Serializable {
      * JPQL Query to find courses by tutor
      */
     public static final String FIND_COURSES_BY_TUTOR = "Tutor.findCoursesByTutor";
-    
+
     @Id
     private String courseName;
-    
+
     /**
-     * Many to One relationship
-     * Course can only be set to one Subject
-     * Subject can be set to many Courses
+     * Many to One relationship Course can only be set to one Subject Subject
+     * can be set to many Courses
      */
     @ManyToOne
-    @JoinColumn(name="subjectName", nullable=false)
+    @JoinColumn(name = "subjectName", nullable = false)
     private Subject subject;
     /**
-     * Many to many relationship
-     * Courses are tutored by many tutors
-     * Tutors Can tutor many courses
+     * Many to many relationship Courses are tutored by many tutors Tutors Can
+     * tutor many courses
      */
     @ManyToMany
-    @JoinTable(name="Courses_tutors",
-          joinColumns=@JoinColumn(name="coursename"),
-          inverseJoinColumns=@JoinColumn(name="email"))
+    @JoinTable(name = "Courses_tutors",
+            joinColumns = @JoinColumn(name = "coursename"),
+            inverseJoinColumns = @JoinColumn(name = "email"))
     private Collection<Tutor> tutors;
-    
+
     /**
      * gets the name of course
+     *
      * @return courseName
      */
     public String getCourseName() {
         return courseName;
     }
-    
+
     /**
      * sets the name of course
-     * @param courseName 
+     *
+     * @param courseName
      */
     public void setCourseName(String courseName) {
         this.courseName = courseName;
     }
-    
+
     /**
      * access the subject that the course is a member of
+     *
      * @return subject that the course is from
      */
     public Subject getSubject() {
         return subject;
     }
-    
+
     /**
      * sets the subject of the course
+     *
      * @param subject is the subject the course will be set to
      */
     public void setSubject(Subject subject) {
         this.subject = subject;
     }
-    
+
     /**
      * gets collection of tutors
+     *
      * @return tutors is collection of tutors
-     */ 
+     */
     public Collection<Tutor> getTutors() {
         return tutors;
     }
-    
+
     /**
      * sets collection of tutors to a specific collection
+     *
      * @param tutors is collection of tutors
      */
     public void setTutors(Collection<Tutor> tutors) {
         this.tutors = tutors;
     }
-    
+
     /**
-     * adds tutor to collection of tutors
-     * create new HashSet if tutors collection is null
-     * @param tutor 
+     * adds tutor to collection of tutors create new HashSet if tutors
+     * collection is null
+     *
+     * @param tutor
      */
     public void addTutor(Tutor tutor) {
-        if (this.tutors == null)
+        if (this.tutors == null) {
             this.tutors = new HashSet();
+        }
         this.tutors.add(tutor);
     }
-    
+
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set

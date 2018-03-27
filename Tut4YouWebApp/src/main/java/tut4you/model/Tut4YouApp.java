@@ -178,6 +178,19 @@ public class Tut4YouApp {
     }
 
     /**
+     * Only students can see the list of tutors.
+     *
+     * @return
+     * @author Andrew Kaichi <ahkaichi@gmail.com>
+     */
+    @PermitAll
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public List<Tutor> getTutorsList() {
+        TypedQuery<Tutor> courseTutorQuery = em.createNamedQuery(Tutor.FIND_TUTORS, Tutor.class);
+        return courseTutorQuery.getResultList();
+    }
+
+    /**
      * the selected tutor will be added to a pending request and vice versa.
      *
      * @param tutor
@@ -428,7 +441,7 @@ public class Tut4YouApp {
         System.out.println(toBeDeleted);
         String userName = getUsernameFromSession();
         Tutor tutor = findTutorUserName(userName);
-        tutor.removeAvailability(toBeDeleted);
+//        tutor.removeAvailability(toBeDeleted);
 
         em.merge(tutor);
         em.remove(em.merge(availability));
@@ -542,7 +555,7 @@ public class Tut4YouApp {
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void registerTutor(Tutor tutor, String groupName,
-             String groupName2) throws StudentExistsException {
+            String groupName2) throws StudentExistsException {
         // 1: Use security EJB to add username/password to security
         // 2: if successful, then add as a registered tutor
         if (null == em.find(Tutor.class, tutor.getEmail())) {
@@ -592,4 +605,115 @@ public class Tut4YouApp {
         }
         em.flush();
     }
+
+    
+    
+    /**
+     * This method can only be called by a student. This methods gets the
+     * username of the current session and checks if the username is null, if so
+     * return null. Otherwise, find the user email to add the request to be
+     * submitted.
+     *
+     * @param rating
+     * @param request to be submitted
+     * @return request if successful
+     */
+    @RolesAllowed("tut4youapp.student")
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public Rating newRating(Rating rating, Tutor tutor) {
+        String userName = getUsernameFromSession();
+        if (userName == null) {
+            return null;
+        } else {
+            User student = find(userName);
+            if (student != null) {
+                student.addRating(rating);
+                rating.setStudent(student);
+                tutor.addPendingRating(rating);
+                rating.setTutor(tutor);
+            } else {
+                return null;
+            }
+        }
+        em.persist(rating);
+        em.merge(tutor);
+        em.flush();
+        return rating;
+    }
+
+    /**
+     * Get a list of ratings of a tutor.
+     *
+     * @return the list of courses to the bean
+     * @author: Syed Haider <shayder426@gmail.com>
+     */
+    @RolesAllowed("tut4youapp.tutor")
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public List<Rating> getRatingList() {
+        String userName = getUsernameFromSession();
+        String email;
+        if (userName == null) {
+            return null;
+        } else {
+            Tutor tutor = findTutorUserName(userName);
+            email = tutor.getEmail();
+            TypedQuery<Rating> ratingQuery = em.createNamedQuery(Rating.FIND_RATING_BY_TUTOR, Rating.class);
+            ratingQuery.setParameter("email", email);
+            return ratingQuery.getResultList();
+        }
+    }
+
+    /**
+     *
+     * @return a list of requests from a user
+     */
+    @RolesAllowed("tut4youapp.student")
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public List<Request> getCompletedRequests() {
+        String userName = getUsernameFromSession();
+        String email;
+        if (userName == null) {
+            return null;
+        } else {
+            User user = find(userName);
+            email = user.getEmail();
+            TypedQuery<Request> requestQuery = em.createNamedQuery(Request.FIND_REQUEST_BY_EMAIL, Request.class);
+            requestQuery.setParameter("student_email", email);
+            requestQuery.setParameter("status", Request.Status.COMPLETED);
+            return requestQuery.getResultList();
+        }
+    }
+
+    /**
+     * Sets a tutor to the request when a tutor completes the request.
+     *
+     * @param r
+     */
+    @RolesAllowed("tut4youapp.tutor")
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void setRequestToComplete(Request r) {
+        //String userName = getUsernameFromSession();
+        //Tutor tutor = findTutorUserName(userName);
+        r.setStatus(Request.Status.COMPLETED);
+        //r.setTutor(tutor);
+        em.merge(r);
+        em.flush();
+    }
+
+    /**
+     * Only students can see the number of tutors that tutors the requested
+     * course. Finds all tutors that teaches the course.
+     *
+     * @param course selected course to be tutored
+     * @return the number of tutors that tutors the course
+     * @author Andrew Kaichi <ahkaichi@gmail.com>
+     */
+    @PermitAll
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public double getAverageRating() {
+        TypedQuery<Double> averageRatingQuery = em.createNamedQuery(Rating.FIND_AVG_RATING_BY_TUTOR, Double.class);
+        return averageRatingQuery.getSingleResult();
+    }
+
+
 }

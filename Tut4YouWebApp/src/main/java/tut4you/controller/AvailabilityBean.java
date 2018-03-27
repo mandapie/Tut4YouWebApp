@@ -40,6 +40,8 @@ import tut4you.model.Tut4YouApp;
 @RequestScoped
 public class AvailabilityBean implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     private static final Logger LOGGER = Logger.getLogger("AvailabilityBean");
 
     @EJB
@@ -289,9 +291,7 @@ public class AvailabilityBean implements Serializable {
         
         stringEndTime = df.format(avail.getEndTime());
         System.out.println("End Time: " + stringEndTime);
-        */
-        
-        
+         */
 
         return result;
     }

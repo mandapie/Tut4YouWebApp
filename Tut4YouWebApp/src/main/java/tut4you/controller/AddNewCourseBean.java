@@ -21,22 +21,26 @@ import tut4you.model.*;
 @Named
 @RequestScoped
 public class AddNewCourseBean implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     private static final Logger LOGGER = Logger.getLogger("AddNewCourseBean");
-    
+
     @EJB
     private Tut4YouApp tut4youApp;
-    
+
     private Subject subject;
     private Course course;
     private List<Subject> subjects = new ArrayList();
     private List<Course> tutorCourses = new ArrayList();
+
     /**
      * Creates a new instance of AddNewCourseBean
      */
     public AddNewCourseBean() {
         course = new Course();
     }
-    
+
     public Subject getSubject() {
         return subject;
     }
@@ -71,18 +75,19 @@ public class AddNewCourseBean implements Serializable {
     public void setTutorCourses(List<Course> tutorCourses) {
         this.tutorCourses = tutorCourses;
     }
-    
+
     /**
      * Adds course to the tutor's course list
+     *
      * @return success if the course was added successfully
      */
     public String addNewCourse() {
         String result = "failure";
         this.course.setSubject(subject);
         this.course = tut4youApp.addNewCourse(course);
-         if (this.course != null) {
-             result = "success";
-         }
-         return result;
-   }
+        if (this.course != null) {
+            result = "success";
+        }
+        return result;
+    }
 }

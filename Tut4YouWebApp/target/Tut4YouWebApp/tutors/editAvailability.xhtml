@@ -16,9 +16,6 @@
                         <b:column medium-screen="2">
                             <!-- Drop-down menu display Monday-Sunday -->
                             <h:outputLabel value="Select a day:"/>
-                            <f:metadata>
-                                <f:viewParam name="id" value="#{availabilityBean.availability.id}" />
-                            </f:metadata>
                             <b:selectOneMenu class="form-control"
                                              id="dayOfWeek"
                                              value="#{availabilityBean.availability.dayOfWeek}"

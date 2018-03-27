@@ -60,6 +60,7 @@ INSERT INTO Courses_tutors(email,courseName) VALUES ('brenda@gmail.com','Introdu
 INSERT INTO Request(student_email,courseName,description,status) VALUES ('amanda@gmail.com','General Biology I','Photosynthesis process',0)
 INSERT INTO Request(student_email,courseName,description,status) VALUES ('amanda@gmail.com','General Biology I','Kreb cycle',0)
 INSERT INTO Request(student_email,courseName,description,status) VALUES ('keith@gmail.com','General Biology I','Kreb cycle',0)
+INSERT INTO Request(student_email,courseName,description,status) VALUES ('daniel@gmail.com','General Biology I','Kreb cycle',0)
 
 INSERT INTO Availability(DAYOFWEEK, ENDTIME, STARTTIME, TUTOR_EMAIL) VALUES ('MONDAY', '23:00:00', '00:00:00', 'amanda@gmail.com')
 INSERT INTO Availability(DAYOFWEEK, ENDTIME, STARTTIME, TUTOR_EMAIL) VALUES ('TUESDAY', '23:00:00', '00:00:00', 'amanda@gmail.com')
@@ -73,3 +74,8 @@ INSERT INTO Availability(DAYOFWEEK, ENDTIME, STARTTIME, TUTOR_EMAIL) VALUES ('WE
 
 INSERT INTO Requests_tutors(id,email) VALUES (1,'amanda@gmail.com')
 INSERT INTO Requests_tutors(id,email) VALUES (2,'amanda@gmail.com')
+
+
+INSERT INTO Rating(student_email,description,ratingValue) VALUES ('daniel@gmail.com','He was a good tutor.',4)
+INSERT INTO Rating(student_email,description,ratingValue) VALUES ('daniel@gmail.com','I liked him.',3)
+INSERT INTO Rating(student_email,description,ratingValue) VALUES ('daniel@gmail.com','He did well.',3)

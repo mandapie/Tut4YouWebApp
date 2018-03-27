@@ -1,10 +1,13 @@
+tut4you\controller\RatingBean.class
 tut4you\model\Request.class
+tut4you\validations\PriceValidator.class
+tut4you\validations\TutorConverter.class
 tut4you\controller\RegistrationBean.class
+tut4you\model\Rating.class
 tut4you\controller\RequestBean.class
 tut4you\controller\UserBean.class
 tut4you\model\Tut4YouApp.class
 tut4you\exception\CourseExistsException.class
-tut4you\controller\EditAvailabilityBean.class
 tut4you\validations\EqualsValidator.class
 tut4you\exception\StudentExistsException.class
 tut4you\model\Tutor.class
@@ -17,7 +20,6 @@ tut4you\model\Group.class
 tut4you\controller\AvailabilityBean.class
 tut4you\controller\AddCourseBean.class
 tut4you\model\Course.class
-tut4you\model\S3Upload.class
 tut4you\controller\HashPassword.class
 tut4you\model\Availability.class
 tut4you\validations\BasicValidator.class

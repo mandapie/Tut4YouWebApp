@@ -29,64 +29,73 @@ import tut4you.model.Tut4YouApp;
 
 /**
  * Adds courses to the tutor.
+ *
  * @author Keith Tran <keithtran25@gmail.com>
  * @author Syed Haider <shayder426@gmail.com>
  */
 @Named
 @SessionScoped
 public class AddCourseBean implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     private static final Logger LOGGER = Logger.getLogger("AddCourseBean");
-    
+
     @EJB
     private Tut4YouApp tut4youApp;
-    
+
     private Course course;
     private Subject subject;
     private List<Subject> subjectList = new ArrayList();
     private List<Course> courseList = new ArrayList();
     private List<Course> tutorCourses = new ArrayList();
-    
+
     /**
      * Creates an instance of the courseBean
      */
     public AddCourseBean() {
         course = new Course();
     }
-    
+
     /**
      * Gets the subject
+     *
      * @return the subject
      */
     public Subject getSubject() {
         return subject;
     }
-    
+
     /**
-     * Sets the subject 
+     * Sets the subject
+     *
      * @param s the subject associated to course
      */
     public void setSubject(Subject s) {
         subject = s;
     }
-    
+
     /**
      * Gets the course
+     *
      * @return the course
      */
     public Course getCourse() {
         return course;
     }
-    
+
     /**
      * Sets the course
+     *
      * @param course the course is set
      */
     public void setCourse(Course course) {
         this.course = course;
     }
-    
+
     /**
      * Gets a list of the subjects in the EJB
+     *
      * @return a list of subjects
      */
     public List<Subject> getSubjectList() {
@@ -95,59 +104,65 @@ public class AddCourseBean implements Serializable {
         }
         return subjectList;
     }
-    
+
     /**
      * Sets the subjectList
+     *
      * @param s list of subjects
      */
     public void setSubjectList(List<Subject> s) {
         subjectList = s;
     }
-    
+
     /**
      * Gets the courses of the tutor
+     *
      * @return list of courses of tutor
      */
     public List<Course> getTutorCourses() {
         tutorCourses = tut4youApp.getTutorCourses();
         return tutorCourses;
     }
-    
+
     /**
      * Sets the courses of the tutor
+     *
      * @param tutorCourses
      */
     public void setTutorCourses(List<Course> tutorCourses) {
         this.tutorCourses = tutorCourses;
     }
-    
+
     /**
      * Gets the list of courses
+     *
      * @return the list of courses
      */
     public List<Course> getCourseList() {
         return courseList;
     }
-    
+
     /**
      * Sets the list of courses
+     *
      * @param courseList list of courses
      */
     public void setCourseList(List<Course> courseList) {
         this.courseList = courseList;
     }
-    
-     /**
+
+    /**
      * Change the subject of the course
      */
     public void changeSubject() {
         courseList = tut4youApp.getCourses(subject.getSubjectName());
     }
-    
+
     /**
      * Adds a new course to the tutor
+     *
      * @return
-     * @throws CourseExistsException 
+     * @throws CourseExistsException
      */
     public String addCourse() throws CourseExistsException {
         String result = "failure";

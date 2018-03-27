@@ -15,40 +15,47 @@ import tut4you.model.Request;
 import tut4you.model.*;
 
 /**
- * Has to do with notifications tab such as listing pending requests from students
- * and show the number of notifications.
+ * Has to do with notifications tab such as listing pending requests from
+ * students and show the number of notifications.
+ *
  * @author Amanda
  */
 @Named
 @RequestScoped
-public class NotifyBean implements Serializable{
+public class NotifyBean implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     private static final Logger LOGGER = Logger.getLogger("NotifyBean");
 
     @EJB
     private Tut4YouApp tut4youApp;
-    
+
     private Request request;
     private List<Request> pendingRequestList;
     private int numofNotif;
-    
+
     /**
      * Gets the request
+     *
      * @return request
      */
     public Request getRequest() {
         return request;
     }
-    
+
     /**
      * Sets the request
-     * @param request 
+     *
+     * @param request
      */
     public void setRequest(Request request) {
         this.request = request;
     }
-    
+
     /**
      * Gets the list of pending requests
+     *
      * @return pendingRequestList
      */
     public List<Request> getPendingRequestList() {
@@ -56,34 +63,38 @@ public class NotifyBean implements Serializable{
         numofNotif = pendingRequestList.size();
         return pendingRequestList;
     }
-    
+
     /**
      * Sets the list of pending requests
-     * @param pendingRequestList 
+     *
+     * @param pendingRequestList
      */
     public void setPendingRequestList(List<Request> pendingRequestList) {
         this.pendingRequestList = pendingRequestList;
     }
-    
+
     /**
      * Gets the state of hasNotif
+     *
      * @return true/false
      */
     public boolean isHasNotif() {
         return numofNotif != 0;
     }
-    
+
     /**
      * Gets the number of notifications
+     *
      * @return the number of notification
      */
     public int getNumofNotif() {
         return numofNotif;
     }
-    
+
     /**
      * Sets the number of notifications
-     * @param numofNotif 
+     *
+     * @param numofNotif
      */
     public void setNumofNotif(int numofNotif) {
         this.numofNotif = numofNotif;

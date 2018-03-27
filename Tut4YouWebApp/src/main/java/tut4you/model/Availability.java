@@ -30,7 +30,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Table;
 
-
 /**
  * Availability encapsulates information of a time frame of when a Tutor is
  * available. Only a Tutor can add an availability.
@@ -39,13 +38,14 @@ import javax.persistence.Table;
  * @author Keith Tran <keithtran25@gmail.com>
  * @author Syed Haider <shayder426@gmail.com>
  */
-@Table(name="Availability")
+@Table(name = "Availability")
 @Entity
 @NamedQueries({
-    @NamedQuery(name = Availability.FIND_AVAILABILITY_BY_TUTOR, query = "SELECT a FROM Availability a JOIN a.tutor s WHERE s.email = :email"),
-    
-})
+    @NamedQuery(name = Availability.FIND_AVAILABILITY_BY_TUTOR, query = "SELECT a FROM Availability a JOIN a.tutor s WHERE s.email = :email"),})
 public class Availability implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     /**
      * JPQL Query to get all availabilities of a tutor
      */
@@ -61,7 +61,7 @@ public class Availability implements Serializable {
     private java.util.Date startTime;
     @Temporal(TemporalType.TIME)
     private java.util.Date endTime;
-    
+
     /**
      * Multiple availabilities can be added by a Tutor
      */
@@ -87,9 +87,10 @@ public class Availability implements Serializable {
         this.startTime = startTime;
         this.endTime = endTime;
     }
-    
+
     /**
      * Gets the Id of availability
+     *
      * @return id
      */
     public Long getId() {
@@ -98,21 +99,25 @@ public class Availability implements Serializable {
 
     /**
      * Sets the primary key of the availability
+     *
      * @param id
      */
     public void setId(Long id) {
         this.id = id;
     }
-    
+
     /**
      * Gets the day of the week
+     *
      * @return dayOfWeek
      */
     public String getDayOfWeek() {
-        return dayOfWeek;    }
+        return dayOfWeek;
+    }
 
     /**
      * Sets the day of the week
+     *
      * @param dayOfWeek
      */
     public void setDayOfWeek(String dayOfWeek) {
@@ -121,6 +126,7 @@ public class Availability implements Serializable {
 
     /**
      * Gets the start time
+     *
      * @return startTime
      */
     public java.util.Date getStartTime() {
@@ -129,6 +135,7 @@ public class Availability implements Serializable {
 
     /**
      * Sets the start time
+     *
      * @param startTime
      */
     public void setStartTime(java.util.Date startTime) {
@@ -137,6 +144,7 @@ public class Availability implements Serializable {
 
     /**
      * Gets the end time
+     *
      * @return endTime
      */
     public java.util.Date getEndTime() {
@@ -145,6 +153,7 @@ public class Availability implements Serializable {
 
     /**
      * Sets the end time
+     *
      * @param endTime
      */
     public void setEndTime(java.util.Date endTime) {
@@ -153,6 +162,7 @@ public class Availability implements Serializable {
 
     /**
      * Gets a tutor who is going to add an availability
+     *
      * @return tutor
      */
     public Tutor getTutor() {
@@ -161,6 +171,7 @@ public class Availability implements Serializable {
 
     /**
      * Sets a tutor who is going to add an availability
+     *
      * @param tutor
      */
     public void setTutor(Tutor tutor) {

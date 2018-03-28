@@ -28,10 +28,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
-import static json.Main.getData;
+import javax.faces.view.ViewScoped;
+import javax.inject.Named;
+//import javax.enterprise.context.SessionScoped;
+
 import json.ZipCodeAPI;
 import okhttp3.OkHttpClient;
 import okhttp3.Response;
@@ -48,7 +51,7 @@ public class RequestBean implements Serializable {
 
     @EJB
     private Tut4YouApp tut4youApp;
-    private static OkHttpClient client = new OkHttpClient();
+    private static final OkHttpClient client = new OkHttpClient();
     private Request request;
     private Subject subject;
     private Course course;
@@ -60,7 +63,8 @@ public class RequestBean implements Serializable {
     private List<Course> courseList = new ArrayList(); //list of courses based on subject to load to the request form
     private List<Request> requestList = new ArrayList(); //list of pending requests
     private List<Tutor> tutorList = new ArrayList(); //list of available tutors
-    private List<String> zipCodesByRadius;
+    private List<Tutor> temp = new ArrayList();
+    private List<String> zipCodesByRadius = new ArrayList();
     //String[] zipCodesByRadius;
     private Tutor tutor; //the tutor who accepts the request
     private String stringMaxRadius;
@@ -68,9 +72,11 @@ public class RequestBean implements Serializable {
      * RequestBean encapsulates all the functions/services involved
      * in making a request
      */
-    public RequestBean() {
+    @PostConstruct
+    public void RequestBean() {
         request = new Request();
         time = "Immediate";
+        tutorList = new ArrayList();
         
     }
     
@@ -309,6 +315,7 @@ public class RequestBean implements Serializable {
      * @throws java.text.ParseException
      */
     public String createNewRequest() throws ParseException {
+        //List<Tutor> temp = new ArrayList();
         String result = "failure";
         if(time.equals("Later")) {
             request.setCurrentTime(StringToTime(getStringLaterTime()));
@@ -325,20 +332,31 @@ public class RequestBean implements Serializable {
             numOfTutors = tut4youApp.getNumOfTutorsFromCourse(request.getCourse().getCourseName());
             //zipCodesByRadius = getData(request.getMaxRadius(), request.getZipCode());
             result = "success";
- 
+            //List<Tutor> temp = new ArrayList();
                 
-            for(String str : getData(request.getMaxRadius(), request.getZipCode()) ) {
+            for( String str : getData(request.getMaxRadius(), request.getZipCode()) ) {
                 System.out.println(str);
-                zipCodesByRadius = Arrays.asList(str.substring(1, str.length() - 1).split(","));
+                zipCodesByRadius = Arrays.asList(str.substring(1, str.length() - 1).split(", "));
                 System.out.print(result);
             }
+            
             for(int i = 0; i < zipCodesByRadius.size(); i++) {
-                tutorList = tut4youApp.getTutorsFromCourse(request.getCourse().getCourseName(), request.getDayOfWeek().toUpperCase(), request.getCurrentTime(), true, zipCodesByRadius.get(i));
+                temp = new ArrayList();
+                //System.out.print(zipCodesByRadius);
+                System.out.println("index " + i + ": "+ zipCodesByRadius.get(i));
+                temp = (tut4youApp.getTutorsFromCourse(request.getCourse().getCourseName(), request.getDayOfWeek().toUpperCase(), request.getCurrentTime(), false, zipCodesByRadius.get(i)));
+                System.out.println("Temp: " + temp);
+                tutorList.addAll(temp);
+                temp.clear();
             }
-            System.out.println("Zip Code List 0: " + zipCodesByRadius.get(0));
+            //tutorList.clear();
+            System.out.println("Zip codes size: " + zipCodesByRadius.get(1));
+            System.out.println("Zip codes: " + zipCodesByRadius);
+            System.out.println("tutor list: " + tutorList);
         }
-
+        //tutorList.clear();
         return result;
+        
     }
     
     /**

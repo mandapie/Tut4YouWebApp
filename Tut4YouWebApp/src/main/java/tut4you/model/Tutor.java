@@ -25,7 +25,9 @@ import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -44,7 +46,8 @@ import javax.persistence.TemporalType;
 @DiscriminatorValue(value="Tutor")
 @Entity
 @NamedQueries({
-    @NamedQuery(name = Tutor.FIND_TUTORS_BY_COURSE_DAY_TIME, query = "SELECT t FROM Tutor t JOIN t.courses c JOIN t.availability a WHERE c.courseName = :coursename AND a.dayOfWeek = :dayofweek AND a.startTime <= :requestTime AND a.endTime >= :requestTime AND t.doNotDisturb = :doNotDisturb AND t.zipCode = :zipCode"),
+    //@NamedQuery(name = Tutor.FIND_TUTORS_BY_COURSE_DAY_TIME, query = "SELECT t FROM Tutor t JOIN t.courses c JOIN t.availability a WHERE c.courseName = :coursename AND a.dayOfWeek = :dayofweek AND a.startTime <= :requestTime AND a.endTime >= :requestTime AND t.doNotDisturb = :doNotDisturb AND t.zipCode = :zipCode"),
+    @NamedQuery(name = Tutor.FIND_TUTORS_BY_COURSE_DAY_TIME, query = "SELECT t FROM Tutor t JOIN t.courses c JOIN t.availability a JOIN t.location l WHERE c.courseName = :coursename AND a.dayOfWeek = :dayofweek AND a.startTime <= :requestTime AND a.endTime >= :requestTime AND t.doNotDisturb = :doNotDisturb AND l.defaultZip = :zipCode"),
     @NamedQuery(name = Tutor.FIND_TUTORS_BY_COURSE, query = "SELECT t FROM Tutor t JOIN t.courses c WHERE c.courseName = :coursename"),
 })
 public class Tutor extends User implements Serializable {     
@@ -63,7 +66,17 @@ public class Tutor extends User implements Serializable {
     private double priceRate;
     private boolean doNotDisturb;
     
-    private String zipCode;
+    @ManyToOne
+    //@JoinColumn(nullable=false)
+    private Location location;
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
+    }
     /**
      * A Tutor can tutor multiple Courses and
      * a Course can be tutored by multiple Tutors.
@@ -87,7 +100,6 @@ public class Tutor extends User implements Serializable {
     public Tutor() {
         priceRate = 0.00;
         doNotDisturb = false;
-        zipCode = "00000";
     }
     
     /**
@@ -97,12 +109,11 @@ public class Tutor extends User implements Serializable {
      * @param priceRate 
      * @param doNotDisturb 
      */
-    public Tutor(Date dateJoined, int numPeopleTutored, double priceRate, boolean doNotDisturb, String zipCode) {
+    public Tutor(Date dateJoined, int numPeopleTutored, double priceRate, boolean doNotDisturb) {
         this.dateJoined = dateJoined;
         this.numPeopleTutored = numPeopleTutored;
         this.priceRate = priceRate;
         this.doNotDisturb = doNotDisturb;
-        this.zipCode = zipCode;
     }
         
     /**
@@ -118,15 +129,14 @@ public class Tutor extends User implements Serializable {
      * @param numPeopleTutored
      * @param priceRate 
      * @param doNotDisturb 
-     * @param zipCode 
+     * * @param zipCode 
      */
-    public Tutor(String email, String firstName, String lastName, String userName, String phoneNumber, String password, String university, Date dateJoined, int numPeopleTutored, double priceRate, boolean doNotDisturb, String zipCode) {
+    public Tutor(String email, String firstName, String lastName, String userName, String phoneNumber, String password, String university, Date dateJoined, int numPeopleTutored, double priceRate, boolean doNotDisturb) {
         super(email, firstName, lastName, userName, phoneNumber, password, university);
         this.dateJoined = dateJoined;
         this.numPeopleTutored = numPeopleTutored;
         this.priceRate = priceRate;
         this.doNotDisturb = doNotDisturb;
-        this.zipCode = zipCode;
     }
     
     /**
@@ -279,19 +289,5 @@ public class Tutor extends User implements Serializable {
      */
     public void removePendingRequest(Request pr) {
         pendingRequests.remove(pr);
-    }
-    /**
-     * sets the zip code
-     * @param zipCode 
-     */
-    public void setZipCode(String zipCode) {
-        this.zipCode = zipCode;
-    }
-    /**
-     * gets the zip code
-     * @return zip code
-     */
-    public String getZipCode() {
-        return zipCode;
     }
 }

@@ -1,3 +1,8 @@
+INSERT INTO Location(id, defaultZip, currentZip, maxRadius) VALUES (0, '92704', '0', 5)
+INSERT INTO Location(id, defaultZip, currentZip, maxRadius) VALUES (1, '92708', '0', 5)
+INSERT INTO Location(id, defaultZip, currentZip, maxRadius) VALUES (2, '92703', '0', 5)
+INSERT INTO Location(id, defaultZip, currentZip, maxRadius) VALUES (3, '92840', '0', 5)
+
 INSERT INTO Groups VALUES ('tut4youapp.student','authenticated user only')
 INSERT INTO Groups VALUES ('tut4youapp.tutor','tutor of selected courses')
 INSERT INTO Groups VALUES ('tut4youapp.moderator','polices tutors and students')
@@ -41,10 +46,10 @@ INSERT INTO Course(subjectName,courseName) VALUES ('Journalism','Advanced Media 
 INSERT INTO Course(subjectName,courseName) VALUES ('Philosophy','The Meaning of Life')
 INSERT INTO Course(subjectName,courseName) VALUES ('Philosophy','Critical Reasoning')
 
-INSERT INTO Users(email,user_type,firstName,lastName,password,phoneNumber,userName,university,priceRate,doNotDisturb) VALUES ('amanda@gmail.com','Tutor','Amanda','Pan','CD639F5ECF3514CCC33B9985B55A118727A21782C04A714AB6A7634BE91DC4B6E8BFF6456B546E382EF00057550952F019993BBE6B8D84FE09C2B961149BFA2A','7141234567','apan','CSULB',15.00,1)
-INSERT INTO Users(email,user_type,firstName,lastName,password,phoneNumber,userName,university,priceRate,doNotDisturb) VALUES ('andrew@gmail.com','Tutor','Andrew','Kaichi','6E99F65920D0B34E678A1FFBA8AA834568A1EF9EFB4D94AD0FB34B42FF2C49C39C228BF5FA619A647831BC0745C49D9FF2171A1513B8591B37FA83B6FC9E2827','7141234567','aKaichi','CSULB',15.50,1)
-INSERT INTO Users(email,user_type,firstName,lastName,password,phoneNumber,userName,university,priceRate,doNotDisturb, zipCode) VALUES ('keith@gmail.com','Tutor','Keith','Tran','0C0BAAA4ECC4C21265E4E41B966C54B806315CDDFF946F6C8D86C352DD8E6F6B8D158F97C6DC310A82202FFC3785996A631E66D02E0CC8FC52623B74A0D646E0','7141234567','kTran','CSULB',20.00,1, '92627')
-INSERT INTO Users(email,user_type,firstName,lastName,password,phoneNumber,userName,university,priceRate,doNotDisturb) VALUES ('syed@gmail.com','Tutor','Syed','Haider','E82C6184E06670CE275027FE9177D95C85E81AA04160FA6095924F514FEE43C3150F14D65EDC4D4ECD105D5E69C9A5B3A5CC7ECCA10C5EE9B80A25863FEA1E08','7141234567','sHaider','CSULB',13.00,1)
+INSERT INTO Users(email,user_type,firstName,lastName,password,phoneNumber,userName,university,priceRate,doNotDisturb,location_id) VALUES ('amanda@gmail.com','Tutor','Amanda','Pan','CD639F5ECF3514CCC33B9985B55A118727A21782C04A714AB6A7634BE91DC4B6E8BFF6456B546E382EF00057550952F019993BBE6B8D84FE09C2B961149BFA2A','7141234567','apan','CSULB',15.00,1,1)
+INSERT INTO Users(email,user_type,firstName,lastName,password,phoneNumber,userName,university,priceRate,doNotDisturb,location_id) VALUES ('andrew@gmail.com','Tutor','Andrew','Kaichi','6E99F65920D0B34E678A1FFBA8AA834568A1EF9EFB4D94AD0FB34B42FF2C49C39C228BF5FA619A647831BC0745C49D9FF2171A1513B8591B37FA83B6FC9E2827','7141234567','aKaichi','CSULB',15.50,1,2)
+INSERT INTO Users(email,user_type,firstName,lastName,password,phoneNumber,userName,university,priceRate,doNotDisturb,location_id) VALUES ('keith@gmail.com','Tutor','Keith','Tran','0C0BAAA4ECC4C21265E4E41B966C54B806315CDDFF946F6C8D86C352DD8E6F6B8D158F97C6DC310A82202FFC3785996A631E66D02E0CC8FC52623B74A0D646E0','7141234567','kTran','CSULB',20.00,1,0)
+INSERT INTO Users(email,user_type,firstName,lastName,password,phoneNumber,userName,university,priceRate,doNotDisturb,location_id) VALUES ('syed@gmail.com','Tutor','Syed','Haider','E82C6184E06670CE275027FE9177D95C85E81AA04160FA6095924F514FEE43C3150F14D65EDC4D4ECD105D5E69C9A5B3A5CC7ECCA10C5EE9B80A25863FEA1E08','7141234567','sHaider','CSULB',13.00,1,3)
 INSERT INTO Users(email,user_type,firstName,lastName,password,phoneNumber,userName,university,priceRate,doNotDisturb) VALUES ('brenda@gmail.com','Tutor','Brenda','Hoffler','2BF2B4C1A129E7E193446EFA878EC1413E16EE01C55336C628CD1FE8BCB9DCD77425B439413684DCBA91E862E0A1FC57A8DEE54DA96E4642132CBC8468E5D7C4','7149876543','bHoff','UCI',16.00,1)
 INSERT INTO Users(email,user_type,firstName,lastName,password,phoneNumber,userName,university,priceRate,doNotDisturb) VALUES ('carmen@gmail.com','Tutor','Carmen','Dangos','290295170CF0721418A3FD7C77081CF3D5312DC9D5AD7D2A7C123E177BB1CF051B4D20491EC3CA6202E42088B556E6314D924FFB41C1D886AD62815EE1E5723C','7141111111','cDang','UCR',14.00,1)
 

@@ -252,7 +252,7 @@ public class Tut4YouApp {
      */
     @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public Course addCourse(Course course)throws CourseExistsException{
+    public Course addCourse(Course course) throws CourseExistsException{
         String userName = getUsernameFromSession();
         if (userName == null) {
             return null;

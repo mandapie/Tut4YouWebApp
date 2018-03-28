@@ -26,6 +26,8 @@ import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import tut4you.model.*;
 import tut4you.model.Tut4YouApp;
 
@@ -42,8 +44,15 @@ public class AvailabilityBean implements Serializable {
     private Tut4YouApp tut4youApp;
    
     private Availability availability;
-    private String stringStartTime;
-    private String stringEndTime;
+    //private String stringStartTime;
+    //private String stringEndTime;
+    
+    @Temporal(TemporalType.TIME)
+    private java.util.Date startTime;
+    
+    @Temporal(TemporalType.TIME)
+    private java.util.Date endTime;
+    
     private List<Availability> availabilityList = new ArrayList();
     
     /**
@@ -51,8 +60,8 @@ public class AvailabilityBean implements Serializable {
      */
     public AvailabilityBean(){
         availability = new Availability();
-        stringStartTime = "";
-        stringEndTime = "";
+        //stringStartTime = "";
+        //stringEndTime = "";
 
     }
     
@@ -71,38 +80,68 @@ public class AvailabilityBean implements Serializable {
     public void setAvailability(Availability availability){
         this.availability = availability;
     }
-    
     /**
-     * Sets the start time of the tutor
-     * @return stringStartTime of the tutor
+     * Gets the start time
+     * @return startTime
      */
-    public String getStringStartTime() {
-        return stringStartTime;
+    public java.util.Date getStartTime() {
+        return startTime;
     }
-    
+
     /**
-     * Gets the start time of the tutor
-     * @param stringStartTime
+     * Sets the start time
+     * @param startTime
      */
-    public void setStringStartTime(String stringStartTime) {
-        this.stringStartTime = stringStartTime;
+    public void setStartTime(java.util.Date startTime) {
+        this.startTime = startTime;
     }
-    
+
     /**
-     * Gets the end time of the tutor
-     * @return stringEndTime of the tutor
+     * Gets the end time
+     * @return endTime
      */
-    public String getStringEndTime() {
-        return stringEndTime;
+    public java.util.Date getEndTime() {
+        return endTime;
     }
-    
+
     /**
-     * Sets the end time of the tutor
-     * @param stringEndTime
+     * Sets the end time
+     * @param endTime
      */
-    public void setStringEndTime(String stringEndTime) {
-        this.stringEndTime = stringEndTime;
+    public void setEndTime(java.util.Date endTime) {
+        this.endTime = endTime;
     }
+//    /**
+//     * Sets the start time of the tutor
+//     * @return stringStartTime of the tutor
+//     */
+//    public String getStringStartTime() {
+//        return stringStartTime;
+//    }
+//    
+//    /**
+//     * Gets the start time of the tutor
+//     * @param stringStartTime
+//     */
+//    public void setStringStartTime(String stringStartTime) {
+//        this.stringStartTime = stringStartTime;
+//    }
+//    
+//    /**
+//     * Gets the end time of the tutor
+//     * @return stringEndTime of the tutor
+//     */
+//    public String getStringEndTime() {
+//        return stringEndTime;
+//    }
+//    
+//    /**
+//     * Sets the end time of the tutor
+//     * @param stringEndTime
+//     */
+//    public void setStringEndTime(String stringEndTime) {
+//        this.stringEndTime = stringEndTime;
+//    }
     
     /**
      * Gets a list of the availabilities of the Tutor in the EJB
@@ -121,8 +160,8 @@ public class AvailabilityBean implements Serializable {
      */
     public String addAvailability() throws ParseException{
         String result = "failure";
-        availability.setStartTime(StringToTime(stringStartTime));
-        availability.setEndTime(StringToTime(stringEndTime));
+        availability.setStartTime(startTime);
+        availability.setEndTime(endTime);
         availability = tut4youApp.addAvailability(availability);
         if (availability != null){
             result = "success";
@@ -141,8 +180,8 @@ public class AvailabilityBean implements Serializable {
             avail.setEditable(true);
         }
         String result = "failure";
-        availability.setStartTime(StringToTime(stringStartTime));
-        availability.setEndTime(StringToTime(stringEndTime));
+        availability.setStartTime(startTime);
+        availability.setEndTime(endTime);
         tut4youApp.updateAvailability(availability);
         if (availability != null) {
             result = "success";

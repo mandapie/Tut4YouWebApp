@@ -24,22 +24,14 @@ import javax.faces.validator.ValidatorException;
 public class TimeValidator implements Validator {
     @Override
     public void validate(FacesContext context, UIComponent component, Object value) throws ValidatorException {
-        try {
-            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-            String stringEndTime = (String) value;
-            java.util.Date endTime = sdf.parse(stringEndTime);
-            System.out.println("endTime: " + endTime);
-            Object otherValue = component.getAttributes().get("otherValue");
-            String stringStartTime = (String) otherValue;
-            java.util.Date startTime = sdf.parse(stringStartTime);
-            System.out.println("startTime: " + startTime);
-            
-            if(startTime.after(endTime)) {
-                FacesMessage message = new FacesMessage("Invalid time inputs");
-                throw new ValidatorException(message);
-            }
-        } catch (ParseException ex) {
-            Logger.getLogger(TimeValidator.class.getName()).log(Level.SEVERE, null, ex);
+        java.util.Date endTime = (java.util.Date) value;
+        //System.out.println("endTime: " + endTime);
+        Object otherValue = component.getAttributes().get("otherValue");
+        java.util.Date startTime = (java.util.Date) otherValue;
+        //System.out.println("startTime: " + startTime);
+        if(startTime.after(endTime)) {
+            FacesMessage message = new FacesMessage("Invalid time inputs");
+            throw new ValidatorException(message);
         }
     }
 }

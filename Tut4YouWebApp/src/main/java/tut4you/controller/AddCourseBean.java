@@ -19,9 +19,12 @@ package tut4you.controller;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import tut4you.exception.CourseExistsException;
 import tut4you.model.*;
@@ -143,15 +146,31 @@ public class AddCourseBean implements Serializable {
     public void changeSubject() {
         courseList = tut4youApp.getCourses(subject.getSubjectName());
     }
-
-    public String addCourse() throws CourseExistsException {
-        String result = "failure";
+    
+    public String addCourse() {
+        String result;
+        try {
         course = tut4youApp.addCourse(course);
-        if (course != null) {
-            result = "success";
-        }
+        result = "success";
+        } catch(CourseExistsException e) {
+            LOGGER.log(Level.SEVERE, null, e);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Course already exists, try again."));
+            result = "add course";
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, null, e);
+            result = "failure";
+            }
+
         return result;
     }
+//    public String addCourse() throws CourseExistsException {
+//        String result = "failure";
+//        course = tut4youApp.addCourse(course);
+//        if (course != null) {
+//            result = "success";
+//        }
+//        return result;
+//    }
     
     /**
      * Adds course to the tutor's course list

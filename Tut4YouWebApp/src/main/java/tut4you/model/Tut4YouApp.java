@@ -545,6 +545,28 @@ public class Tut4YouApp {
         }
     }
     
+    @PermitAll
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void updateUser(Object updateUser) {
+        String userName = getUsernameFromSession();
+        Tutor tutor = findTutorUserName(userName);
+        if (tutor == null){
+            User student = find(userName);
+            student = (User)updateUser;
+            em.merge(student);
+            em.flush();
+        }
+        else {
+            User student = find(userName);
+            student = (User)updateUser;
+            tutor = (Tutor)updateUser;
+            em.merge(student);
+            em.merge(tutor);
+            em.flush();
+        }
+        
+    }
+    
 //    /**
 //     * Converts student to be a tutor. The student will be added a tutor role.
 //     * @param user

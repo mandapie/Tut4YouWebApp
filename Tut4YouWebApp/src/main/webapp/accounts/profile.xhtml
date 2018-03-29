@@ -74,6 +74,11 @@
                     </h:form>
                 </c:if>
                 <b:row>
+                    <b:column>
+                      <b:button value="Edit Profile" href="/Tut4YouWebApp/accounts/editProfile.xhtml"/>  
+                    </b:column>
+                </b:row>
+                <b:row>
                     <a href="/Tut4YouWebApp/students/requestTutor.xhtml">Request for a Tutor</a>
                     <br></br>
                     <c:if test="#{userBean.tutor}">

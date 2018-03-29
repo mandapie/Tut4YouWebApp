@@ -32,6 +32,7 @@ import tut4you.model.*;
  * UserBean checks if a user is authenticated.
  * @author Alvaro Monge <alvaro.monge@csulb.edu>
  * Modified by Amanda Pan <daikiraidemodaisuki@gmail.com>
+ * Modified by Andrew Kaichi <ahkaichi@gmail.com>
  */
 @Named
 @SessionScoped
@@ -85,6 +86,22 @@ public class UserBean implements Serializable {
         this.student = student;
     }
     
+    /**
+     * Updates a User's information
+     * @param object User or Tutor object
+     */
+    public void updateUser(Object object){
+        if (object == student){
+           this.student = (User)object;
+           tut4youapp.updateUser(student); 
+        }
+        else if (object == userTutor){
+            this.student = (User)object;
+            this.userTutor = (Tutor)object;
+            tut4youapp.updateUser(this.student);
+        }
+        
+    }
     /**
      * Gets the state of doNotDisturb is on or off
      * @return true/false

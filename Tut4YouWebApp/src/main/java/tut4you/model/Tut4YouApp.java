@@ -144,10 +144,11 @@ public class Tut4YouApp {
      */
     @RolesAllowed("tut4youapp.student")
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-    public int getNumOfTutorsFromCourse(String course) {
-        TypedQuery<Tutor> courseTutorQuery = em.createNamedQuery(Tutor.FIND_TUTORS_BY_COURSE, Tutor.class);        
+    public long getNumOfTutorsFromCourse(String course) {
+        TypedQuery<Long> courseTutorQuery = em.createNamedQuery(Tutor.FIND_TUTORS_BY_COURSE, Long.class);        
         courseTutorQuery.setParameter("coursename", course);
-        return courseTutorQuery.getResultList().size();
+        long count = (long) courseTutorQuery.getSingleResult();
+        return count;
     }
     
     /**

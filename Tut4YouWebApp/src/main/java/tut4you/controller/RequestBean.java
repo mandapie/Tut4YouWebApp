@@ -33,6 +33,8 @@ import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 //import javax.enterprise.context.SessionScoped;
 
 import json.ZipCodeAPI;
@@ -56,9 +58,12 @@ public class RequestBean implements Serializable {
     private Subject subject;
     private Course course;
     private String time;
-    private String stringLaterTime;
+    
+    @Temporal(TemporalType.TIME)
+    private java.util.Date laterTime;
+    
     private String stringLengthOfSession;
-    private int numOfTutors; //number of tutors who teaches the course
+    private long numOfTutors; //number of tutors who teaches the course
     private List<Subject> subjectList = new ArrayList(); //list of subjects to be loaded to the request form
     private List<Course> courseList = new ArrayList(); //list of courses based on subject to load to the request form
     private List<Request> requestList = new ArrayList(); //list of pending requests
@@ -145,7 +150,7 @@ public class RequestBean implements Serializable {
      * Gets the number of tutors who fit the criteria of a request
      * @return the number of tutors available
      */
-    public int getNumOfTutors() {
+    public long getNumOfTutors() {
         return numOfTutors;
     }
     
@@ -209,16 +214,16 @@ public class RequestBean implements Serializable {
      * Get the time of the request if user set for later 
      * @return the time of the request
      */
-    public String getStringLaterTime() {
-        return stringLaterTime;
+    public java.util.Date getLaterTime() {
+        return laterTime;
     }
     
     /**
      * Sets the time of the request if user wants a request for later
-     * @param stringLaterTime the time of the request if for later
+     * @param laterTime the time of the request if for later
      */
-    public void setStringLaterTime(String stringLaterTime) {
-        this.stringLaterTime = stringLaterTime;
+    public void setLaterTime(java.util.Date laterTime) {
+        this.laterTime = laterTime;
     }
     
     /**
@@ -318,7 +323,7 @@ public class RequestBean implements Serializable {
         //List<Tutor> temp = new ArrayList();
         String result = "failure";
         if(time.equals("Later")) {
-            request.setCurrentTime(StringToTime(getStringLaterTime()));
+            request.setCurrentTime(getLaterTime());
         }
         else {
             request.setCurrentTime(StringToTime(getCurrentTime()));

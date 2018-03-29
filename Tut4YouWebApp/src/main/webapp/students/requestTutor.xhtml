@@ -62,48 +62,23 @@
                     <h:panelGroup id="output">
                         <h:panelGroup rendered="#{requestBean.time eq 'Later'}">
                             <b:column>
-                                <b:selectOneMenu class="form-control"
-                                             id="stringLaterTime"
-                                             value="#{requestBean.stringLaterTime}"
-                                             required="true"
-                                             >
-                                    <f:selectItem itemLabel="Select One..." itemValue="" noSelectionOption="true"/>
-                                    <f:selectItem itemLabel="12:00 AM" itemValue="00:00:00" /> 
-                                    <f:selectItem itemLabel="1:00 AM" itemValue="01:00:00" />
-                                    <f:selectItem itemLabel="2:00 AM" itemValue="02:00:00" />
-                                    <f:selectItem itemLabel="3:00 AM" itemValue="03:00:00" />
-                                    <f:selectItem itemLabel="4:00 AM" itemValue="04:00:00" />
-                                    <f:selectItem itemLabel="5:00 AM" itemValue="05:00:00" />
-                                    <f:selectItem itemLabel="6:00 AM" itemValue="06:00:00" />
-                                    <f:selectItem itemLabel="7:00 AM" itemValue="07:00:00" />
-                                    <f:selectItem itemLabel="8:00 AM" itemValue="08:00:00" />
-                                    <f:selectItem itemLabel="9:00 AM" itemValue="09:00:00" />
-                                    <f:selectItem itemLabel="10:00 AM" itemValue="10:00:00" />
-                                    <f:selectItem itemLabel="11:00 AM" itemValue="11:00:00" />
-                                    <f:selectItem itemLabel="12:00 PM" itemValue="12:00:00" />
-                                    <f:selectItem itemLabel="1:00 PM" itemValue="13:00:00" />
-                                    <f:selectItem itemLabel="2:00 PM" itemValue="14:00:00" />
-                                    <f:selectItem itemLabel="3:00 PM" itemValue="15:00:00" />
-                                    <f:selectItem itemLabel="4:00 PM" itemValue="16:00:00" />
-                                    <f:selectItem itemLabel="5:00 PM" itemValue="17:00:00" />
-                                    <f:selectItem itemLabel="6:00 PM" itemValue="18:00:00" />
-                                    <f:selectItem itemLabel="7:00 PM" itemValue="19:00:00" />
-                                    <f:selectItem itemLabel="8:00 PM" itemValue="20:00:00" />
-                                    <f:selectItem itemLabel="9:00 PM" itemValue="21:00:00" />
-                                    <f:selectItem itemLabel="10:00 PM" itemValue="22:00:00" />
-                                    <f:selectItem itemLabel="11:00 PM" itemValue="23:00:00" />                      
-                                </b:selectOneMenu>
+                                <b:inputText type="time" id="laterTime"
+                                             value="#{requestBean.laterTime}"
+                                             binding="#{passwordComponent}"
+                                             required="true">
+                                    <f:convertDateTime type="time" pattern="HH:mm" dateStyle="full"/>
+                                </b:inputText>
                             </b:column>
                         </h:panelGroup>
                     </h:panelGroup>
                 </b:row>
                 <b:row>
-                    <b:inputText label="Zip Code" placeholder="Enter current zip code..." value="#{requestBean.request.zipCode}"
+                    <b:inputText span="2" label="Zip Code" placeholder="Enter current zip code..." value="#{requestBean.request.zipCode}"
                                  required="true">
                                  <f:validateLength minimum="5"/>
                     </b:inputText> 
                     <b:column>
-                        <b:selectOneMenu class="form-control"
+                        <b:selectOneMenu span="3" class="form-control"
                                              id="maxRadius"
                                              value="#{requestBean.stringMaxRadius}"
                                              required="true">

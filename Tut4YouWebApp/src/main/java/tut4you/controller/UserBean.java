@@ -19,7 +19,10 @@ package tut4you.controller;
 import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.security.PermitAll;
 import javax.ejb.EJB;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
@@ -165,5 +168,18 @@ public class UserBean implements Serializable {
             }
         }
         return result;
+    }
+    /**
+     * Gets a logged in username by getting the username from the session.
+     * @return username
+     * Source: https://dzone.com/articles/liferay-jsf-how-get-current-lo
+     * Had further help by Subject2Change group.
+     */
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public String getUsernameFromSession() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+        String userName = request.getRemoteUser();
+        return userName;
     }
 }

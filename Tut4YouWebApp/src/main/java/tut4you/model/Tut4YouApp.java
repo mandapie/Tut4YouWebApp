@@ -24,12 +24,11 @@ import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
-import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
-import javax.servlet.http.HttpServletRequest;
+import tut4you.controller.UserBean;
 import tut4you.exception.*;
 
 /**
@@ -80,7 +79,9 @@ public class Tut4YouApp {
     @RolesAllowed("tut4youapp.student")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public Request newRequest(Request request) {
-        String userName = getUsernameFromSession();
+        UserBean user = new UserBean();
+        String userName = user.getUsernameFromSession();
+        //String userName = getUsernameFromSession();
         if (userName == null) {
             return null;
         }
@@ -107,7 +108,9 @@ public class Tut4YouApp {
     @RolesAllowed("tut4youapp.student")
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public List<Request> getActiveRequest() {
-        String userName = getUsernameFromSession();
+        UserBean userBean = new UserBean();
+        String userName = userBean.getUsernameFromSession();
+        //String userName = getUsernameFromSession();
         String email;
         if (userName == null) {
             return null;
@@ -200,7 +203,8 @@ public class Tut4YouApp {
     @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void setTutorToRequest(Request r) {
-        String userName = getUsernameFromSession();
+        UserBean user = new UserBean();
+        String userName = user.getUsernameFromSession();
         Tutor tutor = findTutorUserName(userName);
         r.setStatus(Request.Status.ACCEPTED);
         r.setTutor(tutor);
@@ -220,7 +224,9 @@ public class Tut4YouApp {
         if (pendingRequest == null) {
             pendingRequest = r;
         }
-        String userName = getUsernameFromSession();
+        UserBean user = new UserBean();
+        String userName = user.getUsernameFromSession();
+        //String userName = getUsernameFromSession();
         Tutor tutor = findTutorUserName(userName);
         tutor.removePendingRequest(pendingRequest);
         pendingRequest.removeAvailableTutor(tutor);
@@ -235,7 +241,9 @@ public class Tut4YouApp {
     @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public List<Request> getPendingRequestForTutor() {
-        String userName = getUsernameFromSession();
+        //String userName = getUsernameFromSession();
+        UserBean user = new UserBean();
+        String userName = user.getUsernameFromSession();
         Tutor tutor = findTutorUserName(userName);
         TypedQuery<Request> requestTutorQuery = em.createNamedQuery(Request.FIND_REQUESTS_BY_TUTOR, Request.class);
         requestTutorQuery.setParameter("email",tutor.getEmail());
@@ -254,7 +262,9 @@ public class Tut4YouApp {
     @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public Course addCourse(Course course) throws CourseExistsException{
-        String userName = getUsernameFromSession();
+        //String userName = getUsernameFromSession();
+        UserBean user = new UserBean();
+        String userName = user.getUsernameFromSession();
         if (userName == null) {
             return null;
         }
@@ -295,7 +305,9 @@ public class Tut4YouApp {
     @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public Course addNewCourse(Course course){
-        String userName = getUsernameFromSession();
+        UserBean user = new UserBean();
+        String userName = user.getUsernameFromSession();
+        //String userName = getUsernameFromSession();
         if (userName == null) {
             return null;
         }
@@ -322,7 +334,9 @@ public class Tut4YouApp {
     @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public List<Course> getTutorCourses() {
-        String userName = getUsernameFromSession();
+        UserBean user = new UserBean();
+        String userName = user.getUsernameFromSession();
+        //String userName = getUsernameFromSession();
         String email;
         if (userName == null) {
             return null;
@@ -357,7 +371,9 @@ public class Tut4YouApp {
     @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public List<Availability> getAvailabilityList() {
-        String userName = getUsernameFromSession();
+        UserBean user = new UserBean();
+        String userName = user.getUsernameFromSession();
+        //String userName = getUsernameFromSession();
         String email;
         if (userName == null) {
             return null;
@@ -379,7 +395,9 @@ public class Tut4YouApp {
     @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public Availability addAvailability(Availability availability){
-        String userName = getUsernameFromSession();
+        UserBean user = new UserBean();
+        String userName = user.getUsernameFromSession();
+        //String userName = getUsernameFromSession();
         if (userName == null) {
             return null;
         }
@@ -437,7 +455,9 @@ public class Tut4YouApp {
     @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public boolean updateDoNotDisturb(Boolean doNotDisturb){
-        String userName = getUsernameFromSession();
+        UserBean user = new UserBean();
+        String userName = user.getUsernameFromSession();
+        //String userName = getUsernameFromSession();
         Tutor tutor = findTutorUserName(userName);
         doNotDisturb = tutor.isDoNotDisturb();
         if (doNotDisturb == true){
@@ -452,21 +472,21 @@ public class Tut4YouApp {
         }
     }
 
-    /**
-     * Gets a logged in username by getting the username from the session.
-     * @return username
-     * Source: https://dzone.com/articles/liferay-jsf-how-get-current-lo
-     * Had further help by Subject2Change group.
-     */
-    @PermitAll
-    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-    public String getUsernameFromSession() {
-        FacesContext context = FacesContext.getCurrentInstance();
-        HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-        String userName = request.getRemoteUser();
-        return userName;
-    }
-    
+//    /**
+//     * Gets a logged in username by getting the username from the session.
+//     * @return username
+//     * Source: https://dzone.com/articles/liferay-jsf-how-get-current-lo
+//     * Had further help by Subject2Change group.
+//     */
+//    @PermitAll
+//    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+//    public String getUsernameFromSession() {
+//        FacesContext context = FacesContext.getCurrentInstance();
+//        HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+//        String userName = request.getRemoteUser();
+//        return userName;
+//    }
+//    
     /**
      * Gets a student by finding the username student entity.
      * @param username

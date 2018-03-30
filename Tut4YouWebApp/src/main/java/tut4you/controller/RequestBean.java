@@ -62,7 +62,7 @@ public class RequestBean implements Serializable {
     @Temporal(TemporalType.TIME)
     private java.util.Date laterTime;
     
-    private String stringLengthOfSession;
+    private int lengthOfSession;
     private long numOfTutors; //number of tutors who teaches the course
     private List<Subject> subjectList = new ArrayList(); //list of subjects to be loaded to the request form
     private List<Course> courseList = new ArrayList(); //list of courses based on subject to load to the request form
@@ -72,7 +72,7 @@ public class RequestBean implements Serializable {
     private List<String> zipCodesByRadius = new ArrayList();
     //String[] zipCodesByRadius;
     private Tutor tutor; //the tutor who accepts the request
-    private String stringMaxRadius;
+    private int maxRadius;
     /**
      * RequestBean encapsulates all the functions/services involved
      * in making a request
@@ -82,19 +82,19 @@ public class RequestBean implements Serializable {
         request = new Request();
         time = "Immediate";
         tutorList = new ArrayList();
-        
     }
     
-    public String getStringMaxRadius() {
-        return stringMaxRadius;
+    public int getMaxRadius() {
+        return maxRadius;
     }
-    public void setStringMaxRadius(String stringMaxRadius) {
-        this.stringMaxRadius = stringMaxRadius;
+    public void setMaxRadius(int maxRadius) {
+        this.maxRadius = maxRadius;
     }
-    public String getCurrentTime() throws ParseException {
+    public java.util.Date getCurrentTime() throws ParseException {
         String stringCurrentTime = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
-        //java.util.Date currentTime = StringToTime(stringCurrentTime);
-        return stringCurrentTime;
+        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
+        java.util.Date currentTime = sdf.parse(stringCurrentTime);
+        return currentTime;
     }
     
     /**
@@ -227,19 +227,19 @@ public class RequestBean implements Serializable {
     }
     
     /**
-     * gets string length of session
-     * @return stringLengthOfSession
+     * gets length of session
+     * @return lengthOfSession
      */
-    public String getStringLengthOfSession() {
-        return stringLengthOfSession;
+    public int getLengthOfSession() {
+        return lengthOfSession;
     }
     
     /**
-     * sets string length of session
-     * @param stringLengthOfSession 
+     * sets  length of session
+     * @param lengthOfSession 
      */
-    public void setStringLengthOfSession(String stringLengthOfSession) {
-        this.stringLengthOfSession = stringLengthOfSession;
+    public void setLengthOfSession(int lengthOfSession) {
+        this.lengthOfSession = lengthOfSession;
     }
     
     /**
@@ -293,28 +293,6 @@ public class RequestBean implements Serializable {
     }
     
     /**
-     * Convert string to Time
-     * @param time
-     * @return 
-     * @throws java.text.ParseException
-     */
-    public java.util.Date StringToTime(String time) throws ParseException {
-        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
-        java.util.Date date = sdf.parse(time);
-        return date;
-    }
-    
-    /**
-     * converts String to int type
-     * @param string
-     * @return 
-     */
-    public int StringToInt(String string) {
-        int integer = Integer.parseInt(string);
-        return integer;
-    }
-    
-    /**
      * Creates a new request. If successful, get the number of tutors that tutors the course.
      * @return result to be redirected another page
      * @throws java.text.ParseException
@@ -326,11 +304,11 @@ public class RequestBean implements Serializable {
             request.setCurrentTime(getLaterTime());
         }
         else {
-            request.setCurrentTime(StringToTime(getCurrentTime()));
+            request.setCurrentTime(getCurrentTime());
         }
-        request.setMaxRadius(StringToInt(stringMaxRadius));
+        request.setMaxRadius(maxRadius);
         request.setDayOfWeek(getCurrentDayOfWeek());
-        request.setLengthOfSession(StringToInt(stringLengthOfSession));
+        request.setLengthOfSession(lengthOfSession);
         request = tut4youApp.newRequest(request);
         
         if (request != null) {

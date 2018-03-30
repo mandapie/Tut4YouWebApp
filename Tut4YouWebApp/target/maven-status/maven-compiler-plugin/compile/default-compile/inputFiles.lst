@@ -10,6 +10,7 @@ C:\Users\Amanda\Documents\NetBeansProjects\493B\cecs493-project-big-baller-brand
 C:\Users\Amanda\Documents\NetBeansProjects\493B\cecs493-project-big-baller-brand\Tut4YouWebApp\src\main\java\tut4you\model\Availability.java
 C:\Users\Amanda\Documents\NetBeansProjects\493B\cecs493-project-big-baller-brand\Tut4YouWebApp\src\main\java\tut4you\controller\RequestBean.java
 C:\Users\Amanda\Documents\NetBeansProjects\493B\cecs493-project-big-baller-brand\Tut4YouWebApp\src\main\java\tut4you\exception\UserExistsException.java
+C:\Users\Amanda\Documents\NetBeansProjects\493B\cecs493-project-big-baller-brand\Tut4YouWebApp\src\main\java\tut4you\model\Message.java
 C:\Users\Amanda\Documents\NetBeansProjects\493B\cecs493-project-big-baller-brand\Tut4YouWebApp\src\main\java\tut4you\controller\RegistrationBean.java
 C:\Users\Amanda\Documents\NetBeansProjects\493B\cecs493-project-big-baller-brand\Tut4YouWebApp\src\main\java\tut4you\validations\BasicValidator.java
 C:\Users\Amanda\Documents\NetBeansProjects\493B\cecs493-project-big-baller-brand\Tut4YouWebApp\src\main\java\tut4you\model\Tutor.java
@@ -18,5 +19,6 @@ C:\Users\Amanda\Documents\NetBeansProjects\493B\cecs493-project-big-baller-brand
 C:\Users\Amanda\Documents\NetBeansProjects\493B\cecs493-project-big-baller-brand\Tut4YouWebApp\src\main\java\tut4you\model\RequestsTutors.java
 C:\Users\Amanda\Documents\NetBeansProjects\493B\cecs493-project-big-baller-brand\Tut4YouWebApp\src\main\java\tut4you\model\Request.java
 C:\Users\Amanda\Documents\NetBeansProjects\493B\cecs493-project-big-baller-brand\Tut4YouWebApp\src\main\java\tut4you\validations\EqualsValidator.java
+C:\Users\Amanda\Documents\NetBeansProjects\493B\cecs493-project-big-baller-brand\Tut4YouWebApp\src\main\java\tut4you\message\WSEndpoint.java
 C:\Users\Amanda\Documents\NetBeansProjects\493B\cecs493-project-big-baller-brand\Tut4YouWebApp\src\main\java\tut4you\model\User.java
 C:\Users\Amanda\Documents\NetBeansProjects\493B\cecs493-project-big-baller-brand\Tut4YouWebApp\src\main\java\tut4you\controller\UserBean.java

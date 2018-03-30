@@ -14,8 +14,9 @@
             <b:dataTable value="#{requestBean.tutorList}" var="tutor">
                 <b:dataTableColumn>
                     <f:facet name="header">Tutor Name</f:facet>
-                    #{tutor.firstName}
-                    #{tutor.lastName}
+                    <h:link outcome="#{profileBean.goToTutorProfile(tutor)}" value="#{tutor.firstName} #{tutor.lastName}">
+                        <f:param name="username" value="#{tutor.userName}" />
+                    </h:link>  
                 </b:dataTableColumn>
                 <h:column>
                     <f:facet name="header">Request</f:facet>

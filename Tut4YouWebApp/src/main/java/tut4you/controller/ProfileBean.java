@@ -31,21 +31,12 @@ public class ProfileBean implements Serializable {
     
     private User user;
     private String username;
-    private String userEmail;
 
     /**
      * Creates a new instance of ProfileBean
      */
     @PostConstruct
     public void createProfileBean() {
-    }
-
-    public String getUserEmail() {
-        return userEmail;
-    }
-
-    public void setUserEmail(String userEmail) {
-        this.userEmail = userEmail;
     }
 
     public String getUsername() {
@@ -56,9 +47,30 @@ public class ProfileBean implements Serializable {
         this.username = username;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+    
     public void showUsername() {
-        userEmail = userBean.returnEmailFromSession();
-        user = tut4youapp.find(userEmail);
+        String userEmail = userBean.returnEmailFromSession();
+        User isSessionUser = tut4youapp.find(userEmail);
+        if (user == null) {
+            user = isSessionUser;
+        }
+        else {
+            System.out.println(user);
+        }
         username = user.getUserName();
+    }
+    
+    public String goToTutorProfile(Tutor tutor) {
+        user = tut4youapp.find(tutor.getEmail());
+        System.out.println(user);
+        username = user.getUserName();
+        return "success";
     }
 }

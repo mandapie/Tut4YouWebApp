@@ -16,7 +16,6 @@ import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import tut4you.exception.CourseExistsException;
-import tut4you.exception.UserExistsException;
 import tut4you.model.*;
 
 /**

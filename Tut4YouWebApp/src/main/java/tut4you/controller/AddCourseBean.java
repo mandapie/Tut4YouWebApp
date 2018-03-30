@@ -37,7 +37,7 @@ import tut4you.model.Tut4YouApp;
  * @author Syed Haider <shayder426@gmail.com>
  */
 @Named
-@SessionScoped
+@ViewScoped
 public class AddCourseBean implements Serializable {
     private static final Logger LOGGER = Logger.getLogger("AddCourseBean");
     

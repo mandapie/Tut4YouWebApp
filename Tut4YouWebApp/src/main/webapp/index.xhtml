@@ -19,10 +19,14 @@
                     Tutors will be paid according to their hourly rate they have set and the amount of time spent on the session.
                     Stop stressing and request for help at Tut4You!
                 </p>
-                <p>
-                    <a href="/Tut4YouWebApp/authentications/registerStudent.xhtml" class="btn btn-lg btn-info">Register as Student</a>
-                    <a href="/Tut4YouWebApp/authentications/registerTutor.xhtml" class="btn btn-lg btn-info">Register as Tutor</a>
-                </p>
+                <c:choose>
+                    <c:when test="#{userBean.isUserAuthenticated}"></c:when>
+                    <c:otherwise>
+                        <p>
+                            <a href="/Tut4YouWebApp/authentications/registration.xhtml" class="btn btn-lg btn-info">Register with Us</a>
+                        </p>
+                    </c:otherwise>
+                </c:choose>
             </b:container>
         </b:jumbotron>
         <ui:debug hotkey='x'/>

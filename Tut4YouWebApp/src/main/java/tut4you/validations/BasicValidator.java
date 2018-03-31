@@ -24,6 +24,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
 import javax.inject.Named;
+import tut4you.controller.RequestBean;
 
 /**
  * Validates (basic) correct format.
@@ -72,6 +73,18 @@ public class BasicValidator {
             throw new ValidatorException(message);
         }
         
+    }
+    public void validateLaterTime(FacesContext context, UIComponent component, Object value) throws ValidatorException, ParseException {
+        java.util.Date laterTime = (java.util.Date) value;
+        //System.out.println("endTime: " + endTime);
+        //Object otherValue = component.getAttributes().get("otherValue");
+        RequestBean requestBean = new RequestBean();
+        java.util.Date currentTime = requestBean.getCurrentTime();
+        //System.out.println("startTime: " + startTime);
+        if(laterTime.before(currentTime)) {
+            FacesMessage message = new FacesMessage("Invalid later time input");
+            throw new ValidatorException(message);
+        }
     }
 
 

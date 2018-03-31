@@ -10,7 +10,7 @@
         <b:navBar brand="Home" brandHref="/Tut4YouWebApp/index.xhtml">
             <b:navbarLinks>
                 <c:choose>
-                    <c:when test="#{userBean.studentAuthenticated}">
+                    <c:when test="#{userBean.isUserAuthenticated}">
                         <b:navLink value="Account" href="/Tut4YouWebApp/accounts/profile.xhtml"></b:navLink>
                     </c:when>
                     <c:otherwise>
@@ -20,9 +20,9 @@
                 <b:navLink value="About" href="#"></b:navLink>
             </b:navbarLinks>
             
-            <c:if test="#{userBean.studentAuthenticated}">
+            <c:if test="#{userBean.isUserAuthenticated}">
                 <b:form styleClass="navbar-form navbar-right">
-                    <h:outputLabel value="Welcome back, #{userBean.student.firstName}!"/><span> </span>
+                    <h:outputLabel value="Welcome back, #{userBean.user.firstName}!"/><span> </span>
                     <b:commandButton action="#{userBean.logout}" value="Sign Out" look="success" iconAlign="right"/>
                 </b:form>
             </c:if>

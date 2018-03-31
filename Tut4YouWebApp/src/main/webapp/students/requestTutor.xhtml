@@ -66,7 +66,8 @@
                                 <b:inputText type="time" id="laterTime"
                                              value="#{requestBean.laterTime}"
                                              binding="#{passwordComponent}"
-                                             required="true">
+                                             required="true" 
+                                             validator="#{basicValidator.validateLaterTime}">
                                     <f:convertDateTime type="time" pattern="HH:mm" dateStyle="full"/>
                                 </b:inputText>
                             </b:column>

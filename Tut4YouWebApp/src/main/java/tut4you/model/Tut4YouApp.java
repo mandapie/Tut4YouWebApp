@@ -45,6 +45,7 @@ public class Tut4YouApp {
     private EntityManager em;
     private static final Logger LOGGER = Logger.getLogger("Tut4YouApp");
     
+    UserBean userBean = new UserBean();
     /**
      * Query all subjects from the database
      * @return List of subjects
@@ -79,8 +80,7 @@ public class Tut4YouApp {
     @RolesAllowed("tut4youapp.student")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public Request newRequest(Request request) {
-        UserBean user = new UserBean();
-        String userName = user.getUsernameFromSession();
+        String userName = userBean.getUsernameFromSession();
         //String userName = getUsernameFromSession();
         if (userName == null) {
             return null;
@@ -108,7 +108,6 @@ public class Tut4YouApp {
     @RolesAllowed("tut4youapp.student")
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public List<Request> getActiveRequest() {
-        UserBean userBean = new UserBean();
         String userName = userBean.getUsernameFromSession();
         //String userName = getUsernameFromSession();
         String email;
@@ -203,8 +202,7 @@ public class Tut4YouApp {
     @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void setTutorToRequest(Request r) {
-        UserBean user = new UserBean();
-        String userName = user.getUsernameFromSession();
+        String userName = userBean.getUsernameFromSession();
         Tutor tutor = findTutorUserName(userName);
         r.setStatus(Request.Status.ACCEPTED);
         r.setTutor(tutor);
@@ -241,9 +239,7 @@ public class Tut4YouApp {
     @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public List<Request> getPendingRequestForTutor() {
-        //String userName = getUsernameFromSession();
-        UserBean user = new UserBean();
-        String userName = user.getUsernameFromSession();
+        String userName = userBean.getUsernameFromSession();
         Tutor tutor = findTutorUserName(userName);
         TypedQuery<Request> requestTutorQuery = em.createNamedQuery(Request.FIND_REQUESTS_BY_TUTOR, Request.class);
         requestTutorQuery.setParameter("email",tutor.getEmail());
@@ -262,9 +258,7 @@ public class Tut4YouApp {
     @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public Course addCourse(Course course) throws CourseExistsException{
-        //String userName = getUsernameFromSession();
-        UserBean user = new UserBean();
-        String userName = user.getUsernameFromSession();
+        String userName = userBean.getUsernameFromSession();
         if (userName == null) {
             return null;
         }
@@ -305,8 +299,7 @@ public class Tut4YouApp {
     @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public Course addNewCourse(Course course){
-        UserBean user = new UserBean();
-        String userName = user.getUsernameFromSession();
+        String userName = userBean.getUsernameFromSession();
         //String userName = getUsernameFromSession();
         if (userName == null) {
             return null;
@@ -334,8 +327,7 @@ public class Tut4YouApp {
     @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public List<Course> getTutorCourses() {
-        UserBean user = new UserBean();
-        String userName = user.getUsernameFromSession();
+        String userName = userBean.getUsernameFromSession();
         //String userName = getUsernameFromSession();
         String email;
         if (userName == null) {
@@ -371,8 +363,7 @@ public class Tut4YouApp {
     @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public List<Availability> getAvailabilityList() {
-        UserBean user = new UserBean();
-        String userName = user.getUsernameFromSession();
+        String userName = userBean.getUsernameFromSession();
         //String userName = getUsernameFromSession();
         String email;
         if (userName == null) {
@@ -395,8 +386,7 @@ public class Tut4YouApp {
     @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public Availability addAvailability(Availability availability){
-        UserBean user = new UserBean();
-        String userName = user.getUsernameFromSession();
+        String userName = userBean.getUsernameFromSession();
         //String userName = getUsernameFromSession();
         if (userName == null) {
             return null;
@@ -455,9 +445,7 @@ public class Tut4YouApp {
     @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public boolean updateDoNotDisturb(Boolean doNotDisturb){
-        UserBean user = new UserBean();
-        String userName = user.getUsernameFromSession();
-        //String userName = getUsernameFromSession();
+        String userName = userBean.getUsernameFromSession();
         Tutor tutor = findTutorUserName(userName);
         doNotDisturb = tutor.isDoNotDisturb();
         if (doNotDisturb == true){
@@ -566,6 +554,38 @@ public class Tut4YouApp {
         } else {
             throw new StudentExistsException();
         }
+    }
+     /**
+     * Converts student to be a tutor. The student will be added a tutor role.
+     * @param user
+     * @param userType
+     * @param priceRate
+     * @throws tut4you.exception.StudentExistsException
+     */
+    @PermitAll
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void registerUser(User user, String userType, double priceRate) throws StudentExistsException {
+        Group group = em.find(Group.class, "tut4youapp.student");
+        User newStudent = new User(user);
+        if (group == null) {
+            group = new Group("tut4youapp.student");
+        }
+        if (userType.equals("Student")) {
+            newStudent.addGroup(group);
+            group.addStudent(newStudent);
+            em.persist(newStudent);
+        }
+        else {
+            Tutor newTutor = new Tutor(user);
+            newTutor.setPriceRate(priceRate);
+            newTutor.addGroup(group);
+            group.addTutor(newTutor);
+            group = em.find(Group.class, "tut4youapp.tutor");
+            newTutor.addGroup(group);
+            group.addTutor(newTutor);
+            em.persist(newTutor);
+        }
+        em.flush();
     }
     
 //    /**

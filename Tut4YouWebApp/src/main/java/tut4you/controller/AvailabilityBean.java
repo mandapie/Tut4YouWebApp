@@ -54,15 +54,14 @@ public class AvailabilityBean implements Serializable {
     private java.util.Date endTime;
     
     private List<Availability> availabilityList = new ArrayList();
+    private boolean editable = false;
     
     /**
      * Creates a new instance of the Availability entity
      */
     public AvailabilityBean(){
         availability = new Availability();
-        //stringStartTime = "";
-        //stringEndTime = "";
-
+        editable = false;
     }
     
     /**
@@ -208,12 +207,17 @@ public class AvailabilityBean implements Serializable {
         return result;
     }
 
-        public String edit() {
-        availability.setEditable(true);
-        return null;
+
+    public void changeEditable() {
+        editable = editable==false;
+    }
+    public boolean isEditable() {
+        return editable;
     }
 
-    
+    public void setEditable(boolean editable) {
+        this.editable = editable;
+    }
     /**
      * Convert string to Time
      * @param time

@@ -19,7 +19,8 @@ package tut4you.controller;
 import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.annotation.security.PermitAll;
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.ejb.EJB;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
@@ -44,48 +45,38 @@ public class UserBean implements Serializable {
     @EJB
     private Tut4YouApp tut4youapp;
     
-    private User student;
-    private Tutor userTutor;
+    private User user;
     boolean doNotDisturb;
+    int tabIndex;
     
     /**
      * Creates a new instance of UserIdentity
      */
-    public UserBean() {
-        student = userTutor;
-        userTutor = (Tutor)student;
+    @PostConstruct
+    public void createUserBean() {
+        user = null;
     }
-    
-    /**
-     * Gets the Tutor object
-     * @return 
+    /** 
+     * Destroys a new instance of UserIdentity
      */
-    public Tutor getUserTutor() {
-        return userTutor;
-    }
-    
-    /**
-     * Sets the User object
-     * @param tutor 
-     */
-    public void setUserTutor(User tutor) {
-        this.userTutor = (Tutor) tutor;
+    @PreDestroy
+    public void destroyUserBean() {
     }
     
     /**
      * Gets the User object
-     * @return the student Object
+     * @return the user Object
      */
-    public User getStudent() {
-        return student;
+    public User getUser() {
+        return user;
     }
     
     /**
-     * Sets the student Object
-     * @param student the student 
+     * Sets the user Object
+     * @param user the user 
      */
-    public void setStudent(User student) {
-        this.student = student;
+    public void setUser(User user) {
+        this.user = user;
     }
     
     /**
@@ -105,20 +96,53 @@ public class UserBean implements Serializable {
     }
     
     /**
-     * Called the EJG to update the state of doNotDisturb
+     * Called the EJB to update the state of doNotDisturb
      * @param d 
      */
     public void updateDoNotDisturb(Boolean d) {
         tut4youapp.updateDoNotDisturb(doNotDisturb);
     }
+    /**
+     * Gets the index of the tab
+     * @return tabIndex
+     */
+    public int getTabIndex() {
+        return tabIndex;
+    }
     
+    /**
+     * Sets the index of the tab
+     * @param tabIndex
+     */
+    public void setTabIndex(int tabIndex) {
+        this.tabIndex = tabIndex;
+    }
+    /**
+     * Determine if the user is authenticated and if so, make sure the session scope includes the User object for the authenticated user
+     * @return true if the user making a request is authenticated, false otherwise.
+     */
+    public boolean isIsUserAuthenticated() {
+        boolean isAuthenticated = true;
+        if (null == this.user) {
+            FacesContext context = FacesContext.getCurrentInstance();
+            HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+            String userName = request.getRemoteUser();
+            if (userName == null) {
+                isAuthenticated = false;
+            } else {
+                this.user = tut4youapp.find(userName);
+                isAuthenticated = (this.user != null);
+            }
+        }
+        return isAuthenticated;
+    }
     /**
      * Determine if current authenticated user has the role of tutor
      * @return true if user has role of tutor, false otherwise.
      */
-    public boolean isTutor() {
+    public boolean isIsTutor() {
         boolean isTutor = false;
-        if (this.isStudentAuthenticated()) {
+        if (this.isIsUserAuthenticated()) {
             FacesContext context = FacesContext.getCurrentInstance();
             HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
             isTutor = request.isUserInRole("tut4youapp.tutor");
@@ -126,26 +150,6 @@ public class UserBean implements Serializable {
         return isTutor;
     }
 
-    /**
-     * Determine if the student is authenticated and if so, make sure the session scope includes the User object for the authenticated student
-     * @return true if the student making a request is authenticated, false otherwise.
-     */
-    public boolean isStudentAuthenticated() {
-        boolean isAuthenticated = true;
-        if (null == this.student) {
-            FacesContext context = FacesContext.getCurrentInstance();
-            HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-            String userName = request.getRemoteUser();
-            if (userName == null) {
-                isAuthenticated = false;
-            } else {
-                this.student = tut4youapp.find(userName);
-                isAuthenticated = (this.student != null);
-            }
-        }
-        return isAuthenticated;
-    }
-    
     /**
      * Logout the student and invalidate the session
      * @return success if student is logged out and session invalidated, failure otherwise.
@@ -157,7 +161,7 @@ public class UserBean implements Serializable {
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
         try {
             request.logout();
-            student = null;
+            user = null;
             result = "success";
         } catch (ServletException ex) {
             LOGGER.log(Level.SEVERE, null, ex);

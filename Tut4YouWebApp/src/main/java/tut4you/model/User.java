@@ -43,7 +43,6 @@ import javax.persistence.Table;
 @DiscriminatorColumn(name="user_type", discriminatorType=DiscriminatorType.STRING)
 @DiscriminatorValue(value="Student")
 public class User implements Serializable {
-    
     @Id
     private String email;
     
@@ -72,6 +71,20 @@ public class User implements Serializable {
      */
     public User() {
         
+    }
+    
+    /**
+     * Copy constructor
+     * @param user 
+     */
+    public User(User user) {
+        this.email = user.email;
+        this.firstName = user.firstName;
+        this.lastName = user.lastName;
+        this.userName = user.userName;
+        this.phoneNumber = user.phoneNumber;
+        this.password = user.password;
+        this.university = user.university;
     }
     
     /**

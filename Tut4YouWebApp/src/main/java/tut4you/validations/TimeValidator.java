@@ -15,6 +15,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.validator.FacesValidator;
 import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
+import tut4you.controller.RequestBean;
 
 /**
  *

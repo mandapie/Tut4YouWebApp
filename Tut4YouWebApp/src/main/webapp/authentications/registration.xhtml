@@ -91,6 +91,14 @@
                                     <b:message for="hr"/>
                                 </b:inputText>
                             </b:column>
+                            <b:column medium-screen="2">
+                                <h:outputLabel value="Default Zip Code"/>
+                            </b:column>
+                            <b:column medium-screen="4">
+                                <b:inputText id="zip" placeholder="Enter Default Zip Code Location" required="true" requiredMessage="required" value="#{registrationBean.defaultZip}">
+                                    <b:message for="zip"/>
+                                </b:inputText>
+                            </b:column>
                         </b:row>
                     </h:panelGroup>
                 </h:panelGroup>

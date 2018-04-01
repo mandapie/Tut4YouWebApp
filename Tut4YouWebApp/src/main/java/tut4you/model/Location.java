@@ -32,7 +32,7 @@ public class Location implements Serializable {
     @Column(nullable = false, unique = true)
     private Long id;
     
-    @OneToMany(mappedBy="location", cascade={CascadeType.ALL})
+    @OneToMany(mappedBy="location", cascade=CascadeType.ALL)
     private Collection<Tutor> tutors;
 
     public Collection<Tutor> getTutors() {
@@ -51,6 +51,21 @@ public class Location implements Serializable {
         if (this.tutors == null)
             this.tutors = new HashSet();
         this.tutors.add(tutor);
+    }
+     /**
+     * Gets the ID of Location
+     * @return id
+     */
+    public Long getId() {
+        return id;
+    }
+
+    /**
+     * Sets the ID of the Location
+     * @param id
+     */
+    public void setId(Long id) {
+        this.id = id;
     }
     /**
      * Tutors default zip code location
@@ -80,6 +95,13 @@ public class Location implements Serializable {
         this.maxRadius = maxRadius;
     }
     /**
+     * @parm defaultZip
+     * @param defaultZip 
+     */
+    public Location(String defaultZip) {
+        this.defaultZip = defaultZip;
+    }
+    /**
      * get Default Zip
      * @return default zip
      */
@@ -90,7 +112,7 @@ public class Location implements Serializable {
      * set default zip
      * @param defaultZip 
      */
-    public void SetDefaultZip(String defaultZip) {
+    public void setDefaultZip(String defaultZip) {
         this.defaultZip = defaultZip;
     }
     /**

@@ -560,11 +560,12 @@ public class Tut4YouApp {
      * @param user
      * @param userType
      * @param priceRate
+     * @param newLocation
      * @throws tut4you.exception.StudentExistsException
      */
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void registerUser(User user, String userType, double priceRate) throws StudentExistsException {
+    public void registerUser(User user, String userType, double priceRate, Location newLocation) throws StudentExistsException {
         Group group = em.find(Group.class, "tut4youapp.student");
         User newStudent = new User(user);
         if (group == null) {
@@ -583,7 +584,14 @@ public class Tut4YouApp {
             group = em.find(Group.class, "tut4youapp.tutor");
             newTutor.addGroup(group);
             group.addTutor(newTutor);
+            
+            //added
+            newLocation.addTutor(newTutor);
+            //added
+            newTutor.setLocation(newLocation);
+           
             em.persist(newTutor);
+            em.persist(newLocation);
         }
         em.flush();
     }

@@ -44,9 +44,11 @@ public class RegistrationBean implements Serializable {
     private Tut4YouApp tut4youApp;
     
     private User newStudent;
+    private Location newLocation;
     private String confirmPassword;
     private String userType;
     private String priceRate;
+    private String defaultZip;
     
     /** 
      * Creates a new instance of Registration
@@ -54,6 +56,7 @@ public class RegistrationBean implements Serializable {
     @PostConstruct
     public void createRegistrationBean() {
         newStudent = new User();
+        newLocation = new Location();
     }
     
     /** 
@@ -61,8 +64,16 @@ public class RegistrationBean implements Serializable {
      */
     @PreDestroy
     public void destroyRegistrationBean() {
+        
     }
     
+    public Location getNewLocation() {
+        return newLocation;
+    }
+    
+    public void setNewLocation(Location newLocation) {
+        this.newLocation = newLocation;
+    }
     /**
      * Gets the new student who just registered
      * @return the new User entity
@@ -119,6 +130,14 @@ public class RegistrationBean implements Serializable {
         this.priceRate = priceRate;
     }
     
+    public String getDefaultZip() {
+        return defaultZip;
+    }
+    
+    public void setDefaultZip(String defaultZip) {
+        this.defaultZip = defaultZip;
+    }
+    
     /**
      * JSF Action that uses the information submitted in the registration page
      * to add user as a registered User user.
@@ -135,7 +154,8 @@ public class RegistrationBean implements Serializable {
                 if (priceRate != null) {
                     pr = Double.parseDouble(priceRate);
                 }
-                tut4youApp.registerUser(newStudent, userType, pr);
+                newLocation.setDefaultZip(defaultZip);
+                tut4youApp.registerUser(newStudent, userType, pr, newLocation);
                 result = "success";
             } catch (StudentExistsException see) {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("A user with that information already exists, try again."));

@@ -17,6 +17,15 @@
 package tut4you.controller;
 
 import java.io.Serializable;
+import java.math.BigInteger;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -38,7 +47,7 @@ import tut4you.exception.*;
 @Named
 @ViewScoped
 public class RegistrationBean implements Serializable {
-    private static final Logger LOGGER = Logger.getLogger("RequestBean");
+    private static final Logger LOGGER = Logger.getLogger("RegistrationBean");
     
     @EJB
     private Tut4YouApp tut4youApp;
@@ -49,6 +58,7 @@ public class RegistrationBean implements Serializable {
     private String userType;
     private String priceRate;
     private String defaultZip;
+    private int maxRadius;
     
     /** 
      * Creates a new instance of Registration
@@ -66,7 +76,20 @@ public class RegistrationBean implements Serializable {
     public void destroyRegistrationBean() {
         
     }
-    
+    /**
+     * get max radius
+     * @return maxRadius
+     */
+    public int getMaxRadius() {
+        return maxRadius;
+    }
+    /**
+     * set max radius
+     * @param maxRadius 
+     */
+    public void setMaxRadius(int maxRadius) {
+        this.maxRadius = maxRadius;
+    }
     public Location getNewLocation() {
         return newLocation;
     }
@@ -154,8 +177,7 @@ public class RegistrationBean implements Serializable {
                 if (priceRate != null) {
                     pr = Double.parseDouble(priceRate);
                 }
-                newLocation.setDefaultZip(defaultZip);
-                tut4youApp.registerUser(newStudent, userType, pr, newLocation);
+                tut4youApp.registerUser(newStudent, userType, pr, defaultZip, maxRadius);
                 result = "success";
             } catch (StudentExistsException see) {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("A user with that information already exists, try again."));
@@ -166,5 +188,17 @@ public class RegistrationBean implements Serializable {
             }
         }
         return result;
+    }
+    /**
+     * https://stackoverflow.com/questions/33098603/convert-localtime-java-8-to-date
+     * gets the current date which is used for date joined attribute in tutor
+     * @return date joined
+     * @throws ParseException 
+     */
+    public java.util.Date getCurrentDate() throws ParseException {
+        LocalTime d = LocalTime.now();
+        Instant instant = d.atDate(LocalDate.now()).atZone(ZoneId.systemDefault()).toInstant();
+        Date time = Date.from(instant);
+        return time;
     }
 }

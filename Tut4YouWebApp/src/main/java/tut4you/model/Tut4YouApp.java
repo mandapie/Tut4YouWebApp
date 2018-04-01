@@ -16,6 +16,7 @@
  */
 package tut4you.model;
 
+import java.text.ParseException;
 import javax.ejb.Stateless;
 import java.util.List;
 import java.util.logging.Level;
@@ -28,6 +29,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
+import tut4you.controller.RegistrationBean;
 import tut4you.controller.UserBean;
 import tut4you.exception.*;
 
@@ -168,7 +170,7 @@ public class Tut4YouApp {
     @RolesAllowed("tut4youapp.student")
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public List<Tutor> getTutorsFromCourse(String course, String dayOfWeek, java.util.Date time, Boolean doNotDisturb, String zipCode) {
-        TypedQuery<Tutor> courseTutorQuery = em.createNamedQuery(Tutor.FIND_TUTORS_BY_COURSE_DAY_TIME, Tutor.class);
+        TypedQuery<Tutor> courseTutorQuery = em.createNamedQuery(Tutor.FIND_TUTORS_BY_COURSE_DAY_TIME_DZIP, Tutor.class);
         courseTutorQuery.setParameter("coursename", course);
         courseTutorQuery.setParameter("dayofweek", dayOfWeek);
         courseTutorQuery.setParameter("requestTime", time, TemporalType.TIME);
@@ -560,14 +562,17 @@ public class Tut4YouApp {
      * @param user
      * @param userType
      * @param priceRate
-     * @param newLocation
+     * @param defaultZip
+     * @param maxRadius
      * @throws tut4you.exception.StudentExistsException
+     * @throws java.text.ParseException
      */
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void registerUser(User user, String userType, double priceRate, Location newLocation) throws StudentExistsException {
+    public void registerUser(User user, String userType, double priceRate, String defaultZip, int maxRadius) throws StudentExistsException, ParseException {
         Group group = em.find(Group.class, "tut4youapp.student");
         User newStudent = new User(user);
+        RegistrationBean registrationBean = new RegistrationBean();
         if (group == null) {
             group = new Group("tut4youapp.student");
         }
@@ -578,22 +583,18 @@ public class Tut4YouApp {
         }
         else {
             Tutor newTutor = new Tutor(user);
+            newTutor.setDateJoined(registrationBean.getCurrentDate());
             newTutor.setPriceRate(priceRate);
+            newTutor.setMaxRadius(maxRadius);
             newTutor.addGroup(group);
             group.addTutor(newTutor);
             group = em.find(Group.class, "tut4youapp.tutor");
             newTutor.addGroup(group);
             group.addTutor(newTutor);
-            
-            //added
-            newLocation.addTutor(newTutor);
-            //added
-            newTutor.setLocation(newLocation);
-           
+            newTutor.setDefaultZip(defaultZip);
             em.persist(newTutor);
-            em.persist(newLocation);
         }
-        em.flush();
+        //em.flush();
     }
     
 //    /**

@@ -91,6 +91,8 @@
                                     <b:message for="hr"/>
                                 </b:inputText>
                             </b:column>
+                        </b:row>
+                        <b:row>
                             <b:column medium-screen="2">
                                 <h:outputLabel value="Default Zip Code"/>
                             </b:column>
@@ -100,6 +102,17 @@
                                 </b:inputText>
                             </b:column>
                         </b:row>
+                        <b:row>
+                            <b:column medium-screen="2">
+                                <h:outputLabel value="Max Radius"/>
+                            </b:column>
+                            <b:column medium-screen="4">
+                                <b:inputText id="rad" placeholder="Enter Max Radius You Are Willing to Tutor" required="true" requiredMessage="required" value="#{registrationBean.maxRadius}">
+                                    <b:message for="rad"/>
+                                </b:inputText>
+                            </b:column>
+                        </b:row>
+                        
                     </h:panelGroup>
                 </h:panelGroup>
                 <!-- Email that has a validator to check if email format is correct-->

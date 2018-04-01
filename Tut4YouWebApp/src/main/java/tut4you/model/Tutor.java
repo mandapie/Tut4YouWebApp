@@ -45,15 +45,20 @@ import javax.persistence.TemporalType;
 @DiscriminatorValue(value="Tutor")
 @Entity
 @NamedQueries({
-    //@NamedQuery(name = Tutor.FIND_TUTORS_BY_COURSE_DAY_TIME, query = "SELECT t FROM Tutor t JOIN t.courses c JOIN t.availability a WHERE c.courseName = :coursename AND a.dayOfWeek = :dayofweek AND a.startTime <= :requestTime AND a.endTime >= :requestTime AND t.doNotDisturb = :doNotDisturb AND t.zipCode = :zipCode"),
-    @NamedQuery(name = Tutor.FIND_TUTORS_BY_COURSE_DAY_TIME, query = "SELECT t FROM Tutor t JOIN t.courses c JOIN t.availability a JOIN t.location l WHERE c.courseName = :coursename AND a.dayOfWeek = :dayofweek AND a.startTime <= :requestTime AND a.endTime >= :requestTime AND t.doNotDisturb = :doNotDisturb AND l.defaultZip = :zipCode"),
+    @NamedQuery(name = Tutor.FIND_TUTORS_BY_COURSE_DAY_TIME_DZIP, query = "SELECT t FROM Tutor t JOIN t.courses c JOIN t.availability a WHERE c.courseName = :coursename AND a.dayOfWeek = :dayofweek AND a.startTime <= :requestTime AND a.endTime >= :requestTime AND t.doNotDisturb = :doNotDisturb AND t.defaultZip = :zipCode"),
+    @NamedQuery(name = Tutor.FIND_TUTORS_BY_COURSE_DAY_TIME_CZIP, query = "SELECT t FROM Tutor t JOIN t.courses c JOIN t.availability a WHERE c.courseName = :coursename AND a.dayOfWeek = :dayofweek AND a.startTime <= :requestTime AND a.endTime >= :requestTime AND t.doNotDisturb = :doNotDisturb AND t.currentZip = :zipCode"),
+    //@NamedQuery(name = Tutor.FIND_TUTORS_BY_COURSE_DAY_TIME, query = "SELECT t FROM Tutor t JOIN t.courses c JOIN t.availability a JOIN t.location l WHERE c.courseName = :coursename AND a.dayOfWeek = :dayofweek AND a.startTime <= :requestTime AND a.endTime >= :requestTime AND t.doNotDisturb = :doNotDisturb AND l.defaultZip = :zipCode"),
     @NamedQuery(name = Tutor.FIND_TUTORS_BY_COURSE, query = "SELECT COUNT(t.email) FROM Tutor t JOIN t.courses c WHERE c.courseName = :coursename"),
 })
 public class Tutor extends User implements Serializable {     
     /**
-     * JPQL Query to obtain a list of tutors who taught a specific course and is available
+     * JPQL Query to obtain a list of tutors who taught a specific course and is available using default zip code
      */
-    public static final String FIND_TUTORS_BY_COURSE_DAY_TIME = "Tutor.findTutorsByCourseDayTime";
+    public static final String FIND_TUTORS_BY_COURSE_DAY_TIME_DZIP = "Tutor.findTutorsByCourseDayTimeDZip";
+    /**
+     * JPQL Query to obtain a list of tutors who taught a specific course and is available using current zip code
+     */
+    public static final String FIND_TUTORS_BY_COURSE_DAY_TIME_CZIP = "Tutor.findTutorsByCourseDayTimeCZip";
     /**
      * JPQL Query to obtain a list of tutors who taught a specific course
      */
@@ -64,7 +69,18 @@ public class Tutor extends User implements Serializable {
     private int numPeopleTutored;
     private double priceRate;
     private boolean doNotDisturb;
-    
+    /**
+     * Tutors default zip code location
+     */
+    private String defaultZip;
+    /**
+     * Tutors current zip code location
+     */
+    private String currentZip;
+    /**
+     * Tutors max radius
+     */
+    private int maxRadius;
     @ManyToOne
     //@JoinColumn(nullable=false)
     private Location location;
@@ -113,12 +129,18 @@ public class Tutor extends User implements Serializable {
      * @param numPeopleTutored
      * @param priceRate 
      * @param doNotDisturb 
+     * @param defaultZip 
+     * @param currentZip 
+     * @param maxRadius 
      */
-    public Tutor(Date dateJoined, int numPeopleTutored, double priceRate, boolean doNotDisturb) {
+    public Tutor(Date dateJoined, int numPeopleTutored, double priceRate, boolean doNotDisturb, String defaultZip, String currentZip, int maxRadius) {
         this.dateJoined = dateJoined;
         this.numPeopleTutored = numPeopleTutored;
         this.priceRate = priceRate;
         this.doNotDisturb = doNotDisturb;
+        this.defaultZip = defaultZip;
+        this.currentZip = currentZip;
+        this.maxRadius = maxRadius;
     }
         
     /**
@@ -135,13 +157,19 @@ public class Tutor extends User implements Serializable {
      * @param priceRate 
      * @param doNotDisturb 
      * * @param zipCode 
+     * @param defaultZip 
+     * @param currentZip 
+     * @param maxRadius 
      */
-    public Tutor(String email, String firstName, String lastName, String userName, String phoneNumber, String password, String university, Date dateJoined, int numPeopleTutored, double priceRate, boolean doNotDisturb) {
+    public Tutor(String email, String firstName, String lastName, String userName, String phoneNumber, String password, String university, Date dateJoined, int numPeopleTutored, double priceRate, boolean doNotDisturb, String defaultZip, String currentZip, int maxRadius) {
         super(email, firstName, lastName, userName, phoneNumber, password, university);
         this.dateJoined = dateJoined;
         this.numPeopleTutored = numPeopleTutored;
         this.priceRate = priceRate;
         this.doNotDisturb = doNotDisturb;
+        this.defaultZip = defaultZip;
+        this.currentZip = currentZip;
+        this.maxRadius = maxRadius;
     }
     
     /**
@@ -207,7 +235,7 @@ public class Tutor extends User implements Serializable {
      * Sets the date joined by a tutor
      * @param dateJoined 
      */
-    public void setTimeWorked(Date dateJoined) {
+    public void setDateJoined(Date dateJoined) {
         this.dateJoined = dateJoined;
     }
     
@@ -277,7 +305,48 @@ public class Tutor extends User implements Serializable {
             this.courses = new HashSet();
         this.courses.add(course);
     }
-    
+    /**
+     * get Default Zip
+     * @return default zip
+     */
+    public String getDefaultZip() {
+        return defaultZip;
+    }
+    /**
+     * set default zip
+     * @param defaultZip 
+     */
+    public void setDefaultZip(String defaultZip) {
+        this.defaultZip = defaultZip;
+    }
+    /**
+     * get current zip
+     * @return currentZip
+     */
+    public String getCurrentZip() {
+        return currentZip;
+    }
+    /**
+     * set current zip
+     * @param currentZip 
+     */
+    public void setCurrentZip(String currentZip) {
+        this.currentZip = currentZip;
+    }
+    /**
+     * get max radius
+     * @return maxRadius
+     */
+    public int getMaxRadius() {
+        return maxRadius;
+    }
+    /**
+     * set max radius
+     * @param maxRadius 
+     */
+    public void setMaxRadius(int maxRadius) {
+        this.maxRadius = maxRadius;
+    }
     /**
      * Adds a pending request to the list
      * @param pr 

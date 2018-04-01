@@ -32,7 +32,7 @@ public class Location implements Serializable {
     @Column(nullable = false, unique = true)
     private Long id;
     
-    @OneToMany(mappedBy="location", cascade=CascadeType.ALL)
+    @OneToMany(mappedBy="location", cascade=CascadeType.PERSIST)
     private Collection<Tutor> tutors;
 
     public Collection<Tutor> getTutors() {

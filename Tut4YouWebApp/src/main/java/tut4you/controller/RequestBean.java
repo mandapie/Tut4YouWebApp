@@ -326,7 +326,7 @@ public class RequestBean implements Serializable {
             for(int i = 0; i < zipCodesByRadius.size(); i++) {
                 temp = new ArrayList();
                 //System.out.print(zipCodesByRadius);
-                System.out.println("index " + i + ": "+ zipCodesByRadius.get(i));
+                System.out.println("index " + i + ":"+ zipCodesByRadius.get(i));
                 temp = (tut4youApp.getTutorsFromCourse(request.getCourse().getCourseName(), request.getDayOfWeek().toUpperCase(), request.getCurrentTime(), false, zipCodesByRadius.get(i)));
                 System.out.println("Temp: " + temp);
                 tutorList.addAll(temp);

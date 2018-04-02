@@ -70,7 +70,6 @@ public class UserBean implements Serializable {
         if(tutor.getCurrentZip() != null) {
             condition = false;
         }
-        System.out.print("Current Zip: " + currentZip);
     }
     
     public boolean isCondition() {
@@ -86,7 +85,6 @@ public class UserBean implements Serializable {
     @PostConstruct
     public void createUserBean() {
         user = null;
-        //currentZip = null;
         condition = true;
     }
     /** 

@@ -596,6 +596,11 @@ public class Tut4YouApp {
         }
         em.flush();
     }
+    /**
+     * update current zip code of tutor
+     * @param currentZip
+     * @return tutor
+     */
     public Tutor updateCurrentZip(String currentZip) {
         String userName = userBean.getUsernameFromSession();
         Tutor tutor = findTutorUserName(userName);
@@ -604,11 +609,11 @@ public class Tut4YouApp {
             em.merge(tutor);
             em.flush();
         }
-        System.out.println("ZIP: " + currentZip);
-        System.out.println("Tutor: " + tutor);
-        
         return tutor;
     }
+    /**
+     * reset current Zip to null when user logs out
+     */
     public void resetCurrentZip() {
         String userName = userBean.getUsernameFromSession();
         Tutor tutor = findTutorUserName(userName);

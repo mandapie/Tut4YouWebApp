@@ -107,9 +107,19 @@
                                 <h:outputLabel value="Max Radius"/>
                             </b:column>
                             <b:column medium-screen="4">
-                                <b:inputText id="rad" placeholder="Enter Max Radius You Are Willing to Tutor" required="true" requiredMessage="required" value="#{registrationBean.maxRadius}">
-                                    <b:message for="rad"/>
-                                </b:inputText>
+                                <b:selectOneMenu  class="form-control"
+                                             id="maxRadius"
+                                             value="#{registrationBean.maxRadius}"
+                                             required="true">
+                                    <f:selectItem itemLabel="Select max radius..." itemValue="" noSelectionOption="true"/>
+                                    <f:selectItem itemLabel="1 mile" itemValue="1" />
+                                    <f:selectItem itemLabel="3 miles" itemValue="3" /> 
+                                    <f:selectItem itemLabel="5 miles" itemValue="5" />
+                                    <f:selectItem itemLabel="10 miles" itemValue="10" /> 
+                                    <f:selectItem itemLabel="15 miles" itemValue="15" />
+                                    <f:selectItem itemLabel="30 miles" itemValue="30" /> 
+                                    <f:convertNumber type="number"/>
+                                </b:selectOneMenu>
                             </b:column>
                         </b:row>
                         

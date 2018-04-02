@@ -31,14 +31,14 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import tut4you.model.*;
-
+import javax.faces.view.ViewScoped;
 /**
  * UserBean checks if a user is authenticated.
  * @author Alvaro Monge <alvaro.monge@csulb.edu>
  * Modified by Amanda Pan <daikiraidemodaisuki@gmail.com>
  */
 @Named
-@SessionScoped
+@ViewScoped
 public class UserBean implements Serializable {
     private static final Logger LOGGER = Logger.getLogger("UserBean");
     
@@ -48,13 +48,46 @@ public class UserBean implements Serializable {
     private User user;
     boolean doNotDisturb;
     int tabIndex;
+    boolean condition;
+    private String currentZip;
+    /**
+     * get current zip
+     * @return currentZip
+     */
+    public String getCurrentZip() {
+        return currentZip;
+    }
+    /**
+     * set current zip
+     * @param currentZip 
+     */
+    public void setCurrentZip(String currentZip) {
+        this.currentZip = currentZip;
+    }
     
+    public void updateCurrentZip() {
+        Tutor tutor = tut4youapp.updateCurrentZip(currentZip);
+        if(tutor.getCurrentZip() != null) {
+            condition = false;
+        }
+        System.out.print("Current Zip: " + currentZip);
+    }
+    
+    public boolean isCondition() {
+        return condition;
+    }
+
+    public void setCondition(boolean condition) {
+        this.condition = condition;
+    }
     /**
      * Creates a new instance of UserIdentity
      */
     @PostConstruct
     public void createUserBean() {
         user = null;
+        //currentZip = null;
+        condition = true;
     }
     /** 
      * Destroys a new instance of UserIdentity
@@ -78,7 +111,9 @@ public class UserBean implements Serializable {
     public void setUser(User user) {
         this.user = user;
     }
-    
+    public void resetCurrentZip() {
+        tut4youapp.resetCurrentZip();
+    }
     /**
      * Gets the state of doNotDisturb is on or off
      * @return true/false
@@ -160,8 +195,10 @@ public class UserBean implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
         try {
+            resetCurrentZip();
             request.logout();
             user = null;
+            currentZip = null;
             result = "success";
         } catch (ServletException ex) {
             LOGGER.log(Level.SEVERE, null, ex);

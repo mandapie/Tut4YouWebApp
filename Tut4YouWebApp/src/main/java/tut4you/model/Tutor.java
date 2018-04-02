@@ -115,6 +115,7 @@ public class Tutor extends User implements Serializable {
     public Tutor() {
         priceRate = 0.00;
         doNotDisturb = false;
+        currentZip = null;
     }
     /**
      * Copy constructor

@@ -422,7 +422,7 @@ public class Tut4YouApp {
         return availability;
     }
     
-   
+  
 
         /**
      * Only a tutor can delete his/her availability times.
@@ -594,7 +594,25 @@ public class Tut4YouApp {
             newTutor.setDefaultZip(defaultZip);
             em.persist(newTutor);
         }
-        //em.flush();
+        em.flush();
+    }
+    public Tutor updateCurrentZip(String currentZip) {
+        String userName = userBean.getUsernameFromSession();
+        Tutor tutor = findTutorUserName(userName);
+        if(tutor.getCurrentZip() == null) {
+            tutor.setCurrentZip(currentZip);
+            em.merge(tutor);
+            em.flush();
+        }
+        System.out.println("ZIP: " + currentZip);
+        System.out.println("Tutor: " + tutor);
+        
+        return tutor;
+    }
+    public void resetCurrentZip() {
+        String userName = userBean.getUsernameFromSession();
+        Tutor tutor = findTutorUserName(userName);
+        tutor.setCurrentZip(null);
     }
     
 //    /**

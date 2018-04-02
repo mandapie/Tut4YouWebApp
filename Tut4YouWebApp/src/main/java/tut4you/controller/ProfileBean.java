@@ -62,7 +62,7 @@ public class ProfileBean implements Serializable {
             user = isSessionUser;
         }
         else {
-            System.out.println(user);
+            System.out.println("from showusername: " + user);
         }
         username = user.getUserName();
     }

@@ -52,20 +52,19 @@ public class User implements Serializable {
     private String phoneNumber;
     private String password;
     private String university;
-    
     /**
      * A user can submit multiple Requests
      */
     @OneToMany(mappedBy="student", cascade=CascadeType.ALL)
     private Collection<Request> requests;
-    
     /**
      * A user can be in multiple Groups and
      * A group can contain multiple users
      */
     @ManyToMany(mappedBy="students", cascade=CascadeType.ALL)
     private Collection<Group> groups;
-    
+    @OneToMany(mappedBy="user", cascade=CascadeType.ALL)
+    private Collection<Message> messages;
     /**
      * User constructor
      */
@@ -249,6 +248,14 @@ public class User implements Serializable {
      */
     public void setGroups(Collection<Group> groups) {
         this.groups = groups;
+    }
+    
+    public Collection<Message> getMessages() {
+        return messages;
+    }
+
+    public void setMessages(Collection<Message> messages) {
+        this.messages = messages;
     }
     
     /**

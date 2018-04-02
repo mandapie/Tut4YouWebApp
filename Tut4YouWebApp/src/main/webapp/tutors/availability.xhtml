@@ -11,9 +11,8 @@
         <h1>Add Availability</h1>
         <b:panel title="Enter Your Availability" collapsible="false" look="info">
             <b:form>
-                <b:container>
-                    <b:row>
-                        <b:column medium-screen="2">
+                    <b:column span="4">
+                        <b:row>
                             <!-- Drop-down menu display Monday-Sunday -->
                             <h:outputLabel value="Select a day:"/>
                             <b:selectOneMenu class="form-control"
@@ -95,9 +94,41 @@
                             </b:selectOneMenu>
                             <!-- Adds to availability in -->
                             <b:commandButton value="Add Availability" look="primary" style="width:100%" action="#{availabilityBean.addAvailability}"/>
-                        </b:column>
-                    </b:row>
-                </b:container>
+                        </b:row>
+                    </b:column>
+                    <b:column span="8">
+                        <b:dataTable value="#{availabilityBean.availabilityList}" var="avail">
+                            <b:dataTableColumn>
+                                <f:facet name="header">Day of Week</f:facet>
+                                <b:inputText value="#{avail.dayOfWeek}" rendered="#{availabilityBean.editable}" />
+                                <h:outputText value="#{avail.dayOfWeek}" rendered="#{not availabilityBean.editable}"/>
+                            </b:dataTableColumn>
+                            <b:dataTableColumn>
+                                <f:facet name="header">Start Time</f:facet>
+                                <b:inputText value="#{avail.startTime}" rendered="#{availabilityBean.editable}">
+                                    <f:convertDateTime pattern="hh:mm a"></f:convertDateTime>
+                                </b:inputText>
+                                <h:outputText value="#{avail.startTime}" rendered="#{not availabilityBean.editable}">                        
+                                    <f:convertDateTime pattern="hh:mm a"></f:convertDateTime>
+                                </h:outputText>
+                            </b:dataTableColumn>
+                            <b:dataTableColumn>
+                                <f:facet name="header">End Time</f:facet>
+                                <b:inputText value="#{avail.endTime}" rendered="#{availabilityBean.editable}">
+                                    <f:convertDateTime pattern="hh:mm a"></f:convertDateTime>
+                                </b:inputText>
+                                <h:outputText value="#{avail.endTime}" rendered="#{not availabilityBean.editable}">                        
+                                    <f:convertDateTime pattern="hh:mm a"></f:convertDateTime>
+                                </h:outputText>
+                            </b:dataTableColumn>
+                            <b:dataTableColumn>
+                                <f:facet name="header">Action</f:facet>
+                                <b:commandButton value="Edit" action="#{availabilityBean.changeEditable}" rendered="#{not availabilityBean.editable}"/>
+                                <span></span> <!-- somehow can't make spacing unless using empty span-->
+                                <b:commandButton value="Delete" look="danger" action="#{availabilityBean.deleteAvailability(avail)}" rendered="#{not availability.editable}"/>
+                            </b:dataTableColumn>
+                        </b:dataTable>
+                    </b:column>
             </b:form>
         </b:panel>
         <ui:debug hotkey='x'/>

@@ -21,7 +21,7 @@ import tut4you.model.*;
  */
 @Named
 @RequestScoped
-public class NotifyBean implements Serializable{
+public class NotifyBean implements Serializable {
     private static final Logger LOGGER = Logger.getLogger("NotifyBean");
 
     @EJB

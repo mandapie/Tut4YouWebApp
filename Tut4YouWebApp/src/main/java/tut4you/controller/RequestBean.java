@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import tut4you.model.*;
@@ -35,7 +36,7 @@ import tut4you.model.*;
  * @author Amanda Pan <daikiraidemodaisuki@gmail.com>
  */
 @Named
-@ViewScoped
+@SessionScoped
 public class RequestBean implements Serializable {
     private static final Logger LOGGER = Logger.getLogger("RequestBean");
 

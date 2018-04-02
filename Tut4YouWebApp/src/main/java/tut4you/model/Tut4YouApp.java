@@ -192,6 +192,17 @@ public class Tut4YouApp {
     }
     
     /**
+     * saves the message to the database
+     * @param message
+     */
+    @PermitAll
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void saveMessage(Message message) {
+        em.persist(message);
+        em.flush();
+    }
+    
+    /**
      * Sets a tutor to the request when a tutor accepts the request.
      * @param r 
      */

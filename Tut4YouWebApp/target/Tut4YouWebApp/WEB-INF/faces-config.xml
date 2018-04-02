@@ -68,6 +68,13 @@
         </navigation-case>
         
         
+            <navigation-case>
+            <from-outcome>editReview</from-outcome>
+            <to-view-id>/students/editReview.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        
+        
 
         <navigation-case>
             <from-outcome>failure</from-outcome>

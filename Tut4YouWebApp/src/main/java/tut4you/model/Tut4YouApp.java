@@ -16,6 +16,11 @@
  */
 package tut4you.model;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import javax.ejb.Stateless;
 import java.util.List;
@@ -32,6 +37,8 @@ import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
 import javax.servlet.http.HttpServletRequest;
 import tut4you.exception.*;
+import java.util.Arrays;
+import java.util.*;
 
 /**
  * This class is an EJB that handles all functionalities of the Web Application.
@@ -150,9 +157,9 @@ public class Tut4YouApp {
     @RolesAllowed("tut4youapp.student")
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public int getNumOfTutorsFromCourse(String course) {
-        TypedQuery<Tutor> courseTutorQuery = em.createNamedQuery(Tutor.FIND_TUTORS_BY_COURSE, Tutor.class);
+        TypedQuery<Integer> courseTutorQuery = em.createNamedQuery(Tutor.FIND_TUTORS_BY_COURSE, Integer.class);
         courseTutorQuery.setParameter("coursename", course);
-        return courseTutorQuery.getResultList().size();
+        return courseTutorQuery.getSingleResult();
     }
 
     /**
@@ -361,7 +368,7 @@ public class Tut4YouApp {
      */
     @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-    public List<Availability> getAvailabilityList() {
+    public List<Availability> getAvailability() {
         String userName = getUsernameFromSession();
         String email;
         if (userName == null) {
@@ -384,336 +391,443 @@ public class Tut4YouApp {
      */
     @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public Availability addAvailability(Availability availability) {
-        String userName = getUsernameFromSession();
-        if (userName == null) {
-            return null;
-        } else {
-            Tutor tutor = findTutorUserName(userName);
-            if (tutor != null) {
-                tutor.addAvailability(availability);
-                availability.setTutor(tutor);
-                em.persist(availability);
-                em.flush();
-            } else {
-                return null;
+    public Availability addAvailability(Availability availability, Date startTime) {
+        /*List<Availability> list = getAvailability();
+        for (Availability e : list) {
+            if (startTime.after(e.getStartTime()) && startTime.before(e.getEndTime())) {
+                System.out.println("Why are you between me?");
             }
+        }*/
+            String userName = getUsernameFromSession();
+            if (userName == null) {
+                return null;
+            } else {
+                Tutor tutor = findTutorUserName(userName);
+                if (tutor != null) {
+                    tutor.addAvailability(availability);
+                    availability.setTutor(tutor);
+                    em.persist(availability);
+                    em.flush();
+                } else {
+                    return null;
+                }
+            }
+            return availability;
         }
-        return availability;
-    }
 
-    /**
-     * Only a tutor can update his/her availability times.
-     *
-     * @param availability
-     * @author Andrew <ahkaichi@gmail.com>
-     * @param startTime
-     * @param endTime
-     */
-    @RolesAllowed("tut4youapp.tutor")
-    @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void updateAvailability(Availability availability, Date startTime, Date endTime) {
+        /**
+         * Only a tutor can update his/her availability times.
+         *
+         * @param availability
+         * @author Andrew <ahkaichi@gmail.com>
+         * @param startTime
+         * @param endTime
+         */
+        @RolesAllowed("tut4youapp.tutor")
+        @TransactionAttribute(TransactionAttributeType.REQUIRED)
+        public void updateAvailability
+        (Availability availability, Date startTime
+        , Date endTime
+        
+            ) {
         Availability updatedAvailability = em.find(Availability.class, availability.getId());
-        System.out.println("test from ejb");
-        if (updatedAvailability == null) {
-            updatedAvailability = availability;
+            System.out.println("test from ejb");
+            if (updatedAvailability == null) {
+                updatedAvailability = availability;
+            }
+            updatedAvailability.setStartTime(startTime);
+            updatedAvailability.setEndTime(endTime);
+            em.merge(updatedAvailability);
+            em.flush();
         }
-        updatedAvailability.setStartTime(startTime);
-        updatedAvailability.setEndTime(startTime);
-        em.merge(updatedAvailability);
-    }
 
-    /**
-     * Only a tutor can delete his/her availability times.
-     *
-     * @param availability
-     * @author Syed Haider <shayder426@gmail.com>
-     */
-    @RolesAllowed("tut4youapp.tutor")
-    @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void deleteAvailability(Availability availability) {
+        /**
+         * Only a tutor can delete his/her availability times.
+         *
+         * @param availability
+         * @author Syed Haider <shayder426@gmail.com>
+         */
+        @RolesAllowed("tut4youapp.tutor")
+        @TransactionAttribute(TransactionAttributeType.REQUIRED)
+        public void deleteAvailability
+        (Availability availability
+        
+            ) {
         System.out.println("Have I made it here yet?");
-        Availability toBeDeleted = em.find(Availability.class, availability.getId());
-        System.out.println(toBeDeleted);
-        if (toBeDeleted == null) {
-            toBeDeleted = availability;
-        }
-        System.out.println(toBeDeleted);
-        String userName = getUsernameFromSession();
-        Tutor tutor = findTutorUserName(userName);
+            Availability toBeDeleted = em.find(Availability.class, availability.getId());
+            System.out.println(toBeDeleted);
+            if (toBeDeleted == null) {
+                toBeDeleted = availability;
+            }
+            System.out.println(toBeDeleted);
+            String userName = getUsernameFromSession();
+            Tutor tutor = findTutorUserName(userName);
 //        tutor.removeAvailability(toBeDeleted);
 
-        em.merge(tutor);
-        em.remove(em.merge(availability));
-    }
-
-    /**
-     * A tutor can set their status to be available to receive notifications and
-     * set their status to be not available to not receive notifications.
-     *
-     * @param doNotDisturb
-     * @return
-     */
-    @RolesAllowed("tut4youapp.tutor")
-    @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public boolean updateDoNotDisturb(Boolean doNotDisturb
-    ) {
-        String userName = getUsernameFromSession();
-        Tutor tutor = findTutorUserName(userName);
-        doNotDisturb = tutor.isDoNotDisturb();
-        if (doNotDisturb == true) {
-            tutor.setDoNotDisturb(false);
             em.merge(tutor);
-            return doNotDisturb;
-        } else {
-            tutor.setDoNotDisturb(true);
-            em.merge(tutor);
-            return doNotDisturb;
+            em.remove(em.merge(availability));
         }
-    }
 
-    /**
-     * Gets a logged in username by getting the username from the session.
-     *
-     * @return username Source:
-     * https://dzone.com/articles/liferay-jsf-how-get-current-lo Had further
-     * help by Subject2Change group.
-     */
-    @PermitAll
-    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-    public String getUsernameFromSession() {
-        FacesContext context = FacesContext.getCurrentInstance();
-        HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-        String userName = request.getRemoteUser();
-        return userName;
-    }
-
-    /**
-     * Gets a student by finding the username student entity.
-     *
-     * @param username
-     * @return a student
-     */
-    @PermitAll
-    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-    public User find(String username
-    ) {
-        return em.find(User.class, username);
-    }
-
-    /**
-     * Gets a tutor by finding the username in the tutor entity.
-     *
-     * @param username
-     * @return tutor
-     * @Keith <keithtran25@gmail.com>
-     */
-    @PermitAll
-    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-    public Tutor findTutorUserName(String username
-    ) {
-        return em.find(Tutor.class, username);
-    }
-
-    /**
-     * Registers user as a student. The student will be added a student role.
-     *
-     * @param student
-     * @param groupName
-     * @throws StudentExistsException Referenced code from Alvaro Monge
-     * <alvaro.monge@csulb.edu>
-     */
-    @PermitAll
-    @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void registerStudent(User student, String groupName) throws StudentExistsException {
-        // 1: Use security EJB to add username/password to security
-        // 2: if successful, then add as a registered student
-        if (null == em.find(User.class, student.getEmail())) {
-            Group group = em.find(Group.class, groupName);
-            if (group == null) {
-                group = new Group(groupName);
-            }
-            student.addGroup(group);
-            group.addStudent(student);
-            em.persist(student);
-            em.flush();
-        } else {
-            throw new StudentExistsException();
-        }
-    }
-
-    /**
-     * Registers user as a tutor. The student will be added a student and tutor
-     * role.
-     *
-     * @param tutor
-     * @param groupName
-     * @param groupName2
-     * @throws StudentExistsException Referenced code from Alvaro Monge
-     * <alvaro.monge@csulb.edu>
-     */
-    @PermitAll
-    @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void registerTutor(Tutor tutor, String groupName,
-            String groupName2) throws StudentExistsException {
-        // 1: Use security EJB to add username/password to security
-        // 2: if successful, then add as a registered tutor
-        if (null == em.find(Tutor.class, tutor.getEmail())) {
-            Group group = em.find(Group.class, groupName);
-            Group group2 = em.find(Group.class, groupName2);
-            if (group == null) {
-                group = new Group(groupName);
-                group2 = new Group(groupName2);
-            }
-            tutor.addGroup(group);
-            tutor.addGroup(group2);
-            group.addTutor(tutor);
-            group2.addTutor(tutor);
-            em.persist(tutor);
-            em.flush();
-        } else {
-            throw new StudentExistsException();
-        }
-    }
-
-    /**
-     * Converts student to be a tutor. The student will be added a tutor role.
-     *
-     * @param user
-     * @param userType
-     * @throws tut4you.exception.StudentExistsException
-     */
-    @PermitAll
-    @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void registerUser(User user, String userType) throws StudentExistsException {
-        Group group = em.find(Group.class, "tut4youapp.student");
-        if (group == null) {
-            group = new Group("tut4youapp.student");
-        }
-        if (userType == "Student") {
-            user.addGroup(group);
-            group.addStudent(user);
-            em.persist(user);
-        } else {
-            Tutor newTutor = new Tutor(user);
-            newTutor.addGroup(group);
-            group.addTutor(newTutor);
-            group = em.find(Group.class, "tut4youapp.tutor");
-            newTutor.addGroup(group);
-            group.addTutor(newTutor);
-            em.persist(newTutor);
-        }
-        em.flush();
-    }
-
-    
-    
-    /**
-     * This method can only be called by a student. This methods gets the
-     * username of the current session and checks if the username is null, if so
-     * return null. Otherwise, find the user email to add the request to be
-     * submitted.
-     *
-     * @param rating
-     * @param request to be submitted
-     * @return request if successful
-     */
-    @RolesAllowed("tut4youapp.student")
-    @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public Rating newRating(Rating rating, Tutor tutor) {
+        /**
+         * A tutor can set their status to be available to receive notifications
+         * and set their status to be not available to not receive
+         * notifications.
+         *
+         * @param doNotDisturb
+         * @return
+         */
+        @RolesAllowed("tut4youapp.tutor")
+        @TransactionAttribute(TransactionAttributeType.REQUIRED)
+        public boolean updateDoNotDisturb
+        (Boolean doNotDisturb
+        
+            ) {
         String userName = getUsernameFromSession();
-        if (userName == null) {
-            return null;
-        } else {
-            User student = find(userName);
-            if (student != null) {
-                student.addRating(rating);
-                rating.setStudent(student);
-                tutor.addPendingRating(rating);
-                rating.setTutor(tutor);
-            } else {
-                return null;
-            }
-        }
-        em.persist(rating);
-        em.merge(tutor);
-        em.flush();
-        return rating;
-    }
-
-    /**
-     * Get a list of ratings of a tutor.
-     *
-     * @return the list of courses to the bean
-     * @author: Syed Haider <shayder426@gmail.com>
-     */
-    @RolesAllowed("tut4youapp.tutor")
-    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-    public List<Rating> getRatingList() {
-        String userName = getUsernameFromSession();
-        String email;
-        if (userName == null) {
-            return null;
-        } else {
             Tutor tutor = findTutorUserName(userName);
-            email = tutor.getEmail();
-            TypedQuery<Rating> ratingQuery = em.createNamedQuery(Rating.FIND_RATING_BY_TUTOR, Rating.class);
-            ratingQuery.setParameter("email", email);
-            return ratingQuery.getResultList();
+            doNotDisturb = tutor.isDoNotDisturb();
+            if (doNotDisturb == true) {
+                tutor.setDoNotDisturb(false);
+                em.merge(tutor);
+                return doNotDisturb;
+            } else {
+                tutor.setDoNotDisturb(true);
+                em.merge(tutor);
+                return doNotDisturb;
+            }
         }
-    }
 
-    /**
-     *
-     * @return a list of requests from a user
-     */
-    @RolesAllowed("tut4youapp.student")
-    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-    public List<Request> getCompletedRequests() {
+        /**
+         * Gets a logged in username by getting the username from the session.
+         *
+         * @return username Source:
+         * https://dzone.com/articles/liferay-jsf-how-get-current-lo Had further
+         * help by Subject2Change group.
+         */
+        @PermitAll
+        @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+        public String getUsernameFromSession
+        
+            () {
+        FacesContext context = FacesContext.getCurrentInstance();
+            HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+            String userName = request.getRemoteUser();
+            return userName;
+        }
+
+        /**
+         * Gets a student by finding the username student entity.
+         *
+         * @param username
+         * @return a student
+         */
+        @PermitAll
+        @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+        public User find
+        (String username
+        
+            ) {
+        return em.find(User.class, username);
+        }
+
+        /**
+         * Gets a tutor by finding the username in the tutor entity.
+         *
+         * @param username
+         * @return tutor
+         * @Keith <keithtran25@gmail.com>
+         */
+        @PermitAll
+        @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+        public Tutor findTutorUserName
+        (String username
+        
+            ) {
+        return em.find(Tutor.class, username);
+        }
+
+        /**
+         * Registers user as a student. The student will be added a student
+         * role.
+         *
+         * @param student
+         * @param groupName
+         * @throws StudentExistsException Referenced code from Alvaro Monge
+         * <alvaro.monge@csulb.edu>
+         */
+        @PermitAll
+        @TransactionAttribute(TransactionAttributeType.REQUIRED)
+        public void registerStudent
+        (User student, String groupName) throws StudentExistsException {
+            // 1: Use security EJB to add username/password to security
+            // 2: if successful, then add as a registered student
+            if (null == em.find(User.class, student.getEmail())) {
+                Group group = em.find(Group.class, groupName);
+                if (group == null) {
+                    group = new Group(groupName);
+                }
+                student.addGroup(group);
+                group.addStudent(student);
+                em.persist(student);
+                em.flush();
+            } else {
+                throw new StudentExistsException();
+            }
+        }
+
+        /**
+         * Registers user as a tutor. The student will be added a student and
+         * tutor role.
+         *
+         * @param tutor
+         * @param groupName
+         * @param groupName2
+         * @throws StudentExistsException Referenced code from Alvaro Monge
+         * <alvaro.monge@csulb.edu>
+         */
+        @PermitAll
+        @TransactionAttribute(TransactionAttributeType.REQUIRED)
+        public void registerTutor
+        (Tutor tutor, String groupName
+        ,
+            String groupName2) throws StudentExistsException {
+            // 1: Use security EJB to add username/password to security
+            // 2: if successful, then add as a registered tutor
+            if (null == em.find(Tutor.class, tutor.getEmail())) {
+                Group group = em.find(Group.class, groupName);
+                Group group2 = em.find(Group.class, groupName2);
+                if (group == null) {
+                    group = new Group(groupName);
+                    group2 = new Group(groupName2);
+                }
+                tutor.addGroup(group);
+                tutor.addGroup(group2);
+                group.addTutor(tutor);
+                group2.addTutor(tutor);
+                em.persist(tutor);
+                em.flush();
+            } else {
+                throw new StudentExistsException();
+            }
+        }
+
+        /**
+         * Converts student to be a tutor. The student will be added a tutor
+         * role.
+         *
+         * @param user
+         * @param userType
+         * @throws tut4you.exception.StudentExistsException
+         */
+        @PermitAll
+        @TransactionAttribute(TransactionAttributeType.REQUIRED)
+        public void registerUser
+        (User user, String userType) throws StudentExistsException {
+            Group group = em.find(Group.class, "tut4youapp.student");
+            if (group == null) {
+                group = new Group("tut4youapp.student");
+            }
+            if (userType == "Student") {
+                user.addGroup(group);
+                group.addStudent(user);
+                em.persist(user);
+            } else {
+                Tutor newTutor = new Tutor(user);
+                newTutor.addGroup(group);
+                group.addTutor(newTutor);
+                group = em.find(Group.class, "tut4youapp.tutor");
+                newTutor.addGroup(group);
+                group.addTutor(newTutor);
+                em.persist(newTutor);
+            }
+            em.flush();
+        }
+
+        /**
+         * This method can only be called by a student. This methods gets the
+         * username of the current session and checks if the username is null,
+         * if so return null. Otherwise, find the user email to add the request
+         * to be submitted.
+         *
+         * @param rating
+         * @param request to be submitted
+         * @return request if successful
+         */
+        @RolesAllowed("tut4youapp.student")
+        @TransactionAttribute(TransactionAttributeType.REQUIRED)
+        public Rating newRating
+        (Rating rating, Tutor tutor
+        
+            ) {
         String userName = getUsernameFromSession();
-        String email;
-        if (userName == null) {
-            return null;
-        } else {
-            User user = find(userName);
-            email = user.getEmail();
-            TypedQuery<Request> requestQuery = em.createNamedQuery(Request.FIND_REQUEST_BY_EMAIL, Request.class);
-            requestQuery.setParameter("student_email", email);
-            requestQuery.setParameter("status", Request.Status.COMPLETED);
-            return requestQuery.getResultList();
+            if (userName == null) {
+                return null;
+            } else {
+                User student = find(userName);
+                if (student != null) {
+                    student.addRating(rating);
+                    rating.setStudent(student);
+                    tutor.addPendingRating(rating);
+                    rating.setTutor(tutor);
+                } else {
+                    return null;
+                }
+            }
+            em.persist(rating);
+            em.merge(tutor);
+            em.flush();
+            return rating;
         }
-    }
 
-    /**
-     * Sets a tutor to the request when a tutor completes the request.
-     *
-     * @param r
-     */
-    @RolesAllowed("tut4youapp.tutor")
-    @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void setRequestToComplete(Request r) {
+        /**
+         * This method can only be called by a student. This methods gets the
+         * username of the current session and checks if the username is null,
+         * if so return null. Otherwise, find the user email to add the request
+         * to be submitted.
+         *
+         * @param rating
+         * @param description
+         * @param ratingValue
+         * @param request to be submitted
+         * @return request if successful
+         */
+        @RolesAllowed("tut4youapp.student")
+        @TransactionAttribute(TransactionAttributeType.REQUIRED)
+        public void updateRating
+        (Rating rating, String description
+        , Integer ratingValue
+        
+            ) {
+        Rating updatedRating = em.find(Rating.class, rating.getId());
+            System.out.println("test from ejb");
+            if (updatedRating == null) {
+                updatedRating = rating;
+            }
+            updatedRating.setDescription(description);
+            updatedRating.setRatingValue(ratingValue);
+            em.merge(updatedRating);
+            em.flush();
+        }
+
+        /**
+         * Get a list of ratings of a tutor.
+         *
+         * @return the list of courses to the bean
+         * @author: Syed Haider <shayder426@gmail.com>
+         */
+        @RolesAllowed("tut4youapp.tutor")
+        @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+        public List<Rating> getRatingList
+        
+            () {
+        String userName = getUsernameFromSession();
+            String email;
+            if (userName == null) {
+                return null;
+            } else {
+                Tutor tutor = findTutorUserName(userName);
+                email = tutor.getEmail();
+                TypedQuery<Rating> ratingQuery = em.createNamedQuery(Rating.FIND_RATING_BY_TUTOR, Rating.class);
+                ratingQuery.setParameter("email", email);
+                return ratingQuery.getResultList();
+            }
+        }
+
+        /**
+         *
+         * @return a list of requests from a user
+         */
+        @RolesAllowed("tut4youapp.student")
+        @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+        public List<Request> getCompletedRequests
+        
+            () {
+        String userName = getUsernameFromSession();
+            String email;
+            if (userName == null) {
+                return null;
+            } else {
+                User user = find(userName);
+                email = user.getEmail();
+                TypedQuery<Request> requestQuery = em.createNamedQuery(Request.FIND_REQUEST_BY_EMAIL, Request.class);
+                requestQuery.setParameter("student_email", email);
+                requestQuery.setParameter("status", Request.Status.COMPLETED);
+                return requestQuery.getResultList();
+            }
+        }
+
+        /**
+         * Sets a tutor to the request when a tutor completes the request.
+         *
+         * @param r
+         */
+        @RolesAllowed("tut4youapp.tutor")
+        @TransactionAttribute(TransactionAttributeType.REQUIRED)
+        public void setRequestToComplete
+        (Request r
+        
+            ) {
         //String userName = getUsernameFromSession();
         //Tutor tutor = findTutorUserName(userName);
         r.setStatus(Request.Status.COMPLETED);
-        //r.setTutor(tutor);
-        em.merge(r);
-        em.flush();
-    }
+            //r.setTutor(tutor);
+            em.merge(r);
+            em.flush();
+        }
 
-    /**
-     * Only students can see the number of tutors that tutors the requested
-     * course. Finds all tutors that teaches the course.
-     *
-     * @param course selected course to be tutored
-     * @return the number of tutors that tutors the course
-     * @author Andrew Kaichi <ahkaichi@gmail.com>
-     */
-    @PermitAll
-    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-    public double getAverageRating() {
+        /**
+         * Only students can see the number of tutors that tutors the requested
+         * course. Finds all tutors that teaches the course.
+         *
+         * @param course selected course to be tutored
+         * @return the number of tutors that tutors the course
+         * @author Andrew Kaichi <ahkaichi@gmail.com>
+         */
+        @PermitAll
+        @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+        public double getAverageRating
+        
+            () {
         TypedQuery<Double> averageRatingQuery = em.createNamedQuery(Rating.FIND_AVG_RATING_BY_TUTOR, Double.class);
-        return averageRatingQuery.getSingleResult();
+            return averageRatingQuery.getSingleResult();
+        }
+
+        @PermitAll
+        @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+        public int sortByDayOfWeek
+        (Object o1, Object o2
+        
+            ) {
+        List<String> dates = Arrays.asList(new String[]{
+                "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
+            });
+            int value;
+            Comparator<String> dateComparator = new Comparator<String>() {
+                @Override
+                public int compare(String s1, String s2) {
+                    int value;
+                    try {
+                        SimpleDateFormat format = new SimpleDateFormat("EEE");
+                        Date d1 = format.parse(s1);
+                        Date d2 = format.parse(s2);
+                        if (d1.equals(d2)) {
+                            value = s1.substring(s1.indexOf(" ") + 1).compareTo(s2.substring(s2.indexOf(" ") + 1));
+                        } else {
+                            Calendar cal1 = Calendar.getInstance();
+                            Calendar cal2 = Calendar.getInstance();
+                            cal1.setTime(d1);
+                            cal2.setTime(d2);
+                            value = cal1.get(Calendar.DAY_OF_WEEK) - cal2.get(Calendar.DAY_OF_WEEK);
+                        }
+                        return value;
+                    } catch (ParseException pe) {
+                        throw new RuntimeException(pe);
+                    }
+                }
+            };
+            Collections.sort(dates, dateComparator);
+            System.out.println(dates);
+            //System.out.println(dates);
+            return 0;
+        }
+
     }
-
-
-}

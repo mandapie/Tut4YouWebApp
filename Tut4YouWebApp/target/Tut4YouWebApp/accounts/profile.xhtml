@@ -59,12 +59,22 @@
                     <c:if test="#{userBean.tutor}">
                         <b:row>
                             <b:column span="5">
-                                <h:outputLabel value="Price Rate:"/>
+                                <h:outputLabel value="Hourly Rate:"/>
                             </b:column>
                             <b:column span="7">
                                 <h:outputLabel value="#{userBean.student.priceRate}">
                                     <f:convertNumber type="currency" currencySymbol="$" locale="en_US" />
                                 </h:outputLabel>
+                            </b:column>
+                        </b:row>
+                    </c:if>
+                    <c:if test="#{userBean.tutor}">
+                        <b:row>
+                            <b:column span="5">
+                                <h:outputLabel value="Avg Rating:"/>
+                            </b:column>
+                            <b:column span="7">
+                                <p:rating value="#{ratingBean.getAvgRating()}" readonly="true" />
                             </b:column>
                         </b:row>
                     </c:if>
@@ -142,32 +152,26 @@
                                 <b:dataTable value="#{availabilityBean.availabilityList}" var="avail" id="availabilityTable">
                                     <b:dataTableColumn>
                                         <f:facet name="header">Day of Week</f:facet>
-                                        <b:inputText value="#{avail.dayOfWeek}" rendered="#{availabilityBean.editable}" />
-                                        <h:outputText value="#{avail.dayOfWeek}" rendered="#{not availabilityBean.editable}"/>
+                                        <h:outputText value="#{avail.dayOfWeek}"/>
                                     </b:dataTableColumn>
                                     <b:dataTableColumn>
                                         <f:facet name="header">Start Time</f:facet>
-                                        <b:inputText value="#{avail.startTime}" rendered="#{availabilityBean.editable}">
-                                            <f:convertDateTime pattern="hh:mm a"></f:convertDateTime>
-                                        </b:inputText>
-                                        <h:outputText value="#{avail.startTime}" rendered="#{not availabilityBean.editable}">                        
+                                        <h:outputText value="#{avail.startTime}">                        
                                             <f:convertDateTime pattern="hh:mm a"></f:convertDateTime>
                                         </h:outputText>
                                     </b:dataTableColumn>
                                     <b:dataTableColumn>
                                         <f:facet name="header">End Time</f:facet>
-                                        <b:inputText value="#{avail.endTime}" rendered="#{availabilityBean.editable}">
-                                            <f:convertDateTime pattern="hh:mm a"></f:convertDateTime>
-                                        </b:inputText>
-                                        <h:outputText value="#{avail.endTime}" rendered="#{not availabilityBean.editable}">                        
+                                        <h:outputText value="#{avail.endTime}">                        
                                             <f:convertDateTime pattern="hh:mm a"></f:convertDateTime>
                                         </h:outputText>
                                     </b:dataTableColumn>
                                     <b:dataTableColumn>
                                         <f:facet name="header">Action</f:facet>
-                                     
+                                        <b:commandButton value="Edit" action="#{availabilityBean.goToEditAvailabilityPage(avail)}">
+                                        </b:commandButton>
                                         <span></span> <!-- somehow can't make spacing unless using empty span-->
-                                        <b:commandButton value="Delete" look="danger" action="#{availabilityBean.deleteAvailability(avail)}" rendered="#{not availability.editable}">
+                                        <b:commandButton value="Delete" look="danger" action="#{availabilityBean.deleteAvailability(avail)}">
                                         </b:commandButton>
                                     </b:dataTableColumn>
                                 </b:dataTable>  

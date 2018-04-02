@@ -16,12 +16,12 @@
                 <p:rating id="rating" value="#{ratingBean.rating.ratingValue}" required="true" requiredMessage="A rating must be input."/>
                 <br></br>
                 <b:inputTextarea id="description" label="Description/Topic:" placeholder="Enter a short description..." required="true" value="#{ratingBean.rating.description}" requiredMessage="A description must be inputted."/>
-
                 <!-- length of session -->
                 <!-- radio button to select for now or later -->
                 <b:row>
                     <b:commandButton span="2" value="Submit" look="primary" action="#{ratingBean.createNewRating(ratingBean.tutor)}" />
                 </b:row>
+                
             </b:form>
         </b:panel>
 

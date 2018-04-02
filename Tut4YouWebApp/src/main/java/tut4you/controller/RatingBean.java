@@ -39,7 +39,7 @@ import tut4you.model.*;
  * @author Amanda Pan <daikiraidemodaisuki@gmail.com>
  */
 @Named
-@SessionScoped
+@RequestScoped
 public class RatingBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -131,6 +131,13 @@ public class RatingBean implements Serializable {
         return result;
     }
 
+    public String editReviewPage(Rating r) throws ParseException {
+        String result;
+        this.rating = r;
+        result = "editReview";
+        return result;
+    }
+
     /**
      * Convert string to Time
      *
@@ -160,6 +167,19 @@ public class RatingBean implements Serializable {
         System.out.println("Tutor t: " + t.toString());
         rating.setCurrentTime(StringToTime(getCurrentTime()));
         rating = tut4youApp.newRating(rating, t);
+        return result;
+    }
+
+    public String updateRating(Rating r, String description, int ratingValue) throws ParseException {
+        String result = "success";
+        rating.setCurrentTime(StringToTime(getCurrentTime()));
+        rating.setDescription(r.getDescription());
+        rating.setRatingValue(r.getRatingValue());
+        tut4youApp.updateRating(rating,r.getDescription(),r.getRatingValue());
+        if (rating != null) {
+            result = "success";
+            LOGGER.severe("Availability added");
+        }
         return result;
     }
 

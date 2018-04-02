@@ -13,13 +13,13 @@
         <h3>Average Rating</h3>
         <p:rating value="#{ratingBean.getAvgRating()}" readonly="true" />
         <h:form>
-           
+
             <p:dataScroller value="#{ratingBean.ratingList}" var="rating" chunkSize="10">
                 <h:panelGrid columns="2" style="width:100%">
                     <p:outputPanel>
                         <h:panelGrid columns="2" cellpadding="5">
                             <h:outputText value="Student:" style="font-weight: bold" />
-                            
+
                             <f:facet name="header">Past Ratings </f:facet>
                                 #{rating.student.firstName}
                                 #{rating.student.lastName}
@@ -29,7 +29,6 @@
 
                             <h:outputText value="Review" style="font-weight: bold" />
                             <h:outputText value="#{rating.description}" />
-
                         </h:panelGrid>
                     </p:outputPanel>
                 </h:panelGrid>

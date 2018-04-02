@@ -23,7 +23,7 @@
             <c:if test="#{userBean.studentAuthenticated}">
                 <b:form styleClass="navbar-form navbar-right">
                     <h:outputLabel value="Welcome back, #{userBean.student.firstName}!"/><span> </span>
-                    <b:commandButton action="#{userBean.logout}" value="Sign Out" look="success" iconAlign="right"/>
+                    <b:commandButton action="#{userBean.logout}" value="Sign Out" look="success" iconAlign="right" onclick="this.disabled=true" oncomplete="this.disabled=false"/>
                 </b:form>
             </c:if>
         </b:navBar>

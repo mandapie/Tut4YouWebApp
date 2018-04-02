@@ -8,7 +8,7 @@
          @author Andrew Kaichi <ahkaichi@gmail.com> -->
     <ui:define name="title">Availability</ui:define>
     <ui:define name="content">
-        <h1>Edit Availability</h1>
+        <h1>Add Availability</h1>
         <b:panel title="Enter Your Availability" collapsible="false" look="info">
             <b:form>
                 <b:container>
@@ -16,11 +16,11 @@
                         <b:column medium-screen="2">
                             <!-- Drop-down menu display Monday-Sunday -->
                             <h:outputLabel value="Select a day:"/>
-                            <b:selectOneMenu class="form-control"
+                            <b:selectOneMenu                           
                                              id="dayOfWeek"
                                              value="#{availabilityBean.availability.dayOfWeek}"
                                              required="true">
-                                <f:selectItem itemValue="#Select one..."/>
+                                <f:selectItem itemValue="Select One..."/>
                                 <f:selectItem itemValue="MONDAY" />
                                 <f:selectItem itemValue="TUESDAY" />
                                 <f:selectItem itemValue="WEDNESDAY" />
@@ -29,53 +29,30 @@
                                 <f:selectItem itemValue="SATURDAY" />
                                 <f:selectItem itemValue="SUNDAY" />
                             </b:selectOneMenu>
-
-
-
-                            <!-- Start Hour -->
+                            
+                            <!-- Start Time -->
                             <h:outputLabel value="Start Time:"/>
-                            <b:inputText id="startHourM" placeholder="Enter Start Hour" required="true" requiredMessage="required" value="#{availabilityBean.startHour}">
-                                <b:message for="startHourM"/>
-
-                                <!-- Start Minute -->
-                            </b:inputText>                                
-                            <b:inputText id="startMinuteM" placeholder="Enter Start Minute" required="true" requiredMessage="required" value="#{availabilityBean.startMinute}">
-                                <b:message for="startMinuteM"/>
-                            </b:inputText>
-
-                            <!-- Choose AM or PM -->
-                            <b:selectOneMenu class="form-control"
-                                             id="startPeriod"
-                                             value="#{availabilityBean.startPeriod}"
+                            <b:inputText type="time" id="startTime"
+                                         value="#{availabilityBean.availability.startTime}"
+                                             binding="#{passwordComponent}"
                                              required="true">
-                                <f:selectItem itemValue="Select One..."/>
-                                <f:selectItem itemValue="AM" />
-                                <f:selectItem itemValue="PM" />
-                            </b:selectOneMenu>
-
-                            <!-- End Hour -->
-                            <h:outputLabel value="End Time:"/>
-                            <b:inputText id="endHourM" placeholder="Enter End Hour" required="true" requiredMessage="required" value="#{availabilityBean.endHour}">
-                                <b:message for="endHourM"/>
+                                <f:convertDateTime type="time" pattern="HH:mm" dateStyle="full"/>
                             </b:inputText>
+                            
 
-                            <!-- End Minute -->
-                            <b:inputText id="endMinuteM" placeholder="Enter End Minute" required="true" requiredMessage="required" value="#{availabilityBean.endMinute}">
-                                <b:message for="endMinuteM"/>
+                            <!-- End Time -->
+                            <h:outputLabel value="End Time:" />
+                            <b:inputText type="time" id="endTime"
+                                             value="#{availabilityBean.availability.endTime}"
+                                             required="true" >
+                                <f:convertDateTime type="time" pattern="HH:mm" dateStyle="full"/>
+                                <b:message for="endTime"/>
+                                <f:validator validatorId="timeValidator" />
+                                <f:attribute name="otherValue" value="#{passwordComponent.value}" />
                             </b:inputText>
-
-                            <!-- Choose AM or PM -->
-                            <b:selectOneMenu class="form-control"
-                                             id="endPeriod"
-                                             value="#{availabilityBean.endPeriod}"
-                                             required="true">
-                                <f:selectItem itemValue="Select One..."/>
-                                <f:selectItem itemValue="AM" />
-                                <f:selectItem itemValue="PM" />
-                            </b:selectOneMenu>
+                            
                             <!-- Adds to availability in -->
-
-                            <b:commandButton value="Update Availability" look="primary" style="width:100%" action="#{availabilityBean.updateAvailability}"/>
+                            <b:commandButton value="Add Availability" look="primary" style="width:100%" action="#{availabilityBean.updateAvailability(availabilityBean.availability)}"/>
                         </b:column>
                     </b:row>
                 </b:container>

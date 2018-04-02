@@ -4,6 +4,8 @@ tut4you\validations\PriceValidator.class
 tut4you\validations\TutorConverter.class
 tut4you\controller\RegistrationBean.class
 tut4you\model\Rating.class
+tut4you\validations\AvailabilityOverlappingValidator.class
+tut4you\validations\TimeValidator.class
 tut4you\controller\RequestBean.class
 tut4you\controller\UserBean.class
 tut4you\model\Tut4YouApp.class
@@ -18,8 +20,10 @@ tut4you\controller\AddNewCourseBean.class
 tut4you\model\Subject.class
 tut4you\model\Group.class
 tut4you\controller\AvailabilityBean.class
+tut4you\model\Tut4YouApp$1.class
 tut4you\controller\AddCourseBean.class
 tut4you\model\Course.class
 tut4you\controller\HashPassword.class
 tut4you\model\Availability.class
 tut4you\validations\BasicValidator.class
+tut4you\model\Availability$1.class

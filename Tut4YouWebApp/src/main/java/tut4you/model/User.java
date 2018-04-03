@@ -74,6 +74,20 @@ public class User implements Serializable {
     }
     
     /**
+     * Copy constructor
+     * @param user 
+     */
+    public User(User user) {
+        this.email = user.email;
+        this.firstName = user.firstName;
+        this.lastName = user.lastName;
+        this.userName = user.userName;
+        this.phoneNumber = user.phoneNumber;
+        this.password = user.password;
+        this.university = user.university;
+    }
+    
+    /**
      * User overloaded constructor
      * @param email
      * @param firstName

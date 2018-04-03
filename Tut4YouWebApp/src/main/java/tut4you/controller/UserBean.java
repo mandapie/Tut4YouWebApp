@@ -20,6 +20,8 @@ import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
@@ -44,11 +46,18 @@ public class UserBean implements Serializable {
     private User student;
     private Tutor userTutor;
     boolean doNotDisturb;
+    int tabIndex;
     
     /**
      * Creates a new instance of UserIdentity
+     * 
+     * FIXME: Avoid using constructors... instead, @PostConstruct annotated method
      */
     public UserBean() {
+        /* FIXME: THese instructions have NO effect for two reasons: 
+           (1) they're like saying: a = b followed by b = a
+           (2) all fields are null as this is done in a constructor
+        */
         student = userTutor;
         userTutor = (Tutor)student;
     }
@@ -84,7 +93,7 @@ public class UserBean implements Serializable {
     public void setStudent(User student) {
         this.student = student;
     }
-    
+
     /**
      * Gets the state of doNotDisturb is on or off
      * @return true/false
@@ -99,6 +108,22 @@ public class UserBean implements Serializable {
      */
     public void setDoNotDisturb(boolean doNotDisturb) {
         this.doNotDisturb = doNotDisturb;
+    }
+    
+    /**
+     * Gets the index of the tab
+     * @return tabIndex
+     */
+    public int getTabIndex() {
+        return tabIndex;
+    }
+    
+    /**
+     * Sets the index of the tab
+     * @param tabIndex
+     */
+    public void setTabIndex(int tabIndex) {
+        this.tabIndex = tabIndex;
     }
     
     /**
@@ -165,5 +190,18 @@ public class UserBean implements Serializable {
             }
         }
         return result;
+    }
+    /**
+     * Gets a logged in username by getting the username from the session.
+     * @return username
+     * Source: https://dzone.com/articles/liferay-jsf-how-get-current-lo
+     * Had further help by Subject2Change group.
+     */
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public String getUsernameFromSession() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+        String userName = request.getRemoteUser();
+        return userName;
     }
 }

@@ -16,6 +16,7 @@
  */
 package tut4you.model;
 
+import java.util.Date;
 import javax.ejb.Stateless;
 import java.util.List;
 import java.util.logging.Level;
@@ -30,6 +31,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
 import javax.servlet.http.HttpServletRequest;
+import tut4you.controller.UserBean;
 import tut4you.exception.*;
 
 /**
@@ -45,6 +47,7 @@ public class Tut4YouApp {
     @PersistenceContext(unitName = "tut4youWebAppPU")
     private EntityManager em;
     private static final Logger LOGGER = Logger.getLogger("Tut4YouApp");
+    UserBean userBean = new UserBean();
     
     /**
      * Query all subjects from the database
@@ -126,12 +129,28 @@ public class Tut4YouApp {
      * A student can cancel pending requests
      * @param r 
      */
-    @RolesAllowed("tut4youapp.student")
+//    @RolesAllowed("tut4youapp.student")
+    @PermitAll
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void cancelRequest(Request r) {
+        Request pendingRequest = em.find(Request.class, r.getId());
         r.setStatus(Request.Status.CANCELED);
-        removeRequestFromNotification(r);
-        em.merge(r);
+        if (r.getTutor() == null){
+           r = em.merge(r);
+           em.remove(r); 
+        }
+        else if (r.getTutor() != null){
+            Tutor tutor = r.getTutor();
+            tutor.removePendingRequest(pendingRequest);
+            pendingRequest.removeAvailableTutor(tutor);
+            r = em.merge(r);
+            em.remove(r); 
+            em.merge(tutor);
+            em.flush();
+        }
+        
+        
+        
     }
         
     /**
@@ -207,10 +226,11 @@ public class Tut4YouApp {
     }
     
     /**
-     * Pending request wil be removed from te notification list when a tutor declines it.
+     * Pending request will be removed from the notification list when a tutor declines it.
      * @param r 
      */
-    @RolesAllowed("tut4youapp.tutor")
+    //@RolesAllowed("tut4youapp.tutor")
+    @PermitAll
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void removeRequestFromNotification(Request r) {
         Request pendingRequest = em.find(Request.class, r.getId());
@@ -301,7 +321,7 @@ public class Tut4YouApp {
             if (tutor != null) {
                 tutor.addCourse(course);
                 course.addTutor(tutor);
-                //em.merge(tutor);
+                em.merge(tutor);
                 em.persist(course);
             }
             else {
@@ -330,20 +350,6 @@ public class Tut4YouApp {
             courseQuery.setParameter("email", email);
             return courseQuery.getResultList();
         }
-    }
-    
-    /**
-     * Gets the availability. Only a tutor can access this method.
-     * @param id
-     * @return the availability
-     * @author Andrew <ahkaichi@gmail.com>
-     */
-    @RolesAllowed("tut4youapp.tutor")
-    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-    public Availability getAvailability(Long id){
-        //TypedQuery<Availability> availabilityQuery = em.createNamedQuery(Availability.FIND_AVAILABILITY_BY_TUTOR, Availability.class);
-        return em.find(Availability.class, id);
-        //return availabilityQuery.getResultList();       
     }
     
     /**
@@ -392,36 +398,43 @@ public class Tut4YouApp {
                 return null;
             }
         }
-
         return availability;
     }
     
     /**
      * Only a tutor can update his/her availability times.
      * @param availability
-     * @return the availability
      * @author Andrew <ahkaichi@gmail.com>
      */
     @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public Availability updateAvailability(Availability availability){
-        em.merge(availability);
-        return availability;
+    public void updateAvailability(Availability availability, Date startTime, Date endTime){
+        Availability updatedAvailability = em.find(Availability.class, availability.getId());
+        System.out.println("test from ejb");
+        if (updatedAvailability == null) {
+            updatedAvailability = availability;
+        }
+        updatedAvailability.setStartTime(startTime);
+        updatedAvailability.setEndTime(startTime);
+        em.merge(updatedAvailability);
     }
-    
-   
 
-        /**
+    /**
      * Only a tutor can delete his/her availability times.
      * @param availability
-     * @return the availability
      * @author Syed Haider <shayder426@gmail.com>
      */
     @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public Availability deleteAvailability(Availability availability){
-        em.remove(em.merge(availability));
-        return availability;
+    public void deleteAvailability(Availability availability){
+        Availability toBeDeleted = em.find(Availability.class, availability.getId());
+        if (toBeDeleted == null) {
+            toBeDeleted = availability;
+        }
+        String userName = getUsernameFromSession();
+        Tutor tutor = findTutorUserName(userName);
+        tutor.removeAvailability(toBeDeleted);
+        em.merge(tutor);
     }
     
     
@@ -433,20 +446,11 @@ public class Tut4YouApp {
      */
     @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public boolean updateDoNotDisturb(Boolean doNotDisturb){
+    public void updateDoNotDisturb(Boolean doNotDisturb){
         String userName = getUsernameFromSession();
         Tutor tutor = findTutorUserName(userName);
-        doNotDisturb = tutor.isDoNotDisturb();
-        if (doNotDisturb == true){
-            tutor.setDoNotDisturb(false);
-            em.merge(tutor);
-            return doNotDisturb;
-        }
-        else {
-            tutor.setDoNotDisturb(true);
-            em.merge(tutor);
-            return doNotDisturb;
-        }
+        tutor.setDoNotDisturb(!(tutor.isDoNotDisturb()));
+        em.merge(tutor);
     }
 
     /**
@@ -544,26 +548,55 @@ public class Tut4YouApp {
             throw new StudentExistsException();
         }
     }
+    @PermitAll
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void updateUser(Object updateUser) {
+        String userName = getUsernameFromSession();
+        Tutor tutor = findTutorUserName(userName);
+        if (tutor == null){
+            User student = find(userName);
+            student = (User)updateUser;
+            em.merge(student);
+            em.flush();
+        }
+        else {
+            User student = find(userName);
+            student = (User)updateUser;
+            tutor = (Tutor)updateUser;
+            em.merge(student);
+            em.merge(tutor);
+            em.flush();
+        }
+        
+    }
     
-//    /**
-//     * Converts student to be a tutor. The student will be added a tutor role.
-//     * @param user
-//     * @param groupName
-//     * https://stackoverflow.com/questions/20098791/jpa-inheritance-change-the-entity-type
-//     */
-//    //IN PROGRESS
-//    @PermitAll
-//    @TransactionAttribute(TransactionAttributeType.REQUIRED)
-//    public void addTutorRole(User user, String groupName) {
-//        if (user.getDecriminatorValue().equals("Student")) {
-//            em.createNativeQuery("UPDATE Users SET user_type='Tutor'").setParameter("email",user.getEmail()).executeUpdate();
-//            Group group = em.find(Group.class, groupName);
-//            if (group == null) {
-//                group = new Group(groupName);
-//            }
-//            user.addGroup(group);
-//            group.addStudent(user);
-//            em.flush();
-//        }
-//    }
+    /**
+     * Converts student to be a tutor. The student will be added a tutor role.
+     * @param user
+     * @param userType
+     * @throws tut4you.exception.StudentExistsException
+     */
+    @PermitAll
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void registerUser(User user, String userType) throws StudentExistsException {
+            Group group = em.find(Group.class, "tut4youapp.student");
+            if (group == null) {
+                group = new Group("tut4youapp.student");
+            }
+            if (userType == "Student") {
+                user.addGroup(group);
+                group.addStudent(user);
+                em.persist(user);
+            }
+            else {
+                Tutor newTutor = new Tutor(user);
+                newTutor.addGroup(group);
+                group.addTutor(newTutor);
+                group = em.find(Group.class, "tut4youapp.tutor");
+                newTutor.addGroup(group);
+                group.addTutor(newTutor);
+                em.persist(newTutor);
+            }
+            em.flush();
+    }
 }

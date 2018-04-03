@@ -44,7 +44,7 @@ import javax.persistence.TemporalType;
 @DiscriminatorValue(value="Tutor")
 @Entity
 @NamedQueries({
-    @NamedQuery(name = Tutor.FIND_TUTORS_BY_COURSE_DAY_TIME, query = "SELECT t FROM Tutor t JOIN t.courses c JOIN t.availability a WHERE c.courseName = :coursename AND a.dayOfWeek = :dayofweek AND a.startTime <= :requestTime AND a.endTime >= :requestTime AND t.doNotDisturb = :doNotDisturb"),
+    @NamedQuery(name = Tutor.FIND_TUTORS_BY_COURSE_DAY_TIME, query = "SELECT t FROM Tutor t JOIN t.courses c JOIN t.availabilities a WHERE c.courseName = :coursename AND a.dayOfWeek = :dayofweek AND a.startTime <= :requestTime AND a.endTime >= :requestTime AND t.doNotDisturb = :doNotDisturb"),
     @NamedQuery(name = Tutor.FIND_TUTORS_BY_COURSE, query = "SELECT t FROM Tutor t JOIN t.courses c WHERE c.courseName = :coursename"),
 })
 public class Tutor extends User implements Serializable {     
@@ -62,6 +62,7 @@ public class Tutor extends User implements Serializable {
     private int numPeopleTutored;
     private double priceRate;
     private boolean doNotDisturb;
+    private String transcriptFileLocation;
     /**
      * A Tutor can tutor multiple Courses and
      * a Course can be tutored by multiple Tutors.
@@ -72,7 +73,7 @@ public class Tutor extends User implements Serializable {
      * A tutor can set multiple Availabilities
      */
     @OneToMany(mappedBy="tutor", cascade=CascadeType.ALL)
-    private Collection<Availability> availability;
+    private Collection<Availability> availabilities;
     /**
      * Many tutors can view many requests
      */
@@ -88,17 +89,26 @@ public class Tutor extends User implements Serializable {
     }
     
     /**
+     * Copy constructor
+     * @param newTutor 
+     */
+    public Tutor(User newTutor) {
+        super(newTutor);
+    }
+    
+    /**
      * Tutor overloaded constructor with existing attributes
      * @param dateJoined
      * @param numPeopleTutored
      * @param priceRate 
      * @param doNotDisturb 
      */
-    public Tutor(Date dateJoined, int numPeopleTutored, double priceRate, boolean doNotDisturb) {
+    public Tutor(Date dateJoined, int numPeopleTutored, double priceRate, boolean doNotDisturb, String transcriptFileLocation) {
         this.dateJoined = dateJoined;
         this.numPeopleTutored = numPeopleTutored;
         this.priceRate = priceRate;
         this.doNotDisturb = doNotDisturb;
+        this.transcriptFileLocation = transcriptFileLocation;
     }
         
     /**
@@ -156,32 +166,20 @@ public class Tutor extends User implements Serializable {
     }
     
     /**
-     * Gets a collection of a Tutor's availabilities
-     * @return a collection of availabilities
+     * Gets the list of availabilities
+     * @return availabilities
      */
-    public Collection<Availability> getAvailability() {
-        return availability;
-    }
-
-    /**
-     * Sets a collection of a Tutor's availabilities
-     * @param availability the availability of a tutor
-     */
-    public void setAvailability(Collection<Availability> availability) {
-        this.availability = availability;
+    public Collection<Availability> getAvailabilities() {
+        return availabilities;
     }
     
     /**
-     * Adds an availability to a collection
-     * if availability is null, create new HashSet
-     * @param availability 
+     * Sets the list of availabilities
+     * @param availabilities 
      */
-    public void addAvailability(Availability availability) {
-        if (this.availability == null)
-            this.availability = new HashSet();
-        this.availability.add(availability);
+    public void setAvailabilities(Collection<Availability> availabilities) {
+        this.availabilities = availabilities;
     }
-    
     /**
      * Sets the date joined by a tutor
      * @param dateJoined 
@@ -274,4 +272,23 @@ public class Tutor extends User implements Serializable {
     public void removePendingRequest(Request pr) {
         pendingRequests.remove(pr);
     }
-}
+    
+    /**
+     * Adds an availability to a collection
+     * if availability is null, create new HashSet
+     * @param availability 
+     */
+    public void addAvailability(Availability availability) {
+        if (this.availabilities == null)
+            this.availabilities = new HashSet();
+        this.availabilities.add(availability);
+    }
+    
+    /**
+     * Removes availability from the collection
+     * @param a 
+     */
+    public void removeAvailability(Availability a) {
+        availabilities.remove(a);
+    }
+ }

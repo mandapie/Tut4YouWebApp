@@ -18,3 +18,4 @@ tut4you\controller\NotifyBean.class
 tut4you\model\Availability.class
 tut4you\model\User.class
 tut4you\validations\BasicValidator.class
+tut4you\controller\TranscriptBean.class

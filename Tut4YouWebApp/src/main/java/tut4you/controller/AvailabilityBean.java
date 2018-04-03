@@ -229,15 +229,8 @@ public class AvailabilityBean implements Serializable {
      * @return result based on if the availability form was filled out properly
      * @throws java.text.ParseException
      */
-    public String deleteAvailability(Availability avail) throws ParseException {
-        availabilityList.remove(avail);
-        String result = "failure";
-        // availability = tut4youApp.deleteAvailability(availability);
-        if (availability != null) {
-            result = "success";
-            LOGGER.severe("Availability added");
-        }
-        return result;
+    public void deleteAvailability(Availability avail) throws ParseException {
+        tut4youApp.deleteAvailability(availability);
     }
 
     /**

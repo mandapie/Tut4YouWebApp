@@ -114,6 +114,7 @@ public class Request implements Serializable {
     private java.util.Date currentTime;
     private Status status;
     private int lengthOfSession;
+ 
 
     /**
      * Request Constructor
@@ -361,6 +362,7 @@ public class Request implements Serializable {
         }
         return true;
     }
+
 
     /**
      * Override toString

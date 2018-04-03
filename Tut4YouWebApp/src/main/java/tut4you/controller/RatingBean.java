@@ -23,6 +23,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -39,7 +40,7 @@ import tut4you.model.*;
  * @author Amanda Pan <daikiraidemodaisuki@gmail.com>
  */
 @Named
-@RequestScoped
+@SessionScoped
 public class RatingBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -71,21 +72,6 @@ public class RatingBean implements Serializable {
 
     public void setStudentName(String studentName) {
         this.studentName = studentName;
-    }
-
-    public String getCurrentTime() throws ParseException {
-        String stringCurrentTime = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
-        return stringCurrentTime;
-    }
-
-    /**
-     * Gets current day of when the rating is made
-     *
-     * @return string of the current day
-     */
-    public String getCurrentDayOfWeek() {
-        String currentDay = LocalDate.now().getDayOfWeek().name();
-        return currentDay;
     }
 
     /**
@@ -131,13 +117,6 @@ public class RatingBean implements Serializable {
         return result;
     }
 
-    public String editReviewPage(Rating r) throws ParseException {
-        String result;
-        this.rating = r;
-        result = "editReview";
-        return result;
-    }
-
     /**
      * Convert string to Time
      *
@@ -146,7 +125,7 @@ public class RatingBean implements Serializable {
      * @throws java.text.ParseException
      */
     public java.util.Date StringToTime(String time) throws ParseException {
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
         java.util.Date date = sdf.parse(time);
         return date;
     }
@@ -165,22 +144,44 @@ public class RatingBean implements Serializable {
     public String createNewRating(Tutor t) throws ParseException {
         String result = "success";
         System.out.println("Tutor t: " + t.toString());
-        rating.setCurrentTime(StringToTime(getCurrentTime()));
+        Date date = new Date();
+        rating.setCurrentTime(date);
         rating = tut4youApp.newRating(rating, t);
         return result;
     }
-
-    public String updateRating(Rating r, String description, int ratingValue) throws ParseException {
-        String result = "success";
-        rating.setCurrentTime(StringToTime(getCurrentTime()));
-        rating.setDescription(r.getDescription());
-        rating.setRatingValue(r.getRatingValue());
-        tut4youApp.updateRating(rating,r.getDescription(),r.getRatingValue());
+    
+      /**
+     * Updates the current availability of the tutor
+     *
+     * @param avail
+     * @return
+     * @throws java.text.ParseException
+     */
+    public String updateRating(Rating rating) throws ParseException {
+        String result = "failure";
+        this.rating = rating;
+        Date date = new Date();
+        rating.setRatingValue(rating.getRatingValue());
+        rating.setDescription(rating.getDescription());
+        rating.setCurrentTime(date);
+        tut4youApp.updateRating(rating,rating.getDescription(),rating.getRatingValue());
         if (rating != null) {
             result = "success";
-            LOGGER.severe("Availability added");
+            LOGGER.severe("Rating added");
         }
         return result;
+    }
+
+    /**
+     * Delete the availability from the tutor
+     *
+     * @param avail
+     * @return result based on if the availability form was filled out properly
+     * @throws java.text.ParseException
+     */
+    public void deleteRating(Rating rating) throws ParseException {
+        tut4youApp.deleteRating(rating);
+       
     }
 
     /**

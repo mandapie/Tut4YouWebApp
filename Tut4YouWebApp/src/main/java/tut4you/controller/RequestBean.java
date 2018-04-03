@@ -29,6 +29,7 @@ import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
+import static java.util.concurrent.TimeUnit.NANOSECONDS;
 import tut4you.model.*;
 
 /**
@@ -53,6 +54,12 @@ public class RequestBean implements Serializable {
     private String time;
     private String stringLaterTime;
     private String stringLengthOfSession;
+
+
+
+
+   
+
     private int numOfTutors; //number of tutors who teaches the course
     private List<Subject> subjectList = new ArrayList(); //list of subjects to be loaded to the request form
     private List<Course> courseList = new ArrayList(); //list of courses based on subject to load to the request form
@@ -366,4 +373,7 @@ public class RequestBean implements Serializable {
     public void removeRequestFromTutor(Request r) {
         tut4youApp.removeRequestFromNotification(r);
     }
+    
+   
+
 }

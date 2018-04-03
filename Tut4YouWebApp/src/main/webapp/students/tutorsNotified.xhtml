@@ -16,7 +16,9 @@
                 <b:dataTableColumn value="#{tutor.lastName}"/>
                 <h:column>
                     <f:facet name="header">Request</f:facet>
-                    <b:commandButton span="6" value="Request" look="info" action="#{requestBean.sendToTutor(tutor)}"/>
+                    <b:commandButton span="6" value="Request" look="info" action="#{requestBean.sendToTutor(tutor)}">
+                        <f:actionListener binding="#{requestBean.endConversation}"/>
+                    </b:commandButton>
                 </h:column>
             </b:dataTable>
         </h:form>

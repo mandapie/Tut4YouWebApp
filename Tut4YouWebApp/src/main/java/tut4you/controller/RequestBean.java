@@ -30,10 +30,13 @@ import java.util.List;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.faces.bean.RequestScoped;
-import javax.enterprise.context.SessionScoped;
+import javax.enterprise.context.Conversation;
+import javax.enterprise.context.ConversationScoped;
+
+import javax.faces.context.FacesContext;
 //import javax.faces.bean.ViewScoped;
-import javax.faces.flow.FlowScoped;
+
+import javax.inject.Inject;
 
 // javax.faces.bean.ViewScoped;
 //import javax.faces.view.ViewScoped;
@@ -52,13 +55,10 @@ import tut4you.model.*;
  * @author Amanda Pan <daikiraidemodaisuki@gmail.com>
  */
 @Named
-
-//@RequestScoped
-
-@SessionScoped
+@ConversationScoped
 public class RequestBean implements Serializable {
     private static final Logger LOGGER = Logger.getLogger("RequestBean");
-
+    private @Inject Conversation conversation;
     @EJB
     private Tut4YouApp tut4youApp;
     private static final OkHttpClient client = new OkHttpClient();
@@ -92,8 +92,28 @@ public class RequestBean implements Serializable {
         zipCode = new ZipCode();
         time = "Immediate";
         //tutorList = new ArrayList();
+        conversation.begin();
 
     }
+
+    /**
+     *
+     */
+    public void initConversation(){
+
+        if (!FacesContext.getCurrentInstance().isPostback() && conversation.isTransient()) {
+            conversation.begin();
+        }
+
+    }
+    public void endConversation(){
+
+        if(!conversation.isTransient()){
+            conversation.end();
+        }
+    }
+
+
     
     public java.util.Date getCurrentTime() throws ParseException {
         String stringCurrentTime = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
@@ -177,6 +197,7 @@ public class RequestBean implements Serializable {
      * @return subject of the request
      */
     public Subject getSubject() {
+        
         return subject;
     }
     
@@ -342,9 +363,9 @@ public class RequestBean implements Serializable {
             System.out.println("Zip codes: " + zipCodesByRadius);
             System.out.println("tutor list: " + tutorList);
         }
-        System.out.println("tutor list: " + tutorList);
-        course.setCourseName(null);
-        subject.setSubjectName(null);
+        //System.out.println("tutor list: " + tutorListBean.getTutorList());
+        course = new Course();
+        subject = new Subject();
         return result;
     }
     
@@ -362,6 +383,7 @@ public class RequestBean implements Serializable {
      */
     public void setTutorToRequest(Request r) {
         tut4youApp.setTutorToRequest(r);
+        conversation.end();
     }
     
     /**

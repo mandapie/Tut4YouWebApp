@@ -16,6 +16,7 @@ tut4you/controller/AddCourseBean.class
 tut4you/exception/StudentExistsException.class
 tut4you/model/Group.class
 tut4you/controller/HashPassword.class
+tut4you/controller/TutorListBean.class
 tut4you/model/Request.class
 tut4you/validations/TimeValidator.class
 tut4you/controller/RegistrationBean.class

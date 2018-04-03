@@ -111,7 +111,6 @@ public class Tut4YouApp {
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public List<Request> getActiveRequest() {
         String userName = userBean.getUsernameFromSession();
-        //String userName = getUsernameFromSession();
         String email;
         if (userName == null) {
             return null;
@@ -177,7 +176,13 @@ public class Tut4YouApp {
         courseTutorQuery.setParameter("doNotDisturb", false);
         courseTutorQuery.setParameter("zipCode", zipCode);
         return courseTutorQuery.getResultList();
-    }   
+    }
+    @PermitAll
+    public List<String> getUserEmails() {
+        TypedQuery<String> Query = em.createNamedQuery(User.FIND_USER_EMAILS, String.class);
+        return Query.getResultList();
+    }
+    
         
     /**
      * the selected tutor will be added to a pending request and vice versa.

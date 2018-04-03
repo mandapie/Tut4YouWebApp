@@ -181,20 +181,9 @@
                     </b:tabView>
                 </h:form>
             </b:column>
-<!--            <p:confirmDialog
-                widgetVar="myDialog"
-                appendTo="" visible="true"
-                rendered="#{userBean.condition}">
-                <h:panelGrid columns="2" cellpadding="5">
-                    <h:outputLabel for="currentZip" value="Current ZipCode:" />
-                    <p:inputText id="currentZip" value="#{userBean.currentZip}" required="true" label="currentZip" />
-                </h:panelGrid>    
-                <f:facet name="footer">
-                    <b:commandButton value="Accept" look="success" action="#{userBean.updateCurrentZip()}"/>
-                                 
-                </f:facet>
-                
-            </p:confirmDialog>-->
+            <c:if test="#{userBean.condition}">  
+                #{userBean.updateCurrentZip()}
+            </c:if>
             <p:dialog header="Current Zip Code" widgetVar="myDialog" minHeight="40" appendTo="" visible="true"
                 rendered="#{userBean.condition}">
                 <h:form>
@@ -202,9 +191,7 @@
                 <b:inputText id="currentZip" placeholder="press enter to submit" required="true" requiredMessage="required" value="#{userBean.currentZip}">
                             <b:message for="currentZip"/>
                 </b:inputText>
-                <f:facet name = "footer">-->
-                    <p:commandButton value="Submit"  style="width:100%" action="#{userBean.updateCurrentZip()}" />
-                </f:facet>    
+                  
                 </h:form>
             </p:dialog>
 

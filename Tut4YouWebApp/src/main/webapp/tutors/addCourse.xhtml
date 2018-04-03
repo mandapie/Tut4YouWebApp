@@ -12,7 +12,7 @@
             <b:form>
                 <b:row>
                     <b:selectOneMenu span="6" label="Subject" value="#{addCourseBean.subject}">
-                        <f:selectItem itemLabel="select Subect..." noSelectionOption="true"/>
+                        <f:selectItem itemLabel="select Subject..." itemValue="" noSelectionOption="true"/>
                         <f:selectItems value="#{addCourseBean.subjectList}"
                                        var="subject"
                                        itemLabel="#{subject.subjectName}"
@@ -22,7 +22,7 @@
                     </b:selectOneMenu>
 
                     <b:selectOneMenu span="6" label="Course" id="courseList" value="#{addCourseBean.course}">
-                        <f:selectItem itemLabel="select Course..." noSelectionOption="true"/>
+                        <f:selectItem itemLabel="select Course..." itemValue=""noSelectionOption="true"/>
                         <f:selectItems value="#{addCourseBean.courseList}"
                                        var="course"
                                        itemLabel="#{course.courseName}"

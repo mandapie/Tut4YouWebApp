@@ -25,6 +25,7 @@ import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import tut4you.exception.CourseExistsException;
 import tut4you.model.*;
@@ -36,7 +37,7 @@ import tut4you.model.Tut4YouApp;
  * @author Syed Haider <shayder426@gmail.com>
  */
 @Named
-@SessionScoped
+@ViewScoped
 public class AddCourseBean implements Serializable {
     private static final Logger LOGGER = Logger.getLogger("AddCourseBean");
     

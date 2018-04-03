@@ -18,6 +18,7 @@ package tut4you.validations;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
@@ -25,6 +26,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
 import javax.inject.Named;
 import tut4you.controller.RequestBean;
+import tut4you.model.Tut4YouApp;
 
 /**
  * Validates (basic) correct format.
@@ -33,6 +35,9 @@ import tut4you.controller.RequestBean;
 @Named
 @RequestScoped
 public class BasicValidator {
+
+    @EJB
+    private Tut4YouApp tut4YouApp;
 
     /**
      * Creates a new instance of BasicValidator
@@ -55,6 +60,11 @@ public class BasicValidator {
             FacesMessage message = new FacesMessage("Invalid email address");
             throw new ValidatorException(message);
         }
+        for(String str : tut4YouApp.getUserEmails())
+            if(emailStr.equals(str)) {
+                FacesMessage message = new FacesMessage("email address already in use");
+                throw new ValidatorException(message);
+            }
     }
     /**
      * https://stackoverflow.com/questions/42104546/java-regular-expressions-to-validate-phone-numbers
@@ -72,8 +82,8 @@ public class BasicValidator {
             FacesMessage message = new FacesMessage("Invalid phone number");
             throw new ValidatorException(message);
         }
-        
     }
+    
     public void validateLaterTime(FacesContext context, UIComponent component, Object value) throws ValidatorException, ParseException {
         java.util.Date laterTime = (java.util.Date) value;
         //System.out.println("endTime: " + endTime);

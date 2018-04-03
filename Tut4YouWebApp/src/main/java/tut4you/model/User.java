@@ -30,6 +30,9 @@ import javax.persistence.InheritanceType;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Column;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 /**
  * User is the most basic user type. SINGLE_TABLE is used as our inheritance
@@ -42,13 +45,26 @@ import javax.persistence.Table;
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name="user_type", discriminatorType=DiscriminatorType.STRING)
 @DiscriminatorValue(value="Student")
+        
+@NamedQueries({
+    @NamedQuery(name = User.FIND_USER_EMAILS, query = "SELECT t.email FROM User t")
+    
+})
 public class User implements Serializable {
+    /**
+     * JPQL Query to obtain a list of tutors who taught a specific course and is available using default zip code
+     */
+    public static final String FIND_USER_EMAILS = "Tutor.FindUserEmails";
+    
     @Id
     private String email;
     
     private String firstName;
     private String lastName;
+    
+    @Column(nullable = false, unique = true)
     private String userName;
+    
     private String phoneNumber;
     private String password;
     private String university;

@@ -17,14 +17,11 @@
 package tut4you.controller;
 
 import java.io.Serializable;
-import java.math.BigInteger;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -53,7 +50,6 @@ public class RegistrationBean implements Serializable {
     private Tut4YouApp tut4youApp;
     
     private User newStudent;
-    private Location newLocation;
     private String confirmPassword;
     private String userType;
     private String priceRate;
@@ -66,7 +62,6 @@ public class RegistrationBean implements Serializable {
     @PostConstruct
     public void createRegistrationBean() {
         newStudent = new User();
-        newLocation = new Location();
     }
     
     /** 
@@ -90,13 +85,7 @@ public class RegistrationBean implements Serializable {
     public void setMaxRadius(int maxRadius) {
         this.maxRadius = maxRadius;
     }
-    public Location getNewLocation() {
-        return newLocation;
-    }
-    
-    public void setNewLocation(Location newLocation) {
-        this.newLocation = newLocation;
-    }
+
     /**
      * Gets the new student who just registered
      * @return the new User entity

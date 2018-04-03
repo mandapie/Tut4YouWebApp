@@ -47,14 +47,20 @@ import javax.persistence.NamedQuery;
 @DiscriminatorValue(value="Student")
         
 @NamedQueries({
-    @NamedQuery(name = User.FIND_USER_EMAILS, query = "SELECT t.email FROM User t")
+    @NamedQuery(name = User.FIND_USER_EMAILS, query = "SELECT t.email FROM User t"),
+    @NamedQuery(name = User.FIND_USER_USERNAMES, query = "SELECT t.userName FROM User t")
+        
     
 })
 public class User implements Serializable {
     /**
-     * JPQL Query to obtain a list of tutors who taught a specific course and is available using default zip code
+     * JPQL Query to obtain a list of users email
      */
     public static final String FIND_USER_EMAILS = "Tutor.FindUserEmails";
+    /**
+     * JPQL Query to obtain a list of users username
+     */
+    public static final String FIND_USER_USERNAMES = "Tutor.FindUserUserNames";
     
     @Id
     private String email;

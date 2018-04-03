@@ -177,9 +177,22 @@ public class Tut4YouApp {
         courseTutorQuery.setParameter("zipCode", zipCode);
         return courseTutorQuery.getResultList();
     }
+    /**
+     * retrieve list of user emails
+     * @return list of user emails
+     */
     @PermitAll
     public List<String> getUserEmails() {
         TypedQuery<String> Query = em.createNamedQuery(User.FIND_USER_EMAILS, String.class);
+        return Query.getResultList();
+    }
+    /**
+     * retrieve list of user usernames
+     * @return list of usernames
+     */
+    @PermitAll
+    public List<String> getUserUserNames() {
+        TypedQuery<String> Query = em.createNamedQuery(User.FIND_USER_USERNAMES, String.class);
         return Query.getResultList();
     }
     

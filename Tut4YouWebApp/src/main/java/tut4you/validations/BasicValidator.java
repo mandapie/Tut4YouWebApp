@@ -66,6 +66,14 @@ public class BasicValidator {
                 throw new ValidatorException(message);
             }
     }
+    public void validateUserName(FacesContext context, UIComponent toValidate, Object value) throws ValidatorException {    
+         String userName = (String) value;
+         for(String str : tut4YouApp.getUserUserNames())
+         if(userName.equals(str)) {
+            FacesMessage message = new FacesMessage("username already in use");
+            throw new ValidatorException(message);
+        }
+     }
     /**
      * https://stackoverflow.com/questions/42104546/java-regular-expressions-to-validate-phone-numbers
      * 

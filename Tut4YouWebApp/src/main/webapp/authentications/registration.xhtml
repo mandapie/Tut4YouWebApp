@@ -52,7 +52,7 @@
                         <h:outputLabel value="Username"/>
                     </b:column>
                     <b:column medium-screen="4">
-                        <b:inputText id="un" placeholder="Enter Username" required="true" requiredMessage="required" value="#{registrationBean.newStudent.userName}">
+                        <b:inputText id="un" placeholder="Enter Username" required="true" requiredMessage="required" value="#{registrationBean.newStudent.userName}" validator="#{basicValidator.validateUserName}">
                             <b:message for="un"/>
                         </b:inputText>
                     </b:column>
@@ -63,7 +63,7 @@
                         <h:outputLabel value="Phone Number"/>
                     </b:column>
                     <b:column medium-screen="4">
-                        <b:inputText id="pn" placeholder="Enter Phone Number" required="true" requiredMessage="required" value="#{registrationBean.newStudent.phoneNumber}">
+                        <b:inputText id="pn" placeholder="Enter Phone Number" required="true" requiredMessage="required" value="#{registrationBean.newStudent.phoneNumber}" validator="#{basicValidator.validatePhoneNumber}">
                             <b:message for="pn"/>
                         </b:inputText>
                     </b:column>

@@ -109,13 +109,13 @@ INSERT INTO Courses_tutors(email,courseName) VALUES ('syed@gmail.com','Computer 
 INSERT INTO Courses_tutors(email,courseName) VALUES ('andrew@gmail.com','Computer Security')
 INSERT INTO Courses_tutors(email,courseName) VALUES ('amanda@gmail.com','Computer Security')
 
-INSERT INTO ZipCode(Id,zipCode,maxRadius) VALUES (0,'92704',5)
-INSERT INTO ZipCode(Id,zipCode,maxRadius) VALUES (1,'92708',5)
-INSERT INTO ZipCode(Id,zipCode,maxRadius) VALUES (2,'92801',3)
+-- INSERT INTO ZipCode(ID,zipCode,maxRadius) VALUES (0,'92704',5)
+-- INSERT INTO ZipCode(ID,zipCode,maxRadius) VALUES (1,'92708',5)
+-- INSERT INTO ZipCode(ID,zipCode,maxRadius) VALUES (2,'92801',3)
 
-INSERT INTO Request(student_email,courseName,description,status,zipcode_id) VALUES ('amanda@gmail.com','General Biology I','Photosynthesis process',0,0)
-INSERT INTO Request(student_email,courseName,description,status,zipcode_id) VALUES ('amanda@gmail.com','General Biology I','Kreb cycle',0,1)
-INSERT INTO Request(student_email,courseName,description,statuszipcode_id) VALUES ('keith@gmail.com','General Biology I','Kreb cycle',0,2)
+INSERT INTO Request(student_email,courseName,description,status) VALUES ('amanda@gmail.com','General Biology I','Photosynthesis process',0)
+INSERT INTO Request(student_email,courseName,description,status) VALUES ('amanda@gmail.com','General Biology I','Kreb cycle',0)
+INSERT INTO Request(student_email,courseName,description,status) VALUES ('keith@gmail.com','General Biology I','Kreb cycle',0)
 
 INSERT INTO Availability(DAYOFWEEK, ENDTIME, STARTTIME, TUTOR_EMAIL) VALUES ('MONDAY', '23:00:00', '00:00:00', 'amanda@gmail.com')
 INSERT INTO Availability(DAYOFWEEK, ENDTIME, STARTTIME, TUTOR_EMAIL) VALUES ('TUESDAY', '23:00:00', '00:00:00', 'amanda@gmail.com')

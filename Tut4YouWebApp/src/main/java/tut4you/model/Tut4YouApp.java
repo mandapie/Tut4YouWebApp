@@ -83,7 +83,6 @@ public class Tut4YouApp {
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public Request newRequest(Request request) {
         String userName = userBean.getUsernameFromSession();
-        //String userName = getUsernameFromSession();
         if (userName == null) {
             return null;
         }
@@ -176,6 +175,54 @@ public class Tut4YouApp {
         courseTutorQuery.setParameter("doNotDisturb", false);
         courseTutorQuery.setParameter("zipCode", zipCode);
         return courseTutorQuery.getResultList();
+    }
+    
+    /**
+     * Adds ZipCode to DB if it is not already in DB but first checks if it is in the DB
+     * 
+     * @param zipCode
+     * @return zipcode
+     */
+    @RolesAllowed("tut4youapp.student")
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public ZipCode addZipCode(ZipCode zipCode) {
+
+        zipCode = em.find(ZipCode.class, zipCode.getId());
+        
+        if(zipCode == null) {
+            
+            em.persist(zipCode);
+            em.flush();
+        }
+  
+        return zipCode;
+
+    }
+    @RolesAllowed("tut4youapp.student")
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public ZipCodeByRadius addZipCodeByRadius(ZipCode zipCode, ZipCodeByRadius zipCodeByRadius) {
+        List<String> zipCodesByRadiusList = getZipCodesByRadius();
+        ZipCodeByRadius zipCodeByRadiusTemp = em.find(ZipCodeByRadius.class, zipCodeByRadius.getZipCodeByRadius());
+        if(zipCodeByRadiusTemp == null){
+            zipCode.addZipCodeByRadius(zipCodeByRadius);
+            zipCodeByRadius.addZipCode(zipCode);
+            em.persist(zipCodeByRadius);
+            em.flush();
+        }
+        else  {
+            zipCode.addZipCodeByRadius(zipCodeByRadiusTemp);
+            zipCodeByRadiusTemp.addZipCode(zipCode);
+            em.merge(zipCode);
+            
+        }
+        //em.flush();
+        return zipCodeByRadius;
+        
+    }
+    @PermitAll
+    public List<String> getZipCodesByRadius() {
+        TypedQuery<String> Query = em.createNamedQuery(ZipCodeByRadius.FIND_ZIPCODEBYRADIUS, String.class);
+        return Query.getResultList();
     }
     /**
      * retrieve list of user emails

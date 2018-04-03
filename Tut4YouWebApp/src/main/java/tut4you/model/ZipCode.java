@@ -6,13 +6,19 @@
 package tut4you.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -22,10 +28,19 @@ import javax.persistence.Table;
  */
 @Table(name="ZipCode")
 @Entity
+@NamedQueries({
+    @NamedQuery(name = ZipCode.FIND_LOCATIONS, query = "SELECT t from ZipCode t")
+        
+    
+})
 public class ZipCode implements Serializable {
-
+    /**
+     * JPQL Query to obtain a zipCode locations
+     */
+    public static final String FIND_LOCATIONS = "ZipCode.FindLocations";
+    
     public ZipCode() {
-        ZipCodesByRadius = new ArrayList();
+        
     }
 
     public ZipCode(String zipCode, int maxRadius) {
@@ -34,25 +49,42 @@ public class ZipCode implements Serializable {
     }
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false, unique = true)
     private Long id;
     
-    @OneToMany(mappedBy="zipCode",cascade=CascadeType.ALL)
+    @OneToMany(mappedBy="zipCode",cascade=CascadeType.PERSIST)
     private Collection<Request> requests;
+    
+    @ManyToMany(mappedBy="zipCodes", cascade=CascadeType.ALL)
+    private Collection<ZipCodeByRadius> zipCodesByRadius;
     
     private String zipCode;
 
     private int maxRadius;
     
-    private List<String> ZipCodesByRadius;
-
-    public List<String> getZipCodesByRadius() {
-        return ZipCodesByRadius;
-    }
-
-    public void setZipCodesByRadius(List<String> ZipCodesByRadius) {
-        this.ZipCodesByRadius = ZipCodesByRadius;
+    
+    /**
+     * Gets the id of a ZipCode
+     * @return id of the Request
+     */
+    public Long getId() {
+        return id;
     }
     
+    /**
+     * Sets the id of a ZipCode
+     * @param id of the Request
+     */
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void addZipCodeByRadius(ZipCodeByRadius zipCodeByRadius) {
+        if (this.zipCodesByRadius == null)
+            this.zipCodesByRadius = new HashSet();
+        this.zipCodesByRadius.add(zipCodeByRadius);
+    }
     public int getMaxRadius() {
         return maxRadius;
     }
@@ -69,13 +101,6 @@ public class ZipCode implements Serializable {
         this.zipCode = zipCode;
     }
     
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
     /**
      * Adds a request submitted to the collection of Requests
      * @param request 
@@ -100,5 +125,38 @@ public class ZipCode implements Serializable {
     public void setRequests(Collection<Request> requests) {
         this.requests = requests;
     }
+    /**
+     * Override hashCode
+     * @return hash
+     */
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
+        return hash;
+    }
+    
+    /**
+     * Overrides the equals method
+     * @param object 
+     * @return true if object is Request, else false
+     */
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Request)) {
+            return false;
+        }
+        ZipCode other = (ZipCode) object;
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
+    }
+    @Override
+    public String toString() {
+        return "tut4you.model.ZipCode[ id=" + id + " zipCode=" + zipCode + " maxRad=" + maxRadius ;
+    }
+    
     
 }

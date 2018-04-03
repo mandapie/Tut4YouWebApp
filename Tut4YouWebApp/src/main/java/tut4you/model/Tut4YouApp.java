@@ -258,7 +258,17 @@ public class Tut4YouApp {
         requestTutorQuery.setParameter("email",tutor.getEmail());
         return requestTutorQuery.getResultList();
     }
-        
+    
+    @RolesAllowed("tut4youapp.tutor")
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void addTranscriptFileLocation(String transcriptFileLocation) {
+        String userName = userBean.getUsernameFromSession();
+            System.out.println(userName);
+            Tutor tutor = findTutorUserName(userName);
+            tutor.setTrancriptFileLocation(transcriptFileLocation);
+            em.merge(tutor);
+            em.flush();
+    }
     /**
      * Only a tutor can add a course from the database. The course will be
      * persisted to the courses_tutors table.

@@ -149,6 +149,13 @@ public class Tutor extends User implements Serializable {
         this.doNotDisturb = doNotDisturb;
     }
     
+    public String getTranscriptFileLocation() {
+        return transcriptFileLocation;
+    }
+    
+    public void setTrancriptFileLocation(String transcriptFileLocation) {
+        this.transcriptFileLocation = transcriptFileLocation;
+    }
     /**
      * Gets the list of pending requests
      * @return list of pendingRequests

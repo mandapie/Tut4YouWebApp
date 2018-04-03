@@ -23,6 +23,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
+import java.net.URL;
 import java.util.Properties;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -87,10 +88,8 @@ public class TranscriptBean implements Serializable {
         acl.grantPermission(GroupGrantee.AllUsers, Permission.Write);
         try {
             String userName = userbean.getUsernameFromSession();
-            System.out.println(userName);
             tutor = tut4youApp.findTutorUserName(userName);
             String transcriptName = tutor.getUserName();
-            System.out.println(tutor.getUserName());
             String keyName = transcriptName.concat(".pdf");
             
             try (S3Object s3Object = new S3Object()) {
@@ -103,6 +102,9 @@ public class TranscriptBean implements Serializable {
                 s3.putObject(new PutObjectRequest(bucketName, keyName, input, omd).withAccessControlList(acl));
                 FacesMessage message = new FacesMessage("Succesful", file.getFileName() + " is uploaded.");
                 FacesContext.getCurrentInstance().addMessage(null, message);
+                URL url = s3.getUrl(bucketName, keyName);
+                String filepath = url.toString();
+                tut4youApp.addTranscriptFileLocation(filepath);
                 
             }
             System.out.println("Uploaded successfully!");

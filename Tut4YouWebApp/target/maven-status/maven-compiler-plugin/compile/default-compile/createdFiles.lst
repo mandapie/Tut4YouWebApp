@@ -4,7 +4,6 @@ tut4you\validations\PriceValidator.class
 tut4you\validations\TutorConverter.class
 tut4you\controller\RegistrationBean.class
 tut4you\model\Rating.class
-tut4you\validations\AvailabilityOverlappingValidator.class
 tut4you\validations\TimeValidator.class
 tut4you\controller\RequestBean.class
 tut4you\controller\UserBean.class

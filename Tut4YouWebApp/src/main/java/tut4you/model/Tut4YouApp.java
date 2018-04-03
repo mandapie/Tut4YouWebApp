@@ -395,7 +395,7 @@ public class Tut4YouApp {
         /*List<Availability> list = getAvailability();
         for (Availability e : list) {
             if (startTime.after(e.getStartTime()) && startTime.before(e.getEndTime())) {
-                System.out.println("Why are you between me?");
+                return null;
             }
         }*/
             String userName = getUsernameFromSession();

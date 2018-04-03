@@ -1,4 +1,3 @@
-
 /*
  * Licensed under the Academic Free License (AFL 3.0).
  *     http://opensource.org/licenses/AFL-3.0
@@ -65,6 +64,8 @@ public class AvailabilityBean implements Serializable {
 
     private List<Availability> availabilityList = new ArrayList();
 
+    private boolean modalFlag = false;
+
     /**
      * Creates a new instance of the Availability entity
      */
@@ -128,6 +129,15 @@ public class AvailabilityBean implements Serializable {
     public void setEndTime(java.util.Date endTime) {
         this.endTime = endTime;
     }
+
+    public boolean isModalFlag() {
+        return modalFlag;
+    }
+
+    public void setModalFlag(boolean modalFlag) {
+        this.modalFlag = modalFlag;
+    }
+
 //    /**
 //     * Sets the start time of the tutor
 //     * @return stringStartTime of the tutor
@@ -159,7 +169,6 @@ public class AvailabilityBean implements Serializable {
 //    public void setStringEndTime(String stringEndTime) {
 //        this.stringEndTime = stringEndTime;
 //    }
-
     /**
      * Gets a list of the availabilities of the Tutor in the EJB
      *
@@ -180,11 +189,15 @@ public class AvailabilityBean implements Serializable {
         String result = "failure";
         availability.setStartTime(startTime);
         availability.setEndTime(endTime);
-        availability = tut4youApp.addAvailability(availability,startTime);
+        availability = tut4youApp.addAvailability(availability, startTime);
         if (availability != null) {
             result = "success";
+            modalFlag = true;
         }
-        System.out.println("You worked");
+        else
+        {
+            modalFlag = false;
+        }
     }
 
     /**

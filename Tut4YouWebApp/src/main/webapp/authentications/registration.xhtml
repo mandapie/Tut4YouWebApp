@@ -5,10 +5,6 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:b="http://bootsfaces.net/ui"
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
-<<<<<<< HEAD
-    <!-- IN PROGRESS -->
-=======
->>>>>>> origin/Keith
     <!-- @author Amanda Pan <daikiraidemodaisuki@gmail.com> 
          @author Andrew Kaichi <ahkaichi@gmail.com> -->
     <ui:define name="title">Registration</ui:define>
@@ -170,39 +166,38 @@
                                 </b:inputText>
                             </b:column>
                         </b:row>
-                        <b:row>
-                            <b:column medium-screen="2">
-                                <h:outputLabel value="Password" />
-                            </b:column>
-                            <b:column medium-screen="4">
-                                <b:inputSecret id="tpasword" binding="#{tpasswordComponent}" required="true" requiredMessage="required" placeholder="Enter Password" validatorMessage="Please enter at least 8 characters" value="#{registrationBean.newTutor.password}">
-                                    <b:message for="tpasword"/>
-                                    <f:validateLength minimum="3"/>
-                                </b:inputSecret>
-                            </b:column>
-                        </b:row>
-                        <b:row>
-                            <b:column medium-screen="2">
-                                <h:outputLabel value="Confirm Password"/>
-                            </b:column>
-                            <b:column medium-screen="4">
-                                <b:inputSecret id="tcp" placeholder="Enter Password" required="true" requiredMessage="required" value="#{registrationBean.confirmPassword}">
-                                    <b:message for="tcp"/>
-                                    <f:validator validatorId="equalsValidator" />
-                                    <f:attribute name="otherValue" value="#{tpasswordComponent.value}" />
-                                </b:inputSecret>
-                            </b:column>
-                        </b:row>
-                        <b:row>
-                            <b:column span="2" offset="2">
-                                <b:commandButton value="Register" look="primary" style="width:100%" action="#{registrationBean.createTutor}"/>
-                            </b:column>
-                            <b:column span="2">
-                                <b:button value="Cancel" look="danger" style="width:100%" href="/Tut4YouWebApp/index.xhtml"/>
-                            </b:column>
-                        </b:row>
-                    </h:panelGroup>
-                </h:panelGroup>
+                    </h:panelGroup>-->
+                <b:row>
+                    <b:column medium-screen="2">
+                        <h:outputLabel value="Password" />
+                    </b:column>
+                    <b:column medium-screen="4">
+                        <b:inputSecret id="pasword" binding="#{passwordComponent}" required="true" requiredMessage="required" placeholder="Enter Password" validatorMessage="Please enter at least 8 characters" value="#{registrationBean.newStudent.password}">
+                            <b:message for="pasword"/>
+                            <f:validateLength minimum="3"/>
+                        </b:inputSecret>
+                    </b:column>
+                </b:row>
+                <b:row>
+                    <b:column medium-screen="2">
+                        <h:outputLabel value="Confirm Password"/>
+                    </b:column>
+                    <b:column medium-screen="4">
+                        <b:inputSecret id="cp" placeholder="Enter Password" required="true" requiredMessage="required" value="#{registrationBean.confirmPassword}">
+                            <b:message for="cp"/>
+                            <f:validator validatorId="equalsValidator" />
+                            <f:attribute name="otherValue" value="#{passwordComponent.value}" />
+                        </b:inputSecret>
+                    </b:column>
+                </b:row>
+                <b:row>
+                    <b:column span="2" offset="2">
+                        <b:commandButton value="Register" look="primary" style="width:100%" action="#{registrationBean.createStudent}"/>
+                    </b:column>
+                    <b:column span="2">
+                        <b:button value="Cancel" look="danger" style="width:100%" href="/Tut4YouWebApp/index.xhtml"/>
+                    </b:column>
+                </b:row>
             </b:form>
         </b:panel>
         <ui:debug hotkey='x'/>

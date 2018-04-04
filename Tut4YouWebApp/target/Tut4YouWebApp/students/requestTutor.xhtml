@@ -3,29 +3,69 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
-                xmlns:b="http://bootsfaces.net/ui">
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:p="http://primefaces.org/ui">
     <!-- @author Amanda Pan <daikiraidemodaisuki@gmail.com> -->
     <ui:define name="title">Request</ui:define>
     <ui:define name="content">
+    <f:event listener="#{requestBean.initConversation()}"
+    type="preRenderView"></f:event>
+
         <b:panel title="Select the following choices to request for a tutor" collapsible="false" look="info">
             <b:form>
                 <b:row>
-                    <b:selectOneMenu span="6" label="Subject" value="#{requestBean.subject}">
-                        <f:selectItem itemLabel="select Subect..." noSelectionOption="true"/>
+                    <b:selectOneMenu span="6" label="Subject" id="subjectList" value="#{requestBean.subject}" required="true" requiredMessage="required subject">
+                        <f:selectItem itemLabel="select Subject..." itemValue="" noSelectionOption="true"/>
                         <f:selectItems value="#{requestBean.subjectList}"
                                        var="subject"
                                        itemLabel="#{subject.subjectName}"
                                        itemValue="#{subject}"/>
+                        <b:column>
+                            <b:message for="subjectList" span="3"/>
+                        </b:column>
                         <!-- source: https://stackoverflow.com/questions/18498194/loading-hselectonemenu-depending-of-another-hselectonemenu-value -->
                         <f:ajax render="courseList" listener="#{requestBean.changeSubject}"/>
+
                     </b:selectOneMenu>
 
-                    <b:selectOneMenu span="6" label="Course" id="courseList" value="#{requestBean.request.course}">
-                        <f:selectItem itemLabel="select Course..." noSelectionOption="true"/>
+                    <b:selectOneMenu span="6" label="Course" id="courseList" value="#{requestBean.request.course}" required="true" requiredMessage="required course">
+                        <f:selectItem itemLabel="select Course..." itemValue="" noSelectionOption="true"/>
                         <f:selectItems value="#{requestBean.courseList}"
                                        var="course"
                                        itemLabel="#{course.courseName}"
                                        itemValue="#{course}"/>
+<!--                        <b:column>
+                            <b:message for="courseList" span="3"/>
+                        </b:column>-->
+                    </b:selectOneMenu>
+                </b:row>
+                <b:inputTextarea id="dt" label="Description/Topic:" placeholder="Enter a short description..." value="#{requestBean.request.description}"
+                                 required="true" requiredMessage="required description/topic">
+                    <f:validateLength minimum="10"/>
+                </b:inputTextarea>
+                <b:column>
+                    <b:message for="dt" span="3"/>
+                </b:column>
+                <!-- length of session -->
+                <b:row>
+                    <b:selectOneMenu span="4"
+                                             label="Length of Session"
+                                             id="stringLengthOfSession"
+                                             value="#{requestBean.lengthOfSession}"
+                                             required="true" requiredMessage="required length of session">
+                                <f:selectItem itemLabel="Select One..." itemValue="" noSelectionOption="true"/>
+                                <f:selectItem itemLabel="30min" itemValue="30" /> 
+                                <f:selectItem itemLabel="1 hour" itemValue="60" />
+                                <f:selectItem itemLabel="1.5 hours" itemValue="90" />
+                                <f:selectItem itemLabel="2 hours" itemValue="120" />
+                                <f:selectItem itemLabel="2.5 hours" itemValue="150" />
+                                <f:selectItem itemLabel="3 hours" itemValue="180" />
+                                <f:selectItem itemLabel="3.5 hours" itemValue="210" />
+                                <f:selectItem itemLabel="4 hours" itemValue="240" />     
+                                <f:convertNumber type="number"/>
+                                <b:column>
+                                    <b:message for="stringLengthOfSession" span="3"/>
+                                </b:column>
                     </b:selectOneMenu>
                 </b:row>
                 <b:inputTextarea label="Description/Topic:" placeholder="Enter a short description..." value="#{requestBean.request.description}"/>

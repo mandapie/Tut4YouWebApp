@@ -84,7 +84,7 @@
                         <h:outputLabel value="Hourly Rate"/>
                     </b:column>
                     <b:column medium-screen="4">
-                        <b:inputText id="thr" placeholder="Enter Hourly Rate" required="true" requiredMessage="required" value="#{registrationBean.newTutor.priceRate}">
+                        <b:inputText id="thr" placeholder="Enter Hourly Rate" required="true" requiredMessage="required" value="#{registrationBean.newTutor.priceRate}" validator="#{priceValidator.validate}">
                             <b:message for="thr"/>
                         </b:inputText>
                     </b:column>

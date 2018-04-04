@@ -30,6 +30,7 @@ import javax.persistence.Table;
 
 /**
  * Groups the different types of users for different roles purposes
+ *
  * @author Alvaro Monge <alvaro.monge@csulb.edu>
  * Modified by Amanda Pan <daikiraidemodaisuki@gmail.com>
  */
@@ -38,17 +39,20 @@ import javax.persistence.Table;
 @NamedQueries ({
     @NamedQuery(name = Group.FIND_GROUP_BY_USERNAME, query = "SELECT g FROM UserGroup g WHERE g.name = :groupname")
 })
-public class Group implements Serializable {    
+public class Group implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     /**
      * Name of JPQL query to retrieve the Group given its name
      */
     public static final String FIND_GROUP_BY_USERNAME = "Group.findGroupByName";
-    
+
     @Id
     private String name;
-    
+
     private String description;
-    
+
     @ManyToMany
     @JoinTable(name="Groups_users",
           joinColumns=@JoinColumn(name="groupname"),
@@ -64,10 +68,12 @@ public class Group implements Serializable {
     /**
      * Group Constructor
      */
-    public Group() { }
+    public Group() {
+    }
 
     /**
      * creates a group with the given name
+     *
      * @param name is the name of the group to be created
      */
     public Group(String name) {
@@ -76,6 +82,7 @@ public class Group implements Serializable {
 
     /**
      * gets the name of this group
+     *
      * @return the name of this group
      */
     public String getName() {
@@ -83,7 +90,8 @@ public class Group implements Serializable {
     }
 
     /**
-     * sets the name of this group 
+     * sets the name of this group
+     *
      * @param name is the string that is to be the name of this group
      */
     public void setName(String name) {
@@ -92,6 +100,7 @@ public class Group implements Serializable {
 
     /**
      * gets the description of this group
+     *
      * @return is the string describing this group
      */
     public String getDescription() {
@@ -100,6 +109,7 @@ public class Group implements Serializable {
 
     /**
      * sets the description of this group
+     *
      * @param description is the string to be used to describe this group
      */
     public void setDescription(String description) {
@@ -108,6 +118,7 @@ public class Group implements Serializable {
 
     /**
      * gets the collection of users that are members of this group
+     *
      * @return the collection of users in this group
      */
     public Collection<User> getStudents() {
@@ -116,6 +127,7 @@ public class Group implements Serializable {
 
     /**
      * sets the collection of users in this group
+     *
      * @param students the collection of users in this group
      */
     public void setStudents(Collection<User> students) {
@@ -124,15 +136,19 @@ public class Group implements Serializable {
 
     /**
      * adds a user to this group
+     *
      * @param student is the user to be added to this group
      */
     public void addStudent(User student) {
-        if (this.students == null)
+        if (this.students == null) {
             this.students = new HashSet();
+        }
         this.students.add(student);
     }
+
     /**
      * gets the collection of users that are members of this group
+     *
      * @return the collection of users in this group
      */
     public Collection<Tutor> getTutors() {
@@ -141,6 +157,7 @@ public class Group implements Serializable {
 
     /**
      * sets the collection of users in this group
+     *
      * @param tutors the collection of users in this group
      */
     public void setTutors(Collection<Tutor> tutors) {
@@ -149,16 +166,19 @@ public class Group implements Serializable {
 
     /**
      * adds a user to this group
+     *
      * @param tutor is the user to be added to this group
      */
     public void addTutor(Tutor tutor) {
-        if (this.tutors == null)
+        if (this.tutors == null) {
             this.tutors = new HashSet();
+        }
         this.tutors.add(tutor);
     }
-    
+
     /**
      * Override hashCode
+     *
      * @return hash
      */
     @Override
@@ -167,10 +187,11 @@ public class Group implements Serializable {
         hash += (name != null ? name.hashCode() : 0);
         return hash;
     }
-    
+
     /**
      * Overrides the equals method
-     * @param object 
+     *
+     * @param object
      * @return true if object is Group, else false
      */
     @Override
@@ -182,9 +203,10 @@ public class Group implements Serializable {
         Group other = (Group) object;
         return (this.name != null || other.name == null) && (this.name == null || this.name.equals(other.name));
     }
-    
+
     /**
      * Override toString
+     *
      * @return Group as string
      */
     @Override

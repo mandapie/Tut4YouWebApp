@@ -34,54 +34,83 @@ import javax.persistence.Table;
 /**
  * User is the most basic user type. SINGLE_TABLE is used as our inheritance
  * strategy as Tutor inherits all the attributes of a User.
+ *
  * @author Keith Tran <keithtran25@gmail.com>
- * @author Syed Haider <shayder426@gmail.com> 
+ * @author Syed Haider <shayder426@gmail.com>
  */
-@Table(name="Users")
+@Table(name = "Users")
 @Entity
-@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name="user_type", discriminatorType=DiscriminatorType.STRING)
-@DiscriminatorValue(value="Student")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "user_type", discriminatorType = DiscriminatorType.STRING)
+@DiscriminatorValue(value = "Student")
 public class User implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     @Id
     private String email;
-    
+
     private String firstName;
     private String lastName;
     private String userName;
     private String phoneNumber;
     private String password;
     private String university;
-    
     /**
      * A user can submit multiple Requests
      */
-    @OneToMany(mappedBy="student", cascade=CascadeType.ALL)
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
     private Collection<Request> requests;
-    
+
     /**
-     * A user can be in multiple Groups and
-     * A group can contain multiple users
+     * A user can submit multiple Ratings
      */
-    @ManyToMany(mappedBy="students", cascade=CascadeType.ALL)
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
+    private Collection<Rating> ratings;
+
+    /**
+     * A user can be in multiple Groups and A group can contain multiple users
+     */
+    @ManyToMany(mappedBy = "students", cascade = CascadeType.ALL)
     private Collection<Group> groups;
-    
+
+    /**
+     * A user can submit multiple ratings
+     *
+     * @OneToMany(mappedBy="student", cascade=CascadeType.ALL) private
+     * Collection<Rating> ratings;
+     */
     /**
      * User constructor
      */
     public User() {
-        
     }
-    
+
+    /**
+     * Copy constructor
+     *
+     * @param user
+     */
+    public User(User user) {
+        this.email = user.email;
+        this.firstName = user.firstName;
+        this.lastName = user.lastName;
+        this.userName = user.userName;
+        this.phoneNumber = user.phoneNumber;
+        this.password = user.password;
+        this.university = user.university;
+    }
+
     /**
      * User overloaded constructor
+     *
      * @param email
      * @param firstName
      * @param lastName
      * @param userName
      * @param phoneNumber
-     * @param password 
-     * @param university 
+     * @param password
+     * @param university
      */
     public User(String email, String firstName, String lastName, String userName, String phoneNumber, String password, String university) {
         this.email = email;
@@ -92,137 +121,154 @@ public class User implements Serializable {
         this.password = password;
         this.university = university;
     }
-    
+
     /**
      * Gets the email of a user
+     *
      * @return the email
      */
     public String getEmail() {
         return email;
     }
-    
+
     /**
      * Sets the email of a user
-     * @param email 
+     *
+     * @param email
      */
     public void setEmail(String email) {
         this.email = email;
     }
-    
+
     /**
      * Gets the first name of a user
+     *
      * @return first name
      */
     public String getFirstName() {
         return firstName;
     }
-    
+
     /**
      * Sets the first name of a user
-     * @param firstName 
+     *
+     * @param firstName
      */
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
-    
+
     /**
      * Gets the last name of a student
+     *
      * @return the last name
      */
     public String getLastName() {
         return lastName;
     }
-    
+
     /**
      * Sets the last name of a user
-     * @param lastName 
+     *
+     * @param lastName
      */
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
-    
+
     /**
      * Gets the username of a user
+     *
      * @return username
      */
     public String getUserName() {
         return userName;
     }
-    
+
     /**
      * Sets the username of a user
-     * @param userName 
+     *
+     * @param userName
      */
     public void setUserName(String userName) {
         this.userName = userName;
     }
-    
+
     /**
      * Gets the phone number of a user
+     *
      * @return phone number
      */
     public String getPhoneNumber() {
         return phoneNumber;
     }
-    
+
     /**
      * Sets the phone number of a user
+     *
      * @param phoneNumber
      */
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
-    
+
     /**
      * Gets the password of a user
+     *
      * @return password
      */
     public String getPassword() {
         return password;
     }
-    
+
     /**
      * Sets the password of a user
-     * @param password 
+     *
+     * @param password
      */
     public void setPassword(String password) {
         this.password = password;
     }
-    
+
     /**
      * gets the university of the user
-     * @return 
+     *
+     * @return
      */
     public String getUniversity() {
         return university;
     }
-    
+
     /**
      * gets the university of the user
-     * @param university 
+     *
+     * @param university
      */
     public void setUniversity(String university) {
         this.university = university;
     }
-    
+
     /**
      * Gets the collection requests submitted by a user
+     *
      * @return collection of Requests
      */
     public Collection<Request> getRequests() {
         return requests;
     }
-    
+
     /**
      * Sets the collection requests submitted by a user
-     * @param requests 
+     *
+     * @param requests
      */
     public void setRequests(Collection<Request> requests) {
         this.requests = requests;
     }
-    
+
     /**
      * gets the groups that this user is a member of
+     *
      * @return a collection of groups that this user belongs to
      */
     public Collection<Group> getGroups() {
@@ -231,56 +277,76 @@ public class User implements Serializable {
 
     /**
      * sets the groups that this user belongs to
+     *
      * @param groups is the collection of groups that this user is a member of
      */
     public void setGroups(Collection<Group> groups) {
         this.groups = groups;
     }
-    
+
     /**
      * Adds a request submitted to the collection of Requests
-     * @param request 
+     *
+     * @param request
      */
     public void addRequest(Request request) {
-        if (this.requests == null)
+        if (this.requests == null) {
             this.requests = new HashSet();
+        }
         this.requests.add(request);
     }
-    
+
+    /**
+     * Adds a rating submitted to the collection of Rating
+     *
+     * @param rating
+     */
+    public void addRating(Rating rating) {
+        if (this.ratings == null) {
+            this.ratings = new HashSet();
+        }
+        this.ratings.add(rating);
+    }
+
     /**
      * Add a group to the user's set of groups
+     *
      * @param group to be added
      */
     public void addGroup(Group group) {
-        if (this.groups == null)
+        if (this.groups == null) {
             this.groups = new HashSet();
+        }
         this.groups.add(group);
     }
 
     /**
      * determines whether or not the information for this user is valid
+     *
      * @param confirmPassword the password to be confirmed
-     * @return <code>true</code> if this user has valid information; 
-     *         <code>false</code> otherwise
+     * @return <code>true</code> if this user has valid information;
+     * <code>false</code> otherwise
      * @author Alvaro Monge <alvaro.monge@csulb.edu>
      */
     public boolean isInformationValid(String confirmPassword) {
         return (firstName != null && lastName != null
-                 && email != null && password != null
-                 && confirmPassword.equals(password));
+                && email != null && password != null
+                && confirmPassword.equals(password));
     }
-    
+
     /**
      * gets the user type from the discriminator column
      * https://stackoverflow.com/questions/15208793/getting-the-value-of-the-discriminator-column
+     *
      * @return the user type
      */
     public String getDecriminatorValue() {
         return this.getClass().getAnnotation(DiscriminatorValue.class).value();
     }
-    
+
     /**
      * Override hashCode
+     *
      * @return hash
      */
     @Override
@@ -289,10 +355,11 @@ public class User implements Serializable {
         hash += (email != null ? email.hashCode() : 0);
         return hash;
     }
-    
+
     /**
      * Overrides the equals method
-     * @param object 
+     *
+     * @param object
      * @return true if object is User, else false
      */
     @Override
@@ -307,9 +374,10 @@ public class User implements Serializable {
         }
         return true;
     }
-    
+
     /**
      * Override toString
+     *
      * @return User attributes
      */
     @Override

@@ -19,6 +19,8 @@ package tut4you.controller;
 import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
@@ -28,172 +30,194 @@ import tut4you.model.*;
 import tut4you.exception.*;
 
 /**
- * RegistrationBean encapsulates all the functions/services involved 
- * in registering as a User or Tutor.
+ * RegistrationBean encapsulates all the functions/services involved in
+ * registering as a User or Tutor.
+ *
  * @author Amanda Pan <daikiraidemodaisuki@gmail.com>
  * @author Keith Tran <keithtran25@gmail.com>
  */
 @Named
 @RequestScoped
 public class RegistrationBean implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     private static final Logger LOGGER = Logger.getLogger("RequestBean");
-    
+
     @EJB
     private Tut4YouApp tut4youApp;
-    
+
     private User newStudent;
     private Tutor newTutor;
     private String confirmPassword;
     private String userType;
     private Boolean isStudent;
-    
-    /** Creates a new instance of Registration */
+
+    /**
+     * Creates a new instance of Registration
+     */
+    //@PostConstruct
     public RegistrationBean() {
-        newStudent = new User();
-        newTutor = new Tutor();
+
     }
-    
+
+    //EXAMPLE
+//    @PostConstruct
+//    public void createBookstoreBean() {
+//        LOGGER.severe("New BookstoreBean!" + this);
+//    }
+//    @PreDestroy
+//    public void destroyBookstoreBean() {
+//        LOGGER.severe("Destroy BookstoreBean!" + this);
+//    }
     /**
      * Gets the new student who just registered
+     *
      * @return the new User entity
      */
     public User getNewStudent() {
         return newStudent;
     }
-    
+
     /**
      * Sets the user to be a User
+     *
      * @param newStudent student who has just registered
      */
     public void setNewStudent(User newStudent) {
         this.newStudent = newStudent;
     }
-    
+
     /**
      * Gets the tutor that has just registered
+     *
      * @return newTutor the tutor that just registered
      */
     public Tutor getNewTutor() {
         return newTutor;
     }
-    
+
     /**
      * Sets the user to be a Tutor
+     *
      * @param newTutor the newly registered Tutor
      */
     public void setNewTutor(Tutor newTutor) {
         this.newTutor = newTutor;
     }
-    
+
     /**
      * Gets the field of the confirm Password
+     *
      * @return the field of the confirm Password
      */
     public String getConfirmPassword() {
         return confirmPassword;
     }
-    
+
     /**
      * Sets the value in the confirm password to check if password match
+     *
      * @param confirmPassword the password matching the typed password
      */
     public void setConfirmPassword(String confirmPassword) {
         this.confirmPassword = confirmPassword;
     }
-    
+
     /**
      * Gets the userType
+     *
      * @return the userType is Tutor or User
      */
     public String getUserType() {
         return userType;
     }
-    
+
     /**
      * Sets the userType
+     *
      * @param userType the userType is tutor or student
      */
     public void setUserType(String userType) {
         this.userType = userType;
     }
-    
+
     /**
      * Checks to see if the user is a student
+     *
      * @return true if user is a student
      */
     public Boolean getIsStudent() {
         return isStudent.equals("Student");
     }
-    
+
     /**
      * JSF Action that uses the information submitted in the registration page
      * to add user as a registered User user.
-     * @return either failure, success, or register depending on successful
-     * registration.
-     */
-    public String createStudent() {
-        String result = "failure";
-        if (newStudent.isInformationValid(confirmPassword)) {
-            newStudent.setPassword(tut4you.controller.HashPassword.getSHA512Digest(newStudent.getPassword()));
-            try {
-                tut4youApp.registerStudent(newStudent, "tut4youapp.student");
-                result = "success";
-            } catch (StudentExistsException see) {
-                LOGGER.log(Level.SEVERE, null, see);
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("A user with that information already exists, try again."));
-                result = "register";
-            } catch (Exception e) {
-                LOGGER.log(Level.SEVERE, null, e);
-                result = "failure";
-            }
-        }
-        return result;
-    }
-    
-    /**
-     * JSF Action that uses the information submitted in the registration page
-     * to add user as a registered Tutor user.
-     * @return either failure, success, or register depending on successful 
-     * registration.
-     */
-    public String createTutor() {
-        String result = "failure";
-        if (newTutor.isInformationValid(confirmPassword)) {
-            newTutor.setPassword(tut4you.controller.HashPassword.getSHA512Digest(newTutor.getPassword()));
-            try {
-                tut4youApp.registerTutor(newTutor, "tut4youapp.student", "tut4youapp.tutor");
-                result = "success";
-            } catch (StudentExistsException see) {
-                LOGGER.log(Level.SEVERE, null, see);
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("A user with that information already exists, try again."));
-                result = "register";
-            } catch (Exception e) {
-                LOGGER.log(Level.SEVERE, null, e);
-                result = "failure";
-            }
-        }
-        return result;
-    }
-    
-    /**
-     * JSF Action that uses the information submitted in the registration page
-     * to add user as a registered User user.
+     *
      * @return either failure, success, or register depending on successful
      * registration.
      */
     // IN PROGRESS
-//    public String createUser() {
+    public String createUser() {
+        String result = "failure";
+        if (newStudent.isInformationValid(confirmPassword)) {
+            newStudent.setPassword(tut4you.controller.HashPassword.getSHA512Digest(newStudent.getPassword()));
+            try {
+                System.out.println("New Student: " + newStudent.getEmail());
+                tut4youApp.registerUser(newStudent, userType);
+                result = "success";
+            } catch (StudentExistsException see) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("A user with that information already exists, try again."));
+                result = "register";
+            } catch (Exception e) {
+                LOGGER.log(Level.SEVERE, null, e);
+                result = "failure";
+            }
+        }
+        return result;
+    }
+
+//    /**
+//     * JSF Action that uses the information submitted in the registration page
+//     * to add user as a registered User user.
+//     * @return either failure, success, or register depending on successful
+//     * registration.
+//     */
+//    public String createStudent() {
 //        String result = "failure";
 //        if (newStudent.isInformationValid(confirmPassword)) {
 //            newStudent.setPassword(tut4you.controller.HashPassword.getSHA512Digest(newStudent.getPassword()));
 //            try {
 //                tut4youApp.registerStudent(newStudent, "tut4youapp.student");
-//                //if (userType == "Tutor") {
-//                    //newTutor = (Tutor) newStudent;
-//                    tut4youApp.addTutorRole(newStudent, "tut4youapp.tutor");
-//                //}
 //                result = "success";
 //            } catch (StudentExistsException see) {
+//                LOGGER.log(Level.SEVERE, null, see);
+//                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("A user with that information already exists, try again."));
+//                result = "register";
+//            } catch (Exception e) {
+//                LOGGER.log(Level.SEVERE, null, e);
+//                result = "failure";
+//            }
+//        }
+//        return result;
+//    }
+//    
+//    /**
+//     * JSF Action that uses the information submitted in the registration page
+//     * to add user as a registered Tutor user.
+//     * @return either failure, success, or register depending on successful 
+//     * registration.
+//     */
+//    public String createTutor() {
+//        String result = "failure";
+//        if (newTutor.isInformationValid(confirmPassword)) {
+//            newTutor.setPassword(tut4you.controller.HashPassword.getSHA512Digest(newTutor.getPassword()));
+//            try {
+//                tut4youApp.registerTutor(newTutor, "tut4youapp.student", "tut4youapp.tutor");
+//                result = "success";
+//            } catch (StudentExistsException see) {
+//                LOGGER.log(Level.SEVERE, null, see);
 //                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("A user with that information already exists, try again."));
 //                result = "register";
 //            } catch (Exception e) {

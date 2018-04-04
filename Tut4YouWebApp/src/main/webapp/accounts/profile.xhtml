@@ -19,9 +19,9 @@
                             <h:outputLabel value="Name:"/>
                         </b:column>
                         <b:column span="7">
-                            <h:outputLabel value="#{userBean.student.firstName}"/>
+                            <h:outputLabel value="#{userBean.user.firstName}"/>
                             <span></span> <!-- &nbsp; cause run time error -->
-                            <h:outputLabel value="#{userBean.student.lastName}"/>
+                            <h:outputLabel value="#{userBean.user.lastName}"/>
                         </b:column>
                     </b:row>
                     <b:row>
@@ -29,7 +29,7 @@
                             <h:outputLabel value="Username:"/>
                         </b:column>
                         <b:column span="7">
-                            <h:outputLabel value="#{userBean.student.userName}"/>
+                            <h:outputLabel value="#{userBean.user.userName}"/>
                         </b:column>
                     </b:row>
                     <b:row>
@@ -37,7 +37,7 @@
                             <h:outputLabel value="Email:"/>
                         </b:column>
                         <b:column span="7">
-                            <h:outputLabel value="#{userBean.student.email}"/>
+                            <h:outputLabel value="#{userBean.user.email}"/>
                         </b:column>
                     </b:row>
                     <b:row>
@@ -45,7 +45,7 @@
                             <h:outputLabel value="Phone Number:"/>
                         </b:column>
                         <b:column span="7">
-                            <h:outputLabel value="#{userBean.student.phoneNumber}"/>
+                            <h:outputLabel value="#{userBean.user.phoneNumber}"/>
                         </b:column>
                     </b:row>
                     <b:row>
@@ -53,28 +53,28 @@
                             <h:outputLabel value="University:"/>
                         </b:column>
                         <b:column span="7">
-                            <h:outputLabel value="#{userBean.student.university}"/>
+                            <h:outputLabel value="#{userBean.user.university}"/>
                         </b:column>
                     </b:row>
-                    <c:if test="#{userBean.tutor}">
+                    <c:if test="#{userBean.isTutor}">
                         <b:row>
                             <b:column span="5">
                                 <h:outputLabel value="Hourly Rate:"/>
                             </b:column>
                             <b:column span="7">
-                                <h:outputLabel value="#{userBean.student.priceRate}">
+                                <h:outputLabel value="#{userBean.user.priceRate}">
                                     <f:convertNumber type="currency" currencySymbol="$" locale="en_US" />
                                 </h:outputLabel>
                             </b:column>
                         </b:row>
                     </c:if>
-                    <c:if test="#{userBean.tutor}">
+                    <c:if test="#{userBean.isTutor}">
                         <b:row>
                             <b:column span="5">
                                 <h:outputLabel value="Avg Rating:"/>
                             </b:column>
                             <b:column span="7">
-                                <p:rating value="#{ratingBean.getAvgRating()}" readonly="true" />
+                                <p:rating value="#{ratingBean.avgRating}" readonly="true" />
                             </b:column>
                         </b:row>
                     </c:if>
@@ -89,10 +89,10 @@
                         </b:column>
                     </b:row>
                 </b:panel>
-                <c:if test="#{userBean.tutor}">
+                <c:if test="#{userBean.isTutor}">
                     <h:form id="doNotDisturb">
-                        <b:switch label="Do Not Disturb" value="#{userBean.student.doNotDisturb}" id="doNotDisturb" update="@form">
-                            <f:ajax event="change" render="doNotDisturb" listener="#{userBean.updateDoNotDisturb(userBean.student.doNotDisturb)}" />
+                        <b:switch label="Do Not Disturb" value="#{userBean.user.doNotDisturb}" id="doNotDisturb" update="@form">
+                            <f:ajax event="change" render="doNotDisturb" listener="#{userBean.updateDoNotDisturb(userBean.user.doNotDisturb)}" />
                         </b:switch>
                     </h:form>
                 </c:if>
@@ -103,7 +103,7 @@
                     <br></br>
                     <a href="/Tut4YouWebApp/students/sessionTimer.xhtml">Session Timer</a>
                     <br></br>
-                    <c:if test="#{userBean.tutor}">
+                    <c:if test="#{userBean.isTutor}">
                         <a href="/Tut4YouWebApp/tutors/availability.xhtml">Add Availability</a>
                         <br></br>
                         <a href="/Tut4YouWebApp/tutors/addCourse.xhtml">Add Courses</a>
@@ -142,7 +142,7 @@
                                 </h:column>
                             </b:dataTable>
                         </b:tab>
-                        <c:if test="#{userBean.tutor}">
+                        <c:if test="#{userBean.isTutor}">
                             <b:tab title="Notifications">
                                 <!-- NOT WORKING PROPERLY -->
         <!--                            <c:if test="#{notifyBean.hasNotif}">
@@ -208,6 +208,18 @@
                 </h:form>
 
             </b:column>
+            <c:if test="#{userBean.condition}">  
+                #{userBean.updateCurrentZip()}
+            </c:if>
+            <p:dialog header="Current Zip Code" widgetVar="myDialog" minHeight="40" appendTo="" visible="true"
+                rendered="#{userBean.condition}">
+                <h:form>
+                <h:outputText value="Enter current zip code" />
+                <b:inputText id="currentZip" placeholder="press enter to submit" required="true" requiredMessage="required" value="#{userBean.currentZip}">
+                            <b:message for="currentZip"/>
+                </b:inputText>
+                </h:form>
+            </p:dialog>
         </b:container>
         <ui:debug hotkey='x'/>
     </ui:define>

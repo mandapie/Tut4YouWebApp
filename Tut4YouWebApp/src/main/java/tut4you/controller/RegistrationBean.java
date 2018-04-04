@@ -17,6 +17,12 @@
 package tut4you.controller;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -48,28 +54,43 @@ public class RegistrationBean implements Serializable {
     private Tut4YouApp tut4youApp;
 
     private User newStudent;
-    private Tutor newTutor;
     private String confirmPassword;
     private String userType;
+    private String priceRate;
     private Boolean isStudent;
-
+    private String defaultZip;
+    private int maxRadius;
+    
     /**
      * Creates a new instance of Registration
      */
-    //@PostConstruct
-    public RegistrationBean() {
+    @PostConstruct
+    public void  createRegistrationBean() {
 
     }
+    
+    /** 
+     * Destroy a new instance of Registration
+     */
+    @PreDestroy
+    public void destroyRegistrationBean() {
+        
+    }
+    /**
+     * get max radius
+     * @return maxRadius
+     */
+    public int getMaxRadius() {
+        return maxRadius;
+    }
+    /**
+     * set max radius
+     * @param maxRadius 
+     */
+    public void setMaxRadius(int maxRadius) {
+        this.maxRadius = maxRadius;
+    }
 
-    //EXAMPLE
-//    @PostConstruct
-//    public void createBookstoreBean() {
-//        LOGGER.severe("New BookstoreBean!" + this);
-//    }
-//    @PreDestroy
-//    public void destroyBookstoreBean() {
-//        LOGGER.severe("Destroy BookstoreBean!" + this);
-//    }
     /**
      * Gets the new student who just registered
      *
@@ -88,23 +109,6 @@ public class RegistrationBean implements Serializable {
         this.newStudent = newStudent;
     }
 
-    /**
-     * Gets the tutor that has just registered
-     *
-     * @return newTutor the tutor that just registered
-     */
-    public Tutor getNewTutor() {
-        return newTutor;
-    }
-
-    /**
-     * Sets the user to be a Tutor
-     *
-     * @param newTutor the newly registered Tutor
-     */
-    public void setNewTutor(Tutor newTutor) {
-        this.newTutor = newTutor;
-    }
 
     /**
      * Gets the field of the confirm Password
@@ -141,7 +145,34 @@ public class RegistrationBean implements Serializable {
     public void setUserType(String userType) {
         this.userType = userType;
     }
-
+    /**
+     * get price rate
+     * @return priceRate
+     */
+    public String getPriceRate() {
+        return priceRate;
+    }
+    /**
+     * set price rate
+     * @param priceRate 
+     */
+    public void setPriceRate(String priceRate) {
+        this.priceRate = priceRate;
+    }
+    /**
+     * get default zip
+     * @return defaultZip
+     */
+    public String getDefaultZip() {
+        return defaultZip;
+    }
+    /**
+     * set defaultZip
+     * @param defaultZip 
+     */
+    public void setDefaultZip(String defaultZip) {
+        this.defaultZip = defaultZip;
+    }
     /**
      * Checks to see if the user is a student
      *
@@ -150,11 +181,10 @@ public class RegistrationBean implements Serializable {
     public Boolean getIsStudent() {
         return isStudent.equals("Student");
     }
-
+    
     /**
      * JSF Action that uses the information submitted in the registration page
      * to add user as a registered User user.
-     *
      * @return either failure, success, or register depending on successful
      * registration.
      */
@@ -164,8 +194,11 @@ public class RegistrationBean implements Serializable {
         if (newStudent.isInformationValid(confirmPassword)) {
             newStudent.setPassword(tut4you.controller.HashPassword.getSHA512Digest(newStudent.getPassword()));
             try {
-                System.out.println("New Student: " + newStudent.getEmail());
-                tut4youApp.registerUser(newStudent, userType);
+                double pr = 0;
+                if (priceRate != null) {
+                    pr = Double.parseDouble(priceRate);
+                }
+                tut4youApp.registerUser(newStudent, userType, pr, defaultZip, maxRadius);
                 result = "success";
             } catch (StudentExistsException see) {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("A user with that information already exists, try again."));
@@ -177,54 +210,16 @@ public class RegistrationBean implements Serializable {
         }
         return result;
     }
-
-//    /**
-//     * JSF Action that uses the information submitted in the registration page
-//     * to add user as a registered User user.
-//     * @return either failure, success, or register depending on successful
-//     * registration.
-//     */
-//    public String createStudent() {
-//        String result = "failure";
-//        if (newStudent.isInformationValid(confirmPassword)) {
-//            newStudent.setPassword(tut4you.controller.HashPassword.getSHA512Digest(newStudent.getPassword()));
-//            try {
-//                tut4youApp.registerStudent(newStudent, "tut4youapp.student");
-//                result = "success";
-//            } catch (StudentExistsException see) {
-//                LOGGER.log(Level.SEVERE, null, see);
-//                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("A user with that information already exists, try again."));
-//                result = "register";
-//            } catch (Exception e) {
-//                LOGGER.log(Level.SEVERE, null, e);
-//                result = "failure";
-//            }
-//        }
-//        return result;
-//    }
-//    
-//    /**
-//     * JSF Action that uses the information submitted in the registration page
-//     * to add user as a registered Tutor user.
-//     * @return either failure, success, or register depending on successful 
-//     * registration.
-//     */
-//    public String createTutor() {
-//        String result = "failure";
-//        if (newTutor.isInformationValid(confirmPassword)) {
-//            newTutor.setPassword(tut4you.controller.HashPassword.getSHA512Digest(newTutor.getPassword()));
-//            try {
-//                tut4youApp.registerTutor(newTutor, "tut4youapp.student", "tut4youapp.tutor");
-//                result = "success";
-//            } catch (StudentExistsException see) {
-//                LOGGER.log(Level.SEVERE, null, see);
-//                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("A user with that information already exists, try again."));
-//                result = "register";
-//            } catch (Exception e) {
-//                LOGGER.log(Level.SEVERE, null, e);
-//                result = "failure";
-//            }
-//        }
-//        return result;
-//    }
+    /**
+     * https://stackoverflow.com/questions/33098603/convert-localtime-java-8-to-date
+     * gets the current date which is used for date joined attribute in tutor
+     * @return date joined
+     * @throws ParseException 
+     */
+    public java.util.Date getCurrentDate() throws ParseException {
+        LocalTime d = LocalTime.now();
+        Instant instant = d.atDate(LocalDate.now()).atZone(ZoneId.systemDefault()).toInstant();
+        Date time = Date.from(instant);
+        return time;
+    }
 }

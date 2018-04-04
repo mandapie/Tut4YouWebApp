@@ -47,6 +47,7 @@ import java.util.Date;
  * @author Keith Tran <keithtran25@gmail.com>
  * @author Syed Haider <shayder426@gmail.com>
  */
+@Table(name="Availability")
 @Entity
 @NamedQueries({
     @NamedQuery(name = Availability.FIND_AVAILABILITY_BY_TUTOR, query = "SELECT a FROM Availability a JOIN a.tutor s WHERE s.email = :email")

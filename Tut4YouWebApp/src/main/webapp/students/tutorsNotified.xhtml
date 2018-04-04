@@ -16,9 +16,16 @@
                 <b:dataTableColumn value="#{tutor.lastName}"/>
                 <h:column>
                     <f:facet name="header">Request</f:facet>
-                    <b:commandButton span="6" value="Request" look="info" action="#{requestBean.sendToTutor(tutor)}"/>
+                    <b:commandButton span="6" value="Request" look="info" action="#{requestBean.sendToTutor(tutor)}"
+                                     actionListener="#{requestBean.tutorList.remove(tutor)}" action-listener="#{requestBean.refreshPage()}">
+                    </b:commandButton>
                 </h:column>
             </b:dataTable>
+            <b:commandButton span="6" value="Return to Account" look="info" action="#{requestBean.goToHomePage()}">
+                <f:actionListener binding="#{requestBean.endConversation()}"/>
+            </b:commandButton>
+                             
+                
         </h:form>
         <ui:debug hotkey='x' />
     </ui:define>

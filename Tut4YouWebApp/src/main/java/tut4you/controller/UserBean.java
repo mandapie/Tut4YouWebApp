@@ -19,6 +19,8 @@ package tut4you.controller;
 import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.ejb.EJB;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
@@ -47,65 +49,105 @@ public class UserBean implements Serializable {
     @EJB
     private Tut4YouApp tut4youapp;
     
-    private User student;
-    private Tutor userTutor;
+    private User user;
     boolean doNotDisturb;
     int tabIndex;
+    boolean condition;
+    private String currentZip;
     
     /**
      * Creates a new instance of UserIdentity
      */
-    public UserBean() {
-        student = userTutor;
-        userTutor = (Tutor)student;
+    @PostConstruct
+    public void createUserBean() {
+        user = null;
+        condition = true;
     }
-    
+    /** 
+     * Destroys a new instance of UserIdentity
+     */
+    @PreDestroy
+    public void destroyUserBean() {
+    }
+    /**
+     * get current zip
+     * @return currentZip
+     */
+    public String getCurrentZip() {
+        return currentZip;
+    }
+    /**
+     * set current zip
+     * @param currentZip 
+     */
+    public void setCurrentZip(String currentZip) {
+        this.currentZip = currentZip;
+    }
+    /**
+     * updates current zip
+     */
+    public void updateCurrentZip() {
+        Tutor tutor = tut4youapp.updateCurrentZip(currentZip);
+        if(tutor.getCurrentZip() != null) {
+            condition = false;
+        }
+        System.out.print("Current Zip: " + currentZip);
+    }
+    /**
+     * get boolean condition
+     * @return condition
+     */
+    public boolean isCondition() {
+        return condition;
+    }
+    /**
+     * set boolean condition
+     * @param condition 
+     */
+    public void setCondition(boolean condition) {
+        this.condition = condition;
+    }
     /**
      * Gets the Tutor object
      * @return 
      */
-    public Tutor getUserTutor() {
-        return userTutor;
+    public User getUser() {
+        return user;
     }
     
     /**
      * Sets the User object
-     * @param tutor 
+     * @param user
      */
-    public void setUserTutor(User tutor) {
-        this.userTutor = (Tutor) tutor;
+    public void setUser(User user) {
+        this.user = user;
     }
-    
-    /**
-     * Gets the User object
-     * @return the student Object
-     */
-    public User getStudent() {
-        return student;
+    public void resetCurrentZip() {
+        tut4youapp.resetCurrentZip();
     }
-    
-    /**
-     * Sets the student Object
-     * @param student the student 
-     */
-    public void setStudent(User student) {
-        this.student = student;
-    }
-    
+//    /**
+//     * Updates a User's information
+//     * @param object User or Tutor object
+//     */
+//    public void updateUser(Object object){
+//        if (object == student){
+//           this.student = (User)object;
+//           tut4youapp.updateUser(student); 
+//        }
+//        else if (object == userTutor){
+//            this.student = (User)object;
+//            this.userTutor = (Tutor)object;
+//            tut4youapp.updateUser(this.student);
+//        }
+//        
+//    }
     /**
      * Updates a User's information
      * @param object User or Tutor object
      */
-    public void updateUser(Object object){
-        if (object == student){
-           this.student = (User)object;
-           tut4youapp.updateUser(student); 
-        }
-        else if (object == userTutor){
-            this.student = (User)object;
-            this.userTutor = (Tutor)object;
-            tut4youapp.updateUser(this.student);
-        }
+    public void updateUser(User user){
+        tut4youapp.updateUser(user); 
+
         
     }
     /**
@@ -149,41 +191,44 @@ public class UserBean implements Serializable {
     public void updateDoNotDisturb(Boolean d) {
         tut4youapp.updateDoNotDisturb(doNotDisturb);
     }
-    
-    /**
-     * Determine if current authenticated user has the role of tutor
-     * @return true if user has role of tutor, false otherwise.
-     */
-    public boolean isTutor() {
-        boolean isTutor = false;
-        if (this.isStudentAuthenticated()) {
-            FacesContext context = FacesContext.getCurrentInstance();
-            HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-            isTutor = request.isUserInRole("tut4youapp.tutor");
-        }
-        return isTutor;
-    }
 
     /**
-     * Determine if the student is authenticated and if so, make sure the session scope includes the User object for the authenticated student
-     * @return true if the student making a request is authenticated, false otherwise.
+     * Determine if the user is authenticated and if so, make sure the session scope includes the User object for the authenticated user
+     * @return true if the user making a request is authenticated, false otherwise.
      */
-    public boolean isStudentAuthenticated() {
+    public boolean isIsUserAuthenticated() {
         boolean isAuthenticated = true;
-        if (null == this.student) {
+        if (null == this.user) {
             FacesContext context = FacesContext.getCurrentInstance();
             HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
             String userName = request.getRemoteUser();
             if (userName == null) {
                 isAuthenticated = false;
             } else {
-                this.student = tut4youapp.find(userName);
-                isAuthenticated = (this.student != null);
+                this.user = tut4youapp.find(userName);
+                isAuthenticated = (this.user != null);
             }
         }
         return isAuthenticated;
     }
     
+    /**
+     * Determine if current authenticated user has the role of tutor
+     * @return true if user has role of tutor, false otherwise.
+     */
+    public boolean isIsTutor() {
+        boolean isTutor = false;
+        if (this.isIsUserAuthenticated()) {
+            FacesContext context = FacesContext.getCurrentInstance();
+            HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+            isTutor = request.isUserInRole("tut4youapp.tutor");
+        }
+        return isTutor;
+    }
+    /**
+     * Logout the student and invalidate the session
+     * @return success if student is logged out and session invalidated, failure otherwise.
+     */
     /**
      * Logout the student and invalidate the session
      * @return success if student is logged out and session invalidated, failure otherwise.
@@ -194,8 +239,10 @@ public class UserBean implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
         try {
+            resetCurrentZip();
             request.logout();
-            student = null;
+            user = null;
+            currentZip = null;
             result = "success";
         } catch (ServletException ex) {
             LOGGER.log(Level.SEVERE, null, ex);
@@ -207,6 +254,7 @@ public class UserBean implements Serializable {
         }
         return result;
     }
+
     
 
 

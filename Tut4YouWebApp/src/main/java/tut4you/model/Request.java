@@ -44,8 +44,7 @@ import javax.persistence.TemporalType;
  */
 @Table(name = "Request")
 @NamedQueries({
-    @NamedQuery(name = Request.FIND_REQUEST_BY_EMAIL, query = "SELECT r from Request r JOIN r.student s WHERE s.email = :student_email AND r.status = :status")
-    ,
+    @NamedQuery(name = Request.FIND_REQUEST_BY_EMAIL, query = "SELECT r from Request r JOIN r.student s WHERE s.email = :student_email AND r.status = :status"),
     @NamedQuery(name = Request.FIND_REQUESTS_BY_TUTOR, query = "SELECT r FROM Request r JOIN r.availableTutors t WHERE t.email = :email")
 })
 @Entity
@@ -86,6 +85,11 @@ public class Request implements Serializable {
      */
     @ManyToOne
     private User student;
+    /**
+     * ManyToOne relationship between request and zipCode
+     */
+    @ManyToOne
+    private ZipCode zipCode;
     /**
      * only one course can be associated with one request
      */
@@ -138,7 +142,20 @@ public class Request implements Serializable {
         this.currentTime = currentTime;
         this.lengthOfSession = lengthOfSession;
     }
-    
+    /**
+     * get ZipCode of Request
+     * @return zipCode
+     */
+    public ZipCode getZipCode() {
+        return zipCode;
+    }
+    /**
+     * set zipCode of Request
+     * @param zipCode 
+     */
+    public void setZipCode(ZipCode zipCode) {
+        this.zipCode = zipCode;
+    }
     /**
      * Gets the id of a Request
      *
@@ -156,11 +173,17 @@ public class Request implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
-
+    /**
+     * get day of week
+     * @return dayOfWeek
+     */
     public String getDayOfWeek() {
         return dayOfWeek;
     }
-
+    /**
+     * set day of week
+     * @param dayOfWeek 
+     */
     public void setDayOfWeek(String dayOfWeek) {
         this.dayOfWeek = dayOfWeek;
     }

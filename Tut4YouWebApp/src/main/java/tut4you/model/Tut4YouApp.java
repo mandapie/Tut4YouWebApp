@@ -40,6 +40,7 @@ import tut4you.exception.*;
 import java.util.Arrays;
 import java.util.*;
 import javax.faces.application.FacesMessage;
+import tut4you.controller.RegistrationBean;
 import tut4you.controller.UserBean;
 import tut4you.exception.*;
 
@@ -166,26 +167,28 @@ public class Tut4YouApp {
         return courseTutorQuery.getSingleResult();
     }
 
+
     /**
-     *
-     * Only students can see the list of available tutors that tutors the
-     * requested course. Finds all tutors that teaches the course.
-     *
+     * Only students can see the list of available tutors that tutors the requested
+     * course.
+     * Finds all tutors that teaches the course.
      * @param course selected course to be tutored
      * @param dayOfWeek
      * @param time
      * @param doNotDisturb
+     * @param zipCode
      * @return the number of tutors that tutors the course
-     * @author Andrew Kaichi <ahkaichi@gmail.com>
+     * @author Andrew Kaichi <ahkaichi@gmail.com> Keith Tran <keithtran25@gmail.com>
      */
     @RolesAllowed("tut4youapp.student")
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-    public List<Tutor> getTutorsFromCourse(String course, String dayOfWeek, java.util.Date time, Boolean doNotDisturb) {
-        TypedQuery<Tutor> courseTutorQuery = em.createNamedQuery(Tutor.FIND_TUTORS_BY_COURSE_DAY_TIME, Tutor.class);
+    public List<Tutor> getTutorsFromCourse(String course, String dayOfWeek, java.util.Date time, Boolean doNotDisturb, String zipCode) {
+        TypedQuery<Tutor> courseTutorQuery = em.createNamedQuery(Tutor.FIND_TUTORS_BY_COURSE_DAY_TIME_DZIP, Tutor.class);
         courseTutorQuery.setParameter("coursename", course);
         courseTutorQuery.setParameter("dayofweek", dayOfWeek);
         courseTutorQuery.setParameter("requestTime", time, TemporalType.TIME);
         courseTutorQuery.setParameter("doNotDisturb", false);
+        courseTutorQuery.setParameter("zipCode", zipCode);
         return courseTutorQuery.getResultList();
     }
 
@@ -554,65 +557,45 @@ public class Tut4YouApp {
     }
 
     /**
-     * Registers user as a student. The student will be added a student role.
-     *
-     * @param student
-     * @param groupName
-     * @throws StudentExistsException Referenced code from Alvaro Monge
-     * <alvaro.monge@csulb.edu>
+     * Converts student to be a tutor. The student will be added a tutor role.
+     * @param user
+     * @param userType
+     * @param priceRate
+     * @param defaultZip
+     * @param maxRadius
+     * @throws tut4you.exception.StudentExistsException
+     * @throws java.text.ParseException
      */
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void registerStudent(User student, String groupName) throws StudentExistsException {
-        // 1: Use security EJB to add username/password to security
-        // 2: if successful, then add as a registered student
-        if (null == em.find(User.class, student.getEmail())) {
-            Group group = em.find(Group.class, groupName);
-            if (group == null) {
-                group = new Group(groupName);
-            }
-            student.addGroup(group);
-            group.addStudent(student);
-            em.persist(student);
-            em.flush();
-        } else {
-            throw new StudentExistsException();
+    public void registerUser(User user, String userType, double priceRate, String defaultZip, int maxRadius) throws StudentExistsException, ParseException {
+        Group group = em.find(Group.class, "tut4youapp.student");
+        User newStudent = new User(user);
+        RegistrationBean registrationBean = new RegistrationBean();
+        if (group == null) {
+            group = new Group("tut4youapp.student");
         }
+        if (userType.equals("Student")) {
+            newStudent.addGroup(group);
+            group.addStudent(newStudent);
+            em.persist(newStudent);
+        }
+        else {
+            Tutor newTutor = new Tutor(user);
+            newTutor.setDateJoined(registrationBean.getCurrentDate());
+            newTutor.setPriceRate(priceRate);
+            newTutor.setMaxRadius(maxRadius);
+            newTutor.addGroup(group);
+            group.addTutor(newTutor);
+            group = em.find(Group.class, "tut4youapp.tutor");
+            newTutor.addGroup(group);
+            group.addTutor(newTutor);
+            newTutor.setDefaultZip(defaultZip);
+            em.persist(newTutor);
+        }
+        em.flush();
     }
 
-    /**
-     * Registers user as a tutor. The student will be added a student and tutor
-     * role.
-     *
-     * @param tutor
-     * @param groupName
-     * @param groupName2
-     * @throws StudentExistsException Referenced code from Alvaro Monge
-     * <alvaro.monge@csulb.edu>
-     */
-    @PermitAll
-    @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void registerTutor(Tutor tutor, String groupName,
-            String groupName2) throws StudentExistsException {
-        // 1: Use security EJB to add username/password to security
-        // 2: if successful, then add as a registered tutor
-        if (null == em.find(Tutor.class, tutor.getEmail())) {
-            Group group = em.find(Group.class, groupName);
-            Group group2 = em.find(Group.class, groupName2);
-            if (group == null) {
-                group = new Group(groupName);
-                group2 = new Group(groupName2);
-            }
-            tutor.addGroup(group);
-            tutor.addGroup(group2);
-            group.addTutor(tutor);
-            group2.addTutor(tutor);
-            em.persist(tutor);
-            em.flush();
-        } else {
-            throw new StudentExistsException();
-        }
-    }
 
 //    /**
 //     * Converts student to be a tutor. The student will be added a tutor role.
@@ -904,6 +887,99 @@ public class Tut4YouApp {
         FacesMessage message = new FacesMessage("Successfully Updated Profile");
         FacesContext.getCurrentInstance().addMessage(null, message);
 
+    }
+    /**
+     * update current zip code of tutor
+     * @param currentZip
+     * @return tutor
+     * @author Keith Tran <keithtran25@gmail.com>
+     */
+    public Tutor updateCurrentZip(String currentZip) {
+        String userName = userBean.getUsernameFromSession();
+        Tutor tutor = findTutorUserName(userName);
+        if(tutor.getCurrentZip() == null) {
+            tutor.setCurrentZip(currentZip);
+            em.merge(tutor);
+            em.flush();
+        }
+        return tutor;
+    }
+    /**
+     * reset current Zip to null when user logs out
+     * @author Keith Tran <keithtran25@gmail.com>
+     */
+    public void resetCurrentZip() {
+        String userName = userBean.getUsernameFromSession();
+        Tutor tutor = findTutorUserName(userName);
+        tutor.setCurrentZip(null);
+    }
+        /**
+     * retrieve list of user emails
+     * @return list of user emails
+     * @author Keith Tran <keithtran25@gmail.com>
+     */
+    @PermitAll
+    public List<String> getUserEmails() {
+        TypedQuery<String> Query = em.createNamedQuery(User.FIND_USER_EMAILS, String.class);
+        return Query.getResultList();
+    }
+    /**
+     * retrieve list of user usernames
+     * @return list of usernames
+     * @author Keith Tran <keithtran25@gmail.com>
+     */
+    @PermitAll
+    public List<String> getUserUserNames() {
+        TypedQuery<String> Query = em.createNamedQuery(User.FIND_USER_USERNAMES, String.class);
+        return Query.getResultList();
+    }
+        /**
+     * Adds ZipCode to DB if it is not already in DB but first checks if it is in the DB
+     * 
+     * @param zipCode
+     * @return zipcode
+     * @author Keith Tran <keithtran25@gmail.com>
+     *
+     */
+    @RolesAllowed("tut4youapp.student")
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public ZipCode addZipCode(ZipCode zipCode) {
+        TypedQuery<ZipCode> Query = em.createNamedQuery(ZipCode.FIND_ZIP_BY_ZIP_MAXRADIUS, ZipCode.class);
+        Query.setParameter("zipCode", zipCode.getZipCode());   
+        Query.setParameter("maxRadius", zipCode.getMaxRadius());
+        //ZipCode temp = Query.getSingleResult();
+      
+        if(Query.getResultList().isEmpty()) {
+            em.persist(zipCode);
+            em.flush();
+        }
+  
+        return Query.getSingleResult();
+
+    }
+    /**
+     * Add ZipCodeByRadius if it does not belong to zip code location
+     * @param zipCode
+     * @param zipCodeByRadius
+     * @return ZipCodeByRadius
+     * Keith Tran <keithtran25@gmail.com>
+     */
+    public ZipCodeByRadius addZipCodeByRadius(ZipCode zipCode, ZipCodeByRadius zipCodeByRadius) {
+        ZipCodeByRadius zipCodeByRadiusTemp = em.find(ZipCodeByRadius.class, zipCodeByRadius.getZipCodeByRadius());
+        if(zipCodeByRadiusTemp == null){
+            zipCode.addZipCodeByRadius(zipCodeByRadius);
+            zipCodeByRadius.addZipCode(zipCode);
+            em.persist(zipCodeByRadius);
+            em.flush();
+        }
+        else  {
+            zipCode.addZipCodeByRadius(zipCodeByRadiusTemp);
+            zipCodeByRadiusTemp.addZipCode(zipCode);
+            em.merge(zipCode);
+            
+        }
+        return zipCodeByRadius;
+        
     }
 
 }

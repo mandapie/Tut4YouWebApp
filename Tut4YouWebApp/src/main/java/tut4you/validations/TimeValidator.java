@@ -29,14 +29,9 @@ public class TimeValidator implements Validator {
     public void validate(FacesContext context, UIComponent component, Object value) throws ValidatorException {
 
         java.util.Date endTime = (java.util.Date) value;
-        //System.out.println("endTime: " + endTime);
-
         Object otherValue = component.getAttributes().get("otherValue");
         java.util.Date startTime = (java.util.Date) otherValue;
-        //System.out.println("startTime: " + startTime);
-
         String day = (String) component.getAttributes().get("day");
-
         Object listValue = component.getAttributes().get("AvailabilityList");
         List<Availability> list = (List<Availability>) listValue;
 

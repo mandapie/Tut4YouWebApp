@@ -77,4 +77,3 @@ INSERT INTO Rating(student_email,description,ratingValue) VALUES ('daniel@gmail.
 INSERT INTO Rating(student_email,description,ratingValue) VALUES ('daniel@gmail.com','I liked him.',3)
 INSERT INTO Rating(student_email,description,ratingValue) VALUES ('daniel@gmail.com','He did well.',3)
 INSERT INTO Rating(student_email,description,ratingValue) VALUES ('daniel@gmail.com','He did well.',2)
-

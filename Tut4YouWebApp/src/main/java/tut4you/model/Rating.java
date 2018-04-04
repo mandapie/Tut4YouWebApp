@@ -22,6 +22,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 @NamedQueries({
     @NamedQuery(name = Rating.FIND_RATING_BY_EMAIL, query = "SELECT r from Rating r")
@@ -31,6 +32,7 @@ import javax.persistence.OneToOne;
      @NamedQuery(name = Rating.FIND_AVG_RATING_BY_TUTOR, query = "SELECT AVG(r.ratingValue) FROM Rating r")
     ,
     @NamedQuery(name = Request.FIND_REQUEST_BY_EMAIL, query = "SELECT r from Request r JOIN r.student s WHERE s.email = :student_email AND r.status = :status")})
+@Table(name="Rating")
 @Entity
 public class Rating implements Serializable {
 

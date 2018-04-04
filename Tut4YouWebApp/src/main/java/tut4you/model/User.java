@@ -20,6 +20,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.DiscriminatorValue;
@@ -28,6 +29,8 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -43,8 +46,21 @@ import javax.persistence.Table;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "user_type", discriminatorType = DiscriminatorType.STRING)
 @DiscriminatorValue(value = "Student")
-public class User implements Serializable {
 
+@NamedQueries({
+    @NamedQuery(name = User.FIND_USER_EMAILS, query = "SELECT t.email FROM User t"),
+    @NamedQuery(name = User.FIND_USER_USERNAMES, query = "SELECT t.userName FROM User t")
+
+})
+public class User implements Serializable {
+    /**
+     * JPQL Query to obtain a list of users email
+     */
+    public static final String FIND_USER_EMAILS = "Tutor.FindUserEmails";
+    /**
+     * JPQL Query to obtain a list of users username
+     */
+    public static final String FIND_USER_USERNAMES = "Tutor.FindUserUserNames";
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -52,6 +68,7 @@ public class User implements Serializable {
 
     private String firstName;
     private String lastName;
+    @Column(nullable = false, unique = true)
     private String userName;
     private String phoneNumber;
     private String password;

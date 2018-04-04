@@ -66,7 +66,7 @@ public class RequestBean implements Serializable {
     @Temporal(TemporalType.TIME)
     private java.util.Date laterTime;
     private int lengthOfSession;
-    private int numOfTutors; //number of tutors who teaches the course
+    private long numOfTutors; //number of tutors who teaches the course
     private List<Subject> subjectList = new ArrayList(); //list of subjects to be loaded to the request form
     private List<Course> courseList = new ArrayList(); //list of courses based on subject to load to the request form
     private List<Request> requestList = new ArrayList(); //list of pending requests
@@ -203,7 +203,7 @@ public class RequestBean implements Serializable {
      *
      * @return the number of tutors available
      */
-    public int getNumOfTutors() {
+    public long getNumOfTutors() {
         return numOfTutors;
     }
 

@@ -15,7 +15,7 @@
                 <h:outputText value="What is your Email Address?"/>
                 <b:inputText value="#{requestBean.email}" id="inputEmail">
                     <f:validator validatorId="EmailValidator"/>
-                    <f:attribute name="otherValue" value="#{userBean.student.email}"/>
+                    <f:attribute name="otherValue" value="#{userBean.user.email}"/>
                     <b:message for="inputEmail"/>
                 </b:inputText> 
                 <b:commandButton value="Submit" action="#{requestBean.isEmailValid(requestBean.email)}" oncomplete="if (#{requestBean.isCheckEmail()}) PF('dlg3').hide();" update="securityId">

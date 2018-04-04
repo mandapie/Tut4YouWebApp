@@ -121,7 +121,27 @@ public class Tut4YouApp {
             return requestQuery.getResultList();
         }
     }
-    
+    /**
+     * 
+     * @return a list of requests from a user
+     */
+    @RolesAllowed("tut4youapp.student")
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public List<Request> getDeclinedRequest() {
+        String userName = getUsernameFromSession();
+        String email;
+        if (userName == null) {
+            return null;
+        }
+        else {
+            User user = find(userName);
+            email = user.getEmail();
+            TypedQuery<Request> declined = em.createNamedQuery(Request.FIND_REQUEST_BY_EMAIL, Request.class);
+            declined.setParameter("student_email", email);
+            declined.setParameter("status", Request.Status.DECLINED);
+            return declined.getResultList();
+        }
+    }    
     /**
      * A student can cancel pending requests
      * @param r 
@@ -130,22 +150,44 @@ public class Tut4YouApp {
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void cancelRequest(Request r) {
         Request pendingRequest = em.find(Request.class, r.getId());
-        r.setStatus(Request.Status.CANCELED);
+        r.setStatus(Request.Status.CANCELLED);
         if (r.getTutor() == null){
-           r = em.merge(r);
-           em.remove(r); 
+           em.merge(r);
+           //em.remove(r);
+           em.flush();
         }
         else if (r.getTutor() != null){
             Tutor tutor = r.getTutor();
             tutor.removePendingRequest(pendingRequest);
             pendingRequest.removeAvailableTutor(tutor);
-            r = em.merge(r);
-            em.remove(r); 
+            em.merge(r);
+            //em.remove(r); 
             em.merge(tutor);
             em.flush();
         }
     }
-        
+    /**
+     * A student can cancel pending requests
+     * @param r 
+     */
+    @PermitAll
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void declineRequest(Request r) {
+        Request pendingRequest = em.find(Request.class, r.getId());
+        r.setStatus(Request.Status.DECLINED);
+        if (r.getTutor() == null){
+           em.merge(r);
+           em.flush();
+        }
+        else if (r.getTutor() != null){
+            Tutor tutor = r.getTutor();
+            tutor.removePendingRequest(pendingRequest);
+            pendingRequest.removeAvailableTutor(tutor);
+            em.merge(r);
+            em.merge(tutor);
+            em.flush();
+        }
+    } 
     /**
      * Only students can see the number of tutors that tutors the requested
      * course.

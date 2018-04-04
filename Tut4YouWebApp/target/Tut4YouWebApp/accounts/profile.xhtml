@@ -4,11 +4,23 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:b="http://bootsfaces.net/ui"
-                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                xmlns:p="http://primefaces.org/ui">
     <!-- @author Amanda Pan <daikiraidemodaisuki@gmail.com> -->
     <ui:define name="title">Profile</ui:define>
     <ui:define name="content">
         <h1>Profile Page</h1>
+            <b:form>
+                <p:dialog header="Request Declined" widgetVar="modalID" minHeight="40" visible="#{requestBean.declinedRequest.size() != 0}" closable="false">
+                    <ui:repeat var="re" value="#{requestBean.declinedRequest}">
+                        <div>
+                            <p>Your request with the description: #{re.description} has been declined</p>
+                        </div>
+                        <p:commandButton value="Dismiss" style="width:100%" action="#{requestBean.cancelRequest(re)}" oncomplete="PF('modalID').hide();"/>
+                    </ui:repeat> 
+                </p:dialog>
+            </b:form>  
+        
         <b:container fluid="true">
             <!-- profile info and links column -->
             <b:column medium-screen="one-third">
@@ -122,7 +134,7 @@
                                     </h:column>
                                     <h:column>
                                         <f:facet name="header">Action</f:facet>  
-                                        <b:commandButton value="Decline" look="danger" action="#{requestBean.removeRequestFromTutor(req)}"/>
+                                        <b:commandButton value="Decline" look="danger" action="#{requestBean.declineRequest(req)}"/>
                                     </h:column>
                                 </b:dataTable>
                             </h:form>

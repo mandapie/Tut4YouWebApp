@@ -1,0 +1,33 @@
+<ui:composition template="/WEB-INF/templates/layout.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:b="http://bootsfaces.net/ui">
+    <!-- @author Keith Tran <keithtran25@gmail.com> -->
+
+
+    <ui:define name="content">
+        <h1>Previous Sessions</h1>
+        
+        <h:form>
+            <b:dataTable value="#{ratingBean.tutorList}" var="tutor" id="ratingListTable">
+                <b:dataTableColumn>
+                    <f:facet name="header">Tutor Name</f:facet>
+                      #{tutor.firstName}
+                    #{tutor.lastName}
+                </b:dataTableColumn>
+                <b:dataTableColumn>
+                    <f:facet name="header">Rating</f:facet>
+                    <b:commandButton value="Write a Review" action="#{ratingBean.writeReviewPage(tutor)}">
+                    </b:commandButton>
+                </b:dataTableColumn>
+            </b:dataTable>
+        </h:form>
+        <ui:debug hotkey='x'/>
+    </ui:define>
+</ui:composition>
+
+
+
+

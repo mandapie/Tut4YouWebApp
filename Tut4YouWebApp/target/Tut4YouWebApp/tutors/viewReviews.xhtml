@@ -1,0 +1,50 @@
+<ui:composition template="/WEB-INF/templates/layout.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:p="http://primefaces.org/ui">
+    <!-- @author Syed Haider <shayder426@gmail.com> -->
+
+
+    <ui:define name="content">
+        <h1>Reviews</h1>
+        <h3>Average Rating</h3><p:rating value="#{ratingBean.getAvgRating()}" readonly="true" />
+        
+        <h:form>
+            <p:dataScroller value="#{ratingBean.ratingList}" var="rating" chunkSize="10">
+                <h:panelGrid columns="2" style="width:100%">
+                    <p:outputPanel>
+                        <h:panelGrid columns="2" cellpadding="5">
+                            <f:facet name="header">Past Ratings </f:facet>
+                            <h:outputText value="Student: " style="font-weight: bold" />
+                            #{rating.student.firstName}
+                            #{rating.student.lastName}
+
+                            <h:outputText value="Rating: " style="font-weight: bold" />
+                            <p:rating value="#{rating.ratingValue}" readonly="true"/>
+
+                            <h:outputText value="Review: "  style="font-weight:bold" />
+                            <h:outputText value="#{rating.description}"/>
+
+                            <h:outputText value="Date of Review:   " style="font-weight: bold" />
+                            <h:outputText value="#{rating.currentTime}">
+                                <f:convertDateTime pattern="M-d-yyyy"/>
+                            </h:outputText>
+                            
+                            <br></br>
+
+                        </h:panelGrid>
+                    </p:outputPanel>
+                </h:panelGrid>
+            </p:dataScroller>
+
+        </h:form>
+        <ui:debug hotkey='x'/>
+    </ui:define>
+</ui:composition>
+
+
+
+

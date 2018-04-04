@@ -1,0 +1,25 @@
+<ui:composition template="/WEB-INF/templates/layout.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <!-- @author Alvaro Monge <alvaro.monge@csulb.edu> -->
+    <ui:define name="title">Internal Error</ui:define>
+    <ui:define name="content">
+        <h1>Error 500</h1>
+        <p>
+            Something went wrong... You may want to return to the
+            <a href="/Tut4YouWebApp/index.xhtml">Home Page</a>.
+        </p>
+        <c:if test="#{!empty param['registered']}"> </c:if>
+
+        <c:if test="#{!empty param['exception']}">
+            <strong>
+                Problem... this was due to a a run-time exception!
+            </strong>
+        </c:if>
+        <ui:debug hotkey='x'/>
+    </ui:define>
+</ui:composition>

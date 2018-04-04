@@ -1,0 +1,42 @@
+<ui:composition template="/WEB-INF/templates/layout.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                xmlns:p="http://primefaces.org/ui">
+    <!-- @author Syed Haider <shayder426@gmail.com> -->
+    <ui:define name="title">Profile</ui:define>
+    <ui:define name="content">
+        <h1>Tutoring Session</h1>
+        <h:form id="securityId">
+            <p:dialog widgetVar="dlg3" header="Security Question" visible="true" closable="false">  
+                <h:outputText value="What is your Email Address?"/>
+                <b:inputText value="#{requestBean.email}" id="inputEmail">
+                    <f:validator validatorId="EmailValidator"/>
+                    <f:attribute name="otherValue" value="#{userBean.user.email}"/>
+                    <b:message for="inputEmail"/>
+                </b:inputText> 
+                <b:commandButton value="Submit" action="#{requestBean.isEmailValid(requestBean.email)}" oncomplete="if (#{requestBean.isCheckEmail()}) PF('dlg3').hide();" update="securityId">
+                </b:commandButton>
+            </p:dialog>
+
+
+            <p:dialog header="The tutoring session has begun!" widgetVar="dlg1" id="modalID1" minHeight="40"  >
+                <h:outputText value="The tutoring session has begun!" />
+            </p:dialog>
+
+            <p:dialog header="The tutoring session has ended!!" widgetVar="dlg2" id="modalID2" minHeight="40"  >
+                <h:outputText value="The tutoring session has ended!" />
+            </p:dialog>
+
+            <h:panelGrid columns="2">
+                <p:commandButton action= "#{requestBean.startSession}" value="Start Session" style="width:100%" onclick="PF('dlg1').show();"/>
+                <p:commandButton action= "#{requestBean.endSession}" value="End Session" style="width:100%" onclick="PF('dlg2').show();"/>
+            </h:panelGrid>
+
+        </h:form>
+        <ui:debug hotkey='x'/>
+    </ui:define>
+</ui:composition>

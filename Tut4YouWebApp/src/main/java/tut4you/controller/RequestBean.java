@@ -70,6 +70,8 @@ public class RequestBean implements Serializable {
     private List<Subject> subjectList = new ArrayList(); //list of subjects to be loaded to the request form
     private List<Course> courseList = new ArrayList(); //list of courses based on subject to load to the request form
     private List<Request> requestList = new ArrayList(); //list of pending requests
+    private List<Request> cancelledList = new ArrayList(); //list of cancelled requests
+    private List<Request> declinedList = new ArrayList(); //list of declined requests
     private List<Tutor> tutorList; //list of available tutors
     private List<Tutor> temp = new ArrayList();
     private List<String> zipCodesByRadiusList = new ArrayList();
@@ -185,6 +187,22 @@ public class RequestBean implements Serializable {
      */
     public void setRequestList(List<Request> requestList) {
         this.requestList = requestList;
+    }
+    /**
+     * gets the declined request
+     * @return 
+     */
+    public List<Request> getDeclinedRequest() {
+        declinedList = tut4youApp.getDeclinedRequest();
+        return declinedList; 
+        
+    }
+    /**
+     * sets the declined list
+     * @param declinedList 
+     */
+    public void setDeclinedRequest(List<Request> declinedList) {
+        this.declinedList = declinedList;
     }
     /**
      * get zip codes by Radius
@@ -352,6 +370,21 @@ public class RequestBean implements Serializable {
     public void changeSubject() {
         courseList = tut4youApp.getCourses(subject.getSubjectName());
     }
+        /**
+     * Change the status of a request to canceled
+     * @param r
+     */
+    public void cancelRequest(Request r) {
+        tut4youApp.cancelRequest(r);
+    }
+    /**
+     * Change the status of a request to declined
+     * @param r
+     */
+    public void declineRequest(Request r) {
+        tut4youApp.declineRequest(r);
+        tut4youApp.removeRequestFromNotification(r);
+    }
 
     /**
      * Creates a new request. If successful, get the number of tutors that tutors the course.
@@ -414,14 +447,6 @@ public class RequestBean implements Serializable {
         tut4youApp.setTutorToRequest(r);
     }
 
-    /**
-     * Change the status of a request
-     *
-     * @param r
-     */
-    public void cancelRequest(Request r) {
-        tut4youApp.cancelRequest(r);
-    }
     /**
      * redirect to home page
      * @return result

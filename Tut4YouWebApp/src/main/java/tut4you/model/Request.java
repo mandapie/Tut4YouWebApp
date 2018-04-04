@@ -59,7 +59,8 @@ public class Request implements Serializable {
     public enum Status{
         PENDING,
         ACCEPTED,
-        CANCELED,
+        CANCELLED,
+        DECLINED,
         COMPLETED;
     }
     

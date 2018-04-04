@@ -1,0 +1,52 @@
+<ui:composition template="/WEB-INF/templates/layout.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:b="http://bootsfaces.net/ui">
+    <!-- @author Amanda Pan <daikiraidemodaisuki@gmail.com> -->
+    <ui:define name="title">Courses</ui:define>
+    <ui:define name="content">
+        <h1>Add Course</h1>
+        <b:panel title="Add a course" collapsible="false" look="info">
+            <b:form>
+                <b:row>
+                    <b:selectOneMenu span="6" label="Subject" id="subjectList" value="#{addCourseBean.subject}" required="true" requiredMessage="required">
+                        
+                        <f:selectItem itemLabel="select Subject..." itemValue="" noSelectionOption="true"/>
+                        <f:selectItems value="#{addCourseBean.subjectList}"
+                                       var="subject"
+                                       itemLabel="#{subject.subjectName}"
+                                       itemValue="#{subject}"/>
+                        <b:message for="subjectList" span="3"/>
+                        <!-- When you click a subject, it will only shown the courses related to that table in the drop-down menu for courses-->
+                        <f:ajax render="courseList" listener="#{addCourseBean.changeSubject}"/>
+                    </b:selectOneMenu>
+                </b:row>
+                <b:row>
+                    <b:selectOneMenu span="6" label="Course" id="courseList" value="#{addCourseBean.course}" required="true" requiredMessage="required">
+                        
+                        <f:selectItem itemLabel="select Course..." itemValue="" noSelectionOption="true"/>
+                        <f:selectItems value="#{addCourseBean.courseList}"
+                                       var="course"
+                                       itemLabel="#{course.courseName}"
+                                       itemValue="#{course}"/>
+                        <b:message for="courseList" span="3"/>
+                    </b:selectOneMenu>
+                </b:row>
+                <!-- If the course is not available, this redirects you the add new courses page -->
+                <b:row>
+                    <b:container>
+                        <p>
+                            Don't see your course? <a href="/Tut4YouWebApp/tutors/addNewCourse.xhtml">Add a new one</a>!
+                        </p>
+                    </b:container>
+                </b:row>
+                <b:row>
+                    <b:commandButton span="2" value="Submit" look="primary" action="#{addCourseBean.addCourse}" />
+                </b:row>
+            </b:form>
+        </b:panel>
+        <ui:debug hotkey='x'/>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,100 @@
+<ui:composition template="/WEB-INF/templates/layout.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:p="http://primefaces.org/ui">
+    <!-- @Author Keith Tran <keithtran25@gmail.com>
+         @author Andrew Kaichi <ahkaichi@gmail.com> -->
+    <ui:define name="title">Availability</ui:define>
+    <ui:define name="content">
+        <h1>Add Availability</h1>
+        <b:panel title="Enter Your Availability" collapsible="false" look="info">
+            <b:form id="availabilityID">
+
+                <b:column span="4">
+                    <b:row>
+                        <!-- Drop-down menu display Monday-Sunday -->
+                        <h:outputLabel value="Select a day:"/>
+                        <b:selectOneMenu                           
+                            id="dayOfWeek"
+                            value="#{availabilityBean.availability.dayOfWeek}"
+                            required="true"
+                            binding="#{passwordValue}">
+                            <f:selectItem itemValue="Select One..." itemDisabled="true"/>
+                            <f:selectItem itemValue="Monday" />
+                            <f:selectItem itemValue="Tuesday" />
+                            <f:selectItem itemValue="Wednesday" />
+                            <f:selectItem itemValue="Thursday" />
+                            <f:selectItem itemValue="Friday" />
+                            <f:selectItem itemValue="Saturday" />
+                            <f:selectItem itemValue="Sunday" />
+                        </b:selectOneMenu>
+                        <!-- Start Time -->
+                        <h:outputLabel value="Start Time:"/>
+                        <b:inputText type="time" id="startTime"
+                                     value="#{availabilityBean.startTime}"
+                                     binding="#{passwordComponent}"
+                                     required="true">
+                            <f:convertDateTime type="time" pattern="HH:mm" dateStyle="full"/>
+                            <b:message for="startTime"/>
+                        </b:inputText>
+
+                        <!-- End Time -->
+                        <h:outputLabel value="End Time:" />
+                        <b:inputText type="time" id="endTime"
+                                     value="#{availabilityBean.endTime}"
+                                     required="true" >
+                            <f:convertDateTime type="time" pattern="HH:mm" dateStyle="full"/>
+                            <b:message for="endTime"/>
+                            <f:validator validatorId="timeValidator" />
+                            <f:attribute name="AvailabilityList" value="#{availabilityBean.availabilityList}"/>
+                            <f:attribute name="otherValue" value="#{passwordComponent.value}" />
+                            <f:attribute name="day" value="#{passwordValue.value}"/>
+                        </b:inputText>         
+                        <!-- Adds to availability in -->
+                        <p:dialog header="Submitted!" widgetVar="dlg1" id="modalID" minHeight="40" visible="#{availabilityBean.modalFlag}" closable="false"  >
+                            <h:outputText value="Do you want to add another availability?" />
+                            <p:commandButton value="Yes" style="width:100%" action="#{availabilityBean.refreshPage}" />
+                            <p:commandButton value="No" style="width:100%" action="#{availabilityBean.goToHomePage}"/>
+                        </p:dialog>
+                        <b:commandButton value="Add Availability" style="width:100%" action="#{availabilityBean.addAvailability}" oncomplete="if (#{availabilityBean.modalFlag}){PF('dlg1').show()}" update="availabilityID">
+                        </b:commandButton>
+                    </b:row>
+                </b:column>
+
+                <b:column span="8">
+                    <b:dataTable value="#{availabilityBean.availabilityList}" var="avail" id="availabilityTable">
+                        <b:dataTableColumn>
+                            <f:facet name="header">Day of Week</f:facet>
+                            <h:outputText value="#{avail.dayOfWeek}"/>
+                        </b:dataTableColumn>
+                        <b:dataTableColumn>
+                            <f:facet name="header">Start Time</f:facet>
+                            <h:outputText value="#{avail.startTime}">                        
+                                <f:convertDateTime pattern="hh:mm a"></f:convertDateTime>
+                            </h:outputText>
+                        </b:dataTableColumn>
+                        <b:dataTableColumn>
+                            <f:facet name="header">End Time</f:facet>
+                            <h:outputText value="#{avail.endTime}">                        
+                                <f:convertDateTime pattern="hh:mm a"></f:convertDateTime>
+                            </h:outputText>
+                        </b:dataTableColumn>
+                        <b:dataTableColumn>
+                            <f:facet name="header">Action</f:facet>
+                            <b:commandButton value="Edit" action="#{availabilityBean.goToEditAvailabilityPage(avail)}">
+                            </b:commandButton>
+                            <span></span> <!-- somehow can't make spacing unless using empty span-->
+                            <b:commandButton value="Delete" look="danger" action="#{availabilityBean.deleteAvailability(avail)}">
+                            </b:commandButton>
+                        </b:dataTableColumn>
+                    </b:dataTable>  
+                </b:column>
+
+            </b:form>
+        </b:panel>
+        <ui:debug hotkey='x'/>
+    </ui:define>
+</ui:composition>

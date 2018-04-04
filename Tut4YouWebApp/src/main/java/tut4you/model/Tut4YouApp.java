@@ -205,10 +205,11 @@ public class Tut4YouApp {
     /**
      * Sets a tutor to the request when a tutor accepts the request.
      * @param r 
+     * @return r
      */
     @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void setTutorToRequest(Request r) {
+    public Request setTutorToRequest(Request r) {
         String userName = getUsernameFromSession();
         Tutor tutor = findTutorUserName(userName);
         r.setStatus(Request.Status.ACCEPTED);
@@ -216,6 +217,7 @@ public class Tut4YouApp {
         em.merge(r);
         em.flush();
         removeRequestFromNotification(r);
+        return r;
     }
     
     /**

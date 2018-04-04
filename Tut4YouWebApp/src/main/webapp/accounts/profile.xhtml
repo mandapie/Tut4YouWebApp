@@ -4,7 +4,8 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:b="http://bootsfaces.net/ui"
-                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                xmlns:p="http://primefaces.org/ui">
     <!-- @author Amanda Pan <daikiraidemodaisuki@gmail.com> -->
     <ui:define name="metadata">
         <c:if test="#{userBean.isUserAuthenticated}">
@@ -73,6 +74,20 @@
                         </b:row>
                     </c:if>
                 </b:panel>
+                <!-- modal -->
+                <c:if test="#{requestBean.acceptRequest}">
+                    <b:modal id="redirect-to-chat" title="Request Accepted!" closable="false" close-on-escape="false" backdrop="false">
+                        <p>
+                            Your request for #{requestBean.acceptedRequest} has been accepted! Would you like to connect with the tutor?
+                            <br/>
+                            We highly recommend you to discuss location of your session.
+                        </p>
+                        <f:facet name="footer">
+                            <b:button value="No Thanks" dismiss="modal" />
+                            <b:button value="Connect me!" look="primary" outcome="/accounts/message.xhtml"/>
+                        </f:facet>
+                    </b:modal>
+                </c:if>
                 <c:if test="#{userBean.isTutor}">
                     <h:form id="doNotDisturb">
                         <b:switch label="Do Not Disturb" value="#{userBean.user.doNotDisturb}" id="doNotDisturb" update="@form">
@@ -130,7 +145,7 @@
                                     </b:dataTableColumn>
                                     <b:dataTableColumn value="#{req.description}" />
                                     <h:column>
-                                        <f:facet name="header">Action</f:facet>  
+                                        <f:facet name="header">Action</f:facet>
                                         <b:commandButton value="Accept" look="success" action="#{requestBean.setTutorToRequest(req)}"/>
                                         <span></span> <!-- somehow can't make spacing unless using empty span-->
                                         <b:commandButton value="Decline" action="#{requestBean.removeRequestFromTutor(req)}"/>

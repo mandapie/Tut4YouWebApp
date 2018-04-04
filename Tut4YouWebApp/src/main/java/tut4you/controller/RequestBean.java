@@ -27,7 +27,6 @@ import java.util.List;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
-import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import tut4you.model.*;
 
@@ -49,6 +48,7 @@ public class RequestBean implements Serializable {
     private String time;
     private String stringLaterTime;
     private String stringLengthOfSession;
+    private Request acceptedRequest;
     private int numOfTutors; //number of tutors who teaches the course
     private List<Subject> subjectList = new ArrayList(); //list of subjects to be loaded to the request form
     private List<Course> courseList = new ArrayList(); //list of courses based on subject to load to the request form
@@ -250,6 +250,19 @@ public class RequestBean implements Serializable {
         tutorList = c;
     }
     
+    public Request getAcceptedRequest() {
+        return acceptedRequest;
+    }
+
+    public void setAcceptedRequest(Request acceptedRequest) {
+        this.acceptedRequest = acceptedRequest;
+    }
+    
+    public boolean isAcceptRequest() {
+        System.out.println(acceptedRequest != null);
+        return acceptedRequest != null;
+    }
+    
     /**
      * ajax calls this method to load the courses based on the selected subject
      */
@@ -315,9 +328,15 @@ public class RequestBean implements Serializable {
     /**
      * Sets a tutor to the request if tutor accepts
      * @param r 
+     * @return result
      */
-    public void setTutorToRequest(Request r) {
-        tut4youApp.setTutorToRequest(r);
+    public String setTutorToRequest(Request r) {
+        String result = "failure";
+        acceptedRequest = tut4youApp.setTutorToRequest(r);
+        if (acceptedRequest != null) {
+            result = "chat";
+        }
+        return result;
     }
     
     /**

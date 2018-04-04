@@ -12,6 +12,12 @@
     <navigation-rule>
         <from-view-id>*</from-view-id>
         <navigation-case>
+            <from-action>#{requestBean.setTutorToRequest(Request r)}</from-action>
+            <from-outcome>chat</from-outcome>
+            <to-view-id>/accounts/message.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
             <from-action>#{profileBean.goToTutorProfile(Tutor tutor)}</from-action>
             <from-outcome>success</from-outcome>
             <to-view-id>/accounts/tutorProfile.xhtml</to-view-id>
@@ -68,7 +74,7 @@
             <redirect/>
         </navigation-case>
         <!-- source:https://stackoverflow.com/questions/27149787/passing-redirect-param-in-faces-config-in-jsf-2-2 -->
-        <navigation-case>
+<!--        <navigation-case>
             <from-outcome>success</from-outcome>
             <to-view-id>/accounts/profile.xhtml</to-view-id>
             <redirect>
@@ -77,7 +83,7 @@
                     <value>#{profileBean.showUsername}</value>
                 </view-param>
             </redirect>
-        </navigation-case>
+        </navigation-case>-->
         <navigation-case>
             <from-outcome>failure</from-outcome>
             <to-view-id>/errors/internal.xhtml</to-view-id>

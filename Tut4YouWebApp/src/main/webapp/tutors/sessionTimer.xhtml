@@ -7,18 +7,20 @@
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
                 xmlns:p="http://primefaces.org/ui">
     <!-- @author Syed Haider <shayder426@gmail.com> -->
+    
+    
     <ui:define name="title">Profile</ui:define>
     <ui:define name="content">
         <h1>Tutoring Session</h1>
         <h:form id="securityId">
             <p:dialog widgetVar="dlg3" header="Security Question" visible="true" closable="false">  
                 <h:outputText value="What is your Email Address?"/>
-                <b:inputText value="#{requestBean.email}" id="inputEmail">
+                <b:inputText value="#{sessionTimerBean.email}" id="inputEmail">
                     <f:validator validatorId="EmailValidator"/>
-                    <f:attribute name="otherValue" value="#{userBean.user.email}"/>
+                    <f:attribute name="otherValue" value="#{userBean.student.email}"/>
                     <b:message for="inputEmail"/>
                 </b:inputText> 
-                <b:commandButton value="Submit" action="#{requestBean.isEmailValid(requestBean.email)}" oncomplete="if (#{requestBean.isCheckEmail()}) PF('dlg3').hide();" update="securityId">
+                <b:commandButton value="Submit" action="#{sessionTimerBean.isEmailValid(sessionTimerBean.email)}" oncomplete="if (#{sessionTimerBean.isCheckEmail()}) PF('dlg3').hide();" update="securityId">
                 </b:commandButton>
             </p:dialog>
 
@@ -27,13 +29,14 @@
                 <h:outputText value="The tutoring session has begun!" />
             </p:dialog>
 
-            <p:dialog header="The tutoring session has ended!!" widgetVar="dlg2" id="modalID2" minHeight="40"  >
-                <h:outputText value="The tutoring session has ended!" />
+            <p:dialog header="The tutoring session has ended!! Would you like to rate your tutor?" widgetVar="dlg2" closable="false" id="modalID2" minHeight="40"  >
+                  <b:commandButton value="Yes!" action="#{ratingBean.writeReviewPage(requestBean.tutor)}"/>
+                <b:commandButton value="No!" action="#{availabiliyBean.goToHomePage}"/>
             </p:dialog>
 
             <h:panelGrid columns="2">
-                <p:commandButton action= "#{requestBean.startSession}" value="Start Session" style="width:100%" onclick="PF('dlg1').show();"/>
-                <p:commandButton action= "#{requestBean.endSession}" value="End Session" style="width:100%" onclick="PF('dlg2').show();"/>
+                <p:commandButton action= "#{sessionTimerBean.startTutorSession(SessionTimerBean.request)}" value="Start Session" style="width:100%" onclick="PF('dlg1').show();"/>
+                <p:commandButton action= "#{sessionTimerBean.endTutorSession(SessionTimerBean.request)}" value="End Session" style="width:100%" onclick="PF('dlg2').show();"/>
             </h:panelGrid>
 
         </h:form>

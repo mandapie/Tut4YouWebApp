@@ -25,7 +25,6 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
-import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.SessionScoped;
@@ -41,6 +40,7 @@ import tut4you.model.Tut4YouApp;
  * Stores the availability of a tutor
  *
  * @author Andrew Kaichi <Andrew.Kaichi@student.csulb.edu>
+ * modified by Syed Haider <shayder426@gmail.com>
  */
 @Named
 @RequestScoped
@@ -54,6 +54,8 @@ public class AvailabilityBean implements Serializable {
     private Tut4YouApp tut4youApp;
 
     private Availability availability;
+    //private String stringStartTime;
+    //private String stringEndTime;
 
     @Temporal(TemporalType.TIME)
     private java.util.Date startTime;
@@ -68,9 +70,10 @@ public class AvailabilityBean implements Serializable {
     /**
      * Creates a new instance of the Availability entity
      */
-    @PostConstruct
-    public void createAvailabilityBean() {
+    public AvailabilityBean() {
         availability = new Availability();
+        //stringStartTime = "";
+        //stringEndTime = "";
 
     }
 
@@ -128,10 +131,23 @@ public class AvailabilityBean implements Serializable {
         this.endTime = endTime;
     }
 
+    /**
+     * Gets the modalFlag which determines
+     * if the modal will show or not
+     *
+     * @return true if availability is added
+     */
     public boolean isModalFlag() {
         return modalFlag;
     }
 
+    /**
+     * Sets the modalFlag 
+     * which determines if the modal will show or not
+     * 
+     *
+     * @param modalFlag true/false if availability is added
+     */
     public void setModalFlag(boolean modalFlag) {
         this.modalFlag = modalFlag;
     }
@@ -140,12 +156,15 @@ public class AvailabilityBean implements Serializable {
     /**
      * Gets a list of the availabilities of the Tutor in the EJB
      *
-     * @return a list of subjects
+     * @return a list of availabilities
      */
     public List<Availability> getAvailabilityList() {
         availabilityList = tut4youApp.getAvailability();
         return availabilityList;
     }
+
+
+    
     /**
      * Adds the availability to the tutor
      *
@@ -169,12 +188,14 @@ public class AvailabilityBean implements Serializable {
     /**
      * Updates the current availability of the tutor
      *
-     * @param avail
-     * @return
+     * @param avail the availability of the tutor
+     * @return goes to home page if successful
      * @throws java.text.ParseException
      */
     public String updateAvailability(Availability avail) throws ParseException {
         String result = "failure";
+        System.out.println("Start: " + avail.getStartTime());
+        System.out.println("End: " + avail.getEndTime());
         this.availability = avail;
         availability.setStartTime(avail.getStartTime());
         availability.setEndTime(avail.getEndTime());
@@ -189,7 +210,6 @@ public class AvailabilityBean implements Serializable {
      * Delete the availability from the tutor
      *
      * @param avail
-     * @return result based on if the availability form was filled out properly
      * @throws java.text.ParseException
      */
     public void deleteAvailability(Availability avail) throws ParseException {
@@ -197,30 +217,36 @@ public class AvailabilityBean implements Serializable {
     }
 
     /**
-     * Convert string to Time
-     *
-     * @param time
-     * @return
-     * @throws java.text.ParseException
+     * Goes to the edit availability page
+     * 
+     * @param avail the availability to be edited
+     * @return the webpage of edit availability
+     * @throws ParseException
      */
-    public java.util.Date StringToTime(String time) throws ParseException {
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-        java.util.Date date = sdf.parse(time);
-        return date;
-    }
-
     public String goToEditAvailabilityPage(Availability avail) throws ParseException {
         String result;
         this.availability = avail;
+        System.out.println("Availability avail: " + avail.toString());
         result = "editAvailability";
         return result;
     }
 
+    /**
+     * This will return to the home page
+     *
+     * @return to the home page
+     */
     public String goToHomePage() {
         String result = "success";
         return result;
     }
 
+    /**
+     * Refreshes the page if tutor
+     * adds more availabilities
+     *
+     * @return the same page
+     */
     public String refreshPage() {
         String viewId = FacesContext.getCurrentInstance().getViewRoot().getViewId();
         return viewId + "?faces-redirect=true";

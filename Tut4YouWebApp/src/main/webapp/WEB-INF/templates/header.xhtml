@@ -4,20 +4,24 @@
       xmlns:b="http://bootsfaces.net/ui"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <!-- @author Amanda Pan <daikiraidemodaisuki@gmail.com> -->
     <ui:composition>
         <b:navBar brand="Home" brandHref="/Tut4YouWebApp/index.xhtml">
             <b:navbarLinks>
                 <c:choose>
                     <c:when test="#{userBean.isUserAuthenticated}">
-                        <b:navLink value="Account" href="/Tut4YouWebApp/accounts/profile.xhtml"></b:navLink>
+                        <b:navLink value="Account" outcome="/accounts/profile.xhtml" include-view-params="true">
+                            <f:param name="username" value="#{userBean.user.userName}"/>
+                        </b:navLink>
                     </c:when>
                     <c:otherwise>
-                        <b:navLink value="Login" href="/Tut4YouWebApp/accounts/profile.xhtml"></b:navLink>
+                        <b:navLink value="Login" outcome="/accounts/profile.xhtml"> <!--include-view-params="true">-->
+                            <!--<f:param name="username" value=""/>-->
+                        </b:navLink>
                     </c:otherwise>
                 </c:choose>
-                <b:navLink value="About" href="#"></b:navLink>
             </b:navbarLinks>
             
             <c:if test="#{userBean.isUserAuthenticated}">

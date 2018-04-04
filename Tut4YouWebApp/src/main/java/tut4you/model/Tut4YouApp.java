@@ -704,21 +704,21 @@ public class Tut4YouApp {
         em.flush();
     }
 
-    /**
+     /**
      * This method can only be called by a student. This methods gets the
      * username of the current session and checks if the username is null, if so
-     * return null. Otherwise, find the user email to add the request to be
+     * return null. Otherwise, find the user email to add the rating to be
      * submitted.
      *
-     * @param rating
-     * @param request to be submitted
-     * @return request if successful
+     * @param tutor the tutor receiving the rating
+     * @param rating to be submitted
+     * @return rating if successful
      */
     @RolesAllowed("tut4youapp.student")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public Rating newRating(Rating rating, Tutor tutor
     ) {
-        String userName = getUsernameFromSession();
+        String userName = userBean.getUsernameFromSession();
         if (userName == null) {
             return null;
         } else {
@@ -739,16 +739,14 @@ public class Tut4YouApp {
     }
 
     /**
-     * This method can only be called by a student. This methods gets the
-     * username of the current session and checks if the username is null, if so
-     * return null. Otherwise, find the user email to add the request to be
-     * submitted.
+     * This method can only be called by a student. 
+     * 
+     * It will update the rating that a student has previously submitted.
      *
-     * @param rating
-     * @param description
-     * @param ratingValue
-     * @param request to be submitted
-     * @return request if successful
+     * @param rating the rating being updated
+     * @param description the description being updated
+     * @param ratingValue the ratingValue being updated
+     * @author Syed Haider <shayder426@gmail.com>
      */
     @RolesAllowed("tut4youapp.student")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
@@ -757,7 +755,6 @@ public class Tut4YouApp {
     ) {
         Date date = new Date();
         Rating updatedRating = em.find(Rating.class, rating.getId());
-        System.out.println("test from ejb");
         if (updatedRating == null) {
             updatedRating = rating;
         }
@@ -799,7 +796,7 @@ public class Tut4YouApp {
     @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public List<Rating> getRatingList() {
-        String userName = getUsernameFromSession();
+        String userName = userBean.getUsernameFromSession();
         String email;
         if (userName == null) {
             return null;
@@ -813,13 +810,14 @@ public class Tut4YouApp {
     }
 
     /**
+     * Gets a list of the requests that have been completed
      *
-     * @return a list of requests from a user
+     * @return a list of completed requests for a user
      */
     @RolesAllowed("tut4youapp.student")
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public List<Request> getCompletedRequests() {
-        String userName = getUsernameFromSession();
+        String userName = userBean.getUsernameFromSession();
         String email;
         if (userName == null) {
             return null;
@@ -836,26 +834,41 @@ public class Tut4YouApp {
     /**
      * Sets a tutor to the request when a tutor completes the request.
      *
-     * @param r
+     * @param r the request to be set to completed
      */
     @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void setRequestToComplete(Request r
-    ) {
-        String userName = getUsernameFromSession();
+    public void setRequestToComplete(Request r) {
+        Long endTime = System.currentTimeMillis();
+        String userName = userBean.getUsernameFromSession();
         Tutor tutor = findTutorUserName(userName);
         r.setStatus(Request.Status.COMPLETED);
         r.setTutor(tutor);
+        
+        em.merge(r);
+        em.flush();
+    }
+
+   /**
+     * Sets a tutor to the request when a tutor completes the request.
+     * IN PROGRESS
+     * @param r request that is being partaken
+     * @param s
+     */
+    @RolesAllowed("tut4youapp.tutor")
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void startSessionTime(Request r) {
+        Request request = em.find(Request.class, r.getId());
+        Long startTime = System.currentTimeMillis();
         em.merge(r);
         em.flush();
     }
 
     /**
-     * Only students can see the number of tutors that tutors the requested
-     * course. Finds all tutors that teaches the course.
+     *  Gets the average rating of the tutor
      *
-     * @return the number of tutors that tutors the course
-     * @author Andrew Kaichi <ahkaichi@gmail.com>
+     * @return the average rating of the tutor
+     * @author Syed Haider <shayder426@gmail.com>
      */
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
@@ -901,11 +914,18 @@ public class Tut4YouApp {
         return 0;
     }
 
+    /**
+     * Checks to see if user inputted email
+     * and email in database are equivalent
+     *
+     * @param email
+     * @return true if emails are equivalent
+     * @author Syed Haider <shayder426@gmail.com>
+     */
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public boolean checkEmail(String email) {
-        String userName = getUsernameFromSession();
-        System.out.println("Tut4YouApp " + userName.equals(email));
+        String userName = userBean.getUsernameFromSession();
         return userName.equals(email);
     }
 
@@ -1036,5 +1056,14 @@ public class Tut4YouApp {
         return zipCodeByRadius;
         
     }
-
+    /**
+     * saves the message to the database
+     * @param message
+     */
+    @PermitAll
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void saveMessage(Message message) {
+        em.persist(message);
+        em.flush();
+    }
 }

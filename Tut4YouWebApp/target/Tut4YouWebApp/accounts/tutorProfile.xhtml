@@ -1,0 +1,72 @@
+<ui:composition template="/WEB-INF/templates/layout.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <!-- @author Amanda Pan <daikiraidemodaisuki@gmail.com> -->
+    <ui:define name="metadata">
+        <f:metadata>
+            <f:viewParam name="username" value="#{profileBean.username}"/> required="true" requiredMessage="Bad request. Please use a link from within the system."/>
+            <f:event type="preRenderView" listener=""/>
+            <f:viewAction action="#{profileBean.showUsername}"/>
+        </f:metadata>
+    </ui:define>
+    <ui:define name="title">Tutor's Profile Page</ui:define>
+    <ui:define name="content">
+        <h1>Tutor's Profile</h1>
+        <b:container fluid="true">
+            <b:panel>
+                <b:row>
+                    <b:column span="5">
+                        <h:outputLabel value="Name:"/>
+                    </b:column>
+                    <b:column span="7">
+                        <h:outputText value="#{profileBean.user.firstName} #{profileBean.user.lastName}"/>
+                    </b:column>
+                </b:row>
+                <b:row>
+                    <b:column span="5">
+                        <h:outputLabel value="Username:"/>
+                    </b:column>
+                    <b:column span="7">
+                        <h:outputText value="#{profileBean.user.userName}"/>
+                    </b:column>
+                </b:row>
+                <b:row>
+                    <b:column span="5">
+                        <h:outputLabel value="Email:"/>
+                    </b:column>
+                    <b:column span="7">
+                        <h:outputText value="#{profileBean.user.email}"/>
+                    </b:column>
+                </b:row>
+                <b:row>
+                    <b:column span="5">
+                        <h:outputLabel value="Phone Number:"/>
+                    </b:column>
+                    <b:column span="7">
+                        <h:outputText value="#{profileBean.user.phoneNumber}"/>
+                    </b:column>
+                </b:row>
+                <b:row>
+                    <b:column span="5">
+                        <h:outputLabel value="University:"/>
+                    </b:column>
+                    <b:column span="7">
+                        <h:outputText value="#{profileBean.user.university}"/>
+                    </b:column>
+                </b:row>
+                <b:row>
+                    <b:column span="5">
+                        <h:outputLabel value="Price Rate:"/>
+                    </b:column>
+                    <b:column span="7">
+                        <h:outputText value="#{profileBean.user.priceRate}"/>
+                    </b:column>
+                </b:row>
+            </b:panel>
+        </b:container>
+    </ui:define>
+</ui:composition>

@@ -1,7 +1,9 @@
 tut4you\controller\RatingBean.class
+tut4you\messenger\ChatMessageEncoder.class
 tut4you\model\Request.class
 tut4you\validations\PriceValidator.class
 tut4you\validations\TutorConverter.class
+tut4you\controller\MessageBean.class
 tut4you\controller\RegistrationBean.class
 tut4you\model\Rating.class
 tut4you\model\ZipCode.class
@@ -10,10 +12,13 @@ tut4you\validations\EmailValidator.class
 tut4you\controller\RequestBean.class
 tut4you\controller\UserBean.class
 tut4you\model\Tut4YouApp.class
+tut4you\model\Message.class
 tut4you\exception\CourseExistsException.class
 tut4you\exception\UserExistsException.class
+tut4you\model\SessionTimer.class
 tut4you\validations\EqualsValidator.class
 tut4you\exception\StudentExistsException.class
+tut4you\messenger\ChatMessageDecoder.class
 tut4you\model\Tutor.class
 tut4you\controller\NotifyBean.class
 tut4you\model\User.class
@@ -21,6 +26,7 @@ tut4you\model\Request$Status.class
 tut4you\controller\AddNewCourseBean.class
 tut4you\model\Subject.class
 tut4you\model\Group.class
+tut4you\controller\WSEndpoint.class
 tut4you\controller\AvailabilityBean.class
 tut4you\model\Tut4YouApp$1.class
 tut4you\controller\AddCourseBean.class
@@ -29,6 +35,7 @@ json\DataList.class
 tut4you\model\ZipCodeByRadius.class
 json\ZipCodeAPI.class
 tut4you\controller\HashPassword.class
+tut4you\controller\SessionTimerBean.class
 tut4you\model\Availability.class
 tut4you\validations\BasicValidator.class
 tut4you\controller\TranscriptBean.class

@@ -1,8 +1,19 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+/**
+ * Licensed under the Academic Free License (AFL 3.0).
+ *     http://opensource.org/licenses/AFL-3.0
+ * 
+ *  This code has been developed by a group of CSULB students working on their 
+ *  Computer Science senior project called Tutors4You.
+ *  
+ *  Tutors4You is a web application that students can utilize to find a tutor and
+ *  ask them to meet at any location of their choosing. Students that struggle to understand 
+ *  the courses they are taking would benefit from this peer to peer tutoring service.
+ 
+ *  2017 Amanda Pan <daikiraidemodaisuki@gmail.com>
+ *  2017 Andrew Kaichi <ahkaichi@gmail.com>
+ *  2017 Keith Tran <keithtran25@gmail.com>
+ *  2017 Syed Haider <shayder426@gmail.com>
+*/
 package tut4you.model;
 
 import java.io.Serializable;
@@ -22,7 +33,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
-import javax.persistence.Table;
+
+
+/**
+ * Each tutor can receive ratings after tutoring sessions
+ *
+ * @author Syed Haider <shayder426@gmail.com>
+ */
 
 @NamedQueries({
     @NamedQuery(name = Rating.FIND_RATING_BY_EMAIL, query = "SELECT r from Rating r")
@@ -32,7 +49,6 @@ import javax.persistence.Table;
      @NamedQuery(name = Rating.FIND_AVG_RATING_BY_TUTOR, query = "SELECT AVG(r.ratingValue) FROM Rating r")
     ,
     @NamedQuery(name = Request.FIND_REQUEST_BY_EMAIL, query = "SELECT r from Request r JOIN r.student s WHERE s.email = :student_email AND r.status = :status")})
-@Table(name="Rating")
 @Entity
 public class Rating implements Serializable {
 
@@ -42,6 +58,11 @@ public class Rating implements Serializable {
     /**
      * JPQL Query to find Ratings by user email
      */
+
+    /**
+     *
+     */
+
     public static final String FIND_RATING_BY_EMAIL = "Rating.findRatingByEmail";
     /**
      * JPQL Query to find ratings from available/selected tutors
@@ -67,16 +88,7 @@ public class Rating implements Serializable {
     private User student;
 
     /**
-     * Association class between rating and tutor. One tutor can receive many
-     * ratings and one rating can be received by a tutor.
-     *
-     * @ManyToOne
-     * @JoinTable(name = "Ratings_tutors", joinColumns = {
-     * @JoinColumn(name = "id")}, inverseJoinColumns = @JoinColumn(name =
-     * "email")) private Collection<Tutor> tutorsList;
-     */
-    /**
-     * Multiple availabilities can be added by a Tutor
+     * Multiple ratings can be added/viewed by a Tutor
      */
     @ManyToOne
     @JoinColumn(name = "tutorName")
@@ -88,11 +100,6 @@ public class Rating implements Serializable {
 
     private int ratingValue;
 
-    /* private Integer rating1;
-    private Integer rating2;
-    private Integer rating3;
-    private Integer rating4 = 3;
-    private Integer ratingValue;
 
     /**
      * Rating Constructor
@@ -104,9 +111,9 @@ public class Rating implements Serializable {
     /**
      * Rating overloaded constructor
      *
-     * @param ratingValue
-     * @param description
-     * @param currentTime
+     * @param ratingValue rating from 1 - 5 stars
+     * @param description description of the tutoring session
+     * @param currentTime date the rating was submitted
      */
     public Rating(int ratingValue, String description, Date currentTime) {
         this.ratingValue = ratingValue;
@@ -114,12 +121,20 @@ public class Rating implements Serializable {
         this.currentTime = currentTime;
     }
 
-  
-
+    /**
+     * Gets the value of the rating
+     *
+     * @return ratingValue (rating value of the tutor)
+     */
     public int getRatingValue() {
         return ratingValue;
     }
 
+    /**
+     * Sets the value of the rating for the tutor
+     *
+     * @param ratingValue rating value of the tutor
+     */
     public void setRatingValue(int ratingValue) {
         this.ratingValue = ratingValue;
     }
@@ -142,6 +157,11 @@ public class Rating implements Serializable {
         this.id = id;
     }
 
+    /**
+     * Gets the current date 
+     *
+     * @return currentTime the date the rating was done
+     */
     public java.util.Date getCurrentTime() {
         return currentTime;
     }
@@ -149,7 +169,7 @@ public class Rating implements Serializable {
     /**
      * set currentTime
      *
-     * @param currentTime
+     * @param currentTime the date the rating was done
      */
     public void setCurrentTime(java.util.Date currentTime) {
         this.currentTime = currentTime;
@@ -193,7 +213,7 @@ public class Rating implements Serializable {
     }
 
     /**
-     * Gets a short description of a topic or problem by a student
+     * Gets a short description of the rating by a student
      *
      * @return a short description
      */
@@ -202,7 +222,7 @@ public class Rating implements Serializable {
     }
 
     /**
-     * Sets a short description of a topic or problem by a student
+     * Sets a short description of the rating by a student
      *
      * @param description of the problem
      */

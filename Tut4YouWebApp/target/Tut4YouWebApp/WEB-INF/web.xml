@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
+    <resource-ref>
+        <description>DB Connection</description>
+        <res-ref-name>jdbc/tut4youWebAppDS</res-ref-name>
+        <res-type>javax.sql.DataSource</res-type>
+        <res-auth>Container</res-auth>
+    </resource-ref>
+    <context-param>
+        <param-name>javax.faces.PARTIAL_STATE_SAVING</param-name>
+        <param-value>true</param-value>
+    </context-param>
+    <!-- Time Zone Converter -->
+    <context-param>
+        <param-name>javax.faces.DATETIMECONVERTER_DEFAULT_TIMEZONE_IS_SYSTEM_TIMEZONE</param-name>
+        <param-value>true</param-value>
+    </context-param>
+    <!-- Bootsfaces defaut theme -->
+    <context-param>
+        <param-name>BootsFaces_USETHEME</param-name>
+        <param-value>default</param-value>
+    </context-param>
+    <context-param>
+        <param-name>javax.faces.PROJECT_STAGE</param-name>
+        <param-value>Development</param-value>
+    </context-param>
+    <servlet>
+        <servlet-name>Faces Servlet</servlet-name>
+        <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Faces Servlet</servlet-name>
+        <url-pattern>*.xhtml</url-pattern>
+    </servlet-mapping>
+    <session-config>
+        <session-timeout>
+            30
+        </session-timeout>
+    </session-config>
+    <welcome-file-list>
+        <welcome-file>index.xhtml</welcome-file>
+    </welcome-file-list>
+    
+    <!-- ****** Security Settings ****** -->
+    <security-constraint>
+        <display-name>Student functionality</display-name>
+        <web-resource-collection>
+            <web-resource-name>student functions</web-resource-name>
+            <description>student role required</description>
+            <url-pattern>/accounts/*</url-pattern>
+        </web-resource-collection>
+        <web-resource-collection>
+            <web-resource-name>student functions</web-resource-name>
+            <description>student role required</description>
+            <url-pattern>/students/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <description>Have the role of student</description>
+            <role-name>tut4youapp.student</role-name>
+        </auth-constraint>
+	<user-data-constraint>
+            <!-- transport-guarantee can be CONFIDENTIAL, INTEGRAL, or NONE -->
+            <transport-guarantee>NONE</transport-guarantee>
+	</user-data-constraint>
+    </security-constraint>
+    
+    <security-constraint>
+        <display-name>Tutor functionality</display-name>
+        <web-resource-collection>
+            <web-resource-name>tutor functions</web-resource-name>
+            <description>Tutor role required</description>
+            <url-pattern>/tutors/*</url-pattern> <!-- pattern does not work: *.add.xhtml -->
+        </web-resource-collection>
+        <auth-constraint>
+            <description>Have the role of tutor</description>
+            <role-name>tut4youapp.tutor</role-name>
+        </auth-constraint>
+        <user-data-constraint>
+            <!-- transport-guarantee can be CONFIDENTIAL, INTEGRAL, or NONE -->
+            <transport-guarantee>NONE</transport-guarantee>
+        </user-data-constraint>
+    </security-constraint>
+    
+    <security-role>
+        <description>Tut4You student</description>
+        <role-name>tut4youapp.student</role-name>
+    </security-role> 
+    <security-role>
+        <description>Tut4You tutor</description>
+        <role-name>tut4youapp.tutor</role-name>
+    </security-role> 
+      
+    <login-config>
+        <auth-method>FORM</auth-method>
+        <!--<realm-name>SecuredWebApp</realm-name>  optional -->
+        <form-login-config>
+            <form-login-page>/authentications/login.xhtml</form-login-page>
+            <form-error-page>/authentications/login.xhtml?error=true</form-error-page>
+        </form-login-config>
+    </login-config>
+    
+<!-- Destination pages for common error codes -->
+    <error-page>
+        <error-code>404</error-code>
+        <location>/errors/unknown.xhtml</location>
+    </error-page>
+    <error-page>
+        <error-code>403</error-code>
+        <location>/errors/forbidden.xhtml</location>
+    </error-page>
+    <error-page>
+        <error-code>500</error-code>
+        <location>/errors/internal.xhtml</location>
+    </error-page>
+    <error-page>
+        <exception-type>java.lang.Exception</exception-type>
+        <location>/errors/internal.xhtml?exception=true</location>
+    </error-page>
+</web-app>

@@ -19,7 +19,7 @@
                     <p:commandButton value="Dismiss" style="width:100%" action="#{requestBean.cancelRequest(re)}" oncomplete="PF('modalID').hide();"/>
                 </ui:repeat> 
             </p:dialog>
-        </b:form> 
+        </b:form>
         <b:container fluid="true">
             <!-- profile info and links column -->
             <b:column medium-screen="one-third">
@@ -111,8 +111,6 @@
                     <br></br>
                     <a href="/Tut4YouWebApp/students/viewPreviousSessions.xhtml">View Previous Sessions</a>
                     <br></br>
-                    <a href="/Tut4YouWebApp/students/sessionTimer.xhtml">Session Timer</a>
-                    <br></br>
                     <c:if test="#{userBean.isTutor}">
                         <a href="/Tut4YouWebApp/tutors/availability.xhtml">Add Availability</a>
                         <br></br>
@@ -148,7 +146,7 @@
                                 <b:dataTableColumn value="#{r.description}" />
                                 <h:column>
                                     <f:facet name="header">Action</f:facet>
-                                    <b:commandButton value="Cancel" look="danger" action="#{requestBean.declineRequest(r)}" />
+                                    <b:commandButton value="Cancel" look="danger" action="#{requestBean.cancelRequest(r)}" />
                                 </h:column>
                             </b:dataTable>
                         </b:tab>
@@ -169,7 +167,7 @@
                                         <f:facet name="header">Action</f:facet>  
                                         <b:commandButton value="Accept" look="success" action="#{requestBean.setTutorToRequest(req)}"/>
                                         <span></span> <!-- somehow can't make spacing unless using empty span-->
-                                        <b:commandButton value="Decline" action="#{requestBean.removeRequestFromTutor(req)}"/>
+                                        <b:commandButton value="Decline" action="#{requestBean.declineRequest(req)}"/>
                                     </h:column>
                                 </b:dataTable>
                             </b:tab>

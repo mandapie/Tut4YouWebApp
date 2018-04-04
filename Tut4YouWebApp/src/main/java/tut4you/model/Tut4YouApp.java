@@ -623,32 +623,37 @@ public class Tut4YouApp {
      */
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void registerUser(User user, String userType, double priceRate, String defaultZip, int maxRadius) throws StudentExistsException, ParseException {
-        Group group = em.find(Group.class, "tut4youapp.student");
-        User newStudent = new User(user);
-        RegistrationBean registrationBean = new RegistrationBean();
-        if (group == null) {
-            group = new Group("tut4youapp.student");
-        }
-        if (userType.equals("Student")) {
-            newStudent.addGroup(group);
-            group.addStudent(newStudent);
-            em.persist(newStudent);
+    public void registerUser(User user, String userType, double priceRate, String defaultZip, int maxRadius) throws UserExistsException, ParseException {
+        if (null == em.find(User.class, user.getEmail())) {
+            Group group = em.find(Group.class, "tut4youapp.student");
+            User newStudent = new User(user);
+            RegistrationBean registrationBean = new RegistrationBean();
+            if (group == null) {
+                group = new Group("tut4youapp.student");
+            }
+            if (userType.equals("Student")) {
+                newStudent.addGroup(group);
+                group.addStudent(newStudent);
+                em.persist(newStudent);
+            }
+            else {
+                Tutor newTutor = new Tutor(user);
+                newTutor.setDateJoined(registrationBean.getCurrentDate());
+                newTutor.setPriceRate(priceRate);
+                newTutor.setMaxRadius(maxRadius);
+                newTutor.addGroup(group);
+                group.addTutor(newTutor);
+                group = em.find(Group.class, "tut4youapp.tutor");
+                newTutor.addGroup(group);
+                group.addTutor(newTutor);
+                newTutor.setDefaultZip(defaultZip);
+                em.persist(newTutor);
+            }
+            em.flush();
         }
         else {
-            Tutor newTutor = new Tutor(user);
-            newTutor.setDateJoined(registrationBean.getCurrentDate());
-            newTutor.setPriceRate(priceRate);
-            newTutor.setMaxRadius(maxRadius);
-            newTutor.addGroup(group);
-            group.addTutor(newTutor);
-            group = em.find(Group.class, "tut4youapp.tutor");
-            newTutor.addGroup(group);
-            group.addTutor(newTutor);
-            newTutor.setDefaultZip(defaultZip);
-            em.persist(newTutor);
+            throw new UserExistsException();
         }
-        em.flush();
     }
 
 
@@ -942,7 +947,7 @@ public class Tut4YouApp {
 
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void updateUser(Object updateUser) {
+    public void updateUser(User updateUser) {
         String userName = getUsernameFromSession();
         Tutor tutor = findTutorUserName(userName);
         System.out.println("Am I being called");
@@ -1046,12 +1051,6 @@ public class Tut4YouApp {
             zipCodeByRadius.addZipCode(zipCode);
             em.persist(zipCodeByRadius);
             em.flush();
-        }
-        else  {
-            zipCode.addZipCodeByRadius(zipCodeByRadiusTemp);
-            zipCodeByRadiusTemp.addZipCode(zipCode);
-            em.merge(zipCode);
-            
         }
         return zipCodeByRadius;
         

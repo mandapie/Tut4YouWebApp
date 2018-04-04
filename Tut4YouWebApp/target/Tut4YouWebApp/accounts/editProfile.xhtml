@@ -78,17 +78,6 @@
                                 <f:validateLength minimum="5" maximum="5"/>
                             </b:inputText>
                         </b:column>
-                    </b:row>   
-                    <b:row>
-                        <b:column medium-screen="2">
-                            <h:outputLabel value="Default ZipCode"/>
-                        </b:column>
-                        <b:column medium-screen="4">
-                            <b:inputText id="zip" placeholder="Enter Default Zip" required="true" requiredMessage="required" value="#{userBean.user.defaultZip}" validator="#{basicValidator.validateInteger}">
-                                <b:message for="zip"/>
-                                <f:validateLength minimum="5" maximum="5"/>
-                            </b:inputText>
-                        </b:column>
                     </b:row> 
                     <b:row>
                         <b:column medium-screen="2">
@@ -109,8 +98,6 @@
                                 </b:selectOneMenu>
                         </b:column>
                     </b:row> 
-                      
-                    </b:row>
                 </c:if>
                 <b:row>
                     <b:column span="2" offset="2">

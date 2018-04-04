@@ -64,7 +64,7 @@ INSERT INTO Request(student_email,courseName,description,status) VALUES ('daniel
 
 INSERT INTO Availability(DAYOFWEEK, ENDTIME, STARTTIME, TUTOR_EMAIL) VALUES ('Monday', '03:00:00', '01:00:00', 'amanda@gmail.com')
 INSERT INTO Availability(DAYOFWEEK, ENDTIME, STARTTIME, TUTOR_EMAIL) VALUES ('Tuesday', '12:00:00', '10:00:00', 'amanda@gmail.com')
-INSERT INTO Availability(DAYOFWEEK, ENDTIME, STARTTIME, TUTOR_EMAIL) VALUES ('Wednesday', '09:00:00', '06:00:00', 'amanda@gmail.com')
+INSERT INTO Availability(DAYOFWEEK, ENDTIME, STARTTIME, TUTOR_EMAIL) VALUES ('Wednesday', '23:00:00', '00:00:00', 'amanda@gmail.com')
 
 INSERT INTO Availability(DAYOFWEEK, ENDTIME, STARTTIME, TUTOR_EMAIL) VALUES ('WEDNESDAY', '23:00:00', '00:00:00', 'andrew@gmail.com')
 INSERT INTO Availability(DAYOFWEEK, ENDTIME, STARTTIME, TUTOR_EMAIL) VALUES ('WEDNESDAY', '11:00:00', '02:00:00', 'andrew@gmail.com')

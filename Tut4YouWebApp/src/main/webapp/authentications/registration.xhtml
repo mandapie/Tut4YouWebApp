@@ -87,8 +87,9 @@
                                 <h:outputLabel value="Hourly Rate"/>
                             </b:column>
                             <b:column medium-screen="4">
-                                <b:inputText id="hr" placeholder="Enter Hourly Rate" required="true" requiredMessage="required" value="#{registrationBean.priceRate}">
+                                <b:inputText id="hr" placeholder="Enter Hourly Rate" required="true" requiredMessage="required" value="#{registrationBean.priceRate}" validator="#{basicValidator.validateInteger}">
                                     <b:message for="hr"/>
+                                    <f:validateLength minimum="1" maximum="5"/>
                                 </b:inputText>
                             </b:column>
                         </b:row>
@@ -97,8 +98,9 @@
                                 <h:outputLabel value="Default Zip Code"/>
                             </b:column>
                             <b:column medium-screen="4">
-                                <b:inputText id="zip" placeholder="Enter Default Zip Code Location" required="true" requiredMessage="required" value="#{registrationBean.defaultZip}">
+                                <b:inputText id="zip" placeholder="Enter Default Zip Code Location" required="true" requiredMessage="required" value="#{registrationBean.defaultZip}" validator="#{basicValidator.validateInteger}">
                                     <b:message for="zip"/>
+                                    <f:validateLength minimum="5" maximum="5"/>
                                 </b:inputText>
                             </b:column>
                         </b:row>

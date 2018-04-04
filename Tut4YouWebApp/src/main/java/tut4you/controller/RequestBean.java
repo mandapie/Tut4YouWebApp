@@ -79,12 +79,14 @@ public class RequestBean implements Serializable {
     private List<Course> courseList = new ArrayList(); //list of courses based on subject to load to the request form
     private List<Request> requestList = new ArrayList(); //list of pending requests
     private List<Tutor> tutorList; //list of available tutors
+    private List<Tutor> SendRequestList; //list of tutors to send request to
+
     private List<Tutor> temp = new ArrayList();
     private List<String> zipCodesByRadiusList = new ArrayList();
-    //String[] zipCodesByRadius;
     private Tutor tutor; //the tutor who accepts the request
-    //private int maxRadius;
+    
     /**
+     * 
      * RequestBean encapsulates all the functions/services involved
      * in making a request
      */
@@ -95,12 +97,14 @@ public class RequestBean implements Serializable {
         zipCodeByRadius = new ZipCodeByRadius();
         time = "Immediate";
         //tutorList = new ArrayList();
+        SendRequestList = new ArrayList();
         conversation.begin();
 
     }
 
     /**
-     *
+     *http://www.byteslounge.com/tutorials/java-ee-cdi-conversationscoped-example
+     * start conversationscope
      */
     public void initConversation(){
 
@@ -109,13 +113,23 @@ public class RequestBean implements Serializable {
         }
 
     }
+    /**
+     * http://www.byteslounge.com/tutorials/java-ee-cdi-conversationscoped-example
+     * end conversationscope
+     */
     public void endConversation(){
 
         if(!conversation.isTransient()){
             conversation.end();
         }
     }
+    public List<Tutor> getSendRequestList() {
+        return SendRequestList;
+    }
 
+    public void setSendRequestList(List<Tutor> SendRequestList) {
+        this.SendRequestList = SendRequestList;
+    }
 
     public ZipCodeByRadius getZipCodeByRadius() {
         return zipCodeByRadius;
@@ -346,10 +360,8 @@ public class RequestBean implements Serializable {
         else {
             request.setCurrentTime(getCurrentTime());
         }
-        //zipCode.setMaxRadius(maxRadius);
         request.setDayOfWeek(getCurrentDayOfWeek());
         request.setLengthOfSession(lengthOfSession);
-        //zipCode.setZipCodesByRadius(zipCodesByRadius);
         zipCode = tut4youApp.addZipCode(zipCode);
         request.setZipCode(zipCode);
         request = tut4youApp.newRequest(request);
@@ -361,26 +373,19 @@ public class RequestBean implements Serializable {
             for( String str : getData(zipCode.getMaxRadius(), zipCode.getZipCode()) ) {
                 System.out.println(str);
                 zipCodesByRadiusList = Arrays.asList(str.substring(1, str.length() - 1).split(", "));
-                
-                System.out.print(result);
             }
            
             for(int i = 0; i < zipCodesByRadiusList.size(); i++) {
                 zipCodeByRadius = new ZipCodeByRadius(zipCodesByRadiusList.get(i));
                 zipCodeByRadius = tut4youApp.addZipCodeByRadius(zipCode, zipCodeByRadius);
-                System.out.println(zipCodeByRadius);
                 temp = new ArrayList();
-                //System.out.println("index " + i + ":"+ zipCode.getZipCodesByRadiusList().get(i));
                 temp = (tut4youApp.getTutorsFromCourse(request.getCourse().getCourseName(), request.getDayOfWeek().toUpperCase(), request.getCurrentTime(), false, zipCodesByRadiusList.get(i)));
-                System.out.println("Templol: " + temp);
                 tutorList.addAll(temp);
                 temp.clear();
             }
-            //zipCode.setId(4L);
-            //zipCode = tut4youApp.addZipCode(zipCode, request);
-            
+
             System.out.println("Zip codes: " + zipCodesByRadiusList);
-            System.out.println("tutor list: " + tutorList);
+            
         }
         //System.out.println("tutor list: " + tutorListBean.getTutorList());
         return result;
@@ -410,7 +415,22 @@ public class RequestBean implements Serializable {
     public void cancelRequest(Request r) {
         tut4youApp.cancelRequest(r);
     }
-
+    /**
+     * redirect to home page
+     * @return result
+     */
+    public String goToHomePage() {
+        String result = "success";
+        return result;
+    }
+    /**
+     * refresh page
+     * @return 
+     */
+    public String refreshPage() {
+        String viewId = FacesContext.getCurrentInstance().getViewRoot().getViewId();
+        return viewId + "?faces-redirect=true";
+    }
     /**
      * Remove the request from the notification list
      * @param r 
@@ -418,6 +438,13 @@ public class RequestBean implements Serializable {
     public void removeRequestFromTutor(Request r) {
         tut4youApp.removeRequestFromNotification(r);
     }
+    /**
+     * http://square.github.io/okhttp/
+     * get request to use for api
+     * @param url
+     * @return
+     * @throws IOException 
+     */
     public static String getJSON(String url) throws IOException {
         okhttp3.Request request = new okhttp3.Request.Builder()
         .url(url)
@@ -428,10 +455,17 @@ public class RequestBean implements Serializable {
         return response.body().string(); 
 
     }
+    /**
+     * used to retrieve data from zipcode api
+     * api used: http://www.zip-codes.com/content/api/samples/FindZipCodesInRadius.html
+     * @param maxRadius
+     * @param zipCode
+     * @return string of zipcodes
+     */
     public static String[] getData(int maxRadius, String zipCode) {
         String json = null;
         try {
-            json = getJSON("http://api.zip-codes.com/ZipCodesAPI.svc/1.0/FindZipCodesInRadius?zipcode="+zipCode+"&minimumradius=0&maximumradius="+maxRadius+"&key=MCK3KZ9AEI25BGAIE0IF");
+            json = getJSON("http://api.zip-codes.com/ZipCodesAPI.svc/1.0/FindZipCodesInRadius?zipcode="+zipCode+"&minimumradius=0&maximumradius="+maxRadius+"&key=MLVYIHSGGNO4XV12AMQL");
         } catch(IOException e) {
             
         }

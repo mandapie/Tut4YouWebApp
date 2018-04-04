@@ -92,6 +92,24 @@ public class BasicValidator {
         }
     }
     
+    /**
+     * https://stackoverflow.com/questions/9043551/regex-match-integer-only
+     * validate zip is in integers
+     * @param context
+     * @param toValidate
+     * @param value 
+     */
+    public void validateInteger(FacesContext context, UIComponent toValidate, Object value) {
+        String zip = (String) value;
+        String pattern = "^\\d+$";
+        if (zip.matches(pattern)) {     
+            
+        } else {     
+            FacesMessage message = new FacesMessage("Invalid Input");
+            throw new ValidatorException(message);
+        }
+    }
+    
     public void validateLaterTime(FacesContext context, UIComponent component, Object value) throws ValidatorException, ParseException {
         java.util.Date laterTime = (java.util.Date) value;
         //System.out.println("endTime: " + endTime);

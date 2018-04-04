@@ -101,8 +101,8 @@
                 </b:row>
                 <b:row>
                     <b:inputText span="2" id="zip" label="Zip Code" placeholder="Enter current zip code..." value="#{requestBean.zipCode.zipCode}"
-                                 required="true" requiredMessage="required zip code">
-                                 <f:validateLength minimum="5"/> 
+                                 required="true" requiredMessage="required zip code" validator="#{basicValidator.validateInteger}">
+                                 <f:validateLength minimum="5" maximum="5"/> 
                     <b:column>
                         <b:message for="zip" span="3"/>
                     </b:column>

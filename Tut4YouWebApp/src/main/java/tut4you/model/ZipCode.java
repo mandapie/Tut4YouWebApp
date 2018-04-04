@@ -29,7 +29,8 @@ import javax.persistence.Table;
 @Table(name="ZipCode")
 @Entity
 @NamedQueries({
-    @NamedQuery(name = ZipCode.FIND_LOCATIONS, query = "SELECT t from ZipCode t")
+    @NamedQuery(name = ZipCode.FIND_LOCATIONS, query = "SELECT t from ZipCode t"),
+    @NamedQuery(name = ZipCode.FIND_ZIP_BY_ZIP_MAXRADIUS, query = "SELECT t from ZipCode t WHERE t.zipCode = :zipCode AND t.maxRadius = :maxRadius")
         
     
 })
@@ -38,6 +39,10 @@ public class ZipCode implements Serializable {
      * JPQL Query to obtain a zipCode locations
      */
     public static final String FIND_LOCATIONS = "ZipCode.FindLocations";
+    /**
+     * JPQL Query to obtain zipCode based on zipCode and max radius
+     */
+    public static final String FIND_ZIP_BY_ZIP_MAXRADIUS = "ZipCode.FindZipByZipMaxRadius";
     
     public ZipCode() {
         
@@ -53,11 +58,19 @@ public class ZipCode implements Serializable {
     @Column(nullable = false, unique = true)
     private Long id;
     
-    @OneToMany(mappedBy="zipCode",cascade=CascadeType.PERSIST)
+    @OneToMany(mappedBy="zipCode",cascade=CascadeType.ALL)
     private Collection<Request> requests;
     
-    @ManyToMany(mappedBy="zipCodes", cascade=CascadeType.ALL)
+    @ManyToMany(mappedBy="zipCodes", cascade=CascadeType.PERSIST)
     private Collection<ZipCodeByRadius> zipCodesByRadius;
+
+    public Collection<ZipCodeByRadius> getZipCodesByRadius() {
+        return zipCodesByRadius;
+    }
+
+    public void setZipCodesByRadius(Collection<ZipCodeByRadius> zipCodesByRadius) {
+        this.zipCodesByRadius = zipCodesByRadius;
+    }
     
     private String zipCode;
 

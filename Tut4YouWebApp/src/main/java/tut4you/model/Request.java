@@ -19,6 +19,7 @@ package tut4you.model;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

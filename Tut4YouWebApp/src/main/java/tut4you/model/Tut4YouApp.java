@@ -163,7 +163,7 @@ public class Tut4YouApp {
      * @param doNotDisturb
      * @param zipCode
      * @return the number of tutors that tutors the course
-     * @author Andrew Kaichi <ahkaichi@gmail.com>
+     * @author Andrew Kaichi <ahkaichi@gmail.com> Keith Tran <keithtran25@gmail.com>
      */
     @RolesAllowed("tut4youapp.student")
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
@@ -182,26 +182,33 @@ public class Tut4YouApp {
      * 
      * @param zipCode
      * @return zipcode
+     * @author Keith Tran <keithtran25@gmail.com>
+     *
      */
     @RolesAllowed("tut4youapp.student")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public ZipCode addZipCode(ZipCode zipCode) {
-
-        zipCode = em.find(ZipCode.class, zipCode.getId());
-        
-        if(zipCode == null) {
-            
+        TypedQuery<ZipCode> Query = em.createNamedQuery(ZipCode.FIND_ZIP_BY_ZIP_MAXRADIUS, ZipCode.class);
+        Query.setParameter("zipCode", zipCode.getZipCode());   
+        Query.setParameter("maxRadius", zipCode.getMaxRadius());
+        //ZipCode temp = Query.getSingleResult();
+      
+        if(Query.getResultList().isEmpty()) {
             em.persist(zipCode);
             em.flush();
         }
   
-        return zipCode;
+        return Query.getSingleResult();
 
     }
-    @RolesAllowed("tut4youapp.student")
-    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    /**
+     * Add ZipCodeByRadius if it does not belong to zip code location
+     * @param zipCode
+     * @param zipCodeByRadius
+     * @return ZipCodeByRadius
+     * Keith Tran <keithtran25@gmail.com>
+     */
     public ZipCodeByRadius addZipCodeByRadius(ZipCode zipCode, ZipCodeByRadius zipCodeByRadius) {
-        List<String> zipCodesByRadiusList = getZipCodesByRadius();
         ZipCodeByRadius zipCodeByRadiusTemp = em.find(ZipCodeByRadius.class, zipCodeByRadius.getZipCodeByRadius());
         if(zipCodeByRadiusTemp == null){
             zipCode.addZipCodeByRadius(zipCodeByRadius);
@@ -215,18 +222,14 @@ public class Tut4YouApp {
             em.merge(zipCode);
             
         }
-        //em.flush();
         return zipCodeByRadius;
         
     }
-    @PermitAll
-    public List<String> getZipCodesByRadius() {
-        TypedQuery<String> Query = em.createNamedQuery(ZipCodeByRadius.FIND_ZIPCODEBYRADIUS, String.class);
-        return Query.getResultList();
-    }
+
     /**
      * retrieve list of user emails
      * @return list of user emails
+     * @author Keith Tran <keithtran25@gmail.com>
      */
     @PermitAll
     public List<String> getUserEmails() {
@@ -236,6 +239,7 @@ public class Tut4YouApp {
     /**
      * retrieve list of user usernames
      * @return list of usernames
+     * @author Keith Tran <keithtran25@gmail.com>
      */
     @PermitAll
     public List<String> getUserUserNames() {
@@ -261,6 +265,7 @@ public class Tut4YouApp {
         em.merge(tutor);
         em.flush();
     }
+    
     
     /**
      * Sets a tutor to the request when a tutor accepts the request.
@@ -665,6 +670,7 @@ public class Tut4YouApp {
      * update current zip code of tutor
      * @param currentZip
      * @return tutor
+     * @author Keith Tran <keithtran25@gmail.com>
      */
     public Tutor updateCurrentZip(String currentZip) {
         String userName = userBean.getUsernameFromSession();
@@ -678,6 +684,7 @@ public class Tut4YouApp {
     }
     /**
      * reset current Zip to null when user logs out
+     * @author Keith Tran <keithtran25@gmail.com>
      */
     public void resetCurrentZip() {
         String userName = userBean.getUsernameFromSession();

@@ -32,14 +32,6 @@ public class Message implements Serializable {
     private String sender;
     private String message;
     
-    public String getSender() {
-        return sender;
-    }
-
-    public void setSender(String sender) {
-        this.sender = sender;
-    }
-    
     public Long getId() {
         return id;
     }
@@ -50,7 +42,7 @@ public class Message implements Serializable {
     
     public Date getDateSent() {
         return dateSent;
-    }
+    }   
  
     public void setDateSent(Date dateSent) {
         this.dateSent = dateSent;
@@ -70,6 +62,14 @@ public class Message implements Serializable {
  
     public void setUser(User user) {
         this.user = user;
+    }
+    
+    public String getSender() {
+        return sender;
+    }
+
+    public void setSender(String sender) {
+        this.sender = sender;
     }
 
     @Override

@@ -15,8 +15,9 @@ import javax.websocket.EndpointConfig;
 import tut4you.model.Message;
 
 /**
- * source: https://bitbucket.org/hascode/javaee7-websocket-chat
- * @author Amanda
+ * Breaks down the JSON into the sender, message, date attribute to match the Message entity
+ * source: http://www.hascode.com/2013/08/creating-a-chat-application-using-java-ee-7-websockets-and-glassfish-4/
+ * @author Micha Kops
  */
 public class ChatMessageDecoder implements Decoder.Text<Message> {
     @Override

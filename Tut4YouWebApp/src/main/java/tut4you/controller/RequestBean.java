@@ -57,7 +57,54 @@ public class RequestBean implements Serializable {
 
 
 
+   private long startSession;
+    private long endSession;
 
+    public long getStartSession() {
+        return startSession;
+    }
+
+    public void setStartSession(long startSession) {
+        this.startSession = startSession;
+    }
+
+    public long getEndSession() {
+        return endSession;
+    }
+
+    
+    private String email;
+    private boolean checkEmail;
+  
+
+    public boolean isCheckEmail() {
+        return checkEmail;
+    }
+
+    public void setCheckEmail(boolean checkEmail) {
+        this.checkEmail = checkEmail;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    
+    public void isEmailValid(String email)
+    {
+        System.out.println("Requestbean email: " + email);
+        checkEmail = tut4youApp.checkEmail(email);
+        System.out.println("checkmail" + checkEmail);
+        System.out.println("IsCheckMail: " + isCheckEmail());
+    }
+ 
+
+    public void setEndSession(long endSession) {
+        this.endSession = endSession;
+    }
    
 
     private int numOfTutors; //number of tutors who teaches the course

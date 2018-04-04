@@ -40,6 +40,8 @@ import tut4you.exception.*;
 import java.util.Arrays;
 import java.util.*;
 import javax.faces.application.FacesMessage;
+import tut4you.controller.UserBean;
+import tut4you.exception.*;
 
 /**
  * This class is an EJB that handles all functionalities of the Web Application.
@@ -48,6 +50,7 @@ import javax.faces.application.FacesMessage;
  */
 @Stateless
 public class Tut4YouApp {
+
     /**
      * Gets the persistence unit name and creates an entity manager to persist
      * data into the database.
@@ -55,6 +58,7 @@ public class Tut4YouApp {
     @PersistenceContext(unitName = "tut4youWebAppPU")
     private EntityManager em;
     private static final Logger LOGGER = Logger.getLogger("Tut4YouApp");
+    UserBean userBean = new UserBean();
 
     /**
      * Query all subjects from the database
@@ -146,10 +150,6 @@ public class Tut4YouApp {
         em.merge(r);
     }
 
-
-    
-
-        
     /**
      * Only students can see the number of tutors that tutors the requested
      * course. Finds all tutors that teaches the course.
@@ -167,7 +167,7 @@ public class Tut4YouApp {
     }
 
     /**
-
+     *
      * Only students can see the list of available tutors that tutors the
      * requested course. Finds all tutors that teaches the course.
      *
@@ -187,8 +187,7 @@ public class Tut4YouApp {
         courseTutorQuery.setParameter("requestTime", time, TemporalType.TIME);
         courseTutorQuery.setParameter("doNotDisturb", false);
         return courseTutorQuery.getResultList();
-    }   
-        
+    }
 
     /**
      * Only students can see the list of tutors.
@@ -221,7 +220,6 @@ public class Tut4YouApp {
         em.merge(tutor);
         em.flush();
     }
-
 
     /**
      * Sets a tutor to the request when a tutor accepts the request.
@@ -276,7 +274,6 @@ public class Tut4YouApp {
         return requestTutorQuery.getResultList();
     }
 
-        
     /**
      * Only a tutor can add a course from the database. The course will be
      * persisted to the courses_tutors table.
@@ -392,6 +389,7 @@ public class Tut4YouApp {
 
     /**
      * Only a tutor can view the list of courses that they can teach.
+     *
      * @return the list of courses to the bean
      * @author: Syed Haider <shayder426@gmail.com>
      */
@@ -410,7 +408,7 @@ public class Tut4YouApp {
             return availabilityQuery.getResultList();
         }
     }
-    
+
     /**
      * Only a tutor can add availability to the database.
      *
@@ -420,7 +418,7 @@ public class Tut4YouApp {
      */
     @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public Availability addAvailability(Availability availability, Date startTime) {
+    public Availability addAvailability(Availability availability) {
         String userName = getUsernameFromSession();
         if (userName == null) {
             return null;
@@ -510,8 +508,6 @@ public class Tut4YouApp {
             return doNotDisturb;
         }
     }
-
-    
 
     /**
      * Gets a logged in username by getting the username from the session.
@@ -617,7 +613,7 @@ public class Tut4YouApp {
             throw new StudentExistsException();
         }
     }
-    
+
 //    /**
 //     * Converts student to be a tutor. The student will be added a tutor role.
 //     * @param user
@@ -640,7 +636,6 @@ public class Tut4YouApp {
 //        }
 //    }
 //}
-
     /**
      * Converts student to be a tutor. The student will be added a tutor role.
      *
@@ -821,7 +816,6 @@ public class Tut4YouApp {
      * Only students can see the number of tutors that tutors the requested
      * course. Finds all tutors that teaches the course.
      *
-     * @param course selected course to be tutored
      * @return the number of tutors that tutors the course
      * @author Andrew Kaichi <ahkaichi@gmail.com>
      */
@@ -832,7 +826,6 @@ public class Tut4YouApp {
         return averageRatingQuery.getSingleResult();
     }
 
-   
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public int sortByDayOfWeek(Object o1, Object o2
@@ -870,8 +863,6 @@ public class Tut4YouApp {
         return 0;
     }
 
-    
-
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public boolean checkEmail(String email) {
@@ -880,6 +871,39 @@ public class Tut4YouApp {
         return userName.equals(email);
     }
 
-   
+    @RolesAllowed("tut4youapp.tutor")
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void addTranscriptFileLocation(String transcriptFileLocation) {
+        String userName = userBean.getUsernameFromSession();
+        System.out.println(userName);
+        Tutor tutor = findTutorUserName(userName);
+        tutor.setTrancriptFileLocation(transcriptFileLocation);
+        em.merge(tutor);
+        em.flush();
+    }
+
+    @PermitAll
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void updateUser(Object updateUser) {
+        String userName = getUsernameFromSession();
+        Tutor tutor = findTutorUserName(userName);
+        System.out.println("Am I being called");
+        if (tutor == null) {
+            User student = find(userName);
+            student = (User) updateUser;
+            em.merge(student);
+            em.flush();
+        } else {
+            User student = find(userName);
+            student = (User) updateUser;
+            tutor = (Tutor) updateUser;
+            em.merge(student);
+            em.merge(tutor);
+            em.flush();
+        }
+        FacesMessage message = new FacesMessage("Successfully Updated Profile");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+
+    }
 
 }

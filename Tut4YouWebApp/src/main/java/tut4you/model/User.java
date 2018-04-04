@@ -385,3 +385,4 @@ public class User implements Serializable {
         return "tut4you.model.User[ id=" + email + " first name=" + firstName + " last name=" + lastName + " username=" + userName + " phone number=" + phoneNumber + " password=" + password + " ]";
     }
 }
+

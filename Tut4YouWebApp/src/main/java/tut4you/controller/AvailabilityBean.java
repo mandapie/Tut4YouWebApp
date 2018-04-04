@@ -191,7 +191,7 @@ public class AvailabilityBean implements Serializable {
         String result = "failure";
         availability.setStartTime(startTime);
         availability.setEndTime(endTime);
-        availability = tut4youApp.addAvailability(availability, startTime);
+        availability = tut4youApp.addAvailability(availability);
         if (availability != null) {
             result = "success";
             modalFlag = true;

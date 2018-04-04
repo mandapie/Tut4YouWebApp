@@ -78,6 +78,16 @@
                             </b:column>
                         </b:row>
                     </c:if>
+                    <b:row>
+                        <b:column>
+                            <b:button value="Edit Profile" href="/Tut4YouWebApp/accounts/editProfile.xhtml"/>  
+                        </b:column>
+                    </b:row>
+                    <b:row>
+                        <b:column>
+                            <b:button value="Change Password" href="/Tut4YouWebApp/accounts/changePassword.xhtml"/>  
+                        </b:column>
+                    </b:row>
                 </b:panel>
                 <c:if test="#{userBean.tutor}">
                     <h:form id="doNotDisturb">
@@ -101,6 +111,8 @@
                         <a href="/Tut4YouWebApp/tutors/viewReviews.xhtml">View Reviews</a>
                         <br></br>
                         <a href="/Tut4YouWebApp/tutors/sessionTimer.xhtml">Session Timer</a>
+                        <br></br>
+                        <a href="/Tut4YouWebApp/tutors/uploadTranscript.xhtml">Add Transcript</a>
                         <br></br>
                     </c:if>
                 </b:row>

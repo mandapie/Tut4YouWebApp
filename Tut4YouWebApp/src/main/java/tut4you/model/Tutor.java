@@ -40,7 +40,7 @@ import javax.persistence.TemporalType;
  * @author Keith Tran <keithtran25@gmail.com>
  * @author Syed Haider <shayder426@gmail.com>
  */
-  
+
 
 @Table(name = "Tutor")
 @DiscriminatorColumn(name = "user_type", discriminatorType = DiscriminatorType.STRING)
@@ -65,17 +65,19 @@ public class Tutor extends User implements Serializable {
      * JPQL Query to obtain a list of tutors who taught a specific course
      */
     public static final String FIND_TUTORS_BY_COURSE = "Tutor.findTutorsByCourse";
-    
-     /**
+
+    /**
      * JPQL Query to obtain a list of tutors
      */
     public static final String FIND_TUTORS = "Tutor.findTutors";
-    
+
     @Temporal(TemporalType.DATE)
     private Date dateJoined;
     private int numPeopleTutored;
     private double priceRate;
     private boolean doNotDisturb;
+    private String transcriptFileLocation;
+
     /**
      * A Tutor can tutor multiple Courses and a Course can be tutored by
      * multiple Tutors.
@@ -118,20 +120,22 @@ public class Tutor extends User implements Serializable {
         super(newTutor);
     }
 
-    /**
+   /**
      * Tutor overloaded constructor with existing attributes
      *
      * @param dateJoined
      * @param numPeopleTutored
-     * @param priceRate 
-     * @param doNotDisturb 
+     * @param priceRate
+     * @param doNotDisturb
      */
-    public Tutor(Date dateJoined, int numPeopleTutored, double priceRate, boolean doNotDisturb) {
+    public Tutor(Date dateJoined, int numPeopleTutored, double priceRate, boolean doNotDisturb, String transcriptFileLocation) {
         this.dateJoined = dateJoined;
         this.numPeopleTutored = numPeopleTutored;
         this.priceRate = priceRate;
         this.doNotDisturb = doNotDisturb;
+        this.transcriptFileLocation = transcriptFileLocation;
     }
+
     /**
      * Tutor overloaded constructor with inherited and existing attributes
      *
@@ -144,8 +148,8 @@ public class Tutor extends User implements Serializable {
      * @param university
      * @param dateJoined
      * @param numPeopleTutored
-     * @param priceRate 
-     * @param doNotDisturb 
+     * @param priceRate
+     * @param doNotDisturb
      */
     public Tutor(String email, String firstName, String lastName, String userName, String phoneNumber, String password, String university, Date dateJoined, int numPeopleTutored, double priceRate, boolean doNotDisturb) {
         super(email, firstName, lastName, userName, phoneNumber, password, university);
@@ -154,34 +158,38 @@ public class Tutor extends User implements Serializable {
         this.priceRate = priceRate;
         this.doNotDisturb = doNotDisturb;
     }
-    
+
     /**
      * Gets the state of doNotDistrub
+     *
      * @return doNotDisturb
      */
     public boolean isDoNotDisturb() {
         return doNotDisturb;
     }
-    
+
     /**
      * Sets the state of doNotDistrub
-     * @param doNotDisturb 
+     *
+     * @param doNotDisturb
      */
     public void setDoNotDisturb(boolean doNotDisturb) {
         this.doNotDisturb = doNotDisturb;
     }
-    
+
     /**
      * Gets the list of pending requests
+     *
      * @return list of pendingRequests
      */
     public Collection<Request> getPendingRequests() {
         return pendingRequests;
     }
-    
+
     /**
      * Sets the list of pending requests
-     * @param pendingRequests 
+     *
+     * @param pendingRequests
      */
     public void setPendingRequests(Collection<Request> pendingRequests) {
         this.pendingRequests = pendingRequests;
@@ -289,17 +297,18 @@ public class Tutor extends User implements Serializable {
         }
         this.courses.add(course);
     }
-    
+
     /**
      * Adds a pending request to the list
-     * @param pr 
+     *
+     * @param pr
      */
     public void addPendingRequest(Request pr) {
-        if (this.pendingRequests == null)
+        if (this.pendingRequests == null) {
             this.pendingRequests = new HashSet();
+        }
         this.pendingRequests.add(pr);
     }
-    
 
     /**
      * Adds a pending rating to the list
@@ -315,12 +324,12 @@ public class Tutor extends User implements Serializable {
 
     /**
      * removes a pending request from the list
+     *
      * @param pr
      */
     public void removePendingRequest(Request pr) {
         pendingRequests.remove(pr);
     }
-
 
     /**
      * Adds an availability to a collection if availability is null, create new
@@ -333,6 +342,14 @@ public class Tutor extends User implements Serializable {
             this.availabilities = new HashSet();
         }
         this.availabilities.add(availability);
+    }
+
+    public String getTranscriptFileLocation() {
+        return transcriptFileLocation;
+    }
+
+    public void setTrancriptFileLocation(String transcriptFileLocation) {
+        this.transcriptFileLocation = transcriptFileLocation;
     }
 
 }

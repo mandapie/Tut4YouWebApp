@@ -17,10 +17,11 @@
                     <b:column>
                         <h:outputLabel for="uploadTranscript">
                             Upload Your Transcript
-                        </h:outputLabel>
+                        </h:outputLabel
+<!--                        Referenced: https://www.primefaces.org/showcase/ui/file/upload/single.xhtml-->
                         <p:fileUpload value="#{transcriptBean.file}"
                                       mode="simple"
-                                      allowTypes="/(\.|\/)(gif|jpe?g|pdf)$/"
+                                      allowTypes="/(\.|\/)(pdf)$/"
                                       fileLimit="1"
                                       update="uploadTranscript"/>
                         <p:growl id="uploadTranscript" showDetail="true" />

@@ -37,7 +37,7 @@ import tut4you.model.Tut4YouApp;
 import tut4you.model.Tutor;
 
 /**
- *
+ * Uploads file to amazon s3 and saves the file path in the database
  * @author Andrew Kaichi <ahkaichi@gmail.com>
  */
 @Named
@@ -57,15 +57,25 @@ public class TranscriptBean implements Serializable {
     public TranscriptBean(UploadedFile file) {
         this.file = file;
     }
-    
+    /**
+     * Sets the transcript file
+     * @param file file to be set
+     */
     public void setFile(UploadedFile file) {
         this.file = file;
     }
-    
+    /**
+     * Gets the file
+     * @return file
+     */
     public UploadedFile getFile() {
         return file;
     }
-    
+    /**
+     * This method takes a user submitted pdf and uploads it to an Amazon S3 instance; takes the s3 file path and adds it to the database 
+     * Referenced: https://github.com/aws-samples/aws-java-sample/blob/master/src/main/java/com/amazonaws/samples/S3Sample.java
+     * @throws IOException 
+     */
     public void uploadTranscript() throws IOException {
         Properties prop = new Properties();
         InputStream propstream = new FileInputStream(getServletContext().getRealPath("WEB-INF/s3.properties"));
@@ -75,7 +85,6 @@ public class TranscriptBean implements Serializable {
                     prop.getProperty("AWSSecretKey"));
         String bucketName = prop.getProperty("bucketName");
         try {
-            //System.out.println("Key: " + credentials.getAWSAccessKeyId() + ", Secret: " + credentials.getAWSSecretKey());
         } catch (Exception e) {
             throw new AmazonClientException(e);
         }
@@ -119,6 +128,7 @@ public class TranscriptBean implements Serializable {
         } catch (AmazonClientException ace) {
             System.out.println("Caught an AmazonClientException, which means the client encountered an internal error while "
                     + "trying to communicate with S3, such as not being able to access the network.");
+            System.out.println("Error Message: " + ace.getMessage());
         }
     }
    

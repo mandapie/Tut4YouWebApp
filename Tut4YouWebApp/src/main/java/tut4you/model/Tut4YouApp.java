@@ -259,6 +259,10 @@ public class Tut4YouApp {
         return requestTutorQuery.getResultList();
     }
     
+    /**
+     * Adds the tutor's transcript file path location to the database
+     * @param transcriptFileLocation 
+     */
     @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void addTranscriptFileLocation(String transcriptFileLocation) {

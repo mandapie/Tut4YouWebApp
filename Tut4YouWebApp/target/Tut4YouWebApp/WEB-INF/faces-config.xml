@@ -55,6 +55,13 @@
         </navigation-case>
         
         <navigation-case>
+            <from-action>#{userBean.logout}</from-action>
+            <from-outcome>success</from-outcome>
+            <to-view-id>/accounts/profile.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        
+        <navigation-case>
             <from-outcome>editAvailability</from-outcome>
             <to-view-id>/tutors/editAvailability.xhtml</to-view-id>
             <redirect/>
@@ -73,7 +80,6 @@
             <to-view-id>/students/editReview.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
-        
         
 
         <navigation-case>

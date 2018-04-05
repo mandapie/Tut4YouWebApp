@@ -33,6 +33,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 
 /**
@@ -50,6 +51,7 @@ import javax.persistence.OneToOne;
     ,
     @NamedQuery(name = Request.FIND_REQUEST_BY_EMAIL, query = "SELECT r from Request r JOIN r.student s WHERE s.email = :student_email AND r.status = :status")})
 @Entity
+@Table(name="Rating")
 public class Rating implements Serializable {
 
     private static final long serialVersionUID = 1L;

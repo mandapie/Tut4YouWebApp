@@ -1,4 +1,4 @@
-/**
+/*
  * Licensed under the Academic Free License (AFL 3.0).
  *     http://opensource.org/licenses/AFL-3.0
  * 
@@ -13,7 +13,7 @@
  *  2017 Andrew Kaichi <ahkaichi@gmail.com>
  *  2017 Keith Tran <keithtran25@gmail.com>
  *  2017 Syed Haider <shayder426@gmail.com>
-*/
+ */
 package tut4you.model;
 
 import java.io.Serializable;

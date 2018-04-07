@@ -38,11 +38,9 @@ import javax.persistence.TypedQuery;
 import javax.servlet.http.HttpServletRequest;
 import tut4you.exception.*;
 import java.util.Arrays;
-import java.util.*;
 import javax.faces.application.FacesMessage;
 import tut4you.controller.RegistrationBean;
 import tut4you.controller.UserBean;
-import tut4you.exception.*;
 
 /**
  * This class is an EJB that handles all functionalities of the Web Application.
@@ -520,7 +518,6 @@ public class Tut4YouApp {
 
     /**
      * Only a tutor can delete his/her availability times.
-     *
      * @param availability
      * @author Syed Haider <shayder426@gmail.com>
      */
@@ -536,8 +533,6 @@ public class Tut4YouApp {
         System.out.println(toBeDeleted);
         String userName = getUsernameFromSession();
         Tutor tutor = findTutorUserName(userName);
-//        tutor.removeAvailability(toBeDeleted);
-
         em.merge(tutor);
         em.remove(em.merge(availability));
     }
@@ -545,7 +540,6 @@ public class Tut4YouApp {
     /**
      * A tutor can set their status to be available to receive notifications and
      * set their status to be not available to not receive notifications.
-     *
      * @param doNotDisturb
      * @return
      */
@@ -569,7 +563,6 @@ public class Tut4YouApp {
 
     /**
      * Gets a logged in username by getting the username from the session.
-     *
      * @return username Source:
      * https://dzone.com/articles/liferay-jsf-how-get-current-lo Had further
      * help by Subject2Change group.
@@ -585,7 +578,6 @@ public class Tut4YouApp {
 
     /**
      * Gets a student by finding the username student entity.
-     *
      * @param username
      * @return a student
      */
@@ -599,7 +591,6 @@ public class Tut4YouApp {
 
     /**
      * Gets a tutor by finding the username in the tutor entity.
-     *
      * @param username
      * @return tutor
      * @Keith <keithtran25@gmail.com>
@@ -618,16 +609,15 @@ public class Tut4YouApp {
      * @param priceRate
      * @param defaultZip
      * @param maxRadius
-     * @throws tut4you.exception.StudentExistsException
+     * @throws tut4you.exception.UserExistsException
      * @throws java.text.ParseException
      */
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void registerUser(User user, String userType, double priceRate, String defaultZip, int maxRadius) throws UserExistsException, ParseException {
+    public void registerUser(User user, String userType, double priceRate, String defaultZip, int maxRadius, Date joinedDateAsTutor) throws UserExistsException, ParseException {
         if (null == em.find(User.class, user.getEmail())) {
             Group group = em.find(Group.class, "tut4youapp.student");
             User newStudent = new User(user);
-            RegistrationBean registrationBean = new RegistrationBean();
             if (group == null) {
                 group = new Group("tut4youapp.student");
             }
@@ -638,15 +628,15 @@ public class Tut4YouApp {
             }
             else {
                 Tutor newTutor = new Tutor(user);
-                newTutor.setDateJoined(registrationBean.getCurrentDate());
+                newTutor.setDateJoined(joinedDateAsTutor);
                 newTutor.setPriceRate(priceRate);
                 newTutor.setMaxRadius(maxRadius);
-                newTutor.addGroup(group);
+                newTutor.setDefaultZip(defaultZip);
+                newTutor.addGroup(group); //Add user a student role
                 group.addTutor(newTutor);
                 group = em.find(Group.class, "tut4youapp.tutor");
-                newTutor.addGroup(group);
+                newTutor.addGroup(group); //Add user a tutor role
                 group.addTutor(newTutor);
-                newTutor.setDefaultZip(defaultZip);
                 em.persist(newTutor);
             }
             em.flush();
@@ -654,59 +644,6 @@ public class Tut4YouApp {
         else {
             throw new UserExistsException();
         }
-    }
-
-
-//    /**
-//     * Converts student to be a tutor. The student will be added a tutor role.
-//     * @param user
-//     * @param groupName
-//     * https://stackoverflow.com/questions/20098791/jpa-inheritance-change-the-entity-type
-//     */
-//    //IN PROGRESS
-//    @PermitAll
-//    @TransactionAttribute(TransactionAttributeType.REQUIRED)
-//    public void addTutorRole(User user, String groupName) {
-//        if (user.getDecriminatorValue().equals("Student")) {
-//            em.createNativeQuery("UPDATE Users SET user_type='Tutor'").setParameter("email",user.getEmail()).executeUpdate();
-//            Group group = em.find(Group.class, groupName);
-//            if (group == null) {
-//                group = new Group(groupName);
-//            }
-//            user.addGroup(group);
-//            group.addStudent(user);
-//            em.flush();
-//        }
-//    }
-//}
-    /**
-     * Converts student to be a tutor. The student will be added a tutor role.
-     *
-     * @param user
-     * @param userType
-     * @throws tut4you.exception.StudentExistsException
-     */
-    @PermitAll
-    @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void registerUser(User user, String userType) throws StudentExistsException {
-        Group group = em.find(Group.class, "tut4youapp.student");
-        if (group == null) {
-            group = new Group("tut4youapp.student");
-        }
-        if (userType.equals("Student")) {
-            user.addGroup(group);
-            group.addStudent(user);
-            em.persist(user);
-        } else {
-            Tutor newTutor = new Tutor(user);
-            newTutor.addGroup(group);
-            group.addTutor(newTutor);
-            group = em.find(Group.class, "tut4youapp.tutor");
-            newTutor.addGroup(group);
-            group.addTutor(newTutor);
-            em.persist(newTutor);
-        }
-        em.flush();
     }
 
      /**
@@ -968,6 +905,7 @@ public class Tut4YouApp {
         FacesContext.getCurrentInstance().addMessage(null, message);
 
     }
+    
     /**
      * update current zip code of tutor
      * @param currentZip
@@ -993,9 +931,10 @@ public class Tut4YouApp {
         Tutor tutor = findTutorUserName(userName);
         tutor.setCurrentZip(null);
     }
-        /**
-     * retrieve list of user emails
-     * @return list of user emails
+    
+    /**
+     * retrieve list of user email
+     * @return list of user email
      * @author Keith Tran <keithtran25@gmail.com>
      */
     @PermitAll
@@ -1003,6 +942,7 @@ public class Tut4YouApp {
         TypedQuery<String> Query = em.createNamedQuery(User.FIND_USER_EMAILS, String.class);
         return Query.getResultList();
     }
+    
     /**
      * retrieve list of user usernames
      * @return list of usernames

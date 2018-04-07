@@ -14,22 +14,17 @@
  *  2017 Keith Tran <keithtran25@gmail.com>
  *  2017 Syed Haider <shayder426@gmail.com>
  */
-
 package tut4you.controller;
 
 import java.io.Serializable;
-import java.text.ParseException;
 import javax.enterprise.context.RequestScoped;
-import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import tut4you.model.Request;
 import tut4you.model.SessionTimer;
 import tut4you.model.Tut4YouApp;
-import tut4you.model.Tutor;
 
 /**
  * Binds session timer bean inputs to the EJB.
- *
  * @author Syed Haider <shayder426@gmail.com>
  */
 @Named
@@ -133,5 +128,4 @@ public class SessionTimerBean implements Serializable{
         result = "sessionTimer";
         return result;
     }
-    }
-
+}

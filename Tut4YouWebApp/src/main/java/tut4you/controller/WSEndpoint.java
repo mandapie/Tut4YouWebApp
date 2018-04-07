@@ -1,7 +1,18 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Licensed under the Academic Free License (AFL 3.0).
+ *     http://opensource.org/licenses/AFL-3.0
+ * 
+ *  This code has been developed by a group of CSULB students working on their 
+ *  Computer Science senior project called Tutors4You.
+ *  
+ *  Tutors4You is a web application that students can utilize to find a tutor and
+ *  ask them to meet at any location of their choosing. Students that struggle to understand 
+ *  the courses they are taking would benefit from this peer to peer tutoring service.
+ 
+ *  2017 Amanda Pan <daikiraidemodaisuki@gmail.com>
+ *  2017 Andrew Kaichi <ahkaichi@gmail.com>
+ *  2017 Keith Tran <keithtran25@gmail.com>
+ *  2017 Syed Haider <shayder426@gmail.com>
  */
 package tut4you.controller;
 
@@ -30,7 +41,7 @@ import tut4you.model.*;
  * Connects the users to be in a chat.
  * source: https://netbeans.org/kb/docs/javaee/maven-websocketapi.html#createendpoint
  *         http://www.hascode.com/2013/08/creating-a-chat-application-using-java-ee-7-websockets-and-glassfish-4/
- * @author Amanda
+ * @author Amanda Pan <daikiraidemodaisuki@gmail.com>
  */
 @ApplicationScoped
 @DeclareRoles({"tut4youapp.student"})

@@ -12,79 +12,90 @@
     <navigation-rule>
         <from-view-id>*</from-view-id>
         <navigation-case>
-            <from-action>#{requestBean.createNewRequest}</from-action>
-            <from-outcome>success</from-outcome>
-            <to-view-id>/students/tutorsNotified.xhtml</to-view-id>
-            <redirect/>
-        </navigation-case>
-        
-        <navigation-case>
-            <from-action>#{registrationBean.createStudent}</from-action>
-            <from-outcome>success</from-outcome>
-            <to-view-id>/accounts/profile.xhtml?registered=true</to-view-id>
-            <redirect/>
-        </navigation-case>
-        <navigation-case>
-            <from-action>#{registrationBean.createStudent}</from-action>
-            <from-outcome>register</from-outcome>
-            <to-view-id>/authentications/registerStudent.xhtml</to-view-id>
-        </navigation-case>
-        
-        <navigation-case>
-            <from-action>#{registrationBean.createTutor}</from-action>
-            <from-outcome>success</from-outcome>
-            <to-view-id>/accounts/profile.xhtml?registered=true</to-view-id>
-            <redirect/>
-        </navigation-case>
-        <navigation-case>
-            <from-action>#{registrationBean.createTutor}</from-action>
-            <from-outcome>register</from-outcome>
-            <to-view-id>/authentications/registerTutor.xhtml</to-view-id>
-        </navigation-case>
-        
-        <navigation-case>
-            <from-outcome>success</from-outcome>
-            <to-view-id>/accounts/profile.xhtml</to-view-id>
-            <redirect/>
-        </navigation-case>
-
-        <navigation-case>
-            <from-outcome>login</from-outcome>
-            <to-view-id>/accounts/profile.xhtml</to-view-id>
-            <redirect/>
-        </navigation-case>
-        
-        <navigation-case>
-            <from-action>#{userBean.logout}</from-action>
-            <from-outcome>success</from-outcome>
-            <to-view-id>/accounts/profile.xhtml</to-view-id>
-            <redirect/>
-        </navigation-case>
-        
-        <navigation-case>
             <from-outcome>editAvailability</from-outcome>
             <to-view-id>/tutors/editAvailability.xhtml</to-view-id>
             <redirect/>
-        </navigation-case>
-        
-                
+        </navigation-case>  
         <navigation-case>
             <from-outcome>writeReview</from-outcome>
             <to-view-id>/students/writeReview.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
-        
-        
-            <navigation-case>
+        <navigation-case>
             <from-outcome>editReview</from-outcome>
             <to-view-id>/students/editReview.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
-        
-
+        <navigation-case>
+            <from-action>#{requestBean.setTutorToRequest(Request r)}</from-action>
+            <from-outcome>chat</from-outcome>
+            <to-view-id>/accounts/message.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{profileBean.goToTutorProfile(Tutor tutor)}</from-action>
+            <from-outcome>success</from-outcome>
+            <to-view-id>/accounts/tutorProfile.xhtml</to-view-id>
+            <redirect>
+                <view-param>
+                    <name>username</name>
+                    <value>#{profileBean.showUsername}</value>
+                </view-param>
+            </redirect>
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{addCourseBean.addCourse}</from-action>
+            <from-outcome>success</from-outcome>
+            <to-view-id>/accounts/profile.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{addCourseBean.addCourse}</from-action>
+            <from-outcome>addCourse</from-outcome>
+            <to-view-id>/tutors/addCourse.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{addNewCourseBean.addNewCourse}</from-action>
+            <from-outcome>success</from-outcome>
+            <to-view-id>/accounts/profile.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{addNewCourseBean.addNewCourse}</from-action>
+            <from-outcome>addNewCourse</from-outcome>
+            <to-view-id>/tutors/addNewCourse.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{requestBean.createNewRequest}</from-action>
+            <from-outcome>success</from-outcome>
+            <to-view-id>/students/tutorsNotified.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{registrationBean.createUser}</from-action>
+            <from-outcome>success</from-outcome>
+            <to-view-id>/accounts/profile.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{registrationBean.createUser}</from-action>
+            <from-outcome>register</from-outcome>
+            <to-view-id>/authentications/registerStudent.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>success</from-outcome>
+            <to-view-id>/accounts/profile.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
         <navigation-case>
             <from-outcome>failure</from-outcome>
             <to-view-id>/errors/internal.xhtml</to-view-id>
         </navigation-case>
+        <navigation-case>
+            <from-action>#{userBean.logout}</from-action>
+            <from-outcome>success</from-outcome>
+            <to-view-id>/accounts/profile.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>       
     </navigation-rule>
 </faces-config>

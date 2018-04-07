@@ -28,8 +28,7 @@ import tut4you.model.*;
 import tut4you.model.Tut4YouApp;
 
 /**
- * Adds courses to the tutor.
- *
+ * Adds courses that exists in the database to the tutor.
  * @author Keith Tran <keithtran25@gmail.com>
  * @author Syed Haider <shayder426@gmail.com>
  */

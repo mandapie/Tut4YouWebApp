@@ -1,24 +1,32 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Licensed under the Academic Free License (AFL 3.0).
+ *     http://opensource.org/licenses/AFL-3.0
+ * 
+ *  This code has been developed by a group of CSULB students working on their 
+ *  Computer Science senior project called Tutors4You.
+ *  
+ *  Tutors4You is a web application that students can utilize to find a tutor and
+ *  ask them to meet at any location of their choosing. Students that struggle to understand 
+ *  the courses they are taking would benefit from this peer to peer tutoring service.
+ 
+ *  2017 Amanda Pan <daikiraidemodaisuki@gmail.com>
+ *  2017 Andrew Kaichi <ahkaichi@gmail.com>
+ *  2017 Keith Tran <keithtran25@gmail.com>
+ *  2017 Syed Haider <shayder426@gmail.com>
  */
 package tut4you.controller;
 
 import javax.inject.Named;
-import javax.enterprise.context.ConversationScoped;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.faces.view.ViewScoped;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import tut4you.model.*;
 
 /**
- *
- * @author Amanda
+ * Binds the message inputs to the EJB.
+ * @author Amanda Pan <daikiraidemodaisuki@gmail.com>
  */
 @Named
 @ViewScoped

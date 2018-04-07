@@ -19,7 +19,6 @@ package tut4you.exception;
 /**
  * UserExistsException extends the Exception class to determine if a student exists
  * @author Alvaro Monge <alvaro.monge@csulb.edu>
- * Modified by Amanda Pan <daikiraidemodaisuki@gmail.com>
  */
 public class UserExistsException extends Exception {
 

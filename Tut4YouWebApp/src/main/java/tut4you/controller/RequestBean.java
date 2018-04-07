@@ -41,9 +41,9 @@ import json.ZipCodeAPI;
 import okhttp3.OkHttpClient;
 import okhttp3.Response;
 import tut4you.model.*;
+
 /**
  * Binds request inputs to the EJB.
- *
  * @author Amanda Pan <daikiraidemodaisuki@gmail.com>
  */
 @Named

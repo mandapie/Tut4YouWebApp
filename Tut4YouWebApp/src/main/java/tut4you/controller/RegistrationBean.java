@@ -29,9 +29,9 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.ejb.EJB;
 import javax.inject.Named;
-import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
 import tut4you.model.*;
 import tut4you.exception.*;
 
@@ -43,7 +43,7 @@ import tut4you.exception.*;
  * @author Keith Tran <keithtran25@gmail.com>
  */
 @Named
-@RequestScoped
+@ViewScoped
 public class RegistrationBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -53,20 +53,21 @@ public class RegistrationBean implements Serializable {
     @EJB
     private Tut4YouApp tut4youApp;
 
-    private User newStudent;
+    private User newUser;
     private String confirmPassword;
     private String userType;
     private String priceRate;
     private Boolean isStudent;
     private String defaultZip;
     private int maxRadius;
+    private Date joinedDateAsTutor;
     
     /**
      * Creates a new instance of Registration
      */
     @PostConstruct
     public void  createRegistrationBean() {
-
+        newUser = new User();
     }
     
     /** 
@@ -76,6 +77,7 @@ public class RegistrationBean implements Serializable {
     public void destroyRegistrationBean() {
         
     }
+    
     /**
      * get max radius
      * @return maxRadius
@@ -83,6 +85,7 @@ public class RegistrationBean implements Serializable {
     public int getMaxRadius() {
         return maxRadius;
     }
+    
     /**
      * set max radius
      * @param maxRadius 
@@ -92,27 +95,24 @@ public class RegistrationBean implements Serializable {
     }
 
     /**
-     * Gets the new student who just registered
-     *
+     * Gets the new user who just registered
      * @return the new User entity
      */
-    public User getNewStudent() {
-        return newStudent;
+    public User getNewUser() {
+        return newUser;
     }
 
     /**
      * Sets the user to be a User
-     *
-     * @param newStudent student who has just registered
+     * @param newUser student who has just registered
      */
-    public void setNewStudent(User newStudent) {
-        this.newStudent = newStudent;
+    public void setNewUser(User newUser) {
+        this.newUser = newUser;
     }
 
 
     /**
      * Gets the field of the confirm Password
-     *
      * @return the field of the confirm Password
      */
     public String getConfirmPassword() {
@@ -121,7 +121,6 @@ public class RegistrationBean implements Serializable {
 
     /**
      * Sets the value in the confirm password to check if password match
-     *
      * @param confirmPassword the password matching the typed password
      */
     public void setConfirmPassword(String confirmPassword) {
@@ -130,7 +129,6 @@ public class RegistrationBean implements Serializable {
 
     /**
      * Gets the userType
-     *
      * @return the userType is Tutor or User
      */
     public String getUserType() {
@@ -139,12 +137,12 @@ public class RegistrationBean implements Serializable {
 
     /**
      * Sets the userType
-     *
      * @param userType the userType is tutor or student
      */
     public void setUserType(String userType) {
         this.userType = userType;
     }
+    
     /**
      * get price rate
      * @return priceRate
@@ -152,6 +150,7 @@ public class RegistrationBean implements Serializable {
     public String getPriceRate() {
         return priceRate;
     }
+    
     /**
      * set price rate
      * @param priceRate 
@@ -159,6 +158,7 @@ public class RegistrationBean implements Serializable {
     public void setPriceRate(String priceRate) {
         this.priceRate = priceRate;
     }
+    
     /**
      * get default zip
      * @return defaultZip
@@ -166,6 +166,7 @@ public class RegistrationBean implements Serializable {
     public String getDefaultZip() {
         return defaultZip;
     }
+    
     /**
      * set defaultZip
      * @param defaultZip 
@@ -173,13 +174,29 @@ public class RegistrationBean implements Serializable {
     public void setDefaultZip(String defaultZip) {
         this.defaultZip = defaultZip;
     }
+    
     /**
      * Checks to see if the user is a student
-     *
      * @return true if user is a student
      */
     public Boolean getIsStudent() {
         return isStudent.equals("Student");
+    }
+    
+    /**
+     * Gets join Date as a tutor
+     * @return joinedDateAsTutor
+     */
+    public Date getJoinedDateAsTutor() {
+        return joinedDateAsTutor;
+    }
+    
+    /**
+     * Sets join Date as a tutor
+     * @param joinedDateAsTutor 
+     */
+    public void setJoinedDateAsTutor(Date joinedDateAsTutor) {
+        this.joinedDateAsTutor = joinedDateAsTutor;
     }
     
     /**
@@ -188,35 +205,38 @@ public class RegistrationBean implements Serializable {
      * @return either failure, success, or register depending on successful
      * registration.
      */
-    // IN PROGRESS
     public String createUser() {
         String result = "failure";
-        if (newStudent.isInformationValid(confirmPassword)) {
-            newStudent.setPassword(tut4you.controller.HashPassword.getSHA512Digest(newStudent.getPassword()));
+        if (newUser.isInformationValid(confirmPassword)) {
+            newUser.setPassword(tut4you.controller.HashPassword.getSHA512Digest(newUser.getPassword()));
             try {
                 double pr = 0;
                 if (priceRate != null) {
                     pr = Double.parseDouble(priceRate);
                 }
-                tut4youApp.registerUser(newStudent, userType, pr, defaultZip, maxRadius);
+                joinedDateAsTutor = getCurrentDate();
+                tut4youApp.registerUser(newUser, userType, pr, defaultZip, maxRadius, joinedDateAsTutor);
                 result = "success";
-            } catch (UserExistsException see) {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("A user with that information already exists, try again."));
+            }
+            catch (UserExistsException see) {
+                FacesContext.getCurrentInstance().addMessage("registration:em", new FacesMessage("A user with that information already exists, try again."));
                 result = "register";
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 LOGGER.log(Level.SEVERE, null, e);
                 result = "failure";
             }
         }
         return result;
     }
+    
     /**
      * https://stackoverflow.com/questions/33098603/convert-localtime-java-8-to-date
      * gets the current date which is used for date joined attribute in tutor
      * @return date joined
      * @throws ParseException 
      */
-    public java.util.Date getCurrentDate() throws ParseException {
+    public Date getCurrentDate() throws ParseException {
         LocalTime d = LocalTime.now();
         Instant instant = d.atDate(LocalDate.now()).atZone(ZoneId.systemDefault()).toInstant();
         Date time = Date.from(instant);

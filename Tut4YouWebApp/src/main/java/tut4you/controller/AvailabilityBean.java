@@ -18,17 +18,11 @@ package tut4you.controller;
 
 import java.io.Serializable;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
-import javax.enterprise.context.SessionScoped;
-import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.persistence.Temporal;
@@ -38,7 +32,6 @@ import tut4you.model.Tut4YouApp;
 
 /**
  * Stores the availability of a tutor
- *
  * @author Andrew Kaichi <Andrew.Kaichi@student.csulb.edu>
  * modified by Syed Haider <shayder426@gmail.com>
  */

@@ -17,7 +17,6 @@ tut4you\exception\CourseExistsException.class
 tut4you\exception\UserExistsException.class
 tut4you\model\SessionTimer.class
 tut4you\validations\EqualsValidator.class
-tut4you\exception\StudentExistsException.class
 tut4you\messenger\ChatMessageDecoder.class
 tut4you\model\Tutor.class
 tut4you\controller\NotifyBean.class

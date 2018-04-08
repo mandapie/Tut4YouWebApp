@@ -25,30 +25,38 @@
     <ui:define name="content">
         <h1>Add Course</h1>
         <b:panel title="Add a course" collapsible="false" look="info">
-            <b:form>
+            <b:form id="addCourseForm">
                 <b:row>
-                    <b:selectOneMenu span="6" label="Subject" id="subjectList" value="#{addCourseBean.subject}" required="true" requiredMessage="required">
-                        
-                        <f:selectItem itemLabel="select Subject..." itemValue="" noSelectionOption="true"/>
-                        <f:selectItems value="#{addCourseBean.subjectList}"
-                                       var="subject"
-                                       itemLabel="#{subject.subjectName}"
-                                       itemValue="#{subject}"/>
-                        <b:message for="subjectList" span="3"/>
-                        <!-- When you click a subject, it will only shown the courses related to that table in the drop-down menu for courses-->
-                        <f:ajax render="courseList" listener="#{addCourseBean.changeSubject}"/>
-                    </b:selectOneMenu>
+                    <b:column medium-screen="2">
+                        <h:outputLabel value="Subject"/>
+                    </b:column>
+                    <b:column medium-screen="4">
+                        <b:message for="subjects"/>
+                        <b:selectOneMenu id="subjects" value="#{addCourseBean.subject}" required="true" requiredMessage="required">
+                            <f:selectItem itemLabel="select Subject..." itemValue="" noSelectionOption="true"/>
+                            <f:selectItems value="#{addCourseBean.subjectList}"
+                                           var="subject"
+                                           itemLabel="#{subject.subjectName}"
+                                           itemValue="#{subject}"/>
+                            <!-- When you click a subject, it will only shown the courses related to that table in the drop-down menu for courses-->
+                            <f:ajax render="courses" listener="#{addCourseBean.changeSubject}"/>
+                        </b:selectOneMenu>
+                    </b:column>
                 </b:row>
                 <b:row>
-                    <b:selectOneMenu span="6" label="Course" id="courseList" value="#{addCourseBean.course}" required="true" requiredMessage="required">
-                        
-                        <f:selectItem itemLabel="select Course..." itemValue="" noSelectionOption="true"/>
-                        <f:selectItems value="#{addCourseBean.courseList}"
-                                       var="course"
-                                       itemLabel="#{course.courseName}"
-                                       itemValue="#{course}"/>
-                        <b:message for="courseList" span="3"/>
-                    </b:selectOneMenu>
+                    <b:column medium-screen="2">
+                        <h:outputLabel value="Subject"/>
+                    </b:column>
+                    <b:column medium-screen="4">
+                        <b:message for="courses"/>
+                        <b:selectOneMenu id="courses" value="#{addCourseBean.course}" required="true" requiredMessage="required">
+                            <f:selectItem itemLabel="select Course..." itemValue="" noSelectionOption="true"/>
+                            <f:selectItems value="#{addCourseBean.courseList}"
+                                           var="course"
+                                           itemLabel="#{course.courseName}"
+                                           itemValue="#{course}"/>
+                        </b:selectOneMenu>
+                    </b:column>
                 </b:row>
                 <!-- If the course is not available, this redirects you the add new courses page -->
                 <b:row>

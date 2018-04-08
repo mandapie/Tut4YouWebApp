@@ -5,7 +5,7 @@
  *  This code has been developed by a group of CSULB students working on their 
  *  Computer Science senior project called Tutors4You.
  *  
- *  Tutors4You is a web application that students can utilize to find a tutor and
+ *  Tutors4You is a web application that students can utilize to findUser a tutor and
  *  ask them to meet at any location of their choosing. Students that struggle to understand 
  *  the courses they are taking would benefit from this peer to peer tutoring service.
  
@@ -19,9 +19,12 @@ package tut4you.controller;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
-import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import tut4you.exception.CourseExistsException;
 import tut4you.model.*;
@@ -33,7 +36,7 @@ import tut4you.model.Tut4YouApp;
  * @author Syed Haider <shayder426@gmail.com>
  */
 @Named
-@SessionScoped
+@ViewScoped
 public class AddCourseBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -159,15 +162,23 @@ public class AddCourseBean implements Serializable {
 
     /**
      * Adds a new course to the tutor
-     *
-     * @return
-     * @throws CourseExistsException
+     * @return course
      */
-    public String addCourse() throws CourseExistsException {
+    public String addCourse() {
         String result = "failure";
-        course = tut4youApp.addCourse(course);
-        if (this.course != null) {
-            result = "success";
+        try {
+            course = tut4youApp.addCourse(course);
+            if (this.course != null) {
+                result = "success";
+            }
+        }
+        catch (CourseExistsException see) {
+            FacesContext.getCurrentInstance().addMessage("addCourseForm:courses", new FacesMessage("You have already taken this course."));
+            result = "addCourse";
+        }
+        catch (Exception e) {
+            LOGGER.log(Level.SEVERE, null, e);
+            result = "failure";
         }
         return result;
     }

@@ -101,14 +101,10 @@
                         </b:row>
                     </c:if>
                     <b:row>
-                        <b:column>
-                            <b:button value="Edit Profile" href="/Tut4YouWebApp/accounts/editProfile.xhtml"/>  
-                        </b:column>
+                        <b:button value="Edit Profile" href="/Tut4YouWebApp/accounts/editProfile.xhtml"/>  
                     </b:row>
                     <b:row>
-                        <b:column>
-                            <b:button value="Change Password" href="/Tut4YouWebApp/accounts/changePassword.xhtml"/>  
-                        </b:column>
+                        <b:button value="Change Password" href="/Tut4YouWebApp/accounts/changePassword.xhtml"/>  
                     </b:row>
                 </b:panel>
                 <c:if test="#{userBean.isTutor}">
@@ -146,7 +142,7 @@
                             <b:dataTable value="#{requestBean.requestList}" var="r">
                                 <b:dataTableColumn>
                                     <f:facet name="header">Day of Week</f:facet>
-                                        #{r.dayOfWeek}
+                                    #{r.dayOfWeek}
                                 </b:dataTableColumn>
                                 <h:column>
                                     <f:facet name="header">Date and Time</f:facet>

@@ -5,7 +5,7 @@
  *  This code has been developed by a group of CSULB students working on their 
  *  Computer Science senior project called Tutors4You.
  *  
- *  Tutors4You is a web application that students can utilize to find a tutor and
+ *  Tutors4You is a web application that students can utilize to findUser a tutor and
  *  ask them to meet at any location of their choosing. Students that struggle to understand 
  *  the courses they are taking would benefit from this peer to peer tutoring service.
  
@@ -96,7 +96,7 @@ public class TranscriptBean implements Serializable {
         acl.grantPermission(GroupGrantee.AllUsers, Permission.Write);
         try {
             String userName = userbean.getEmailFromSession();
-            tutor = tut4youApp.findTutorUserName(userName);
+            tutor = tut4youApp.findTutor(userName);
             String transcriptName = tutor.getUserName();
             String keyName = transcriptName.concat(".pdf");
             

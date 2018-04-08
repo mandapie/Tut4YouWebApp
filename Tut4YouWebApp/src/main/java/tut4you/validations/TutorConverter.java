@@ -53,7 +53,7 @@ public class TutorConverter implements Converter {
       Tutor theBook = null;
       if (submittedValue != null && !submittedValue.isEmpty()) {
          try {
-            theBook = tut4youapp.findTutorUserName(submittedValue);
+            theBook = tut4youapp.findTutor(submittedValue);
          } catch (NumberFormatException e) {
             throw new ConverterException(new FacesMessage(submittedValue + " is not a valid Tutor ID"), e);
          }

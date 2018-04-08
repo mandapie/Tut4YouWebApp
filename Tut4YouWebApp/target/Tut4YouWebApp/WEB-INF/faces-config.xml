@@ -45,20 +45,8 @@
         </navigation-case>
         <navigation-case>
             <from-action>#{addCourseBean.addCourse}</from-action>
-            <from-outcome>success</from-outcome>
-            <to-view-id>/accounts/profile.xhtml</to-view-id>
-            <redirect/>
-        </navigation-case>
-        <navigation-case>
-            <from-action>#{addCourseBean.addCourse}</from-action>
             <from-outcome>addCourse</from-outcome>
             <to-view-id>/tutors/addCourse.xhtml</to-view-id>
-        </navigation-case>
-        <navigation-case>
-            <from-action>#{addNewCourseBean.addNewCourse}</from-action>
-            <from-outcome>success</from-outcome>
-            <to-view-id>/accounts/profile.xhtml</to-view-id>
-            <redirect/>
         </navigation-case>
         <navigation-case>
             <from-action>#{addNewCourseBean.addNewCourse}</from-action>
@@ -69,12 +57,6 @@
             <from-action>#{requestBean.createNewRequest}</from-action>
             <from-outcome>success</from-outcome>
             <to-view-id>/students/tutorsNotified.xhtml</to-view-id>
-            <redirect/>
-        </navigation-case>
-        <navigation-case>
-            <from-action>#{registrationBean.createUser}</from-action>
-            <from-outcome>success</from-outcome>
-            <to-view-id>/accounts/profile.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
         <navigation-case>

@@ -100,18 +100,16 @@
                             <h:outputLabel value="Max Radius"/>
                         </b:column>
                         <b:column medium-screen="4">
-                            <b:selectOneMenu  class="form-control"
-                                             id="maxRadius"
-                                             value="#{userBean.user.maxRadius}"
-                                             required="true">
-                                    <f:selectItem itemLabel="1 mile" itemValue="1" />
-                                    <f:selectItem itemLabel="3 miles" itemValue="3" /> 
-                                    <f:selectItem itemLabel="5 miles" itemValue="5" />
-                                    <f:selectItem itemLabel="10 miles" itemValue="10" /> 
-                                    <f:selectItem itemLabel="15 miles" itemValue="15" />
-                                    <f:selectItem itemLabel="30 miles" itemValue="30" /> 
-                                    <f:convertNumber type="number"/>
-                                </b:selectOneMenu>
+                            <b:selectOneMenu class="form-control" id="maxRadius" value="#{userBean.user.maxRadius}" required="true">
+                                <f:selectItem itemValue="#{userBean.user.maxRadius}" />
+                                <f:selectItem itemLabel="1 mile" itemValue="1" />
+                                <f:selectItem itemLabel="3 miles" itemValue="3" /> 
+                                <f:selectItem itemLabel="5 miles" itemValue="5" />
+                                <f:selectItem itemLabel="10 miles" itemValue="10" /> 
+                                <f:selectItem itemLabel="15 miles" itemValue="15" />
+                                <f:selectItem itemLabel="30 miles" itemValue="30" /> 
+                                <f:convertNumber type="number"/>
+                            </b:selectOneMenu>
                         </b:column>
                     </b:row> 
                 </c:if>

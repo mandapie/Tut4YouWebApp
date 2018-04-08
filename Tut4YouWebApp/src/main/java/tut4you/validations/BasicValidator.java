@@ -17,7 +17,7 @@
 package tut4you.validations;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
@@ -66,6 +66,7 @@ public class BasicValidator {
                 throw new ValidatorException(message);
             }
     }
+    
     /**
      * validate userName is unique
      * @param context
@@ -81,9 +82,9 @@ public class BasicValidator {
             throw new ValidatorException(message);
         }
      }
+    
     /**
      * https://stackoverflow.com/questions/42104546/java-regular-expressions-to-validate-phone-numbers
-     * 
      * @param context the FacesContext
      * @param toValidate the UIComponent being validated (e-mail field)
      * @param value the value (email address) of the component
@@ -116,6 +117,7 @@ public class BasicValidator {
             throw new ValidatorException(message);
         }
     }
+    
     /**
      * validate that later time in request is not before the actual time
      * @param context
@@ -125,17 +127,12 @@ public class BasicValidator {
      * @throws ParseException 
      */
     public void validateLaterTime(FacesContext context, UIComponent component, Object value) throws ValidatorException, ParseException {
-        java.util.Date laterTime = (java.util.Date) value;
-        //System.out.println("endTime: " + endTime);
-        //Object otherValue = component.getAttributes().get("otherValue");
+        Date laterTime = (Date) value;
         RequestBean requestBean = new RequestBean();
-        java.util.Date currentTime = requestBean.getCurrentTime();
-        //System.out.println("startTime: " + startTime);
+        Date currentTime = requestBean.getCurrentTime();
         if(laterTime.before(currentTime)) {
             FacesMessage message = new FacesMessage("Invalid later time input");
             throw new ValidatorException(message);
         }
     }
-
-
 }

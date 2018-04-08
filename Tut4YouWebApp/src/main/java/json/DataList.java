@@ -49,7 +49,7 @@ public class DataList {
 
     /**
      * Gets the state
-     * @return 
+     * @return State
      */
     public String getState ()
     {

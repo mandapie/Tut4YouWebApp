@@ -313,7 +313,6 @@ public class Tut4YouApp {
 
     /**
      * Tutors are able to view pending requests.
-     *
      * @return
      */
     @RolesAllowed("tut4youapp.tutor")

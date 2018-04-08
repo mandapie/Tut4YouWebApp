@@ -209,28 +209,26 @@
                             <b:tab title="Courses">
                                 <br></br> <!-- for better spacing -->
                                 <!-- Bootsfaces datatable to show the data in an organized fashion -->
-                                <b:dataTable value="#{addCourseBean.tutorCourses}" var="course">
+                                <b:dataTable value="#{courseBean.tutorCourses}" var="course">
                                     <b:dataTableColumn>
                                         <f:facet name="header">Courses You Have Taken</f:facet>
-                                            #{course.courseName}
+                                        #{course.courseName}
                                     </b:dataTableColumn>
                                 </b:dataTable>
                             </b:tab>
                         </c:if>
                     </b:tabView>
                 </h:form>
-
             </b:column>
             <c:if test="#{userBean.condition}">  
                 #{userBean.updateCurrentZip()}
             </c:if>
-            <p:dialog header="Current Zip Code" widgetVar="myDialog" minHeight="40" appendTo="" visible="true"
-                rendered="#{userBean.condition}">
+            <p:dialog header="Current Zip Code" widgetVar="myDialog" minHeight="40" visible="true" rendered="#{userBean.condition}">
                 <h:form>
-                <h:outputText value="Enter current zip code" />
-                <b:inputText id="currentZip" placeholder="press enter to submit" required="true" requiredMessage="required" value="#{userBean.currentZip}">
-                            <b:message for="currentZip"/>
-                </b:inputText>
+                    <h:outputText value="Enter current zip code" />
+                    <b:inputText id="currentZip" placeholder="press enter to submit" required="true" requiredMessage="required" value="#{userBean.currentZip}">
+                        <b:message for="currentZip"/>
+                    </b:inputText>
                 </h:form>
             </p:dialog>
         </b:container>

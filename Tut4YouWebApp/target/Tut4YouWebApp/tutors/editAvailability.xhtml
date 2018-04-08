@@ -70,10 +70,10 @@
                             <f:attribute name="day" value="#{passwordValue.value}"/>
                         </b:inputText>         
                         <!-- Adds to availability in -->
-                        <p:dialog header="Updated!" widgetVar="dlg1" id="modalID" minHeight="40" visible="#{availabilityBean.modalFlag}" closable="false"  >
+                        <p:dialog header="Updated!" widgetVar="dlg1" id="modalID" minHeight="40" visible="#{availabilityBean.addNewAvailability}" closable="false"  >
                             <p:commandButton value="Go To Home Page" style="width:100%" action="#{availabilityBean.goToHomePage}"/>
                         </p:dialog>
-                        <b:commandButton value="Add Availability" style="width:100%" action="#{availabilityBean.updateAvailability(availabilityBean.availability)}" oncomplete="if (#{availabilityBean.modalFlag}){PF('dlg1').show()}" update="availabilityID">
+                        <b:commandButton value="Add Availability" style="width:100%" action="#{availabilityBean.updateAvailability(availabilityBean.availability)}" oncomplete="if (#{availabilityBean.addNewAvailability}){PF('dlg1').show()}" update="availabilityID">
                         </b:commandButton>
                     </b:row>
                 </b:column>

@@ -32,14 +32,14 @@
                     </b:column>
                     <b:column medium-screen="4">
                         <b:message for="subjects"/>
-                        <b:selectOneMenu id="subjects" value="#{addCourseBean.subject}" required="true" requiredMessage="required">
+                        <b:selectOneMenu id="subjects" value="#{courseBean.subject}" required="true" requiredMessage="required">
                             <f:selectItem itemLabel="select Subject..." itemValue="" noSelectionOption="true"/>
-                            <f:selectItems value="#{addCourseBean.subjectList}"
+                            <f:selectItems value="#{courseBean.subjectList}"
                                            var="subject"
                                            itemLabel="#{subject.subjectName}"
                                            itemValue="#{subject}"/>
                             <!-- When you click a subject, it will only shown the courses related to that table in the drop-down menu for courses-->
-                            <f:ajax render="courses" listener="#{addCourseBean.changeSubject}"/>
+                            <f:ajax render="courses" listener="#{courseBean.changeSubject}"/>
                         </b:selectOneMenu>
                     </b:column>
                 </b:row>
@@ -49,9 +49,9 @@
                     </b:column>
                     <b:column medium-screen="4">
                         <b:message for="courses"/>
-                        <b:selectOneMenu id="courses" value="#{addCourseBean.course}" required="true" requiredMessage="required">
+                        <b:selectOneMenu id="courses" value="#{courseBean.course}" required="true" requiredMessage="required">
                             <f:selectItem itemLabel="select Course..." itemValue="" noSelectionOption="true"/>
-                            <f:selectItems value="#{addCourseBean.courseList}"
+                            <f:selectItems value="#{courseBean.courseList}"
                                            var="course"
                                            itemLabel="#{course.courseName}"
                                            itemValue="#{course}"/>
@@ -67,7 +67,7 @@
                     </b:container>
                 </b:row>
                 <b:row>
-                    <b:commandButton span="2" value="Submit" look="primary" action="#{addCourseBean.addCourse}" />
+                    <b:commandButton span="2" value="Submit" look="primary" action="#{courseBean.addCourse}" />
                 </b:row>
             </b:form>
         </b:panel>

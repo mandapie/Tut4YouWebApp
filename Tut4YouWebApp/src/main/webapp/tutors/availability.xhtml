@@ -30,17 +30,16 @@
         <h1>Add Availability</h1>
         <b:panel title="Enter Your Availability" collapsible="false" look="info">
             <b:form id="availabilityID">
-
                 <b:column span="4">
-                    <b:row>
                         <!-- Drop-down menu display Monday-Sunday -->
-                        <h:outputLabel value="Select a day:"/>
+                        <h:outputLabel value="Select a day"/>
+                        <b:message for="dayOfWeek"/>
                         <b:selectOneMenu                           
                             id="dayOfWeek"
                             value="#{availabilityBean.availability.dayOfWeek}"
                             required="true"
-                            binding="#{passwordValue}">
-                            <f:selectItem itemValue="Select One..." itemDisabled="true"/>
+                            requiredMessage="required">
+                            <f:selectItem itemLabel="Select One..." itemValue="" noSelectionOption="true"/>
                             <f:selectItem itemValue="Monday" />
                             <f:selectItem itemValue="Tuesday" />
                             <f:selectItem itemValue="Wednesday" />
@@ -50,39 +49,36 @@
                             <f:selectItem itemValue="Sunday" />
                         </b:selectOneMenu>
                         <!-- Start Time -->
-                        <h:outputLabel value="Start Time:"/>
+                        <h:outputLabel value="Start Time"/>
                         <b:inputText type="time" id="startTime"
                                      value="#{availabilityBean.startTime}"
-                                     binding="#{passwordComponent}"
-                                     required="true">
+                                     required="true"
+                                     requiredMessage="required">
                             <f:convertDateTime type="time" pattern="HH:mm" dateStyle="full"/>
                             <b:message for="startTime"/>
                         </b:inputText>
 
                         <!-- End Time -->
-                        <h:outputLabel value="End Time:" />
+                        <h:outputLabel value="End Time" />
                         <b:inputText type="time" id="endTime"
                                      value="#{availabilityBean.endTime}"
-                                     required="true" >
+                                     required="true"
+                                     requiredMessage="required">
                             <f:convertDateTime type="time" pattern="HH:mm" dateStyle="full"/>
                             <b:message for="endTime"/>
                             <f:validator validatorId="timeValidator" />
-                            <f:attribute name="AvailabilityList" value="#{availabilityBean.availabilityList}"/>
-                            <f:attribute name="otherValue" value="#{passwordComponent.value}" />
-                            <f:attribute name="day" value="#{passwordValue.value}"/>
                         </b:inputText>         
                         <!-- Adds to availability in -->
-                        <p:dialog header="Submitted!" widgetVar="dlg1" id="modalID" minHeight="40" visible="#{availabilityBean.modalFlag}" closable="false"  >
+                        <p:dialog header="Submitted!" widgetVar="dlg1" id="modalID" minHeight="40" visible="#{availabilityBean.addNewAvailability}" closable="false">
                             <h:outputText value="Do you want to add another availability?" />
-                            <p:commandButton value="Yes" style="width:100%" action="#{availabilityBean.refreshPage}" />
-                            <p:commandButton value="No" style="width:100%" action="#{availabilityBean.goToHomePage}"/>
+                            <p:button value="Yes" style="width:100%" outcome="/tutors/availability.xhtml" />
+                            <p:button value="No" style="width:100%" outcome="/accounts/profile.xhtml"/>
                         </p:dialog>
-                        <b:commandButton value="Add Availability" style="width:100%" action="#{availabilityBean.addAvailability}" oncomplete="if (#{availabilityBean.modalFlag}){PF('dlg1').show()}" update="availabilityID">
-                        </b:commandButton>
-                    </b:row>
+                        <b:commandButton value="Add Availability" style="width:100%" look="primary" action="#{availabilityBean.addAvailability}" oncomplete="if (#{availabilityBean.addNewAvailability}){PF('dlg1').show()}" update="availabilityID"/>
                 </b:column>
-
+                <br/>
                 <b:column span="8">
+                    <h:outputLabel value="Your current availabilities"/>
                     <b:dataTable value="#{availabilityBean.availabilityList}" var="avail" id="availabilityTable">
                         <b:dataTableColumn>
                             <f:facet name="header">Day of Week</f:facet>
@@ -110,7 +106,6 @@
                         </b:dataTableColumn>
                     </b:dataTable>  
                 </b:column>
-
             </b:form>
         </b:panel>
         <ui:debug hotkey='x'/>

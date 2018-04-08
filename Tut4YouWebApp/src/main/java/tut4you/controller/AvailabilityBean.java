@@ -47,32 +47,22 @@ public class AvailabilityBean implements Serializable {
     private Tut4YouApp tut4youApp;
 
     private Availability availability;
-    //private String stringStartTime;
-    //private String stringEndTime;
-
     @Temporal(TemporalType.TIME)
     private java.util.Date startTime;
-
     @Temporal(TemporalType.TIME)
     private java.util.Date endTime;
-
     private List<Availability> availabilityList = new ArrayList();
-
-    private boolean modalFlag = false;
+    private boolean addNewAvailability = false;
 
     /**
      * Creates a new instance of the Availability entity
      */
     public AvailabilityBean() {
         availability = new Availability();
-        //stringStartTime = "";
-        //stringEndTime = "";
-
     }
 
     /**
      * Gets the availability of the tutor
-     *
      * @return the availability of the tutor
      */
     public Availability getAvailability() {
@@ -81,7 +71,6 @@ public class AvailabilityBean implements Serializable {
 
     /**
      * Sets the availability of the tutor (not used)
-     *
      * @param availability the availability of the tutor
      */
     public void setAvailability(Availability availability) {
@@ -90,7 +79,6 @@ public class AvailabilityBean implements Serializable {
 
     /**
      * Gets the start time
-     *
      * @return startTime
      */
     public java.util.Date getStartTime() {
@@ -99,7 +87,6 @@ public class AvailabilityBean implements Serializable {
 
     /**
      * Sets the start time
-     *
      * @param startTime
      */
     public void setStartTime(java.util.Date startTime) {
@@ -108,7 +95,6 @@ public class AvailabilityBean implements Serializable {
 
     /**
      * Gets the end time
-     *
      * @return endTime
      */
     public java.util.Date getEndTime() {
@@ -117,7 +103,6 @@ public class AvailabilityBean implements Serializable {
 
     /**
      * Sets the end time
-     *
      * @param endTime
      */
     public void setEndTime(java.util.Date endTime) {
@@ -125,70 +110,49 @@ public class AvailabilityBean implements Serializable {
     }
 
     /**
-     * Gets the modalFlag which determines
-     * if the modal will show or not
-     *
+     * Gets the addNewAvailability which determines if the modal will show or not
      * @return true if availability is added
      */
-    public boolean isModalFlag() {
-        return modalFlag;
+    public boolean isAddNewAvailability() {
+        return addNewAvailability;
     }
 
     /**
-     * Sets the modalFlag 
-     * which determines if the modal will show or not
-     * 
-     *
-     * @param modalFlag true/false if availability is added
+     * Sets the addNewAvailability which determines if the modal will show or not
+     * @param addNewAvailability true/false if availability is added
      */
-    public void setModalFlag(boolean modalFlag) {
-        this.modalFlag = modalFlag;
+    public void setAddNewAvailability(boolean addNewAvailability) {
+        this.addNewAvailability = addNewAvailability;
     }
 
-
     /**
-     * Gets a list of the availabilities of the Tutor in the EJB
-     *
+     * Gets a list of the availabilities of the Tutor from the database
      * @return a list of availabilities
      */
     public List<Availability> getAvailabilityList() {
         availabilityList = tut4youApp.getAvailability();
         return availabilityList;
     }
-
-
     
     /**
      * Adds the availability to the tutor
-     *
      * @throws java.text.ParseException
      */
     public void addAvailability() throws ParseException {
-        String result = "failure";
         availability.setStartTime(startTime);
         availability.setEndTime(endTime);
         availability = tut4youApp.addAvailability(availability);
-        if (availability != null) {
-            result = "success";
-            modalFlag = true;
-        }
-        else
-        {
-            modalFlag = false;
-        }
+        addNewAvailability = availability != null;
     }
 
     /**
      * Updates the current availability of the tutor
-     *
      * @param avail the availability of the tutor
      * @return goes to home page if successful
      * @throws java.text.ParseException
      */
     public String updateAvailability(Availability avail) throws ParseException {
         String result = "failure";
-        System.out.println("Start: " + avail.getStartTime());
-        System.out.println("End: " + avail.getEndTime());
         this.availability = avail;
         availability.setStartTime(avail.getStartTime());
         availability.setEndTime(avail.getEndTime());
@@ -201,7 +165,6 @@ public class AvailabilityBean implements Serializable {
 
     /**
      * Delete the availability from the tutor
-     *
      * @param avail
      * @throws java.text.ParseException
      */
@@ -211,7 +174,6 @@ public class AvailabilityBean implements Serializable {
 
     /**
      * Goes to the edit availability page
-     * 
      * @param avail the availability to be edited
      * @return the webpage of edit availability
      * @throws ParseException
@@ -223,26 +185,4 @@ public class AvailabilityBean implements Serializable {
         result = "editAvailability";
         return result;
     }
-
-    /**
-     * This will return to the home page
-     *
-     * @return to the home page
-     */
-    public String goToHomePage() {
-        String result = "success";
-        return result;
-    }
-
-    /**
-     * Refreshes the page if tutor
-     * adds more availabilities
-     *
-     * @return the same page
-     */
-    public String refreshPage() {
-        String viewId = FacesContext.getCurrentInstance().getViewRoot().getViewId();
-        return viewId + "?faces-redirect=true";
-    }
-
 }

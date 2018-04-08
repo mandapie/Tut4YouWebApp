@@ -7,6 +7,7 @@ C:\Users\Amanda\Documents\NetBeansProjects\493B\cecs493-project-big-baller-brand
 C:\Users\Amanda\Documents\NetBeansProjects\493B\cecs493-project-big-baller-brand\Tut4YouWebApp\src\main\java\json\ZipCodeAPI.java
 C:\Users\Amanda\Documents\NetBeansProjects\493B\cecs493-project-big-baller-brand\Tut4YouWebApp\src\main\java\tut4you\controller\AvailabilityBean.java
 C:\Users\Amanda\Documents\NetBeansProjects\493B\cecs493-project-big-baller-brand\Tut4YouWebApp\src\main\java\tut4you\model\Rating.java
+C:\Users\Amanda\Documents\NetBeansProjects\493B\cecs493-project-big-baller-brand\Tut4YouWebApp\src\main\java\tut4you\controller\CourseBean.java
 C:\Users\Amanda\Documents\NetBeansProjects\493B\cecs493-project-big-baller-brand\Tut4YouWebApp\src\main\java\tut4you\messenger\ChatMessageDecoder.java
 C:\Users\Amanda\Documents\NetBeansProjects\493B\cecs493-project-big-baller-brand\Tut4YouWebApp\src\main\java\tut4you\validations\EqualsValidator.java
 C:\Users\Amanda\Documents\NetBeansProjects\493B\cecs493-project-big-baller-brand\Tut4YouWebApp\src\main\java\tut4you\controller\UserBean.java
@@ -28,12 +29,10 @@ C:\Users\Amanda\Documents\NetBeansProjects\493B\cecs493-project-big-baller-brand
 C:\Users\Amanda\Documents\NetBeansProjects\493B\cecs493-project-big-baller-brand\Tut4YouWebApp\src\main\java\tut4you\model\Message.java
 C:\Users\Amanda\Documents\NetBeansProjects\493B\cecs493-project-big-baller-brand\Tut4YouWebApp\src\main\java\tut4you\validations\BasicValidator.java
 C:\Users\Amanda\Documents\NetBeansProjects\493B\cecs493-project-big-baller-brand\Tut4YouWebApp\src\main\java\tut4you\model\Tutor.java
-C:\Users\Amanda\Documents\NetBeansProjects\493B\cecs493-project-big-baller-brand\Tut4YouWebApp\src\main\java\tut4you\controller\AddNewCourseBean.java
 C:\Users\Amanda\Documents\NetBeansProjects\493B\cecs493-project-big-baller-brand\Tut4YouWebApp\src\main\java\tut4you\controller\RatingBean.java
 C:\Users\Amanda\Documents\NetBeansProjects\493B\cecs493-project-big-baller-brand\Tut4YouWebApp\src\main\java\tut4you\model\RequestsTutors.java
 C:\Users\Amanda\Documents\NetBeansProjects\493B\cecs493-project-big-baller-brand\Tut4YouWebApp\src\main\java\tut4you\validations\TutorConverter.java
 C:\Users\Amanda\Documents\NetBeansProjects\493B\cecs493-project-big-baller-brand\Tut4YouWebApp\src\main\java\tut4you\validations\PriceValidator.java
-C:\Users\Amanda\Documents\NetBeansProjects\493B\cecs493-project-big-baller-brand\Tut4YouWebApp\src\main\java\tut4you\validations\EmailValidator.java
 C:\Users\Amanda\Documents\NetBeansProjects\493B\cecs493-project-big-baller-brand\Tut4YouWebApp\src\main\java\tut4you\model\Request.java
 C:\Users\Amanda\Documents\NetBeansProjects\493B\cecs493-project-big-baller-brand\Tut4YouWebApp\src\main\java\tut4you\model\User.java
 C:\Users\Amanda\Documents\NetBeansProjects\493B\cecs493-project-big-baller-brand\Tut4YouWebApp\src\main\java\tut4you\validations\TimeValidator.java

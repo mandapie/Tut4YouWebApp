@@ -8,7 +8,6 @@ tut4you\controller\RegistrationBean.class
 tut4you\model\Rating.class
 tut4you\model\ZipCode.class
 tut4you\validations\TimeValidator.class
-tut4you\validations\EmailValidator.class
 tut4you\controller\RequestBean.class
 tut4you\controller\UserBean.class
 tut4you\model\Tut4YouApp.class
@@ -21,8 +20,8 @@ tut4you\messenger\ChatMessageDecoder.class
 tut4you\model\Tutor.class
 tut4you\controller\NotifyBean.class
 tut4you\model\User.class
+tut4you\controller\CourseBean.class
 tut4you\model\Request$Status.class
-tut4you\controller\AddNewCourseBean.class
 tut4you\model\Subject.class
 tut4you\model\Group.class
 tut4you\controller\WSEndpoint.class

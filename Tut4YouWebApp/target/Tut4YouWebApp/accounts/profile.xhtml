@@ -29,9 +29,7 @@
         <b:form>
             <p:dialog header="Request Declined" widgetVar="modalID" minHeight="40" visible="#{requestBean.declinedRequest.size() != 0}" closable="false">
                 <ui:repeat var="re" value="#{requestBean.declinedRequest}">
-                    <div>
-                        <p>Your request with the description: #{re.description} has been declined</p>
-                    </div>
+                    <p>Your request with the description: #{re.description} has been declined</p>
                     <p:commandButton value="Dismiss" style="width:100%" action="#{requestBean.cancelRequest(re)}" oncomplete="PF('modalID').hide();"/>
                 </ui:repeat> 
             </p:dialog>
@@ -45,9 +43,7 @@
                             <h:outputLabel value="Name:"/>
                         </b:column>
                         <b:column span="7">
-                            <h:outputLabel value="#{userBean.user.firstName}"/>
-                            <span></span> <!-- &nbsp; cause run time error -->
-                            <h:outputLabel value="#{userBean.user.lastName}"/>
+                            <h:outputText value="#{userBean.user.firstName} #{userBean.user.lastName}"/>
                         </b:column>
                     </b:row>
                     <b:row>
@@ -55,7 +51,7 @@
                             <h:outputLabel value="Username:"/>
                         </b:column>
                         <b:column span="7">
-                            <h:outputLabel value="#{userBean.user.userName}"/>
+                            <h:outputText value="#{userBean.user.userName}"/>
                         </b:column>
                     </b:row>
                     <b:row>
@@ -63,7 +59,7 @@
                             <h:outputLabel value="Email:"/>
                         </b:column>
                         <b:column span="7">
-                            <h:outputLabel value="#{userBean.user.email}"/>
+                            <h:outputText value="#{userBean.user.email}"/>
                         </b:column>
                     </b:row>
                     <b:row>
@@ -71,7 +67,7 @@
                             <h:outputLabel value="Phone Number:"/>
                         </b:column>
                         <b:column span="7">
-                            <h:outputLabel value="#{userBean.user.phoneNumber}"/>
+                            <h:outputText value="#{userBean.user.phoneNumber}"/>
                         </b:column>
                     </b:row>
                     <b:row>
@@ -79,7 +75,7 @@
                             <h:outputLabel value="University:"/>
                         </b:column>
                         <b:column span="7">
-                            <h:outputLabel value="#{userBean.user.university}"/>
+                            <h:outputText value="#{userBean.user.university}"/>
                         </b:column>
                     </b:row>
                     <c:if test="#{userBean.isTutor}">
@@ -88,9 +84,9 @@
                                 <h:outputLabel value="Hourly Rate:"/>
                             </b:column>
                             <b:column span="7">
-                                <h:outputLabel value="#{userBean.user.priceRate}">
+                                <h:outputText value="#{userBean.user.priceRate}">
                                     <f:convertNumber type="currency" currencySymbol="$" locale="en_US" />
-                                </h:outputLabel>
+                                </h:outputText>
                             </b:column>
                         </b:row>
                     </c:if>
@@ -176,7 +172,7 @@
                                 <b:dataTable value="#{notifyBean.pendingRequestList}" var="req">
                                     <b:dataTableColumn>
                                         <f:facet name="header">Day of Week</f:facet>
-                                            #{req.course.courseName}
+                                        #{req.course.courseName}
                                     </b:dataTableColumn>
                                     <b:dataTableColumn value="#{req.description}" />
                                     <h:column>
@@ -208,14 +204,11 @@
                                     </b:dataTableColumn>
                                     <b:dataTableColumn>
                                         <f:facet name="header">Action</f:facet>
-                                        <b:commandButton value="Edit" action="#{availabilityBean.goToEditAvailabilityPage(avail)}">
-                                        </b:commandButton>
+                                        <b:commandButton value="Edit" action="#{availabilityBean.goToEditAvailabilityPage(avail)}"/>
                                         <span></span> <!-- somehow can't make spacing unless using empty span-->
-                                        <b:commandButton value="Delete" look="danger" action="#{availabilityBean.deleteAvailability(avail)}">
-                                        </b:commandButton>
+                                        <b:commandButton value="Delete" look="danger" action="#{availabilityBean.deleteAvailability(avail)}"/>
                                     </b:dataTableColumn>
                                 </b:dataTable>  
-                                <br></br>
                             </b:tab>
                             <b:tab title="Courses">
                                 <br></br> <!-- for better spacing -->

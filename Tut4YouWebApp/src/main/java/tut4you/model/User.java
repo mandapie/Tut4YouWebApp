@@ -40,6 +40,7 @@ import javax.persistence.Table;
  *
  * @author Keith Tran <keithtran25@gmail.com>
  * @author Syed Haider <shayder426@gmail.com>
+ * @author Amanda Pan <daikiraidemodaisuki@gmail.com>
  */
 @Table(name = "Users")
 @Entity
@@ -61,6 +62,7 @@ public class User implements Serializable {
      * JPQL Query to obtain a list of users username
      */
     public static final String FIND_USER_USERNAMES = "Tutor.FindUserUserNames";
+    
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -91,12 +93,6 @@ public class User implements Serializable {
     @ManyToMany(mappedBy = "students", cascade = CascadeType.ALL)
     private Collection<Group> groups;
 
-    /**
-     * A user can submit multiple ratings
-     *
-     * @OneToMany(mappedBy="student", cascade=CascadeType.ALL) private
-     * Collection<Rating> ratings;
-     */
     /**
      * User constructor
      */

@@ -196,7 +196,6 @@ public class RequestBean implements Serializable {
     public List<Request> getDeclinedRequest() {
         declinedList = tut4youApp.getDeclinedRequest();
         return declinedList; 
-        
     }
     /**
      * sets the declined list
@@ -456,6 +455,7 @@ public class RequestBean implements Serializable {
         String result = "success";
         return result;
     }
+    
     /**
      * refresh page
      * @return 
@@ -467,12 +467,12 @@ public class RequestBean implements Serializable {
 
     /**
      * Remove the request from the notification list
-     *
      * @param r
      */
     public void removeRequestFromTutor(Request r) {
         tut4youApp.removeRequestFromNotification(r);
     }
+    
     /**
      * http://square.github.io/okhttp/
      * get request to use for api
@@ -490,6 +490,7 @@ public class RequestBean implements Serializable {
         return response.body().string(); 
 
     }
+    
     /**
      * used to retrieve data from zipcode api
      * api used: http://www.zip-codes.com/content/api/samples/FindZipCodesInRadius.html

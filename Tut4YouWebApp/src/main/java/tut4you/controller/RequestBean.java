@@ -26,6 +26,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -64,7 +65,7 @@ public class RequestBean implements Serializable {
     private Course course;
     private String time;
     @Temporal(TemporalType.TIME)
-    private java.util.Date laterTime;
+    private Date laterTime;
     private int lengthOfSession;
     private long numOfTutors; //number of tutors who teaches the course
     private List<Subject> subjectList = new ArrayList(); //list of subjects to be loaded to the request form
@@ -291,7 +292,7 @@ public class RequestBean implements Serializable {
      * Get the time of the request if user set for later 
      * @return the time of the request
      */
-    public java.util.Date getLaterTime() {
+    public Date getLaterTime() {
         return laterTime;
     }
     

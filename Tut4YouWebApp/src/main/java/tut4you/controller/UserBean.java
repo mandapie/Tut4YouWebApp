@@ -63,12 +63,14 @@ public class UserBean implements Serializable {
         user = null;
         condition = true;
     }
+    
     /** 
      * Destroys a new instance of UserIdentity
      */
     @PreDestroy
     public void destroyUserBean() {
     }
+    
     /**
      * get current zip
      * @return currentZip
@@ -76,6 +78,7 @@ public class UserBean implements Serializable {
     public String getCurrentZip() {
         return currentZip;
     }
+    
     /**
      * set current zip
      * @param currentZip 
@@ -83,16 +86,7 @@ public class UserBean implements Serializable {
     public void setCurrentZip(String currentZip) {
         this.currentZip = currentZip;
     }
-    /**
-     * updates current zip
-     */
-    public void updateCurrentZip() {
-        Tutor tutor = tut4youapp.updateCurrentZip(currentZip);
-        if(tutor.getCurrentZip() != null) {
-            condition = false;
-        }
-        System.out.print("Current Zip: " + currentZip);
-    }
+    
     /**
      * get boolean condition
      * @return condition
@@ -122,34 +116,7 @@ public class UserBean implements Serializable {
     public void setUser(User user) {
         this.user = user;
     }
-    public void resetCurrentZip() {
-        tut4youapp.resetCurrentZip();
-    }
-//    /**
-//     * Updates a User's information
-//     * @param object User or Tutor object
-//     */
-//    public void updateUser(Object object){
-//        if (object == student){
-//           this.student = (User)object;
-//           tut4youapp.updateUser(student); 
-//        }
-//        else if (object == userTutor){
-//            this.student = (User)object;
-//            this.userTutor = (Tutor)object;
-//            tut4youapp.updateUser(this.student);
-//        }
-//        
-//    }
-    /**
-     * Updates a User's information
-     * @param object User or Tutor object
-     */
-    public void updateUser(User user){
-        tut4youapp.updateUser(user); 
-
-        
-    }
+    
     /**
      * Gets the state of doNotDisturb is on or off
      * @return true/false
@@ -188,8 +155,8 @@ public class UserBean implements Serializable {
      * Called the EJG to update the state of doNotDisturb
      * @param d 
      */
-    public void updateDoNotDisturb(Boolean d) {
-        tut4youapp.updateDoNotDisturb(doNotDisturb);
+    public void switchDoNotDisturb(Boolean d) {
+        tut4youapp.switchDoNotDisturb(doNotDisturb);
     }
 
     /**
@@ -225,10 +192,7 @@ public class UserBean implements Serializable {
         }
         return isTutor;
     }
-    /**
-     * Logout the student and invalidate the session
-     * @return success if student is logged out and session invalidated, failure otherwise.
-     */
+
     /**
      * Logout the student and invalidate the session
      * @return success if student is logged out and session invalidated, failure otherwise.
@@ -239,14 +203,16 @@ public class UserBean implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
         try {
-            resetCurrentZip();
             request.logout();
             user = null;
             currentZip = null;
+            tut4youapp.updateCurrentZip(currentZip);
             result = "success";
-        } catch (ServletException ex) {
+        }
+        catch (ServletException ex) {
             LOGGER.log(Level.SEVERE, null, ex);
-        } finally {
+        }
+        finally {
             HttpSession session = request.getSession(false);
             if (session != null) {
                 session.invalidate();
@@ -255,20 +221,34 @@ public class UserBean implements Serializable {
         return result;
     }
 
-    
-
-
     /**
      * Gets a logged in username by getting the username from the session.
      * @return username
      * Source: https://dzone.com/articles/liferay-jsf-how-get-current-lo
      * Had further help by Subject2Change group.
      */
-    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-    public String getUsernameFromSession() {
+    public String getEmailFromSession() {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-        String userName = request.getRemoteUser();
-        return userName;
+        String email = request.getRemoteUser();
+        return email;
+    }
+    
+    /**
+     * updates current zip
+     */
+    public void updateCurrentZip() {
+        Tutor tutor = tut4youapp.updateCurrentZip(currentZip);
+        if(tutor.getCurrentZip() != null) {
+            condition = false;
+        }
+    }
+    
+    /**
+     * Updates a User's information
+     * @param user User or Tutor object
+     */
+    public void updateUser(User user){
+        tut4youapp.updateUser(user); 
     }
 }

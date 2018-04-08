@@ -118,7 +118,7 @@
                 <c:if test="#{userBean.isTutor}">
                     <h:form id="doNotDisturb">
                         <b:switch label="Do Not Disturb" value="#{userBean.user.doNotDisturb}" id="doNotDisturb" update="@form">
-                            <f:ajax event="change" render="doNotDisturb" listener="#{userBean.updateDoNotDisturb(userBean.user.doNotDisturb)}" />
+                            <f:ajax event="change" render="doNotDisturb" listener="#{userBean.switchDoNotDisturb(userBean.user.doNotDisturb)}" />
                         </b:switch>
                     </h:form>
                 </c:if>

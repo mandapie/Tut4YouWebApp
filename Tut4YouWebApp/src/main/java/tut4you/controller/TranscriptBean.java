@@ -95,7 +95,7 @@ public class TranscriptBean implements Serializable {
         AccessControlList acl = new AccessControlList();
         acl.grantPermission(GroupGrantee.AllUsers, Permission.Write);
         try {
-            String userName = userbean.getUsernameFromSession();
+            String userName = userbean.getEmailFromSession();
             tutor = tut4youApp.findTutorUserName(userName);
             String transcriptName = tutor.getUserName();
             String keyName = transcriptName.concat(".pdf");

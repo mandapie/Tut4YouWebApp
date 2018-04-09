@@ -245,8 +245,10 @@ public class UserBean implements Serializable {
     /**
      * Updates a User's information
      * @param user User or Tutor object
+     * @return result
      */
-    public void updateUser(User user){
+    public String updateUser(User user){
         tut4youapp.updateUser(user); 
+        return "success";
     }
 }

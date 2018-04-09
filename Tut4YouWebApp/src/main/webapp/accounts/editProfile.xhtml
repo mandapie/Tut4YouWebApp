@@ -25,7 +25,6 @@
     <ui:define name="title">Edit Profile</ui:define>
     <ui:define name="content">
         <h1>Edit Profile</h1>
-        
         <b:panel title="Re-Enter the information you'd like to change." collapsible="false" look="info">
             <h:form>
                 <!-- First Name -->
@@ -116,7 +115,6 @@
                 <b:row>
                     <b:column span="2" offset="2">
                         <b:commandButton value="Edit" look="primary" style="width:100%" action="#{userBean.updateUser(userBean.user)}"/>
-                        <h:messages globalOnly="true" />
                     </b:column>
                     <b:column span="2">
                         <b:button value="Cancel" look="danger" style="width:100%" href="/Tut4YouWebApp/accounts/profile.xhtml"/>

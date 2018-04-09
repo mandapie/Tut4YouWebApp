@@ -24,6 +24,8 @@ import java.util.List;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.SessionScoped;
+import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -36,7 +38,7 @@ import tut4you.model.Tut4YouApp;
  * modified by Syed Haider <shayder426@gmail.com>
  */
 @Named
-@RequestScoped
+@SessionScoped
 public class AvailabilityBean implements Serializable {
 
     private static final long serialVersionUID = 1L;

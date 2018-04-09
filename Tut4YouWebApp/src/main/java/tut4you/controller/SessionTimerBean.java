@@ -32,11 +32,13 @@ import tut4you.model.Tut4YouApp;
 @RequestScoped
 public class SessionTimerBean implements Serializable{
     
-    private String email;
-    private boolean checkEmail;
     private static final long serialVersionUID = 1L;
+    
     @EJB
     private Tut4YouApp tut4youApp;
+    
+    private String email;
+    private boolean checkEmail;
     private Request request;
     private SessionTimer sessionTimer;
   
@@ -86,8 +88,7 @@ public class SessionTimerBean implements Serializable{
      *
      * @param email the user inputted email
      */
-    public void isEmailValid(String email)
-    {
+    public void isEmailValid(String email) {
         checkEmail = tut4youApp.checkEmail(email);
     }
     
@@ -96,12 +97,11 @@ public class SessionTimerBean implements Serializable{
      *
      * @param r the active request of the tutoring session
      */
-    public void startTutorSession(Request r)
-    {
+    public void startTutorSession(Request r) {
         Long startTime = System.currentTimeMillis();
         sessionTimer.setStartSessionTime(startTime);
+        System.out.println(sessionTimer);
         tut4youApp.startSessionTime(r);
-        
     }
 
     /**

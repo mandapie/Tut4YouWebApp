@@ -41,7 +41,7 @@
             </p:dialog>
             <p:dialog header="The tutoring session has ended!! Would you like to rate your tutor?" widgetVar="dlg2" closable="false" id="modalID2" minHeight="40"  >
                 <b:commandButton value="Yes!" action="#{ratingBean.writeReviewPage(requestBean.tutor)}"/>
-                <b:button value="No!" outcome="/accounts/proile.xhtml"/>
+                <b:button value="No!" outcome="/accounts/profile.xhtml"/>
             </p:dialog>
             <h:panelGrid columns="2">
                 <p:commandButton action= "#{sessionTimerBean.startTutorSession(SessionTimerBean.request)}" value="Start Session" style="width:100%" onclick="PF('dlg1').show();"/>

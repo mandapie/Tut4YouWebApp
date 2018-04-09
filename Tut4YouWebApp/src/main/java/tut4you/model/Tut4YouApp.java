@@ -774,7 +774,6 @@ public class Tut4YouApp {
         Tutor tutor = findTutor(currentUserEmail);
         r.setStatus(Request.Status.COMPLETED);
         r.setTutor(tutor);
-        
         em.merge(r);
         em.flush();
     }

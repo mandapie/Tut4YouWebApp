@@ -105,8 +105,6 @@ public class RatingBean implements Serializable {
     public String writeReviewPage(Tutor t) throws ParseException {
         String result;
         this.tutor = t;
-        System.out.println("Tutor t: " + t.toString());
-
         result = "writeReview";
         return result;
     }
@@ -120,7 +118,7 @@ public class RatingBean implements Serializable {
      */
     public java.util.Date StringToTime(String time) throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-        java.util.Date date = sdf.parse(time);
+        Date date = sdf.parse(time);
         return date;
     }
 

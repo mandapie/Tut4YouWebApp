@@ -201,10 +201,10 @@ public class UserBean implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
         try {
-            request.logout();
-            user = null;
             currentZip = null;
             tut4youapp.updateCurrentZip(currentZip);
+            request.logout();
+            user = null;
             result = "success";
         }
         catch (ServletException ex) {

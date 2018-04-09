@@ -5,7 +5,7 @@
  *  This code has been developed by a group of CSULB students working on their 
  *  Computer Science senior project called Tutors4You.
  *  
- *  Tutors4You is a web application that students can utilize to findUser a tutor and
+ *  Tutors4You is a web application that students can utilize to find a tutor and
  *  ask them to meet at any location of their choosing. Students that struggle to understand 
  *  the courses they are taking would benefit from this peer to peer tutoring service.
  
@@ -18,28 +18,29 @@ package tut4you.controller;
 
 import java.io.Serializable;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import tut4you.model.*;
 
 /**
  * Binds rating inputs to the EJB.
- * @author Syed Haider <shayder426@gmail.com>
+ *
+ * @author Amanda Pan <daikiraidemodaisuki@gmail.com>
  */
 @Named
-@RequestScoped
+@SessionScoped
 public class RatingBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     private static final Logger LOGGER = Logger.getLogger("RatingBean");
     private List<Tutor> tutorList = new ArrayList(); //list of available tutors
-    private List<Tutor> completedTutorList = new ArrayList(); //list of tutors that have completed sessions
     private List<Rating> ratingList = new ArrayList(); //list of ratings
     private List<Request> requestList = new ArrayList(); //list of completed requests
 
@@ -58,21 +59,11 @@ public class RatingBean implements Serializable {
         rating = new Rating();
     }
 
-    /**
-     * Returns the full name of the student
-     *
-     * @return the full name of the student
-     */
     public String getStudentName() {
         studentName = rating.getStudent().getFirstName() + rating.getStudent().getLastName();
         return studentName;
     }
 
-    /**
-     * Sets the studentName
-     *
-     * @param studentName the name of the student
-     */
     public void setStudentName(String studentName) {
         this.studentName = studentName;
     }
@@ -95,137 +86,113 @@ public class RatingBean implements Serializable {
         this.rating = rating;
     }
 
-    /**
-     * Gets the tutor who is being rated
-     *
-     * @return
-     */
     public Tutor getTutor() {
         return tutor;
     }
 
-    /**
-     * Sets the tutor who is being rated
-     *
-     * @param tutor
-     */
     public void setTutor(Tutor tutor) {
         this.tutor = tutor;
     }
 
-    /**
-     * Gets the list of
-     *
-     * @return
-     */
-    public List<Request> getCompletedRequests() {
-        return tut4youApp.getCompletedRequests();
+    public List<Tutor> getTutorList() {
+        return tut4youApp.getTutorsList();
     }
 
-    /**
-     * Sets the list of
-     *
-     * @param c the list of tutors being rated
-     */
     public void setTutorList(List<Tutor> c) {
         tutorList = c;
     }
 
-    /**
-     * This will forward the user to the webpage to write a review on a specific
-     * Tutor
-     *
-     * @param t tutor who is being rated
-     * @return the faces-config webpage
-     * @throws ParseException
-     */
     public String writeReviewPage(Tutor t) throws ParseException {
         String result;
         this.tutor = t;
+        System.out.println("Tutor t: " + t.toString());
+
         result = "writeReview";
         return result;
     }
 
     /**
-     * Creates a new rating for a tutor
+     * Convert string to Time
      *
-     * @param t the tutor being rated
-     * @return user sent to home page
-     * @throws ParseException
+     * @param time
+     * @return
+     * @throws java.text.ParseException
      */
+    public java.util.Date StringToTime(String time) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+        java.util.Date date = sdf.parse(time);
+        return date;
+    }
+
+    /**
+     * converts String to int type
+     *
+     * @param string
+     * @return
+     */
+    public int StringToInt(String string) {
+        int integer = Integer.parseInt(string);
+        return integer;
+    }
+
     public String createNewRating(Tutor t) throws ParseException {
         String result = "success";
+        System.out.println("Tutor t: " + t.toString());
         Date date = new Date();
         rating.setCurrentTime(date);
         rating = tut4youApp.newRating(rating, t);
         return result;
     }
-
-    /**
-     * Updates the rating that the student has given a tutor
+    
+      /**
+     * Updates the current availability of the tutor
      *
-     * @param rating the rating that is being updated
-     * @return the
+     * @param avail
+     * @return
      * @throws java.text.ParseException
      */
     public String updateRating(Rating rating) throws ParseException {
-        String result = "success";
+        String result = "failure";
         this.rating = rating;
         Date date = new Date();
         rating.setRatingValue(rating.getRatingValue());
         rating.setDescription(rating.getDescription());
         rating.setCurrentTime(date);
-        tut4youApp.updateRating(rating, rating.getDescription(), rating.getRatingValue());
+        tut4youApp.updateRating(rating,rating.getDescription(),rating.getRatingValue());
+        if (rating != null) {
+            result = "success";
+            LOGGER.severe("Rating added");
+        }
         return result;
     }
 
     /**
-     * Delete the rating for the tutor
+     * Delete the availability from the tutor
      *
-     * @param rating the rating to be delete
+     * @param avail
+     * @return result based on if the availability form was filled out properly
      * @throws java.text.ParseException
      */
     public void deleteRating(Rating rating) throws ParseException {
         tut4youApp.deleteRating(rating);
-
+       
     }
 
     /**
-     * Gets a list of the ratings of the Tutor
+     * Gets a list of the availabilities of the Tutor in the EJB
      *
-     * @return a list of ratings
+     * @return a list of subjects
      */
     public List<Rating> getRatingList() {
         ratingList = tut4youApp.getRatingList();
         return ratingList;
     }
 
-    /**
-     * Gets a list of completed requests
-     *
-     * @return a list of requests
-     */
     public List<Request> getRequestList() {
         requestList = tut4youApp.getCompletedRequests();
         return requestList;
     }
 
-    /**
-     * Gets a list of completed sessions with tutors
-     *
-     * @return a list of tutors
-     */
-    public List<Tutor> getTutorList() {
-        return tut4youApp.getTutorsList();
-    }
-
- 
-
-    /**
-     * Gets the average rating of the tutor
-     *
-     * @return averageRating of the tutor
-     */
     public int getAvgRating() {
         return (int) tut4youApp.getAverageRating();
     }

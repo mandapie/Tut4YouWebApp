@@ -651,7 +651,8 @@ public class Tut4YouApp {
         String currentUserEmail = userBean.getEmailFromSession();
         if (currentUserEmail == null) {
             return null;
-        } else {
+        }
+        else {
             User student = findUser(currentUserEmail);
             if (student != null) {
                 student.addRating(rating);

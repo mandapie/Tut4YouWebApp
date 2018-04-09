@@ -89,8 +89,7 @@ public class Rating implements Serializable {
 
     private String description;
     @Temporal(TemporalType.TIMESTAMP)
-    private java.util.Date currentTime;
-
+    private Date currentTime;
     private int ratingValue;
 
 

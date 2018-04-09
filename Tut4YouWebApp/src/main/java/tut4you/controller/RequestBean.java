@@ -94,27 +94,7 @@ public class RequestBean implements Serializable {
         //conversation.begin();
 
     }
-//    /**
-//     *http://www.byteslounge.com/tutorials/java-ee-cdi-conversationscoped-example
-//     * start conversationscope
-//     */
-//    public void initConversation(){
-//
-//        if (!FacesContext.getCurrentInstance().isPostback() && conversation.isTransient()) {
-//            conversation.begin();
-//        }
-//
-//    }
-//    /**
-//     * http://www.byteslounge.com/tutorials/java-ee-cdi-conversationscoped-example
-//     * end conversationscope
-//     */
-//    public void endConversation(){
-//
-//        if(!conversation.isTransient()){
-//            conversation.end();
-//        }
-//    }
+    
     public ZipCodeByRadius getZipCodeByRadius() {
         return zipCodeByRadius;
     }
@@ -123,7 +103,7 @@ public class RequestBean implements Serializable {
         this.zipCodeByRadius = zipCodeByRadius;
     }
 
-    public java.util.Date getCurrentTime() throws ParseException {
+    public Date getCurrentTime() throws ParseException {
         String stringCurrentTime = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
         SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
         java.util.Date currentTime = sdf.parse(stringCurrentTime);
@@ -493,7 +473,7 @@ public class RequestBean implements Serializable {
     public static String[] getData(int maxRadius, String zipCode) {
         String json = null;
         try {
-            json = getJSON("http://api.zip-codes.com/ZipCodesAPI.svc/1.0/FindZipCodesInRadius?zipcode="+zipCode+"&minimumradius=0&maximumradius="+maxRadius+"&key=MLVYIHSGGNO4XV12AMQL");
+            json = getJSON("http://api.zip-codes.com/ZipCodesAPI.svc/1.0/FindZipCodesInRadius?zipcode="+zipCode+"&minimumradius=0&maximumradius="+maxRadius+"&key=9EH2HQMG9WY56C9UO3EJ");
         } catch(IOException e) {
             
         }

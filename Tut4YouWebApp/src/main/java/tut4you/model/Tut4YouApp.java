@@ -514,7 +514,6 @@ public class Tut4YouApp {
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void updateAvailability(Availability availability, Date startTime, Date endTime) {
         Availability updatedAvailability = em.find(Availability.class, availability.getId());
-        System.out.println("test from ejb");
         if (updatedAvailability == null) {
             updatedAvailability = availability;
         }
@@ -709,7 +708,6 @@ public class Tut4YouApp {
         if (toBeDeleted == null) {
             toBeDeleted = rating;
         }
-        System.out.println(toBeDeleted);
         Tutor tutor = findTutor(currentUserEmail);
         em.merge(tutor);
         em.remove(em.merge(rating));
@@ -875,7 +873,6 @@ public class Tut4YouApp {
         UserBean userBean = new UserBean();
         String currentUserEmail = userBean.getEmailFromSession();
         Tutor tutor = findTutor(currentUserEmail);
-        System.out.println("Am I being called");
         if (tutor == null) {
             User student = findUser(currentUserEmail);
             student = (User) updateUser;

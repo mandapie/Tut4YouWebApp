@@ -155,7 +155,6 @@ public class RatingBean implements Serializable {
      */
     public String createNewRating(Tutor t) throws ParseException {
         String result = "success";
-        System.out.println("Tutor t: " + t.toString());
         Date date = new Date();
         rating.setCurrentTime(date);
         rating = tut4youApp.newRating(rating, t);

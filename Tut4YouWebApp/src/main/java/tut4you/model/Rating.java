@@ -43,12 +43,9 @@ import javax.persistence.Table;
  */
 
 @NamedQueries({
-    @NamedQuery(name = Rating.FIND_RATING_BY_EMAIL, query = "SELECT r from Rating r")
-    ,
-    @NamedQuery(name = Rating.FIND_RATING_BY_TUTOR, query = "SELECT r FROM Rating r JOIN r.tutor s WHERE s.email = :email")
-    ,
-     @NamedQuery(name = Rating.FIND_AVG_RATING_BY_TUTOR, query = "SELECT AVG(r.ratingValue) FROM Rating r")
-    ,
+    @NamedQuery(name = Rating.FIND_RATING_BY_EMAIL, query = "SELECT r from Rating r"),
+    @NamedQuery(name = Rating.FIND_RATING_BY_TUTOR, query = "SELECT r FROM Rating r JOIN r.tutor s WHERE s.email = :email"),
+     @NamedQuery(name = Rating.FIND_AVG_RATING_BY_TUTOR, query = "SELECT AVG(r.ratingValue) FROM Rating r"),
     @NamedQuery(name = Request.FIND_REQUEST_BY_EMAIL, query = "SELECT r from Request r JOIN r.student s WHERE s.email = :student_email AND r.status = :status")})
 @Entity
 @Table(name="Rating")
@@ -56,15 +53,9 @@ public class Rating implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    /*
     /**
      * JPQL Query to find Ratings by user email
      */
-
-    /**
-     *
-     */
-
     public static final String FIND_RATING_BY_EMAIL = "Rating.findRatingByEmail";
     /**
      * JPQL Query to find ratings from available/selected tutors

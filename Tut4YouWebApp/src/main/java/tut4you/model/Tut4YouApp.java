@@ -976,7 +976,7 @@ public class Tut4YouApp {
      * saves the message to the database
      * @param message
      */
-    @RolesAllowed("tut4youapp.student")
+    @PermitAll
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void saveMessage(Message message) {
         em.persist(message);

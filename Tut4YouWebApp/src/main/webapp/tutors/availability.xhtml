@@ -34,36 +34,25 @@
                         <!-- Drop-down menu display Monday-Sunday -->
                         <h:outputLabel value="Select a day"/>
                         <b:message for="dayOfWeek"/>
-                        <b:selectOneMenu                           
-                            id="dayOfWeek"
-                            value="#{availabilityBean.availability.dayOfWeek}"
-                            required="true"
-                            requiredMessage="required">
+                        <b:selectOneMenu id="dayOfWeek" value="#{availabilityBean.availability.dayOfWeek}" required="true" requiredMessage="required">
                             <f:selectItem itemLabel="Select One..." itemValue="" noSelectionOption="true"/>
-                            <f:selectItem itemValue="Monday" />
-                            <f:selectItem itemValue="Tuesday" />
-                            <f:selectItem itemValue="Wednesday" />
-                            <f:selectItem itemValue="Thursday" />
-                            <f:selectItem itemValue="Friday" />
-                            <f:selectItem itemValue="Saturday" />
-                            <f:selectItem itemValue="Sunday" />
+                            <f:selectItem itemLabel="Monday" itemValue="MONDAY"/>
+                            <f:selectItem itemLabel="Tuesday" itemValue="TUESDAY"/>
+                            <f:selectItem itemLabel="Wednesday" itemValue="WEDNESDAY"/>
+                            <f:selectItem itemLabel="Thursday" itemValue="THURSDAY"/>
+                            <f:selectItem itemLabel="Friday" itemValue="FRIDAY"/>
+                            <f:selectItem itemLabel="Saturday" itemValue="SATURDAY"/>
+                            <f:selectItem itemLabel="Sunday" itemValue="SUNDAY"/>
                         </b:selectOneMenu>
                         <!-- Start Time -->
                         <h:outputLabel value="Start Time"/>
-                        <b:inputText type="time" id="startTime"
-                                     value="#{availabilityBean.startTime}"
-                                     required="true"
-                                     requiredMessage="required">
+                        <b:inputText type="time" id="startTime" value="#{availabilityBean.startTime}" required="true" requiredMessage="required">
                             <f:convertDateTime type="time" pattern="HH:mm" dateStyle="full"/>
                             <b:message for="startTime"/>
                         </b:inputText>
-
                         <!-- End Time -->
                         <h:outputLabel value="End Time" />
-                        <b:inputText type="time" id="endTime"
-                                     value="#{availabilityBean.endTime}"
-                                     required="true"
-                                     requiredMessage="required">
+                        <b:inputText type="time" id="endTime" value="#{availabilityBean.endTime}" required="true" requiredMessage="required">
                             <f:convertDateTime type="time" pattern="HH:mm" dateStyle="full"/>
                             <b:message for="endTime"/>
                             <f:validator validatorId="timeValidator" />
@@ -95,14 +84,6 @@
                             <h:outputText value="#{avail.endTime}">                        
                                 <f:convertDateTime pattern="hh:mm a"></f:convertDateTime>
                             </h:outputText>
-                        </b:dataTableColumn>
-                        <b:dataTableColumn>
-                            <f:facet name="header">Action</f:facet>
-                            <b:commandButton value="Edit" action="#{availabilityBean.goToEditAvailabilityPage(avail)}">
-                            </b:commandButton>
-                            <span></span> <!-- somehow can't make spacing unless using empty span-->
-                            <b:commandButton value="Delete" look="danger" action="#{availabilityBean.deleteAvailability(avail)}">
-                            </b:commandButton>
                         </b:dataTableColumn>
                     </b:dataTable>  
                 </b:column>

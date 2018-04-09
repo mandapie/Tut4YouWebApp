@@ -19,11 +19,11 @@ package tut4you.controller;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
-import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -81,7 +81,7 @@ public class AvailabilityBean implements Serializable {
      * Gets the start time
      * @return startTime
      */
-    public java.util.Date getStartTime() {
+    public Date getStartTime() {
         return startTime;
     }
 
@@ -97,7 +97,7 @@ public class AvailabilityBean implements Serializable {
      * Gets the end time
      * @return endTime
      */
-    public java.util.Date getEndTime() {
+    public Date getEndTime() {
         return endTime;
     }
 
@@ -105,7 +105,7 @@ public class AvailabilityBean implements Serializable {
      * Sets the end time
      * @param endTime
      */
-    public void setEndTime(java.util.Date endTime) {
+    public void setEndTime(Date endTime) {
         this.endTime = endTime;
     }
 
@@ -181,7 +181,7 @@ public class AvailabilityBean implements Serializable {
     public String goToEditAvailabilityPage(Availability avail) throws ParseException {
         String result;
         this.availability = avail;
-        System.out.println("Availability avail: " + avail.toString());
+        System.out.println(availability.toString());
         result = "editAvailability";
         return result;
     }

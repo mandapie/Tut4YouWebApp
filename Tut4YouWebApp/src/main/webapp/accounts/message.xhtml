@@ -1,0 +1,92 @@
+<ui:composition template="/WEB-INF/templates/layout.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:b="http://bootsfaces.net/ui">
+    <!--
+        Licensed under the Academic Free License (AFL 3.0).
+        http://opensource.org/licenses/AFL-3.0
+
+        This code has been developed by a group of CSULB students working on their 
+        Computer Science senior project called Tutors4You.
+
+        Tutors4You is a web application that students can utilize to find a tutor and
+        ask them to meet at any location of their choosing. Students that struggle to understand 
+        the courses they are taking would benefit from this peer to peer tutoring service.
+
+        2017 Amanda Pan <daikiraidemodaisuki@gmail.com>
+        2017 Andrew Kaichi <ahkaichi@gmail.com>
+        2017 Keith Tran <keithtran25@gmail.com>
+        2017 Syed Haider <shayder426@gmail.com>
+    -->
+    <!-- @author Amanda Pan <daikiraidemodaisuki@gmail.com> -->
+    <ui:define name="title">Message</ui:define>
+    <h:head>
+        <h:outputScript name="../WEB-INF/resources/jquery-1.10.2.min.js"/>
+    </h:head>
+    <ui:define name="content">
+        <h1>Message</h1>
+        <b:form id="do-chat">
+            <div id="response" style="border:1px solid #000000;padding:5px;min-height:400px;max-height:300px;overflow:auto;"/>
+            <br/>
+            <row> <!-- not using b: tag to keep the look of this page consistent" -->
+                <!-- input value won't clear after submit when using h: or b: tag... -->
+                <input type="text" placeholder="Your message..." id="message" style="width:80%" autocomplete="off"/>
+                <input type="submit" value="Send" style="float:right;"/>
+            </row>
+        </b:form>
+        <script>
+            var wsocket;
+            var url = window.location.href.split("/"); //gets the full url path and parse each location into an element for an array
+            //console.log(url); //uncomment to see the url
+            var serviceLocation = "ws://" + url[2] + "/Tut4YouWebApp/message"; //url[0] = http, url[1] = " " because http//
+            var $message;
+            var $chatWindow;
+
+            function onMessageReceived(evt) {
+                var msg = JSON.parse(evt.data);
+                var $messageLine = $('<p><span style="background:#e0efff;border-radius:7px;padding:2px 7px;">' + msg.received + ' <strong>' + msg.sender + '</strong>' +
+                        '</span><span style="background:#e0e1e2;border-radius:7px;margin-left:1em;padding:2px 7px;">' + msg.message + '</span></p>');
+                $chatWindow.append($messageLine);
+                /* keeps overflow at bottom
+                * source: https://stackoverflow.com/questions/18614301/keep-overflow-div-scrolled-to-bottom-unless-user-scrolls-up */
+                $chatWindow.scrollTop($chatWindow[0].scrollHeight);                
+            }
+
+            function sendMessage() {
+                var msg = '{"message":"' + $message.val() + '", "sender":"' + '#{userBean.user.userName}' + '", "received":""}';
+                //if message is empty send message
+                if ($message.val() !== '') {
+                    wsocket.send(msg);
+                }
+                $message.val('').focus();
+            }
+
+            $(document).ready(function () {
+                $message = $('#message');
+                $chatWindow = $('#response');
+                wsocket = new WebSocket(serviceLocation);
+                
+                $('#do-chat').submit(function (evt) {
+                    evt.preventDefault(); //prevents the default action of the event to be triggered.
+                    sendMessage();
+                });
+                
+                wsocket.onopen = function() {
+                    $message.focus();
+                };
+                wsocket.onmessage = onMessageReceived;
+                
+                wsocket.onerror = function () {
+                    $message.val('Error sending message...');
+                };
+                
+                wsocket.onclose = function() {
+                    wsocket.close();
+                };
+            });
+        </script>
+        <ui:debug hotkey='x' />
+    </ui:define>
+</ui:composition>

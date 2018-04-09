@@ -5,7 +5,7 @@
  *  This code has been developed by a group of CSULB students working on their 
  *  Computer Science senior project called Tutors4You.
  *  
- *  Tutors4You is a web application that students can utilize to find a tutor and
+ *  Tutors4You is a web application that students can utilize to findUser a tutor and
  *  ask them to meet at any location of their choosing. Students that struggle to understand 
  *  the courses they are taking would benefit from this peer to peer tutoring service.
  *  
@@ -17,7 +17,7 @@
 package tut4you.validations;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
@@ -46,7 +46,7 @@ public class BasicValidator {
     }
 
     /**
-     * validates an e-mail address to be in the (basic) correct format.
+     * validates an e-mail address to be in the (basic) correct format and validate that it is not already in the database
      * @param context the FacesContext
      * @param toValidate the UIComponent being validated (e-mail field)
      * @param value the value (email address) of the component
@@ -66,6 +66,14 @@ public class BasicValidator {
                 throw new ValidatorException(message);
             }
     }
+    
+    /**
+     * validate userName is unique
+     * @param context
+     * @param toValidate
+     * @param value
+     * @throws ValidatorException 
+     */
     public void validateUserName(FacesContext context, UIComponent toValidate, Object value) throws ValidatorException {    
          String userName = (String) value;
          for(String str : tut4YouApp.getUserUserNames())
@@ -74,9 +82,9 @@ public class BasicValidator {
             throw new ValidatorException(message);
         }
      }
+    
     /**
      * https://stackoverflow.com/questions/42104546/java-regular-expressions-to-validate-phone-numbers
-     * 
      * @param context the FacesContext
      * @param toValidate the UIComponent being validated (e-mail field)
      * @param value the value (email address) of the component
@@ -110,18 +118,21 @@ public class BasicValidator {
         }
     }
     
+    /**
+     * validate that later time in request is not before the actual time
+     * @param context
+     * @param component
+     * @param value
+     * @throws ValidatorException
+     * @throws ParseException 
+     */
     public void validateLaterTime(FacesContext context, UIComponent component, Object value) throws ValidatorException, ParseException {
-        java.util.Date laterTime = (java.util.Date) value;
-        //System.out.println("endTime: " + endTime);
-        //Object otherValue = component.getAttributes().get("otherValue");
+        Date laterTime = (Date) value;
         RequestBean requestBean = new RequestBean();
-        java.util.Date currentTime = requestBean.getCurrentTime();
-        //System.out.println("startTime: " + startTime);
+        Date currentTime = requestBean.getCurrentTime();
         if(laterTime.before(currentTime)) {
             FacesMessage message = new FacesMessage("Invalid later time input");
             throw new ValidatorException(message);
         }
     }
-
-
 }

@@ -5,7 +5,7 @@
  *  This code has been developed by a group of CSULB students working on their 
  *  Computer Science senior project called Tutors4You.
  *  
- *  Tutors4You is a web application that students can utilize to find a tutor and
+ *  Tutors4You is a web application that students can utilize to findUser a tutor and
  *  ask them to meet at any location of their choosing. Students that struggle to understand 
  *  the courses they are taking would benefit from this peer to peer tutoring service.
  
@@ -22,8 +22,6 @@ import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.ejb.EJB;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
@@ -31,15 +29,19 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import tut4you.model.*;
-import javax.faces.view.ViewScoped;
+
 /**
  * UserBean checks if a user is authenticated.
  * @author Alvaro Monge <alvaro.monge@csulb.edu>
  * Modified by Amanda Pan <daikiraidemodaisuki@gmail.com>
+ * Modified by Andrew Kaichi <ahkaichi@gmail.com>
  */
 @Named
-@ViewScoped
+@SessionScoped
 public class UserBean implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     private static final Logger LOGGER = Logger.getLogger("UserBean");
     
     @EJB
@@ -50,36 +52,22 @@ public class UserBean implements Serializable {
     int tabIndex;
     boolean condition;
     private String currentZip;
+    private String priceRate;
     /**
-     * get current zip
-     * @return currentZip
+     * get price rate
+     * @return price rate
      */
-    public String getCurrentZip() {
-        return currentZip;
+    public String getPriceRate() {
+        return priceRate;
     }
     /**
-     * set current zip
-     * @param currentZip 
+     * set price rate
+     * @param priceRate 
      */
-    public void setCurrentZip(String currentZip) {
-        this.currentZip = currentZip;
+    public void setPriceRate(String priceRate) {
+        this.priceRate = priceRate;
     }
     
-    public void updateCurrentZip() {
-        Tutor tutor = tut4youapp.updateCurrentZip(currentZip);
-        if(tutor.getCurrentZip() != null) {
-            condition = false;
-        }
-        System.out.print("Current Zip: " + currentZip);
-    }
-    
-    public boolean isCondition() {
-        return condition;
-    }
-
-    public void setCondition(boolean condition) {
-        this.condition = condition;
-    }
     /**
      * Creates a new instance of UserIdentity
      */
@@ -88,6 +76,7 @@ public class UserBean implements Serializable {
         user = null;
         condition = true;
     }
+    
     /** 
      * Destroys a new instance of UserIdentity
      */
@@ -96,23 +85,51 @@ public class UserBean implements Serializable {
     }
     
     /**
-     * Gets the User object
-     * @return the user Object
+     * get current zip
+     * @return currentZip
+     */
+    public String getCurrentZip() {
+        return currentZip;
+    }
+    
+    /**
+     * set current zip
+     * @param currentZip 
+     */
+    public void setCurrentZip(String currentZip) {
+        this.currentZip = currentZip;
+    }
+    
+    /**
+     * get boolean condition
+     * @return condition
+     */
+    public boolean isCondition() {
+        return condition;
+    }
+    /**
+     * set boolean condition
+     * @param condition 
+     */
+    public void setCondition(boolean condition) {
+        this.condition = condition;
+    }
+    /**
+     * Gets the Tutor object
+     * @return 
      */
     public User getUser() {
         return user;
     }
     
     /**
-     * Sets the user Object
-     * @param user the user 
+     * Sets the User object
+     * @param user
      */
     public void setUser(User user) {
         this.user = user;
     }
-    public void resetCurrentZip() {
-        tut4youapp.resetCurrentZip();
-    }
+    
     /**
      * Gets the state of doNotDisturb is on or off
      * @return true/false
@@ -130,27 +147,31 @@ public class UserBean implements Serializable {
     }
     
     /**
-     * Called the EJB to update the state of doNotDisturb
-     * @param d 
-     */
-    public void updateDoNotDisturb(Boolean d) {
-        tut4youapp.updateDoNotDisturb(doNotDisturb);
-    }
-    /**
      * Gets the index of the tab
+     *
      * @return tabIndex
      */
     public int getTabIndex() {
         return tabIndex;
     }
-    
+
     /**
      * Sets the index of the tab
+     *
      * @param tabIndex
      */
     public void setTabIndex(int tabIndex) {
         this.tabIndex = tabIndex;
     }
+
+    /**
+     * Called the EJG to update the state of doNotDisturb
+     * @param d 
+     */
+    public void switchDoNotDisturb(Boolean d) {
+        tut4youapp.switchDoNotDisturb(doNotDisturb);
+    }
+
     /**
      * Determine if the user is authenticated and if so, make sure the session scope includes the User object for the authenticated user
      * @return true if the user making a request is authenticated, false otherwise.
@@ -164,12 +185,13 @@ public class UserBean implements Serializable {
             if (userName == null) {
                 isAuthenticated = false;
             } else {
-                this.user = tut4youapp.find(userName);
+                this.user = tut4youapp.findUser(userName);
                 isAuthenticated = (this.user != null);
             }
         }
         return isAuthenticated;
     }
+    
     /**
      * Determine if current authenticated user has the role of tutor
      * @return true if user has role of tutor, false otherwise.
@@ -194,14 +216,16 @@ public class UserBean implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
         try {
-            resetCurrentZip();
             request.logout();
             user = null;
             currentZip = null;
+            tut4youapp.updateCurrentZip(currentZip);
             result = "success";
-        } catch (ServletException ex) {
+        }
+        catch (ServletException ex) {
             LOGGER.log(Level.SEVERE, null, ex);
-        } finally {
+        }
+        finally {
             HttpSession session = request.getSession(false);
             if (session != null) {
                 session.invalidate();
@@ -209,17 +233,36 @@ public class UserBean implements Serializable {
         }
         return result;
     }
+
     /**
      * Gets a logged in username by getting the username from the session.
      * @return username
      * Source: https://dzone.com/articles/liferay-jsf-how-get-current-lo
      * Had further help by Subject2Change group.
      */
-    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-    public String getUsernameFromSession() {
+    public String getEmailFromSession() {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-        String userName = request.getRemoteUser();
-        return userName;
+        String email = request.getRemoteUser();
+        return email;
+    }
+    
+    /**
+     * updates current zip
+     */
+    public void updateCurrentZip() {
+        Tutor tutor = tut4youapp.updateCurrentZip(currentZip);
+        if(tutor.getCurrentZip() != null) {
+            condition = false;
+        }
+    }
+    
+    /**
+     * Updates a User's information
+     * @param user User or Tutor object
+     */
+    public void updateUser(User user){
+ 
+        tut4youapp.updateUser(user); 
     }
 }

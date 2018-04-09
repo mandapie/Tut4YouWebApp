@@ -19,7 +19,6 @@ package tut4you.model;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -39,16 +38,20 @@ import javax.persistence.TemporalType;
 /**
  * Request contains subject and course name, and a short description of a
  * specific topic. Each request is automatically assigned a unique identifier.
+ *
  * @author Keith Tran <keithtran25@gmail.com>
  * Modified by Amanda Pan <daikiraidemodaisuki@gmail.com>
  */
-@Table(name="Request")
+@Table(name = "Request")
 @NamedQueries({
     @NamedQuery(name = Request.FIND_REQUEST_BY_EMAIL, query = "SELECT r from Request r JOIN r.student s WHERE s.email = :student_email AND r.status = :status"),
     @NamedQuery(name = Request.FIND_REQUESTS_BY_TUTOR, query = "SELECT r FROM Request r JOIN r.availableTutors t WHERE t.email = :email")
 })
 @Entity
 public class Request implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     /**
      * Tells whether a Request is pending, accepted or canceled
      * http://tomee.apache.org/examples-trunk/jpa-enumerated/README.html
@@ -56,7 +59,9 @@ public class Request implements Serializable {
     public enum Status{
         PENDING,
         ACCEPTED,
-        CANCELED;
+        CANCELLED,
+        DECLINED,
+        COMPLETED;
     }
     
     /**
@@ -67,7 +72,7 @@ public class Request implements Serializable {
      * JPQL Query to find requests from available/selected tutors
      */
     public static final String FIND_REQUESTS_BY_TUTOR = "Request.findRequestsByTutor";
-    
+
     /**
      * Primary key is generated uniquely
      */
@@ -75,24 +80,17 @@ public class Request implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, unique = true)
     private Long id;
-    /**
-     * ManyToOne relationship between request and zipCode
-     */
-    @ManyToOne
-    private ZipCode zipCode;
 
-    public ZipCode getZipCode() {
-        return zipCode;
-    }
-
-    public void setZipCode(ZipCode zipCode) {
-        this.zipCode = zipCode;
-    }
     /**
      * Multiple requests can be submitted by a student
      */
     @ManyToOne
     private User student;
+    /**
+     * ManyToOne relationship between request and zipCode
+     */
+    @ManyToOne
+    private ZipCode zipCode;
     /**
      * only one course can be associated with one request
      */
@@ -120,22 +118,23 @@ public class Request implements Serializable {
     private java.util.Date currentTime;
     private Status status;
     private int lengthOfSession;
-    
+ 
+
     /**
      * Request Constructor
      */
     public Request() {
-        
+
     }
-    
+
     /**
      * request overloaded constructor
+     *
      * @param student
      * @param description
-     * @param status 
-     * @param currentTime 
-     * @param lengthOfSession 
-
+     * @param status
+     * @param currentTime
+     * @param lengthOfSession
      */
     public Request(User student, String description, Status status, java.util.Date currentTime, int lengthOfSession) {
         this.student = student;
@@ -143,35 +142,56 @@ public class Request implements Serializable {
         this.status = status;
         this.currentTime = currentTime;
         this.lengthOfSession = lengthOfSession;
-
     }
-
+    /**
+     * get ZipCode of Request
+     * @return zipCode
+     */
+    public ZipCode getZipCode() {
+        return zipCode;
+    }
+    /**
+     * set zipCode of Request
+     * @param zipCode 
+     */
+    public void setZipCode(ZipCode zipCode) {
+        this.zipCode = zipCode;
+    }
     /**
      * Gets the id of a Request
+     *
      * @return id of the Request
      */
     public Long getId() {
         return id;
     }
-    
+
     /**
      * Sets the id of a Request
+     *
      * @param id of the Request
      */
     public void setId(Long id) {
         this.id = id;
     }
-
+    /**
+     * get day of week
+     * @return dayOfWeek
+     */
     public String getDayOfWeek() {
         return dayOfWeek;
     }
-    
+    /**
+     * set day of week
+     * @param dayOfWeek 
+     */
     public void setDayOfWeek(String dayOfWeek) {
         this.dayOfWeek = dayOfWeek;
     }
-    
+
     /**
      * get currentTime
+     *
      * @return currenTime
      */
     public java.util.Date getCurrentTime() {
@@ -204,113 +224,128 @@ public class Request implements Serializable {
     }
     /**
      * Gets a course from the courseList
+     *
      * @return course from the list
      */
     public Course getCourse() {
         return course;
     }
-    
+
     /**
      * Sets a course to a Request
+     *
      * @param course selected course from the list
      */
     public void setCourse(Course course) {
         this.course = course;
     }
-    
+
     /**
      * Gets a tutor
+     *
      * @return tutor
      */
-    public Tutor getTutor(){
+    public Tutor getTutor() {
         return tutor;
     }
-    
+
     /**
      * Sets a tutor
-     * @param tutor 
+     *
+     * @param tutor
      */
     public void setTutor(Tutor tutor) {
         this.tutor = tutor;
     }
-    
+
     /**
      * Gets the student who logged in to Tut4You
+     *
      * @return logged in student
      */
     public User getStudent() {
         return student;
     }
-    
+
     /**
      * Sets the student who logged in to Tut4You
+     *
      * @param student who logged in
      */
     public void setStudent(User student) {
         this.student = student;
     }
-    
+
     /**
      * Gets a short description of a topic or problem by a student
+     *
      * @return a short description
      */
     public String getDescription() {
         return description;
     }
-    
+
     /**
      * Sets a short description of a topic or problem by a student
+     *
      * @param description of the problem
      */
     public void setDescription(String description) {
         this.description = description;
     }
-    
+
     /**
      * gets the length of the tutoring session
+     *
      * @return lengthOfSession
      */
     public int getLengthOfSession() {
         return lengthOfSession;
     }
-    
+
     /**
      * sets the length of the tutoring session
-     * @param lengthOfSession 
+     *
+     * @param lengthOfSession
      */
     public void setLengthOfSession(int lengthOfSession) {
         this.lengthOfSession = lengthOfSession;
     }
-    
+
     /**
      * Gets a collection of available tutors
+     *
      * @return availableTutors
      */
     public Collection<Tutor> getAvailableTutors() {
         return availableTutors;
     }
-    
+
     /**
      * Sets a collection of available tutors
-     * @param availableTutors 
+     *
+     * @param availableTutors
      */
     public void setAvailableTutors(Collection<Tutor> availableTutors) {
         this.availableTutors = availableTutors;
     }
-    
+
     /**
      * Adds an available tutor to the collection of available tutors
-     * @param at 
+     *
+     * @param at
      */
     public void addAvailableTutor(Tutor at) {
-        if (this.availableTutors == null)
+        if (this.availableTutors == null) {
             this.availableTutors = new HashSet();
+        }
         this.availableTutors.add(at);
     }
-    
+
     /**
      * removes an available tutor to the collection of available tutors
-     * @param at 
+     *
+     * @param at
      */
     public void removeAvailableTutor(Tutor at) {
         availableTutors.remove(at);
@@ -318,6 +353,7 @@ public class Request implements Serializable {
     
     /**
      * Override hashCode
+     *
      * @return hash
      */
     @Override
@@ -326,10 +362,11 @@ public class Request implements Serializable {
         hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
-    
+
     /**
      * Overrides the equals method
-     * @param object 
+     *
+     * @param object
      * @return true if object is Request, else false
      */
     @Override
@@ -344,9 +381,11 @@ public class Request implements Serializable {
         }
         return true;
     }
-    
+
+
     /**
      * Override toString
+     *
      * @return Request attributes
      */
     @Override

@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
-    <!-- AWS + MySQL (this is commented out because datasource in tome.xml) -->
+    <!--     AWS + MySQL (this is commented out because datasource in tome.xml) 
+    -->   
 <!--    <Resource id="jdbc/tut4youWebAppDS" type="javax.sql.DataSource">
         jdbcDriver=com.mysql.jdbc.Driver
         jtaManaged=true
         initialSize=1
-        password=YOUR_PASSWORD
-        userName=YOUR_USERNAME
-        jdbcUrl=jdbc:mysql://YOUR_ENDPOINT:3306/YOUR_DB_NAME
+        password=tut4youapp
+        userName=tut4you
+        jdbcUrl=jdbc:mysql://tomee-mysqldb.cz14lgoxj0jq.us-east-2.rds.amazonaws.com:3306/tut4youDB
     </Resource>-->
-    <!-- LOCALHOST + DERBY-->
+    <!--     LOCALHOST + DERBY 
+-->    
 <!--    <Resource id="jdbc/tut4youWebAppDS" type="javax.sql.DataSource">
           jdbcDriver=org.apache.derby.jdbc.ClientDriver
           jtaManaged=true

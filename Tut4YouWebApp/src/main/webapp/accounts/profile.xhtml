@@ -6,10 +6,34 @@
                 xmlns:b="http://bootsfaces.net/ui"
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
                 xmlns:p="http://primefaces.org/ui">
+    <!--
+        Licensed under the Academic Free License (AFL 3.0).
+        http://opensource.org/licenses/AFL-3.0
+
+        This code has been developed by a group of CSULB students working on their 
+        Computer Science senior project called Tutors4You.
+
+        Tutors4You is a web application that students can utilize to find a tutor and
+        ask them to meet at any location of their choosing. Students that struggle to understand 
+        the courses they are taking would benefit from this peer to peer tutoring service.
+
+        2017 Amanda Pan <daikiraidemodaisuki@gmail.com>
+        2017 Andrew Kaichi <ahkaichi@gmail.com>
+        2017 Keith Tran <keithtran25@gmail.com>
+        2017 Syed Haider <shayder426@gmail.com>
+    -->
     <!-- @author Amanda Pan <daikiraidemodaisuki@gmail.com> -->
     <ui:define name="title">Profile</ui:define>
     <ui:define name="content">
         <h1>Profile Page</h1>
+        <b:form>
+            <p:dialog header="Request Declined" widgetVar="modalID" minHeight="40" visible="#{requestBean.declinedRequest.size() != 0}" closable="false">
+                <ui:repeat var="re" value="#{requestBean.declinedRequest}">
+                    <p>Your request with the description: #{re.description} has been declined</p>
+                    <p:commandButton value="Dismiss" style="width:100%" action="#{requestBean.cancelRequest(re)}" oncomplete="PF('modalID').hide();"/>
+                </ui:repeat> 
+            </p:dialog>
+        </b:form>
         <b:container fluid="true">
             <!-- profile info and links column -->
             <b:column medium-screen="one-third">
@@ -19,9 +43,7 @@
                             <h:outputLabel value="Name:"/>
                         </b:column>
                         <b:column span="7">
-                            <h:outputLabel value="#{userBean.user.firstName}"/>
-                            <span></span> <!-- &nbsp; cause run time error -->
-                            <h:outputLabel value="#{userBean.user.lastName}"/>
+                            <h:outputText value="#{userBean.user.firstName} #{userBean.user.lastName}"/>
                         </b:column>
                     </b:row>
                     <b:row>
@@ -29,7 +51,7 @@
                             <h:outputLabel value="Username:"/>
                         </b:column>
                         <b:column span="7">
-                            <h:outputLabel value="#{userBean.user.userName}"/>
+                            <h:outputText value="#{userBean.user.userName}"/>
                         </b:column>
                     </b:row>
                     <b:row>
@@ -37,7 +59,7 @@
                             <h:outputLabel value="Email:"/>
                         </b:column>
                         <b:column span="7">
-                            <h:outputLabel value="#{userBean.user.email}"/>
+                            <h:outputText value="#{userBean.user.email}"/>
                         </b:column>
                     </b:row>
                     <b:row>
@@ -45,7 +67,7 @@
                             <h:outputLabel value="Phone Number:"/>
                         </b:column>
                         <b:column span="7">
-                            <h:outputLabel value="#{userBean.user.phoneNumber}"/>
+                            <h:outputText value="#{userBean.user.phoneNumber}"/>
                         </b:column>
                     </b:row>
                     <b:row>
@@ -53,34 +75,60 @@
                             <h:outputLabel value="University:"/>
                         </b:column>
                         <b:column span="7">
-                            <h:outputLabel value="#{userBean.user.university}"/>
+                            <h:outputText value="#{userBean.user.university}"/>
                         </b:column>
                     </b:row>
                     <c:if test="#{userBean.isTutor}">
                         <b:row>
                             <b:column span="5">
-                                <h:outputLabel value="Price Rate:"/>
+                                <h:outputLabel value="Hourly Rate:"/>
                             </b:column>
                             <b:column span="7">
-                                <h:outputLabel value="#{userBean.user.priceRate}"/>
+                                <h:outputText value="#{userBean.user.priceRate}">
+                                    <f:convertNumber type="currency" currencySymbol="$" locale="en_US" />
+                                </h:outputText>
                             </b:column>
                         </b:row>
                     </c:if>
+                    <c:if test="#{userBean.isTutor}">
+                        <b:row>
+                            <b:column span="5">
+                                <h:outputLabel value="Avg Rating:"/>
+                            </b:column>
+                            <b:column span="7">
+                                <p:rating value="#{ratingBean.avgRating}" readonly="true" />
+                            </b:column>
+                        </b:row>
+                    </c:if>
+                    <b:row>
+                        <b:button value="Edit Profile" href="/Tut4YouWebApp/accounts/editProfile.xhtml"/>  
+                    </b:row>
+                    <b:row>
+                        <b:button value="Change Password" href="/Tut4YouWebApp/accounts/changePassword.xhtml"/>  
+                    </b:row>
                 </b:panel>
                 <c:if test="#{userBean.isTutor}">
                     <h:form id="doNotDisturb">
                         <b:switch label="Do Not Disturb" value="#{userBean.user.doNotDisturb}" id="doNotDisturb" update="@form">
-                            <f:ajax event="change" render="doNotDisturb" listener="#{userBean.updateDoNotDisturb(userBean.user.doNotDisturb)}" />
+                            <f:ajax event="change" render="doNotDisturb" listener="#{userBean.switchDoNotDisturb(userBean.user.doNotDisturb)}" />
                         </b:switch>
                     </h:form>
                 </c:if>
                 <b:row>
                     <a href="/Tut4YouWebApp/students/requestTutor.xhtml">Request for a Tutor</a>
                     <br></br>
+                    <a href="/Tut4YouWebApp/students/viewPreviousSessions.xhtml">View Previous Sessions</a>
+                    <br></br>
                     <c:if test="#{userBean.isTutor}">
                         <a href="/Tut4YouWebApp/tutors/availability.xhtml">Add Availability</a>
                         <br></br>
                         <a href="/Tut4YouWebApp/tutors/addCourse.xhtml">Add Courses</a>
+                        <br></br>
+                        <a href="/Tut4YouWebApp/tutors/viewReviews.xhtml">View Reviews</a>
+                        <br></br>
+                        <a href="/Tut4YouWebApp/tutors/sessionTimer.xhtml">Session Timer</a>
+                        <br></br>
+                        <a href="/Tut4YouWebApp/tutors/uploadTranscript.xhtml">Add Transcript</a>
                         <br></br>
                     </c:if>
                 </b:row>
@@ -127,50 +175,41 @@
                                         <f:facet name="header">Action</f:facet>  
                                         <b:commandButton value="Accept" look="success" action="#{requestBean.setTutorToRequest(req)}"/>
                                         <span></span> <!-- somehow can't make spacing unless using empty span-->
-                                        <b:commandButton value="Decline" action="#{requestBean.removeRequestFromTutor(req)}"/>
+                                        <b:commandButton value="Decline" action="#{requestBean.declineRequest(req)}"/>
                                     </h:column>
                                 </b:dataTable>
                             </b:tab>
                             <b:tab title="Schedule">
                                 <br></br> <!-- for better spacing -->
-                                <b:dataTable value="#{availabilityBean.availabilityList}" var="avail">
+                                <b:dataTable value="#{availabilityBean.availabilityList}" var="avail" id="availabilityTable">
                                     <b:dataTableColumn>
                                         <f:facet name="header">Day of Week</f:facet>
-                                        <b:inputText value="#{avail.dayOfWeek}" rendered="#{availabilityBean.editable}" />
-                                        <h:outputText value="#{avail.dayOfWeek}" rendered="#{not availabilityBean.editable}"/>
+                                        <h:outputText value="#{avail.dayOfWeek}"/>
                                     </b:dataTableColumn>
                                     <b:dataTableColumn>
                                         <f:facet name="header">Start Time</f:facet>
-                                        <b:inputText value="#{avail.startTime}" rendered="#{availabilityBean.editable}">
-                                            <f:convertDateTime pattern="hh:mm a"></f:convertDateTime>
-                                        </b:inputText>
-                                        <h:outputText value="#{avail.startTime}" rendered="#{not availabilityBean.editable}">                        
+                                        <h:outputText value="#{avail.startTime}">                        
                                             <f:convertDateTime pattern="hh:mm a"></f:convertDateTime>
                                         </h:outputText>
                                     </b:dataTableColumn>
                                     <b:dataTableColumn>
                                         <f:facet name="header">End Time</f:facet>
-                                        <b:inputText value="#{avail.endTime}" rendered="#{availabilityBean.editable}">
-                                            <f:convertDateTime pattern="hh:mm a"></f:convertDateTime>
-                                        </b:inputText>
-                                        <h:outputText value="#{avail.endTime}" rendered="#{not availabilityBean.editable}">                        
+                                        <h:outputText value="#{avail.endTime}">                        
                                             <f:convertDateTime pattern="hh:mm a"></f:convertDateTime>
                                         </h:outputText>
                                     </b:dataTableColumn>
                                     <b:dataTableColumn>
                                         <f:facet name="header">Action</f:facet>
-                                            <b:commandButton value="Edit" action="#{availabilityBean.changeEditable}" rendered="#{not availabilityBean.editable}"/>
-                                            <span></span> <!-- somehow can't make spacing unless using empty span-->
-                                            <b:commandButton value="Delete" look="danger" action="#{availabilityBean.deleteAvailability(avail)}" rendered="#{not availability.editable}"/>
+                                        <b:commandButton value="Edit" action="#{availabilityBean.goToEditAvailabilityPage(avail)}"/>
+                                        <span></span> <!-- somehow can't make spacing unless using empty span-->
+                                        <b:commandButton value="Delete" look="danger" action="#{availabilityBean.deleteAvailability(avail)}"/>
                                     </b:dataTableColumn>
                                 </b:dataTable>  
-                                <br></br>
-                                <b:commandButton value="Save Changes" action="#{availabilityBean.updateAvailability(avail)}" />	
                             </b:tab>
                             <b:tab title="Courses">
                                 <br></br> <!-- for better spacing -->
                                 <!-- Bootsfaces datatable to show the data in an organized fashion -->
-                                <b:dataTable value="#{addCourseBean.tutorCourses}" var="course">
+                                <b:dataTable value="#{courseBean.tutorCourses}" var="course">
                                     <b:dataTableColumn>
                                         <f:facet name="header">Courses You Have Taken</f:facet>
                                         #{course.courseName}
@@ -184,16 +223,14 @@
             <c:if test="#{userBean.condition}">  
                 #{userBean.updateCurrentZip()}
             </c:if>
-            <p:dialog header="Current Zip Code" widgetVar="myDialog" minHeight="40" appendTo="" visible="true"
-                rendered="#{userBean.condition}">
+            <p:dialog header="Current Zip Code" widgetVar="myDialog" minHeight="40" visible="true" rendered="#{userBean.condition}">
                 <h:form>
-                <h:outputText value="Enter current zip code" />
-                <b:inputText id="currentZip" placeholder="press enter to submit" required="true" requiredMessage="required" value="#{userBean.currentZip}">
-                            <b:message for="currentZip"/>
-                </b:inputText>
+                    <h:outputText value="Enter current zip code" />
+                    <b:inputText id="currentZip" placeholder="press enter to submit" required="true" requiredMessage="required" value="#{userBean.currentZip}">
+                        <b:message for="currentZip"/>
+                    </b:inputText>
                 </h:form>
             </p:dialog>
-
         </b:container>
         <ui:debug hotkey='x'/>
     </ui:define>

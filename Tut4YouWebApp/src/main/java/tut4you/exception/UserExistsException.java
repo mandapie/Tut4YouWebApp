@@ -17,17 +17,16 @@
 package tut4you.exception;
 
 /**
- * StudentExistsException extends the Exception class to determine if a student exists
+ * UserExistsException extends the Exception class to determine if a student exists
  * @author Alvaro Monge <alvaro.monge@csulb.edu>
- * Modified by Amanda Pan <daikiraidemodaisuki@gmail.com>
  */
-public class StudentExistsException extends Exception {
+public class UserExistsException extends Exception {
 
     /**
      * Creates a new instance of <code>StudentExistsException</code> without detail
      * message.
      */
-    public StudentExistsException() {
+    public UserExistsException() {
         super("User with the given email address already exists");
     }
 
@@ -37,7 +36,7 @@ public class StudentExistsException extends Exception {
      *
      * @param msg the detail message.
      */
-    public StudentExistsException(String msg) {
+    public UserExistsException(String msg) {
         super(msg);
     }
 }

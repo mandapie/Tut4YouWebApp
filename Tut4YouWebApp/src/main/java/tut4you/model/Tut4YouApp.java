@@ -56,9 +56,6 @@ public class Tut4YouApp {
     private EntityManager em;
     
     private static final Logger LOGGER = Logger.getLogger("Tut4YouApp");
-    
-    UserBean userBean = new UserBean();
-    String currentUserEmail = userBean.getEmailFromSession();
 
     /**
      * Query all subjects from the database
@@ -98,6 +95,8 @@ public class Tut4YouApp {
     @RolesAllowed("tut4youapp.student")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public Request newRequest(Request request) {
+        UserBean userBean = new UserBean();
+        String currentUserEmail = userBean.getEmailFromSession();
         if (currentUserEmail == null) {
             return null;
         } else {
@@ -122,6 +121,8 @@ public class Tut4YouApp {
     @RolesAllowed("tut4youapp.student")
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public List<Request> getActiveRequest() {
+        UserBean userBean = new UserBean();
+        String currentUserEmail = userBean.getEmailFromSession();
         String email;
         if (currentUserEmail == null) {
             return null;
@@ -142,6 +143,8 @@ public class Tut4YouApp {
     @RolesAllowed("tut4youapp.student")
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public List<Request> getDeclinedRequest() {
+        UserBean userBean = new UserBean();
+        String currentUserEmail = userBean.getEmailFromSession();
         String email;
         if (currentUserEmail == null) {
             return null;
@@ -283,6 +286,8 @@ public class Tut4YouApp {
     @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void setTutorToRequest(Request r) {
+        UserBean userBean = new UserBean();
+        String currentUserEmail = userBean.getEmailFromSession();
         Tutor tutor = findTutor(currentUserEmail);
         r.setStatus(Request.Status.ACCEPTED);
         r.setTutor(tutor);
@@ -300,6 +305,8 @@ public class Tut4YouApp {
     @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void removeRequestFromNotification(Request r) {
+        UserBean userBean = new UserBean();
+        String currentUserEmail = userBean.getEmailFromSession();
         Request pendingRequest = em.find(Request.class, r.getId());
         if (pendingRequest == null) {
             pendingRequest = r;
@@ -318,6 +325,8 @@ public class Tut4YouApp {
     @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public List<Request> getPendingRequestForTutor() {
+        UserBean userBean = new UserBean();
+        String currentUserEmail = userBean.getEmailFromSession();
         Tutor tutor = findTutor(currentUserEmail);
         TypedQuery<Request> requestTutorQuery = em.createNamedQuery(Request.FIND_REQUESTS_BY_TUTOR, Request.class);
         requestTutorQuery.setParameter("email", tutor.getEmail());
@@ -337,6 +346,8 @@ public class Tut4YouApp {
     @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public Course addCourse(Course course) throws CourseExistsException {
+        UserBean userBean = new UserBean();
+        String currentUserEmail = userBean.getEmailFromSession();
         if (currentUserEmail == null) {
             return null;
         }
@@ -373,6 +384,8 @@ public class Tut4YouApp {
     @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public Course addNewCourse(Course course) throws CourseExistsException {
+        UserBean userBean = new UserBean();
+        String currentUserEmail = userBean.getEmailFromSession();
         if (currentUserEmail == null) {
             return null;
         }
@@ -400,6 +413,8 @@ public class Tut4YouApp {
     @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public List<Course> getTutorCourses() {
+        UserBean userBean = new UserBean();
+        String currentUserEmail = userBean.getEmailFromSession();
         String email;
         if (currentUserEmail == null) {
             return null;
@@ -422,6 +437,8 @@ public class Tut4YouApp {
     @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public List<Availability> getAvailability() {
+        UserBean userBean = new UserBean();
+        String currentUserEmail = userBean.getEmailFromSession();
         String email;
         if (currentUserEmail == null) {
             return null;
@@ -443,6 +460,8 @@ public class Tut4YouApp {
     @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public List<Availability> getAvailabilityList() {
+        UserBean userBean = new UserBean();
+        String currentUserEmail = userBean.getEmailFromSession();
         String email;
         if (currentUserEmail == null) {
             return null;
@@ -465,6 +484,8 @@ public class Tut4YouApp {
     @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public Availability addAvailability(Availability availability) {
+        UserBean userBean = new UserBean();
+        String currentUserEmail = userBean.getEmailFromSession();
         if (currentUserEmail == null) {
             return null;
         } else {
@@ -511,6 +532,8 @@ public class Tut4YouApp {
     @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void deleteAvailability(Availability availability) {
+        UserBean userBean = new UserBean();
+        String currentUserEmail = userBean.getEmailFromSession();
         Availability toBeDeleted = em.find(Availability.class, availability.getId());
         if (toBeDeleted == null) {
             toBeDeleted = availability;
@@ -528,8 +551,9 @@ public class Tut4YouApp {
      */
     @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public boolean switchDoNotDisturb(Boolean doNotDisturb
-    ) {
+    public boolean switchDoNotDisturb(Boolean doNotDisturb) {
+        UserBean userBean = new UserBean();
+        String currentUserEmail = userBean.getEmailFromSession();
         Tutor tutor = findTutor(currentUserEmail);
         doNotDisturb = tutor.isDoNotDisturb();
         if (doNotDisturb == true) {
@@ -623,8 +647,9 @@ public class Tut4YouApp {
      */
     @RolesAllowed("tut4youapp.student")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public Rating newRating(Rating rating, Tutor tutor
-    ) {
+    public Rating newRating(Rating rating, Tutor tutor) {
+        UserBean userBean = new UserBean();
+        String currentUserEmail = userBean.getEmailFromSession();
         if (currentUserEmail == null) {
             return null;
         } else {
@@ -678,6 +703,8 @@ public class Tut4YouApp {
     @RolesAllowed("tut4youapp.student")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void deleteRating(Rating rating) {
+        UserBean userBean = new UserBean();
+        String currentUserEmail = userBean.getEmailFromSession();
         Rating toBeDeleted = em.find(Rating.class, rating.getId());
         if (toBeDeleted == null) {
             toBeDeleted = rating;
@@ -697,6 +724,8 @@ public class Tut4YouApp {
     @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public List<Rating> getRatingList() {
+        UserBean userBean = new UserBean();
+        String currentUserEmail = userBean.getEmailFromSession();
         String email;
         if (currentUserEmail == null) {
             return null;
@@ -717,6 +746,8 @@ public class Tut4YouApp {
     @RolesAllowed("tut4youapp.student")
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public List<Request> getCompletedRequests() {
+        UserBean userBean = new UserBean();
+        String currentUserEmail = userBean.getEmailFromSession();
         String email;
         if (currentUserEmail == null) {
             return null;
@@ -738,6 +769,8 @@ public class Tut4YouApp {
     @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void setRequestToComplete(Request r) {
+        UserBean userBean = new UserBean();
+        String currentUserEmail = userBean.getEmailFromSession();
         Long endTime = System.currentTimeMillis();
         Tutor tutor = findTutor(currentUserEmail);
         r.setStatus(Request.Status.COMPLETED);
@@ -820,12 +853,16 @@ public class Tut4YouApp {
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public boolean checkEmail(String email) {
+        UserBean userBean = new UserBean();
+        String currentUserEmail = userBean.getEmailFromSession();
         return currentUserEmail.equals(email);
     }
 
     @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void addTranscriptFileLocation(String transcriptFileLocation) {
+        UserBean userBean = new UserBean();
+        String currentUserEmail = userBean.getEmailFromSession();
         Tutor tutor = findTutor(currentUserEmail);
         tutor.setTrancriptFileLocation(transcriptFileLocation);
         em.merge(tutor);
@@ -835,12 +872,13 @@ public class Tut4YouApp {
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void updateUser(User updateUser) {
+        UserBean userBean = new UserBean();
+        String currentUserEmail = userBean.getEmailFromSession();
         Tutor tutor = findTutor(currentUserEmail);
         System.out.println("Am I being called");
         if (tutor == null) {
             User student = findUser(currentUserEmail);
             student = (User) updateUser;
-            
             em.merge(student);
             em.flush();
         } else {
@@ -863,6 +901,8 @@ public class Tut4YouApp {
      * @author Keith Tran <keithtran25@gmail.com>
      */
     public Tutor updateCurrentZip(String currentZip) {
+        UserBean userBean = new UserBean();
+        String currentUserEmail = userBean.getEmailFromSession();
         Tutor tutor = findTutor(currentUserEmail);
         tutor.setCurrentZip(currentZip);
         em.merge(tutor);

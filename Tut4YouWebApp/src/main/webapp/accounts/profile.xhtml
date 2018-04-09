@@ -130,6 +130,17 @@
                         <br></br>
                         <a href="/Tut4YouWebApp/tutors/uploadTranscript.xhtml">Add Transcript</a>
                         <br></br>
+                        <c:if test="#{userBean.condition}">  
+                            #{userBean.updateCurrentZip()}
+                        </c:if>
+                        <p:dialog header="Current Zip Code" widgetVar="myDialog" minHeight="40" visible="true" rendered="#{userBean.condition}">
+                            <h:form>
+                                <h:outputText value="Enter current zip code" />
+                                <b:inputText id="currentZip" placeholder="press enter to submit" required="true" requiredMessage="required" value="#{userBean.currentZip}">
+                                    <b:message for="currentZip"/>
+                                </b:inputText>
+                            </h:form>
+                        </p:dialog>
                     </c:if>
                 </b:row>
             </b:column>
@@ -220,17 +231,6 @@
                     </b:tabView>
                 </h:form>
             </b:column>
-            <c:if test="#{userBean.condition}">  
-                #{userBean.updateCurrentZip()}
-            </c:if>
-            <p:dialog header="Current Zip Code" widgetVar="myDialog" minHeight="40" visible="true" rendered="#{userBean.condition}">
-                <h:form>
-                    <h:outputText value="Enter current zip code" />
-                    <b:inputText id="currentZip" placeholder="press enter to submit" required="true" requiredMessage="required" value="#{userBean.currentZip}">
-                        <b:message for="currentZip"/>
-                    </b:inputText>
-                </h:form>
-            </p:dialog>
         </b:container>
         <ui:debug hotkey='x'/>
     </ui:define>

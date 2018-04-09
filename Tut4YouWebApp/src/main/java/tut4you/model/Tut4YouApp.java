@@ -840,6 +840,7 @@ public class Tut4YouApp {
         if (tutor == null) {
             User student = findUser(currentUserEmail);
             student = (User) updateUser;
+            
             em.merge(student);
             em.flush();
         } else {

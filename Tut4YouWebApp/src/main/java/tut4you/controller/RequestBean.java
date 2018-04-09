@@ -33,6 +33,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.Conversation;
 import javax.enterprise.context.ConversationScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -48,7 +49,7 @@ import tut4you.model.*;
  * @author Amanda Pan <daikiraidemodaisuki@gmail.com>
  */
 @Named
-@ConversationScoped
+@SessionScoped
 public class RequestBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -88,31 +89,32 @@ public class RequestBean implements Serializable {
         request = new Request();
         zipCode = new ZipCode();
         zipCodeByRadius = new ZipCodeByRadius();
+        tutorList = new ArrayList();
         time = "Immediate";
-        conversation.begin();
+        //conversation.begin();
 
     }
-    /**
-     *http://www.byteslounge.com/tutorials/java-ee-cdi-conversationscoped-example
-     * start conversationscope
-     */
-    public void initConversation(){
-
-        if (!FacesContext.getCurrentInstance().isPostback() && conversation.isTransient()) {
-            conversation.begin();
-        }
-
-    }
-    /**
-     * http://www.byteslounge.com/tutorials/java-ee-cdi-conversationscoped-example
-     * end conversationscope
-     */
-    public void endConversation(){
-
-        if(!conversation.isTransient()){
-            conversation.end();
-        }
-    }
+//    /**
+//     *http://www.byteslounge.com/tutorials/java-ee-cdi-conversationscoped-example
+//     * start conversationscope
+//     */
+//    public void initConversation(){
+//
+//        if (!FacesContext.getCurrentInstance().isPostback() && conversation.isTransient()) {
+//            conversation.begin();
+//        }
+//
+//    }
+//    /**
+//     * http://www.byteslounge.com/tutorials/java-ee-cdi-conversationscoped-example
+//     * end conversationscope
+//     */
+//    public void endConversation(){
+//
+//        if(!conversation.isTransient()){
+//            conversation.end();
+//        }
+//    }
     public ZipCodeByRadius getZipCodeByRadius() {
         return zipCodeByRadius;
     }
@@ -415,14 +417,21 @@ public class RequestBean implements Serializable {
                 System.out.println(str);
                 zipCodesByRadiusList = Arrays.asList(str.substring(1, str.length() - 1).split(", "));
             }
-           
+            System.out.println("course " + ": " + request.getCourse().getCourseName());
+            System.out.println("day of week "+ ": " + request.getDayOfWeek());
+            System.out.println("course " + ": " + request.getCurrentTime());
             for(int i = 0; i < zipCodesByRadiusList.size(); i++) {
                 zipCodeByRadius = new ZipCodeByRadius(zipCodesByRadiusList.get(i));
                 zipCodeByRadius = tut4youApp.addZipCodeByRadius(zipCode, zipCodeByRadius);
                 temp = new ArrayList();
                 temp = (tut4youApp.getTutorsFromCourse(request.getCourse().getCourseName(), request.getDayOfWeek().toUpperCase(), request.getCurrentTime(), false, zipCodesByRadiusList.get(i)));
                 tutorList.addAll(temp);
+                
+                System.out.println("Zip code " + i + ": " + zipCodesByRadiusList.get(i));
+                System.out.println("temp "+i+": " + temp);
+                
                 temp.clear();
+
             }
             
         }
@@ -436,6 +445,7 @@ public class RequestBean implements Serializable {
      */
     public void sendToTutor(Tutor t) {
         tut4youApp.addPendingRequest(t, request);
+        tutorList.remove(t);
     }
 
     /**
@@ -445,24 +455,6 @@ public class RequestBean implements Serializable {
      */
     public void setTutorToRequest(Request r) {
         tut4youApp.setTutorToRequest(r);
-    }
-
-    /**
-     * redirect to home page
-     * @return result
-     */
-    public String goToHomePage() {
-        String result = "success";
-        return result;
-    }
-    
-    /**
-     * refresh page
-     * @return 
-     */
-    public String refreshPage() {
-        String viewId = FacesContext.getCurrentInstance().getViewRoot().getViewId();
-        return viewId + "?faces-redirect=true";
     }
 
     /**
@@ -513,5 +505,4 @@ public class RequestBean implements Serializable {
             Arrays.toString(zipCodeAPI.getDataList())
          };
     }
-
 }

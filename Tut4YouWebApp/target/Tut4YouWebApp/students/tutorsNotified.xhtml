@@ -28,20 +28,16 @@
         <h1>Tutors Available</h1>
         <h:form>
             <b:dataTable value="#{requestBean.tutorList}" var="tutor">
-                <b:dataTableColumn value="#{tutor.firstName}"/>
-                <b:dataTableColumn value="#{tutor.lastName}"/>
-                <h:column>
+                <b:dataTableColumn>
+                    <f:facet name="header">Tutor</f:facet>
+                    <h:outputText value="#{tutor.firstName} #{tutor.lastName}"/>
+                </b:dataTableColumn>
+                <b:dataTableColumn>
                     <f:facet name="header">Request</f:facet>
-                    <b:commandButton span="6" value="Request" look="info" action="#{requestBean.sendToTutor(tutor)}"
-                                     actionListener="#{requestBean.tutorList.remove(tutor)}" action-listener="#{requestBean.refreshPage()}">
-                    </b:commandButton>
-                </h:column>
+                    <b:commandButton span="6" value="Request" look="info" action="#{requestBean.sendToTutor(tutor)}"/>
+                </b:dataTableColumn>
             </b:dataTable>
-            <b:commandButton span="6" value="Return to Account" look="info" action="#{requestBean.goToHomePage()}">
-                <f:actionListener binding="#{requestBean.endConversation()}"/>
-            </b:commandButton>
-                             
-                
+            <b:button style="width:100%" value="Return to Account" look="info" outcome="/accounts/profile.xhtml"/>
         </h:form>
         <ui:debug hotkey='x' />
     </ui:define>

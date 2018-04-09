@@ -849,7 +849,7 @@ public class Tut4YouApp {
      * @return true if emails are equivalent
      * @author Syed Haider <shayder426@gmail.com>
      */
-    @PermitAll
+    @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public boolean checkEmail(String email) {
         UserBean userBean = new UserBean();

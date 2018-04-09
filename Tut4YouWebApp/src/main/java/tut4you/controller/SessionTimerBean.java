@@ -17,6 +17,7 @@
 package tut4you.controller;
 
 import java.io.Serializable;
+import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 import tut4you.model.Request;
@@ -34,6 +35,7 @@ public class SessionTimerBean implements Serializable{
     private String email;
     private boolean checkEmail;
     private static final long serialVersionUID = 1L;
+    @EJB
     private Tut4YouApp tut4youApp;
     private Request request;
     private SessionTimer sessionTimer;
@@ -98,7 +100,6 @@ public class SessionTimerBean implements Serializable{
     {
         Long startTime = System.currentTimeMillis();
         sessionTimer.setStartSessionTime(startTime);
-        //sessionTimer = tut4youApp.addSessionTimer(sessionTimer);
         tut4youApp.startSessionTime(r);
         
     }

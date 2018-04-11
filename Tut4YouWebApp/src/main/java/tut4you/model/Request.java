@@ -18,6 +18,7 @@ package tut4you.model;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -95,7 +96,7 @@ public class Request implements Serializable {
      * only one course can be associated with one request
      */
     @OneToOne
-    @JoinColumn(name="courseName", nullable=false)
+    @JoinColumn(nullable=false)
     private Course course;    
     /**
      * Association class between request and tutor.
@@ -110,14 +111,15 @@ public class Request implements Serializable {
           inverseJoinColumns=@JoinColumn(name="email"))
     private Collection<Tutor> availableTutors;
     @OneToOne
-    @JoinColumn(name="tutorName")
     private Tutor tutor;
+    @OneToOne
+    private SessionTimer session;
     private String description;
     private String dayOfWeek;
     @Temporal(TemporalType.TIME)
-    private java.util.Date currentTime;
+    private Date currentTime;
     private Status status;
-    private int lengthOfSession;
+    private float lengthOfSession;
  
 
     /**
@@ -143,6 +145,15 @@ public class Request implements Serializable {
         this.currentTime = currentTime;
         this.lengthOfSession = lengthOfSession;
     }
+    
+    public SessionTimer getSession() {
+        return session;
+    }
+
+    public void setSession(SessionTimer session) {
+        this.session = session;
+    }
+    
     /**
      * get ZipCode of Request
      * @return zipCode
@@ -194,7 +205,7 @@ public class Request implements Serializable {
      *
      * @return currenTime
      */
-    public java.util.Date getCurrentTime() {
+    public Date getCurrentTime() {
         return currentTime;
     }
 
@@ -202,7 +213,7 @@ public class Request implements Serializable {
      * set currentTime
      * @param currentTime 
      */
-    public void setCurrentTime(java.util.Date currentTime) {
+    public void setCurrentTime(Date currentTime) {
         this.currentTime = currentTime;
 
     }
@@ -299,7 +310,7 @@ public class Request implements Serializable {
      *
      * @return lengthOfSession
      */
-    public int getLengthOfSession() {
+    public float getLengthOfSession() {
         return lengthOfSession;
     }
 
@@ -308,7 +319,7 @@ public class Request implements Serializable {
      *
      * @param lengthOfSession
      */
-    public void setLengthOfSession(int lengthOfSession) {
+    public void setLengthOfSession(float lengthOfSession) {
         this.lengthOfSession = lengthOfSession;
     }
 

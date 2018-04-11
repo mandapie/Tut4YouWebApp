@@ -25,27 +25,21 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import java.util.Date;
-import java.util.HashSet;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 
 /**
  * Each tutor can receive ratings after tutoring sessions
- *
  * @author Syed Haider <shayder426@gmail.com>
  */
 
 @NamedQueries({
     @NamedQuery(name = Rating.FIND_RATING_BY_EMAIL, query = "SELECT r from Rating r"),
     @NamedQuery(name = Rating.FIND_RATING_BY_TUTOR, query = "SELECT r FROM Rating r JOIN r.tutor s WHERE s.email = :email"),
-     @NamedQuery(name = Rating.FIND_AVG_RATING_BY_TUTOR, query = "SELECT AVG(r.ratingValue) FROM Rating r"),
+    @NamedQuery(name = Rating.FIND_AVG_RATING_BY_TUTOR, query = "SELECT AVG(r.ratingValue) FROM Rating r"),
     @NamedQuery(name = Request.FIND_REQUEST_BY_EMAIL, query = "SELECT r from Request r JOIN r.student s WHERE s.email = :student_email AND r.status = :status")})
 @Entity
 @Table(name="Rating")
@@ -73,25 +67,20 @@ public class Rating implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, unique = true)
     private Long id;
-
+    private String description;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dateRated;
+    private int ratingValue;
     /**
      * Multiple ratings can be submitted by a student
      */
     @ManyToOne
     private User student;
-
     /**
      * Multiple ratings can be added/viewed by a Tutor
      */
     @ManyToOne
-    @JoinColumn(name = "tutorName")
     private Tutor tutor;
-
-    private String description;
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date currentTime;
-    private int ratingValue;
-
 
     /**
      * Rating Constructor
@@ -110,7 +99,7 @@ public class Rating implements Serializable {
     public Rating(int ratingValue, String description, Date currentTime) {
         this.ratingValue = ratingValue;
         this.description = description;
-        this.currentTime = currentTime;
+        this.dateRated = currentTime;
     }
 
     /**
@@ -152,19 +141,19 @@ public class Rating implements Serializable {
     /**
      * Gets the current date 
      *
-     * @return currentTime the date the rating was done
+     * @return dateRated the date the rating was done
      */
-    public java.util.Date getCurrentTime() {
-        return currentTime;
+    public Date getDateRated() {
+        return dateRated;
     }
 
     /**
-     * set currentTime
+     * set dateRated
      *
-     * @param currentTime the date the rating was done
+     * @param dateRated the date the rating was done
      */
-    public void setCurrentTime(java.util.Date currentTime) {
-        this.currentTime = currentTime;
+    public void setDateRated(Date dateRated) {
+        this.dateRated = dateRated;
 
     }
 
@@ -255,7 +244,7 @@ public class Rating implements Serializable {
      */
     @Override
     public String toString() {
-        return "tut4you.model.Rating[ id=" + id + " description=" + description + " currentTime= " + currentTime + " ]";
+        return "tut4you.model.Rating[ id=" + id + " description=" + description + " currentTime= " + dateRated + " ]";
     }
 
 }

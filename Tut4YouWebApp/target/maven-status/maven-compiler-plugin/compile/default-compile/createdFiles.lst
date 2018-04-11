@@ -21,6 +21,7 @@ tut4you\messenger\ChatMessageDecoder.class
 tut4you\model\Tutor.class
 tut4you\controller\NotifyBean.class
 tut4you\model\User.class
+tut4you\controller\ProfileBean.class
 tut4you\controller\CourseBean.class
 tut4you\model\Request$Status.class
 tut4you\model\Subject.class

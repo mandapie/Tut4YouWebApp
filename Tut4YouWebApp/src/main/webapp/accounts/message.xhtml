@@ -55,7 +55,7 @@
             }
 
             function sendMessage() {
-                var msg = '{"message":"' + $message.val() + '", "sender":"' + '#{userBean.user.userName}' + '", "received":""}';
+                var msg = '{"message":"' + $message.val() + '", "sender":"' + '#{userBean.user.username}' + '", "received":""}';
                 //if message is empty send message
                 if ($message.val() !== '') {
                     wsocket.send(msg);

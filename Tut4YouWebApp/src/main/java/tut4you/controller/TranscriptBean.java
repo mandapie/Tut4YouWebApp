@@ -97,7 +97,7 @@ public class TranscriptBean implements Serializable {
         try {
             String userName = userbean.getEmailFromSession();
             tutor = tut4youApp.findTutor(userName);
-            String transcriptName = tutor.getUserName();
+            String transcriptName = tutor.getUsername();
             String keyName = transcriptName.concat(".pdf");
             
             try (S3Object s3Object = new S3Object()) {

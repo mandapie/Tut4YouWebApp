@@ -617,7 +617,7 @@ public class Tut4YouApp {
             }
             else {
                 Tutor newTutor = new Tutor(user);
-                newTutor.setDateJoined(joinedDateAsTutor);
+                newTutor.setDateJoinedAsTutor(joinedDateAsTutor);
                 newTutor.setPriceRate(priceRate);
                 newTutor.setMaxRadius(maxRadius);
                 newTutor.setDefaultZip(defaultZip);
@@ -689,7 +689,7 @@ public class Tut4YouApp {
         }
         updatedRating.setDescription(description);
         updatedRating.setRatingValue(ratingValue);
-        updatedRating.setCurrentTime(date);
+        updatedRating.setDateRated(date);
         em.merge(updatedRating);
         em.flush();
     }

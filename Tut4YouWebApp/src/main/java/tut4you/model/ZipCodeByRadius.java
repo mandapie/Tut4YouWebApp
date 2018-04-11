@@ -19,13 +19,13 @@ package tut4you.model;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 /**
@@ -36,8 +36,6 @@ import javax.persistence.Table;
 @Entity
 @NamedQueries({
     //@NamedQuery(name = ZipCodeByRadius.FIND_ZIPCODEBYRADIUS, query = "SELECT t.zipCodeByRadius from ZipCodeByRadius t JOIN t.zipCodes r WHERE r.zipCode = : zipCode")
-        
-    
 })
 public class ZipCodeByRadius implements Serializable {
     /**
@@ -45,22 +43,23 @@ public class ZipCodeByRadius implements Serializable {
      */
    // public static final String FIND_ZIPCODEBYRADIUS= "ZipCode.FindZipCodeByRadius";
     
+    @Id
+    private String zipCodeByRadius;
+    @ManyToMany
+    @JoinTable(
+        joinColumns={
+          @JoinColumn(name="zipCodeByRadius")
+        },
+        inverseJoinColumns=@JoinColumn(name="id"))
+    private Collection<ZipCode> zipCodes;
+
     public ZipCodeByRadius() {
     }
 
     public ZipCodeByRadius(String zipCodeByRadius) {
         this.zipCodeByRadius = zipCodeByRadius;
     }
-    @Id
-    private String zipCodeByRadius;
     
-    @ManyToMany
-    @JoinTable(joinColumns={
-              @JoinColumn(name="zipCodeByRadius")
-          },
-          inverseJoinColumns=@JoinColumn(name="id"))
-    private Collection<ZipCode> zipCodes;
-
     public Collection<ZipCode> getZipCodes() {
         return zipCodes;
     }

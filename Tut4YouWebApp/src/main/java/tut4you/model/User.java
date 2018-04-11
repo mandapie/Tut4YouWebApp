@@ -50,7 +50,7 @@ import javax.persistence.Table;
 
 @NamedQueries({
     @NamedQuery(name = User.FIND_USER_EMAILS, query = "SELECT t.email FROM User t"),
-    @NamedQuery(name = User.FIND_USER_USERNAMES, query = "SELECT t.userName FROM User t")
+    @NamedQuery(name = User.FIND_USER_USERNAMES, query = "SELECT t.username FROM User t")
 
 })
 public class User implements Serializable {
@@ -61,7 +61,7 @@ public class User implements Serializable {
     /**
      * JPQL Query to obtain a list of users username
      */
-    public static final String FIND_USER_USERNAMES = "Tutor.FindUserUserNames";
+    public static final String FIND_USER_USERNAMES = "Tutor.FindUserUsernames";
     
     private static final long serialVersionUID = 1L;
 
@@ -71,7 +71,7 @@ public class User implements Serializable {
     private String firstName;
     private String lastName;
     @Column(nullable = false, unique = true)
-    private String userName;
+    private String username;
     private String phoneNumber;
     private String password;
     private String university;
@@ -108,7 +108,7 @@ public class User implements Serializable {
         this.email = user.email;
         this.firstName = user.firstName;
         this.lastName = user.lastName;
-        this.userName = user.userName;
+        this.username = user.username;
         this.phoneNumber = user.phoneNumber;
         this.password = user.password;
         this.university = user.university;
@@ -129,7 +129,7 @@ public class User implements Serializable {
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.userName = userName;
+        this.username = userName;
         this.phoneNumber = phoneNumber;
         this.password = password;
         this.university = university;
@@ -194,17 +194,17 @@ public class User implements Serializable {
      *
      * @return username
      */
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
 
     /**
      * Sets the username of a user
      *
-     * @param userName
+     * @param username
      */
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     /**
@@ -395,7 +395,7 @@ public class User implements Serializable {
      */
     @Override
     public String toString() {
-        return "tut4you.model.User[ id=" + email + " first name=" + firstName + " last name=" + lastName + " username=" + userName + " phone number=" + phoneNumber + " password=" + password + " ]";
+        return "tut4you.model.User[ id=" + email + " first name=" + firstName + " last name=" + lastName + " username=" + username + " phone number=" + phoneNumber  + " ]";
     }
 }
 

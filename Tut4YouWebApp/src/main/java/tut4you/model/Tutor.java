@@ -76,24 +76,16 @@ public class Tutor extends User implements Serializable {
     public static final String FIND_TUTORS = "Tutor.findTutors";
 
     @Temporal(TemporalType.DATE)
-    private Date dateJoined;
-    private int numPeopleTutored;
+    private Date dateJoinedAsTutor;
+    private int numOfPeopleTutored;
     private double priceRate;
     private boolean doNotDisturb;
-    private String transcriptFileLocation;
-    
-    /**
-     * Tutors default zip code location
-     */
+    private String transcriptFilePath;
+    private int overallRating;
     private String defaultZip;
-    /**
-     * Tutors current zip code location
-     */
     private String currentZip;
-    /**
-     * Tutors max radius
-     */
     private int maxRadius;
+    
     /**
      * A Tutor can tutor multiple Courses and a Course can be tutored by
      * multiple Tutors.
@@ -130,7 +122,6 @@ public class Tutor extends User implements Serializable {
 
     /**
      * Copy constructor
-     *
      * @param newTutor
      */
     public Tutor(User newTutor) {
@@ -150,11 +141,11 @@ public class Tutor extends User implements Serializable {
      * @param maxRadius
      */
     public Tutor(Date dateJoined, int numPeopleTutored, double priceRate, boolean doNotDisturb, String transcriptFileLocation, String defaultZip, String currentZip, int maxRadius) {
-        this.dateJoined = dateJoined;
-        this.numPeopleTutored = numPeopleTutored;
+        this.dateJoinedAsTutor = dateJoined;
+        this.numOfPeopleTutored = numPeopleTutored;
         this.priceRate = priceRate;
         this.doNotDisturb = doNotDisturb;
-        this.transcriptFileLocation = transcriptFileLocation;
+        this.transcriptFilePath = transcriptFileLocation;
         this.defaultZip = defaultZip;
         this.currentZip = currentZip;
         this.maxRadius = maxRadius;
@@ -180,16 +171,40 @@ public class Tutor extends User implements Serializable {
      */
     public Tutor(String email, String firstName, String lastName, String userName, String phoneNumber, String password, String university, Date dateJoined, int numPeopleTutored, double priceRate, boolean doNotDisturb, String defaultZip, String currentZip, int maxRadius, String transcriptFileLocation) {
         super(email, firstName, lastName, userName, phoneNumber, password, university);
-        this.dateJoined = dateJoined;
-        this.numPeopleTutored = numPeopleTutored;
+        this.dateJoinedAsTutor = dateJoined;
+        this.numOfPeopleTutored = numPeopleTutored;
         this.priceRate = priceRate;
         this.doNotDisturb = doNotDisturb;
-        this.transcriptFileLocation = transcriptFileLocation;
+        this.transcriptFilePath = transcriptFileLocation;
         this.defaultZip = defaultZip;
         this.currentZip = currentZip;
         this.maxRadius = maxRadius;
     }
 
+    public int getNumOfPeopleTutored() {
+        return numOfPeopleTutored;
+    }
+
+    public void setNumOfPeopleTutored(int numOfPeopleTutored) {
+        this.numOfPeopleTutored = numOfPeopleTutored;
+    }
+
+    public int getOverallRating() {
+        return overallRating;
+    }
+
+    public void setOverallRating(int overallRating) {
+        this.overallRating = overallRating;
+    }
+
+    public Collection<Rating> getRatings() {
+        return ratings;
+    }
+
+    public void setRatings(Collection<Rating> ratings) {
+        this.ratings = ratings;
+    }
+    
     /**
      * Gets the state of doNotDistrub
      *
@@ -247,10 +262,10 @@ public class Tutor extends User implements Serializable {
     /**
      * Sets the date joined by a tutor
      *
-     * @param dateJoined
+     * @param dateJoinedAsTutor
      */
-    public void setDateJoined(Date dateJoined) {
-        this.dateJoined = dateJoined;
+    public void setDateJoinedAsTutor(Date dateJoinedAsTutor) {
+        this.dateJoinedAsTutor = dateJoinedAsTutor;
     }
 
     /**
@@ -258,8 +273,8 @@ public class Tutor extends User implements Serializable {
      *
      * @return the date
      */
-    public Date getDateJoined() {
-        return dateJoined;
+    public Date getDateJoinedAsTutor() {
+        return dateJoinedAsTutor;
     }
 
     /**
@@ -268,7 +283,7 @@ public class Tutor extends User implements Serializable {
      * @param numPeopleTutored
      */
     public void setNumTutored(int numPeopleTutored) {
-        this.numPeopleTutored = numPeopleTutored;
+        this.numOfPeopleTutored = numPeopleTutored;
     }
 
     /**
@@ -277,7 +292,7 @@ public class Tutor extends User implements Serializable {
      * @return the number of student taught
      */
     public int getNumTutored() {
-        return numPeopleTutored;
+        return numOfPeopleTutored;
     }
 
     /**
@@ -416,11 +431,11 @@ public class Tutor extends User implements Serializable {
         this.availabilities.add(availability);
     }
 
-    public String getTranscriptFileLocation() {
-        return transcriptFileLocation;
+    public String getTranscriptFilePath() {
+        return transcriptFilePath;
     }
 
     public void setTrancriptFileLocation(String transcriptFileLocation) {
-        this.transcriptFileLocation = transcriptFileLocation;
+        this.transcriptFilePath = transcriptFileLocation;
     }
 }

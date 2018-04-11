@@ -31,10 +31,7 @@ import java.util.List;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.enterprise.context.Conversation;
-import javax.enterprise.context.ConversationScoped;
 import javax.enterprise.context.SessionScoped;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.Temporal;
@@ -55,7 +52,6 @@ public class RequestBean implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private static final Logger LOGGER = Logger.getLogger("RequestBean");
-    private @Inject Conversation conversation;
     @EJB
     private Tut4YouApp tut4youApp;
     private static final OkHttpClient client = new OkHttpClient();
@@ -91,7 +87,6 @@ public class RequestBean implements Serializable {
         zipCodeByRadius = new ZipCodeByRadius();
         tutorList = new ArrayList();
         time = "Immediate";
-        //conversation.begin();
 
     }
     

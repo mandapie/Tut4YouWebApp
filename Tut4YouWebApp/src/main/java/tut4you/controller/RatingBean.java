@@ -137,7 +137,7 @@ public class RatingBean implements Serializable {
         String result = "success";
         System.out.println("Tutor t: " + t.toString());
         Date date = new Date();
-        rating.setCurrentTime(date);
+        rating.setDateRated(date);
         rating = tut4youApp.newRating(rating, t);
         return result;
     }
@@ -155,7 +155,7 @@ public class RatingBean implements Serializable {
         Date date = new Date();
         rating.setRatingValue(rating.getRatingValue());
         rating.setDescription(rating.getDescription());
-        rating.setCurrentTime(date);
+        rating.setDateRated(date);
         tut4youApp.updateRating(rating,rating.getDescription(),rating.getRatingValue());
         if (rating != null) {
             result = "success";

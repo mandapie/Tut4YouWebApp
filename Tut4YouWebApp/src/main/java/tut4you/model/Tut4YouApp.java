@@ -910,7 +910,10 @@ public class Tut4YouApp {
             em.persist(zipCode);
             em.flush();
         }
-        return Query.getSingleResult();
+        else {
+            zipCode = Query.getSingleResult();
+        }
+        return zipCode;
     }
     
     /**
@@ -928,6 +931,20 @@ public class Tut4YouApp {
             em.persist(zipCodeByRadius);
             em.flush();
         }
+        else if(!zipCode.getZipCodesByRadius().contains(zipCodeByRadiusTemp)) {
+            System.out.print("LIST: "+zipCode.getZipCodesByRadius());
+            System.out.print("TRUEEEEEE");
+            zipCodeByRadiusTemp.addZipCode(zipCode);
+            zipCode.addZipCodeByRadius(zipCodeByRadiusTemp);         
+            em.merge(zipCodeByRadiusTemp);
+            zipCodeByRadius = zipCodeByRadiusTemp;
+        }
+        else {
+            System.out.print("FALSEEEEEE");
+            zipCodeByRadius = zipCodeByRadiusTemp;
+        }
+
+        
         return zipCodeByRadius;
         
     }

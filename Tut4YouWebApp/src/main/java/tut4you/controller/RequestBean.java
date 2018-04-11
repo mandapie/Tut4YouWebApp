@@ -35,6 +35,7 @@ import javax.enterprise.context.Conversation;
 import javax.enterprise.context.ConversationScoped;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.Temporal;
@@ -417,19 +418,12 @@ public class RequestBean implements Serializable {
                 System.out.println(str);
                 zipCodesByRadiusList = Arrays.asList(str.substring(1, str.length() - 1).split(", "));
             }
-            System.out.println("course " + ": " + request.getCourse().getCourseName());
-            System.out.println("day of week "+ ": " + request.getDayOfWeek());
-            System.out.println("course " + ": " + request.getCurrentTime());
             for(int i = 0; i < zipCodesByRadiusList.size(); i++) {
                 zipCodeByRadius = new ZipCodeByRadius(zipCodesByRadiusList.get(i));
                 zipCodeByRadius = tut4youApp.addZipCodeByRadius(zipCode, zipCodeByRadius);
                 temp = new ArrayList();
                 temp = (tut4youApp.getTutorsFromCourse(request.getCourse().getCourseName(), request.getDayOfWeek().toUpperCase(), request.getCurrentTime(), false, zipCodesByRadiusList.get(i)));
                 tutorList.addAll(temp);
-                
-                System.out.println("Zip code " + i + ": " + zipCodesByRadiusList.get(i));
-                System.out.println("temp "+i+": " + temp);
-                
                 temp.clear();
 
             }
@@ -510,7 +504,7 @@ public class RequestBean implements Serializable {
     public static String[] getData(int maxRadius, String zipCode) {
         String json = null;
         try {
-            json = getJSON("http://api.zip-codes.com/ZipCodesAPI.svc/1.0/FindZipCodesInRadius?zipcode="+zipCode+"&minimumradius=0&maximumradius="+maxRadius+"&key=MLVYIHSGGNO4XV12AMQL");
+            json = getJSON("http://api.zip-codes.com/ZipCodesAPI.svc/1.0/FindZipCodesInRadius?zipcode="+zipCode+"&minimumradius=0&maximumradius="+maxRadius+"&key=9EH2HQMG9WY56C9UO3EJ");
         } catch(IOException e) {
             
         }

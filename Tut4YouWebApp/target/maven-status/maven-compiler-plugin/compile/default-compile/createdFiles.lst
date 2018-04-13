@@ -2,7 +2,6 @@ tut4you\controller\RatingBean.class
 tut4you\messenger\ChatMessageEncoder.class
 tut4you\model\Request.class
 tut4you\validations\PriceValidator.class
-tut4you\validations\TutorConverter.class
 tut4you\controller\MessageBean.class
 tut4you\controller\RegistrationBean.class
 tut4you\model\Rating.class

@@ -27,7 +27,7 @@
     <ui:define name="content">
         <h1>Tutoring Session</h1>
         <h:form id="securityId">
-            <p:dialog widgetVar="dlg3" header="Security Question" visible="true" closable="false">  
+            <p:dialog widgetVar="dlg3" header="Security Question" visible="true" closable="false" modal="true">  
                 <h:outputText value="What is your Email Address?"/>
                 <b:inputText value="#{sessionTimerBean.email}" id="inputEmail">
                     <f:validator validatorId="EmailValidator"/>
@@ -39,7 +39,7 @@
             <p:dialog header="The tutoring session has begun!" widgetVar="dlg1" id="modalID1" minHeight="40"  >
                 <h:outputText value="The tutoring session has begun!" />
             </p:dialog>
-            <p:dialog header="The tutoring session has ended!! Would you like to rate your tutor?" widgetVar="dlg2" closable="false" id="modalID2" minHeight="40"  >
+            <p:dialog header="The tutoring session has ended!! Would you like to rate your tutor?" widgetVar="dlg2" closable="false" modal="true" id="modalID2" minHeight="40"  >
                 <b:commandButton value="Yes!" action="#{ratingBean.writeReviewPage(requestBean.tutor)}"/>
                 <b:button value="No!" outcome="/accounts/profile.xhtml"/>
             </p:dialog>

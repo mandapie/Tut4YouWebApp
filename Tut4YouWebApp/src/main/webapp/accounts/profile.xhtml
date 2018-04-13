@@ -130,7 +130,7 @@
                         <c:if test="#{userBean.condition}">  
                             #{userBean.updateCurrentZip()}
                         </c:if>
-                        <p:dialog header="Current Zip Code" widgetVar="myDialog" minHeight="40" visible="true" rendered="#{userBean.condition}">
+                        <p:dialog header="Current Zip Code" widgetVar="myDialog" minHeight="40" visible="true" rendered="#{userBean.condition}" modal="true">
                             <h:form>
                                 <h:outputText value="Enter current zip code" />
                                 <b:inputText id="currentZip" placeholder="press enter to submit" required="true" requiredMessage="required" value="#{userBean.currentZip}">

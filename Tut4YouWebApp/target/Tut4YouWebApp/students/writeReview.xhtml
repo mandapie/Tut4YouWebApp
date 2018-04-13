@@ -31,9 +31,13 @@
                     <b:message for="rating"/>
                 </p:rating>
                 <br></br>
-                <b:inputTextarea id="description" label="Description/Topic" maxlength="1000" placeholder="Enter a short description...(1000 characters max)" required="true" value="#{ratingBean.rating.description}" requiredMessage="A description must be entered.">
-                    <b:message for="description"/>
-                </b:inputTextarea>
+                <p:inputTextarea label="Description/Topic: (300 characters max)" 
+                                 placeholder="Enter a short description..." 
+                                 value="#{ratingBean.rating.description}" 
+                                 rows="5" cols="60" counter="display" maxlength="300" 
+                                 counterTemplate="{0} characters remaining." autoResize="false" />
+                <br/>
+                <h:outputText id="display" style="font-weight:bold"/>
                 <!-- length of session -->
                 <b:row>
                     <b:commandButton span="2" value="Submit" look="primary" action="#{ratingBean.createNewRating(ratingBean.tutor)}" />

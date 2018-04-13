@@ -33,7 +33,7 @@
                     <b:column medium-screen="4">
                         <b:message for="subjects"/>
                         <b:selectOneMenu id="subjects" value="#{courseBean.subject}" required="true" requiredMessage="required">
-                            <f:selectItem itemLabel="select Subject..." itemValue="" noSelectionOption="true"/>
+                            <f:selectItem itemLabel="Select Subject..." itemValue="" noSelectionOption="true"/>
                             <f:selectItems value="#{courseBean.subjectList}"
                                            var="subject"
                                            itemLabel="#{subject.subjectName}"
@@ -50,7 +50,7 @@
                     <b:column medium-screen="4">
                         <b:message for="courses"/>
                         <b:selectOneMenu id="courses" value="#{courseBean.course}" required="true" requiredMessage="required">
-                            <f:selectItem itemLabel="select Course..." itemValue="" noSelectionOption="true"/>
+                            <f:selectItem itemLabel="Select Course..." itemValue="" noSelectionOption="true"/>
                             <f:selectItems value="#{courseBean.courseList}"
                                            var="course"
                                            itemLabel="#{course.courseName}"

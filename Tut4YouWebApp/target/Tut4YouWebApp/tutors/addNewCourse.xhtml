@@ -34,7 +34,7 @@
                     <b:column medium-screen="4">
                         <b:message for="subjectList"/>
                         <b:selectOneMenu id="subjectList" value="#{addCourseBean.subject}" required="true" requiredMessage="required">
-                            <f:selectItem itemLabel="select Subject..." itemValue="" noSelectionOption="true"/>
+                            <f:selectItem itemLabel="Select Subject..." itemValue="" noSelectionOption="true"/>
                             <f:selectItems value="#{addCourseBean.subjects}" var="subject" itemLabel="#{subject.subjectName}" itemValue="#{subject}"/>
                         </b:selectOneMenu>
                     </b:column>
@@ -42,7 +42,7 @@
                 <!-- Inputting the new course -->
                 <b:row>
                     <b:column medium-screen="2">
-                        <h:outputLabel value="courseName"/>
+                        <h:outputLabel value="Course Name"/>
                     </b:column>
                     <b:column medium-screen="4">
                         <b:inputText id="cn" placeholder="Enter Course Name" required="true" requiredMessage="required" value="#{addCourseBean.course.courseName}">

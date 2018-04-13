@@ -3,7 +3,8 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
-                xmlns:b="http://bootsfaces.net/ui">
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:p="http://primefaces.org/ui">
     <!--
         Licensed under the Academic Free License (AFL 3.0).
         http://opensource.org/licenses/AFL-3.0
@@ -23,6 +24,9 @@
     <!-- @author Amanda Pan <daikiraidemodaisuki@gmail.com> 
          @author Andrew Kaichi <ahkaichi@gmail.com> -->
     <ui:define name="title">Registration</ui:define>
+    <h:head>
+        <h:outputStylesheet library="css" name="styles.css"/>
+    </h:head>
     <ui:define name="content">
         <b:panel title="Enter Your Information to Register" collapsible="false" look="info">
             <h:form id="registration">
@@ -32,12 +36,13 @@
                         <h:outputLabel value="User Type"/>
                     </b:column>
                     <b:column medium-screen="4">
-                        <h:selectOneRadio id="ut" value="#{registrationBean.userType}" required="true" requiredMessage="required">
+                        <p:selectOneRadio id="ut" value="#{registrationBean.userType}" required="true" requiredMessage="required">
                             <b:message for="ut"/>
                             <f:selectItem itemLabel="Student" itemValue="Student" />
+                            
                             <f:selectItem itemValue="Tutor" itemLabel="Tutor" />
                             <f:ajax render="tutorFields" execute="ut"/>
-                        </h:selectOneRadio>
+                        </p:selectOneRadio>
                     </b:column>
                 </b:row>
                 <!-- First Name -->

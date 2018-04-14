@@ -201,7 +201,7 @@ public class AvailabilityBean implements Serializable {
      * @throws java.text.ParseException
      */
     public void deleteAvailability(Availability avail) throws ParseException {
-        tut4youApp.deleteAvailability(availability);
+        tut4youApp.deleteAvailability(avail);
     }
 
     /**

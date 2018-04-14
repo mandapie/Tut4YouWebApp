@@ -68,13 +68,15 @@ INSERT INTO Request(student_email,course_courseName,description,status) VALUES (
 INSERT INTO Request(student_email,course_courseName,description,status) VALUES ('keith@gmail.com','General Biology I','Kreb cycle',0)
 INSERT INTO Request(student_email,course_courseName,description,status) VALUES ('daniel@gmail.com','General Biology I','Kreb cycle',0)
 
-INSERT INTO Availability(DAYOFWEEK, ENDTIME, STARTTIME, TUTOR_EMAIL) VALUES ('MONDAY', '23:59:00', '00:00:00', 'amanda@gmail.com')
-INSERT INTO Availability(DAYOFWEEK, ENDTIME, STARTTIME, TUTOR_EMAIL) VALUES ('TUESDAY', '23:59:00', '00:00:00', 'amanda@gmail.com')
+INSERT INTO Availability(DAYOFWEEK, ENDTIME, STARTTIME, TUTOR_EMAIL) VALUES ('MONDAY', '03:59:00', '02:00:00', 'amanda@gmail.com')
+INSERT INTO Availability(DAYOFWEEK, ENDTIME, STARTTIME, TUTOR_EMAIL) VALUES ('MONDAY', '04:59:00', '04:00:00', 'amanda@gmail.com')
+INSERT INTO Availability(DAYOFWEEK, ENDTIME, STARTTIME, TUTOR_EMAIL) VALUES ('MONDAY', '06:59:00', '05:00:00', 'amanda@gmail.com')
+
+INSERT INTO Availability(DAYOFWEEK, ENDTIME, STARTTIME, TUTOR_EMAIL) VALUES ('TUESDAY', '03:59:00', '02:00:00', 'amanda@gmail.com')
+INSERT INTO Availability(DAYOFWEEK, ENDTIME, STARTTIME, TUTOR_EMAIL) VALUES ('TUESDAY', '04:59:00', '04:00:00', 'amanda@gmail.com')
+INSERT INTO Availability(DAYOFWEEK, ENDTIME, STARTTIME, TUTOR_EMAIL) VALUES ('TUESDAY', '06:59:00', '05:00:00', 'amanda@gmail.com')
+
 INSERT INTO Availability(DAYOFWEEK, ENDTIME, STARTTIME, TUTOR_EMAIL) VALUES ('WEDNESDAY', '23:59:00', '00:00:00', 'amanda@gmail.com')
-INSERT INTO Availability(DAYOFWEEK, ENDTIME, STARTTIME, TUTOR_EMAIL) VALUES ('THURSDAY', '23:59:00', '00:00:00', 'amanda@gmail.com')
-INSERT INTO Availability(DAYOFWEEK, ENDTIME, STARTTIME, TUTOR_EMAIL) VALUES ('FRIDAY', '23:59:00', '00:00:00', 'amanda@gmail.com')
-INSERT INTO Availability(DAYOFWEEK, ENDTIME, STARTTIME, TUTOR_EMAIL) VALUES ('SATURDAY', '23:59:00', '00:00:00', 'amanda@gmail.com')
-INSERT INTO Availability(DAYOFWEEK, ENDTIME, STARTTIME, TUTOR_EMAIL) VALUES ('SUNDAY', '23:59:00', '00:00:00', 'amanda@gmail.com')
 
 INSERT INTO Availability(DAYOFWEEK, ENDTIME, STARTTIME, TUTOR_EMAIL) VALUES ('WEDNESDAY', '23:00:00', '00:00:00', 'andrew@gmail.com')
 INSERT INTO Availability(DAYOFWEEK, ENDTIME, STARTTIME, TUTOR_EMAIL) VALUES ('WEDNESDAY', '11:00:00', '02:00:00', 'andrew@gmail.com')

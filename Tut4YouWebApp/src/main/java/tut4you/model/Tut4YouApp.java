@@ -54,7 +54,7 @@ public class Tut4YouApp {
      */
     @PersistenceContext(unitName = "tut4youWebAppPU")
     private EntityManager em;
-    
+
     private static final Logger LOGGER = Logger.getLogger("Tut4YouApp");
 
     /**
@@ -85,9 +85,9 @@ public class Tut4YouApp {
 
     /**
      * This method can only be called by a student. This methods gets the
- username of the current session and checks if the username is null, if so
- return null. Otherwise, findUser the user email to add the request to be
- submitted.
+     * username of the current session and checks if the username is null, if so
+     * return null. Otherwise, findUser the user email to add the request to be
+     * submitted.
      *
      * @param request to be submitted
      * @return request if successful
@@ -136,8 +136,8 @@ public class Tut4YouApp {
         }
     }
 
-/**
-     * 
+    /**
+     *
      * @return a list of requests from a user
      */
     @RolesAllowed("tut4youapp.student")
@@ -148,8 +148,7 @@ public class Tut4YouApp {
         String email;
         if (currentUserEmail == null) {
             return null;
-        }
-        else {
+        } else {
             User user = findUser(currentUserEmail);
             email = user.getEmail();
             TypedQuery<Request> declined = em.createNamedQuery(Request.FIND_REQUEST_BY_EMAIL, Request.class);
@@ -157,22 +156,23 @@ public class Tut4YouApp {
             declined.setParameter("status", Request.Status.DECLINED);
             return declined.getResultList();
         }
-    }    
+    }
+
     /**
      * A student can cancel pending requests
-     * @param r 
+     *
+     * @param r
      */
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void cancelRequest(Request r) {
         Request pendingRequest = em.find(Request.class, r.getId());
         r.setStatus(Request.Status.CANCELLED);
-        if (r.getTutor() == null){
-           em.merge(r);
-           //em.remove(r);
-           em.flush();
-        }
-        else if (r.getTutor() != null){
+        if (r.getTutor() == null) {
+            em.merge(r);
+            //em.remove(r);
+            em.flush();
+        } else if (r.getTutor() != null) {
             Tutor tutor = r.getTutor();
             tutor.removePendingRequest(pendingRequest);
             pendingRequest.removeAvailableTutor(tutor);
@@ -182,20 +182,21 @@ public class Tut4YouApp {
             em.flush();
         }
     }
+
     /**
      * A student can cancel pending requests
-     * @param r 
+     *
+     * @param r
      */
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void declineRequest(Request r) {
         Request pendingRequest = em.find(Request.class, r.getId());
         r.setStatus(Request.Status.DECLINED);
-        if (r.getTutor() == null){
-           em.merge(r);
-           em.flush();
-        }
-        else if (r.getTutor() != null){
+        if (r.getTutor() == null) {
+            em.merge(r);
+            em.flush();
+        } else if (r.getTutor() != null) {
             Tutor tutor = r.getTutor();
             tutor.removePendingRequest(pendingRequest);
             pendingRequest.removeAvailableTutor(tutor);
@@ -203,7 +204,7 @@ public class Tut4YouApp {
             em.merge(tutor);
             em.flush();
         }
-    } 
+    }
 
     /**
      * Only students can see the number of tutors that tutors the requested
@@ -221,18 +222,18 @@ public class Tut4YouApp {
         return courseTutorQuery.getSingleResult();
     }
 
-
     /**
-     * Only students can see the list of available tutors that tutors the requested
-     * course.
-     * Finds all tutors that teaches the course.
+     * Only students can see the list of available tutors that tutors the
+     * requested course. Finds all tutors that teaches the course.
+     *
      * @param course selected course to be tutored
      * @param dayOfWeek
      * @param time
      * @param doNotDisturb
      * @param zipCode
      * @return the number of tutors that tutors the course
-     * @author Andrew Kaichi <ahkaichi@gmail.com> Keith Tran <keithtran25@gmail.com>
+     * @author Andrew Kaichi <ahkaichi@gmail.com> Keith Tran
+     * <keithtran25@gmail.com>
      */
     @RolesAllowed("tut4youapp.student")
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
@@ -320,6 +321,7 @@ public class Tut4YouApp {
 
     /**
      * Tutors are able to view pending requests.
+     *
      * @return
      */
     @RolesAllowed("tut4youapp.tutor")
@@ -336,6 +338,7 @@ public class Tut4YouApp {
     /**
      * Only a tutor can add a course from the database. The course will be
      * persisted to the courses_tutors table.
+     *
      * @param course to be added
      * @return the selected course to the bean.
      * @throws CourseExistsException
@@ -350,8 +353,7 @@ public class Tut4YouApp {
         String currentUserEmail = userBean.getEmailFromSession();
         if (currentUserEmail == null) {
             return null;
-        }
-        else {
+        } else {
             Tutor tutor = findTutor(currentUserEmail);
             Course groupCourse = em.find(Course.class, course.getCourseName());
             if (groupCourse == null) {
@@ -362,8 +364,7 @@ public class Tut4YouApp {
                 groupCourse.addTutor(tutor);
                 em.merge(tutor);
                 em.flush();
-            }
-            else {
+            } else {
                 throw new CourseExistsException();
             }
             return course;
@@ -374,6 +375,7 @@ public class Tut4YouApp {
      * Only a tutor can add a course that is not from the database. For new
      * course that isn't in database added by a tutor will be persisted to the
      * course table and courses_tutors table.
+     *
      * @param course
      * @return the course to the bean
      * @author Keith <keithtran25@gmail.com>
@@ -388,8 +390,7 @@ public class Tut4YouApp {
         String currentUserEmail = userBean.getEmailFromSession();
         if (currentUserEmail == null) {
             return null;
-        }
-        else {
+        } else {
             Tutor tutor = findTutor(currentUserEmail);
             Course groupCourse = em.find(Course.class, course.getCourseName());
             if (groupCourse == null) {
@@ -397,8 +398,7 @@ public class Tut4YouApp {
                 tutor.addCourse(groupCourse);
                 groupCourse.addTutor(tutor);
                 em.persist(groupCourse);
-            }
-            else {
+            } else {
                 throw new CourseExistsException();
             }
             return groupCourse;
@@ -407,6 +407,7 @@ public class Tut4YouApp {
 
     /**
      * Only a tutor can view the list of courses that they can teach.
+     *
      * @return the list of courses to the bean
      * @author: Syed Haider <shayder426@gmail.com>
      */
@@ -418,8 +419,7 @@ public class Tut4YouApp {
         String email;
         if (currentUserEmail == null) {
             return null;
-        }
-        else {
+        } else {
             Tutor tutor = findTutor(currentUserEmail);
             email = tutor.getEmail();
             TypedQuery<Course> courseQuery = em.createNamedQuery(Course.FIND_COURSES_BY_TUTOR, Course.class);
@@ -480,10 +480,11 @@ public class Tut4YouApp {
      * @param availability
      * @return the availability
      * @author Andrew <ahkaichi@gmail.com>
+     * @throws tut4you.exception.AvailabilityExistsException
      */
     @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public Availability addAvailability(Availability availability) {
+    public Availability addAvailability(Availability availability) throws AvailabilityExistsException{
         UserBean userBean = new UserBean();
         String currentUserEmail = userBean.getEmailFromSession();
         if (currentUserEmail == null) {
@@ -496,7 +497,7 @@ public class Tut4YouApp {
                 em.persist(availability);
                 em.flush();
             } else {
-                return null;
+                throw new AvailabilityExistsException();
             }
         }
         return availability;
@@ -525,6 +526,7 @@ public class Tut4YouApp {
 
     /**
      * Only a tutor can delete his/her availability times.
+     *
      * @param availability
      * @author Syed Haider <shayder426@gmail.com>
      */
@@ -545,6 +547,7 @@ public class Tut4YouApp {
     /**
      * A tutor can set their status to be available to receive notifications and
      * set their status to be not available to not receive notifications.
+     *
      * @param doNotDisturb
      * @return
      */
@@ -568,6 +571,7 @@ public class Tut4YouApp {
 
     /**
      * Gets a user by finding the email in the user entity.
+     *
      * @param email
      * @return user email
      */
@@ -580,6 +584,7 @@ public class Tut4YouApp {
 
     /**
      * Gets a tutor by finding the email in the tutor entity.
+     *
      * @param email
      * @return tutor email
      * @Keith <keithtran25@gmail.com>
@@ -589,9 +594,10 @@ public class Tut4YouApp {
     public Tutor findTutor(String email) {
         return em.find(Tutor.class, email);
     }
-    
+
     /**
      * Converts student to be a tutor. The student will be added a tutor role.
+     *
      * @param user
      * @param userType
      * @param priceRate
@@ -614,8 +620,7 @@ public class Tut4YouApp {
                 newStudent.addGroup(group);
                 group.addStudent(newStudent);
                 em.persist(newStudent);
-            }
-            else {
+            } else {
                 Tutor newTutor = new Tutor(user);
                 newTutor.setDateJoinedAsTutor(joinedDateAsTutor);
                 newTutor.setPriceRate(priceRate);
@@ -629,17 +634,17 @@ public class Tut4YouApp {
                 em.persist(newTutor);
             }
             em.flush();
-        }
-        else {
+        } else {
             throw new UserExistsException();
         }
     }
 
-     /**
+    /**
      * This method can only be called by a student. This methods gets the
      * username of the current session and checks if the username is null, if so
      * return null. Otherwise, findUser the user email to add the rating to be
      * submitted.
+     *
      * @param tutor the tutor receiving the rating
      * @param rating to be submitted
      * @return rating if successful
@@ -651,8 +656,7 @@ public class Tut4YouApp {
         String currentUserEmail = userBean.getEmailFromSession();
         if (currentUserEmail == null) {
             return null;
-        }
-        else {
+        } else {
             User student = findUser(currentUserEmail);
             if (student != null) {
                 student.addRating(rating);
@@ -670,8 +674,8 @@ public class Tut4YouApp {
     }
 
     /**
-     * This method can only be called by a student. 
-     * 
+     * This method can only be called by a student.
+     *
      * It will update the rating that a student has previously submitted.
      *
      * @param rating the rating being updated
@@ -778,9 +782,10 @@ public class Tut4YouApp {
         em.flush();
     }
 
-   /**
-     * Sets a tutor to the request when a tutor completes the request.
-     * IN PROGRESS
+    /**
+     * Sets a tutor to the request when a tutor completes the request. IN
+     * PROGRESS
+     *
      * @param r request that is being partaken
      * @param s
      */
@@ -794,7 +799,7 @@ public class Tut4YouApp {
     }
 
     /**
-     *  Gets the average rating of the tutor
+     * Gets the average rating of the tutor
      *
      * @return the average rating of the tutor
      * @author Syed Haider <shayder426@gmail.com>
@@ -841,8 +846,7 @@ public class Tut4YouApp {
     }
 
     /**
-     * Checks to see if user inputted email
-     * and email in database are equivalent
+     * Checks to see if user inputted email and email in database are equivalent
      *
      * @param email
      * @return true if emails are equivalent
@@ -890,9 +894,10 @@ public class Tut4YouApp {
         FacesContext.getCurrentInstance().addMessage(null, message);
 
     }
-    
+
     /**
      * update current zip code of tutor
+     *
      * @param currentZip
      * @return tutor
      * @author Keith Tran <keithtran25@gmail.com>
@@ -906,9 +911,10 @@ public class Tut4YouApp {
         em.flush();
         return tutor;
     }
-    
+
     /**
      * retrieve list of user email
+     *
      * @return list of user email
      * @author Keith Tran <keithtran25@gmail.com>
      */
@@ -917,9 +923,10 @@ public class Tut4YouApp {
         TypedQuery<String> Query = em.createNamedQuery(User.FIND_USER_EMAILS, String.class);
         return Query.getResultList();
     }
-    
+
     /**
      * retrieve list of user usernames
+     *
      * @return list of usernames
      * @author Keith Tran <keithtran25@gmail.com>
      */
@@ -928,10 +935,11 @@ public class Tut4YouApp {
         TypedQuery<String> Query = em.createNamedQuery(User.FIND_USER_USERNAMES, String.class);
         return Query.getResultList();
     }
-    
+
     /**
-     * Adds ZipCode to DB if it is not already in DB but first checks if it is in the DB
-     * 
+     * Adds ZipCode to DB if it is not already in DB but first checks if it is
+     * in the DB
+     *
      * @param zipCode
      * @return zipcode
      * @author Keith Tran <keithtran25@gmail.com>
@@ -941,36 +949,37 @@ public class Tut4YouApp {
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public ZipCode addZipCode(ZipCode zipCode) {
         TypedQuery<ZipCode> Query = em.createNamedQuery(ZipCode.FIND_ZIP_BY_ZIP_MAXRADIUS, ZipCode.class);
-        Query.setParameter("zipCode", zipCode.getZipCode());   
-        Query.setParameter("maxRadius", zipCode.getMaxRadius());      
-        if(Query.getResultList().isEmpty()) {
+        Query.setParameter("zipCode", zipCode.getZipCode());
+        Query.setParameter("maxRadius", zipCode.getMaxRadius());
+        if (Query.getResultList().isEmpty()) {
             em.persist(zipCode);
             em.flush();
         }
         return Query.getSingleResult();
     }
-    
+
     /**
      * Add ZipCodeByRadius if it does not belong to zip code location
+     *
      * @param zipCode
      * @param zipCodeByRadius
-     * @return ZipCodeByRadius
-     * Keith Tran <keithtran25@gmail.com>
+     * @return ZipCodeByRadius Keith Tran <keithtran25@gmail.com>
      */
     public ZipCodeByRadius addZipCodeByRadius(ZipCode zipCode, ZipCodeByRadius zipCodeByRadius) {
         ZipCodeByRadius zipCodeByRadiusTemp = em.find(ZipCodeByRadius.class, zipCodeByRadius.getZipCodeByRadius());
-        if(zipCodeByRadiusTemp == null){
+        if (zipCodeByRadiusTemp == null) {
             zipCode.addZipCodeByRadius(zipCodeByRadius);
             zipCodeByRadius.addZipCode(zipCode);
             em.persist(zipCodeByRadius);
             em.flush();
         }
         return zipCodeByRadius;
-        
+
     }
-    
+
     /**
      * saves the message to the database
+     *
      * @param message
      */
     @PermitAll

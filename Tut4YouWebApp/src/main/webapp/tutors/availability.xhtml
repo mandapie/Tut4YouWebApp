@@ -5,36 +5,25 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:b="http://bootsfaces.net/ui"
                 xmlns:p="http://primefaces.org/ui">
-    <!--
-        Licensed under the Academic Free License (AFL 3.0).
-        http://opensource.org/licenses/AFL-3.0
-
-        This code has been developed by a group of CSULB students working on their 
-        Computer Science senior project called Tutors4You.
-
-        Tutors4You is a web application that students can utilize to find a tutor and
-        ask them to meet at any location of their choosing. Students that struggle to understand 
-        the courses they are taking would benefit from this peer to peer tutoring service.
-
-        2017 Amanda Pan <daikiraidemodaisuki@gmail.com>
-        2017 Andrew Kaichi <ahkaichi@gmail.com>
-        2017 Keith Tran <keithtran25@gmail.com>
-        2017 Syed Haider <shayder426@gmail.com>
-    -->
     <!-- @Author Keith Tran <keithtran25@gmail.com>
          @author Andrew Kaichi <ahkaichi@gmail.com> 
          @author Syed Haider <shayder426@gmail.com> -->
-
     <ui:define name="title">Availability</ui:define>
     <ui:define name="content">
         <h1>Add Availability</h1>
         <b:panel title="Enter Your Availability" collapsible="false" look="info">
             <b:form id="availabilityID">
+
                 <b:column span="4">
+                    <b:row>
                         <!-- Drop-down menu display Monday-Sunday -->
-                        <h:outputLabel value="Select a day"/>
+                        <h:outputLabel value="Select a day:"/>
                         <b:message for="dayOfWeek"/>
-                        <b:selectOneMenu id="dayOfWeek" value="#{availabilityBean.availability.dayOfWeek}" required="true" requiredMessage="required">
+                        <b:selectOneMenu                           
+                            id="dayOfWeek"
+                            value="#{availabilityBean.availability.dayOfWeek}"
+                            required="true"
+                            binding="#{day}">
                             <f:selectItem itemLabel="Select One..." itemValue="" noSelectionOption="true"/>
                             <f:selectItem itemLabel="Monday" itemValue="MONDAY"/>
                             <f:selectItem itemLabel="Tuesday" itemValue="TUESDAY"/>
@@ -45,27 +34,38 @@
                             <f:selectItem itemLabel="Sunday" itemValue="SUNDAY"/>
                         </b:selectOneMenu>
                         <!-- Start Time -->
-                        <h:outputLabel value="Start Time"/>
-                        <b:inputText type="time" id="startTime" value="#{availabilityBean.startTime}" required="true" requiredMessage="required">
+                        <h:outputLabel value="Start Time:"/>
+                        <b:inputText type="time" id="startTime"
+                                     value="#{availabilityBean.startTime}"
+                                     binding="#{availTime}"
+                                     required="true">
                             <f:convertDateTime type="time" pattern="HH:mm" dateStyle="full"/>
                             <b:message for="startTime"/>
                         </b:inputText>
+
                         <!-- End Time -->
-                        <h:outputLabel value="End Time" />
-                        <b:inputText type="time" id="endTime" value="#{availabilityBean.endTime}" required="true" requiredMessage="required">
+                        <h:outputLabel value="End Time:" />
+                        <b:inputText type="time" id="endTime"
+                                     value="#{availabilityBean.endTime}"
+                                     required="true" >
                             <f:convertDateTime type="time" pattern="HH:mm" dateStyle="full"/>
                             <b:message for="endTime"/>
                             <f:validator validatorId="timeValidator" />
+                            <f:attribute name="AvailabilityList" value="#{availabilityBean.availabilityList}"/>
+                            <f:attribute name="otherValue" value="#{availTime.value}" />
+                            <f:attribute name="day" value="#{day.value}"/>
                         </b:inputText>         
                         <!-- Adds to availability in -->
-                        <p:dialog header="Submitted!" widgetVar="dlg1" id="modalID" minHeight="40" visible="#{availabilityBean.addNewAvailability}" closable="false">
+                        <p:dialog header="Submitted!" widgetVar="dlg1" id="modalID" minHeight="40" visible="#{availabilityBean.addNewAvailability}" closable="false"  >
                             <h:outputText value="Do you want to add another availability?" />
-                            <p:button value="Yes" style="width:100%" outcome="/tutors/availability.xhtml" />
-                            <p:button value="No" style="width:100%" outcome="/accounts/profile.xhtml"/>
+                            <p:button value="Yes" outcome="/tutors/availability.xhtml" />
+                            <p:button value="No"  outcome="/accounts/profile.xhtml"/>
                         </p:dialog>
-                        <b:commandButton value="Add Availability" style="width:100%" look="primary" action="#{availabilityBean.addAvailability}" oncomplete="if (#{availabilityBean.addNewAvailability}){PF('dlg1').show()}" update="availabilityID"/>
+                        <b:commandButton value="Add Availability" style="width:100%" action="#{availabilityBean.addAvailability}" oncomplete="if (#{availabilityBean.addNewAvailability}){PF('dlg1').show()}" update="availabilityID">
+                        </b:commandButton>
+                    </b:row>
                 </b:column>
-                <br/>
+
                 <b:column span="8">
                     <h:outputLabel value="Your current availabilities"/>
                     <b:dataTable value="#{availabilityBean.availabilityList}" var="avail" id="availabilityTable">
@@ -87,6 +87,7 @@
                         </b:dataTableColumn>
                     </b:dataTable>  
                 </b:column>
+
             </b:form>
         </b:panel>
         <ui:debug hotkey='x'/>

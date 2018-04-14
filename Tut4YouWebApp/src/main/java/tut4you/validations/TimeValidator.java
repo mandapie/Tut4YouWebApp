@@ -17,14 +17,13 @@ import tut4you.model.Availability;
 
 /**
  *
- * @author Keith
+ * @author Syed Haider
  */
 @FacesValidator(value = "timeValidator")
 public class TimeValidator implements Validator {
 
     @Override
     public void validate(FacesContext context, UIComponent component, Object value) throws ValidatorException {
-
         Date endTime = (Date) value;
         Object otherValue = component.getAttributes().get("otherValue");
         Date startTime = (Date) otherValue;
@@ -33,7 +32,11 @@ public class TimeValidator implements Validator {
         List<Availability> list = (List<Availability>) listValue;
 
         for (Availability avail : list) {
-            if (startTime.after(endTime)) {
+          if (day.equals(avail.getDayOfWeek()) && (startTime.equals(avail.getStartTime()) && endTime.equals(avail.getEndTime()))) {
+                FacesMessage message = new FacesMessage("You currently have this date and time set for your availability.");
+                throw new ValidatorException(message);
+            }
+           else if (startTime.after(endTime)) {
                 FacesMessage message = new FacesMessage("Start Time must be before End Time");
                 throw new ValidatorException(message);
             } else if (day.equals(avail.getDayOfWeek()) && (startTime.after(avail.getStartTime()) && startTime.before(avail.getEndTime()))) {

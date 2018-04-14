@@ -130,9 +130,11 @@
                         <c:if test="#{userBean.condition}">  
                             #{userBean.updateCurrentZip()}
                         </c:if>
-                        <p:dialog header="Current Zip Code" widgetVar="myDialog" minHeight="40" visible="true" rendered="#{userBean.condition}" modal="true">
+                        <p:dialog header="Current Zip Code" widgetVar="myDialog" minHeight="40" visible="true" rendered="#{userBean.condition}" closable="false" modal="true">
                             <h:form>
-                                <h:outputText value="Enter current zip code" />
+                                <h:outputText value="Enter current zip code (Defauilt is: " />
+                                <h:outputText value="#{userBean.user.defaultZip}" />
+                                <h:outputText value=")" />
                                 <b:inputText id="currentZip" placeholder="press enter to submit" required="true" requiredMessage="required" value="#{userBean.currentZip}">
                                     <b:message for="currentZip"/>
                                 </b:inputText>
@@ -150,7 +152,7 @@
                             <b:dataTable value="#{requestBean.requestList}" var="r">
                                 <b:dataTableColumn>
                                     <f:facet name="header">Day of Week</f:facet>
-                                    #{r.dayOfWeek}
+                                        #{r.dayOfWeek}
                                 </b:dataTableColumn>
                                 <h:column>
                                     <f:facet name="header">Date and Time</f:facet>
@@ -176,7 +178,7 @@
                                 <b:dataTable value="#{notifyBean.pendingRequestList}" var="req">
                                     <b:dataTableColumn>
                                         <f:facet name="header">Day of Week</f:facet>
-                                        #{req.course.courseName}
+                                            #{req.course.courseName}
                                     </b:dataTableColumn>
                                     <b:dataTableColumn value="#{req.description}" />
                                     <h:column>
@@ -220,7 +222,7 @@
                                 <b:dataTable value="#{courseBean.tutorCourses}" var="course">
                                     <b:dataTableColumn>
                                         <f:facet name="header">Courses You Have Taken</f:facet>
-                                        #{course.courseName}
+                                            #{course.courseName}
                                     </b:dataTableColumn>
                                 </b:dataTable>
                             </b:tab>

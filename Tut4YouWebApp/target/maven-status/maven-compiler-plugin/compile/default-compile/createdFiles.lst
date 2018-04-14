@@ -37,4 +37,5 @@ tut4you\controller\SessionTimerBean.class
 tut4you\model\Availability.class
 tut4you\validations\BasicValidator.class
 tut4you\controller\TranscriptBean.class
+tut4you\exception\AvailabilityExistsException.class
 tut4you\model\Availability$1.class

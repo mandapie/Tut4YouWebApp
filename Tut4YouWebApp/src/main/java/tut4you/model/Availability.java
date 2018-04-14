@@ -253,6 +253,6 @@ public class Availability implements Serializable {
 
     @Override
     public String toString() {
-        return "tut4you.entities.Availability[ id=" + id + " ]" + "startTime= " + startTime + "endTime = " + endTime;
+        return "tut4you.entities.Availability[ id=" + id + " ]" + "startTime= " + startTime + "endTime = " + endTime + "dayOfWeek =" + dayOfWeek;
     }
 }

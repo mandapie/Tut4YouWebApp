@@ -32,6 +32,7 @@ C:\Users\Saadman\Documents\GitHub\cecs493-project-big-baller-brand\Tut4YouWebApp
 C:\Users\Saadman\Documents\GitHub\cecs493-project-big-baller-brand\Tut4YouWebApp\src\main\java\tut4you\model\ZipCode.java
 C:\Users\Saadman\Documents\GitHub\cecs493-project-big-baller-brand\Tut4YouWebApp\src\main\java\tut4you\controller\RequestBean.java
 C:\Users\Saadman\Documents\GitHub\cecs493-project-big-baller-brand\Tut4YouWebApp\src\main\java\tut4you\controller\NotifyBean.java
+C:\Users\Saadman\Documents\GitHub\cecs493-project-big-baller-brand\Tut4YouWebApp\src\main\java\tut4you\exception\AvailabilityExistsException.java
 C:\Users\Saadman\Documents\GitHub\cecs493-project-big-baller-brand\Tut4YouWebApp\src\main\java\tut4you\controller\AvailabilityBean.java
 C:\Users\Saadman\Documents\GitHub\cecs493-project-big-baller-brand\Tut4YouWebApp\src\main\java\tut4you\exception\CourseExistsException.java
 C:\Users\Saadman\Documents\GitHub\cecs493-project-big-baller-brand\Tut4YouWebApp\src\main\java\tut4you\model\SessionTimer.java

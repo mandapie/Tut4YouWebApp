@@ -30,7 +30,9 @@ public class TimeValidator implements Validator {
         String day = (String) component.getAttributes().get("day");
         Object listValue = component.getAttributes().get("AvailabilityList");
         List<Availability> list = (List<Availability>) listValue;
-
+        System.out.println(day);
+        System.out.println(startTime);
+        System.out.println(endTime);
         for (Availability avail : list) {
           if (day.equals(avail.getDayOfWeek()) && (startTime.equals(avail.getStartTime()) && endTime.equals(avail.getEndTime()))) {
                 FacesMessage message = new FacesMessage("You currently have this date and time set for your availability.");
@@ -46,7 +48,7 @@ public class TimeValidator implements Validator {
                 FacesMessage message = new FacesMessage("End time is in between start/end time. Re-enter");
                 throw new ValidatorException(message);
             } else if (day.equals(avail.getDayOfWeek()) && (startTime.before(avail.getStartTime()) && endTime.after(avail.getEndTime()))) {
-                FacesMessage message = new FacesMessage("You have set your availability for this time already. Re-enter.");
+                FacesMessage message = new FacesMessage("This time is overlapping with one of your availabilties. Re-enter.");
                 throw new ValidatorException(message);
             } else {
                 break;

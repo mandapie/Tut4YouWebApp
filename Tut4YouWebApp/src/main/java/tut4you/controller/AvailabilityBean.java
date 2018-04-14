@@ -27,6 +27,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import javax.persistence.Temporal;
@@ -42,7 +43,7 @@ import tut4you.model.Tut4YouApp;
  * modified by Syed Haider <shayder426@gmail.com>
  */
 @Named
-@RequestScoped
+@SessionScoped
 public class AvailabilityBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -59,7 +60,7 @@ public class AvailabilityBean implements Serializable {
     private java.util.Date endTime;
     private List<Availability> availabilityList = new ArrayList();
     private boolean addNewAvailability = false;
-    //private boolean modalFlag = false;
+    //private boolean addUpdatedAvailability = false;
 
     /**
      * Creates a new instance of the Availability entity
@@ -183,16 +184,18 @@ public class AvailabilityBean implements Serializable {
      * @throws java.text.ParseException
      */
     public String updateAvailability(Availability avail) throws ParseException {
-        String result = "failure";
+        String result = "updatedAvailability";
         this.availability = avail;
+        System.out.println("Have you been called");
+        System.out.println(avail.getStartTime());
+        System.out.println(avail.getEndTime());
         availability.setStartTime(avail.getStartTime());
         availability.setEndTime(avail.getEndTime());
         tut4youApp.updateAvailability(availability, avail.getStartTime(), avail.getEndTime());
-        if (availability != null) {
-            result = "success";
-        }
         return result;
     }
+    
+
 
     /**
      * Delete the availability from the tutor
@@ -213,8 +216,7 @@ public class AvailabilityBean implements Serializable {
      */
     public String goToEditAvailabilityPage(Availability avail) throws ParseException {
         String result;
-        this.availability = avail;
-        System.out.println(availability.toString());
+        availability = avail;
         result = "editAvailability";
         return result;
     }

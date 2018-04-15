@@ -32,6 +32,7 @@ import tut4you.model.*;
 
 /**
  * UserBean checks if a user is authenticated.
+ *
  * @author Alvaro Monge <alvaro.monge@csulb.edu>
  * Modified by Amanda Pan <daikiraidemodaisuki@gmail.com>
  * Modified by Andrew Kaichi <ahkaichi@gmail.com>
@@ -43,16 +44,16 @@ public class UserBean implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private static final Logger LOGGER = Logger.getLogger("UserBean");
-    
+
     @EJB
     private Tut4YouApp tut4youapp;
-    
+
     private User user;
     boolean doNotDisturb;
     int tabIndex;
     boolean condition;
     private String currentZip;
-    
+
     /**
      * Creates a new instance of UserIdentity
      */
@@ -61,76 +62,86 @@ public class UserBean implements Serializable {
         user = null;
         condition = true;
     }
-    
-    /** 
+
+    /**
      * Destroys a new instance of UserIdentity
      */
     @PreDestroy
     public void destroyUserBean() {
     }
-    
+
     /**
      * get current zip
+     *
      * @return currentZip
      */
     public String getCurrentZip() {
         return currentZip;
     }
-    
+
     /**
      * set current zip
-     * @param currentZip 
+     *
+     * @param currentZip
      */
     public void setCurrentZip(String currentZip) {
         this.currentZip = currentZip;
     }
-    
+
     /**
      * get boolean condition
+     *
      * @return condition
      */
     public boolean isCondition() {
         return condition;
     }
+
     /**
      * set boolean condition
-     * @param condition 
+     *
+     * @param condition
      */
     public void setCondition(boolean condition) {
         this.condition = condition;
     }
+
     /**
      * Gets the Tutor object
-     * @return 
+     *
+     * @return
      */
     public User getUser() {
         return user;
     }
-    
+
     /**
      * Sets the User object
+     *
      * @param user
      */
     public void setUser(User user) {
         this.user = user;
     }
-    
+
     /**
      * Gets the state of doNotDisturb is on or off
+     *
      * @return true/false
      */
     public boolean isDoNotDisturb() {
         return doNotDisturb;
     }
-    
+
     /**
      * Sets the state of doNotDisturb
-     * @param doNotDisturb 
+     *
+     * @param doNotDisturb
      */
     public void setDoNotDisturb(boolean doNotDisturb) {
         this.doNotDisturb = doNotDisturb;
     }
-    
+
     /**
      * Gets the index of the tab
      *
@@ -151,15 +162,19 @@ public class UserBean implements Serializable {
 
     /**
      * Called the EJG to update the state of doNotDisturb
-     * @param d 
+     *
+     * @param d
      */
     public void switchDoNotDisturb(Boolean d) {
         tut4youapp.switchDoNotDisturb(doNotDisturb);
     }
 
     /**
-     * Determine if the user is authenticated and if so, make sure the session scope includes the User object for the authenticated user
-     * @return true if the user making a request is authenticated, false otherwise.
+     * Determine if the user is authenticated and if so, make sure the session
+     * scope includes the User object for the authenticated user
+     *
+     * @return true if the user making a request is authenticated, false
+     * otherwise.
      */
     public boolean isIsUserAuthenticated() {
         boolean isAuthenticated = true;
@@ -176,9 +191,10 @@ public class UserBean implements Serializable {
         }
         return isAuthenticated;
     }
-    
+
     /**
      * Determine if current authenticated user has the role of tutor
+     *
      * @return true if user has role of tutor, false otherwise.
      */
     public boolean isIsTutor() {
@@ -193,7 +209,9 @@ public class UserBean implements Serializable {
 
     /**
      * Logout the student and invalidate the session
-     * @return success if student is logged out and session invalidated, failure otherwise.
+     *
+     * @return success if student is logged out and session invalidated, failure
+     * otherwise.
      */
     public String logout() {
         String result = "failure";
@@ -201,16 +219,16 @@ public class UserBean implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
         try {
-            currentZip = null;
-            tut4youapp.updateCurrentZip(currentZip);
+            if (isIsTutor()) {
+                currentZip = null;
+                tut4youapp.updateCurrentZip(currentZip);
+            }
             request.logout();
             user = null;
             result = "success";
-        }
-        catch (ServletException ex) {
+        } catch (ServletException ex) {
             LOGGER.log(Level.SEVERE, null, ex);
-        }
-        finally {
+        } finally {
             HttpSession session = request.getSession(false);
             if (session != null) {
                 session.invalidate();
@@ -221,9 +239,10 @@ public class UserBean implements Serializable {
 
     /**
      * Gets a logged in username by getting the username from the session.
-     * @return username
-     * Source: https://dzone.com/articles/liferay-jsf-how-get-current-lo
-     * Had further help by Subject2Change group.
+     *
+     * @return username Source:
+     * https://dzone.com/articles/liferay-jsf-how-get-current-lo Had further
+     * help by Subject2Change group.
      */
     public String getEmailFromSession() {
         FacesContext context = FacesContext.getCurrentInstance();
@@ -231,24 +250,26 @@ public class UserBean implements Serializable {
         String email = request.getRemoteUser();
         return email;
     }
-    
+
     /**
      * updates current zip
      */
     public void updateCurrentZip() {
         Tutor tutor = tut4youapp.updateCurrentZip(currentZip);
-        if(tutor.getCurrentZip() != null) {
+        if (tutor.getCurrentZip() != null) {
             condition = false;
         }
     }
-    
+
     /**
      * Updates a User's information
+     *
      * @param user User or Tutor object
      * @return result
      */
-    public String updateUser(User user){
-        tut4youapp.updateUser(user); 
+    public String updateUser(User user) {
+        tut4youapp.updateUser(user);
         return "success";
     }
+
 }

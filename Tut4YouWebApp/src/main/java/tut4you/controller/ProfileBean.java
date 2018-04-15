@@ -9,6 +9,6 @@ package tut4you.controller;
  *
  * @author Amanda
  */
+
 public class ProfileBean {
-    
 }

@@ -111,7 +111,8 @@ public class RequestBean implements Serializable {
      * @return string of the current day
      */
     public String getCurrentDayOfWeek() {
-        String currentDay = LocalDate.now().getDayOfWeek().name();
+        String str = LocalDate.now().getDayOfWeek().name().toLowerCase();
+        String currentDay = str.substring(0, 1).toUpperCase() + str.substring(1);
         return currentDay;
     }
     public ZipCode getZipCode() {

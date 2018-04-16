@@ -878,12 +878,12 @@ public class Tut4YouApp {
         String currentUserEmail = userBean.getEmailFromSession();
         Tutor tutor = findTutor(currentUserEmail);
         if (tutor == null) {
-            User student = findUser(currentUserEmail);
+            User student;
             student = (User) updateUser;
             em.merge(student);
             em.flush();
         } else {
-            User student = findUser(currentUserEmail);
+            User student;
             student = (User) updateUser;
             tutor = (Tutor) updateUser;
             em.merge(student);
@@ -902,6 +902,8 @@ public class Tut4YouApp {
      * @return tutor
      * @author Keith Tran <keithtran25@gmail.com>
      */
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    @RolesAllowed("tut4youapp.tutor")
     public Tutor updateCurrentZip(String currentZip) {
         UserBean userBean = new UserBean();
         String currentUserEmail = userBean.getEmailFromSession();
@@ -918,6 +920,7 @@ public class Tut4YouApp {
      * @return list of user email
      * @author Keith Tran <keithtran25@gmail.com>
      */
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     @PermitAll
     public List<String> getUserEmails() {
         TypedQuery<String> Query = em.createNamedQuery(User.FIND_USER_EMAILS, String.class);
@@ -930,6 +933,7 @@ public class Tut4YouApp {
      * @return list of usernames
      * @author Keith Tran <keithtran25@gmail.com>
      */
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     @PermitAll
     public List<String> getUserUserNames() {
         TypedQuery<String> Query = em.createNamedQuery(User.FIND_USER_USERNAMES, String.class);
@@ -965,6 +969,8 @@ public class Tut4YouApp {
      * @param zipCodeByRadius
      * @return ZipCodeByRadius Keith Tran <keithtran25@gmail.com>
      */
+    @RolesAllowed("tut4youapp.student")
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public ZipCodeByRadius addZipCodeByRadius(ZipCode zipCode, ZipCodeByRadius zipCodeByRadius) {
         ZipCodeByRadius zipCodeByRadiusTemp = em.find(ZipCodeByRadius.class, zipCodeByRadius.getZipCodeByRadius());
         if (zipCodeByRadiusTemp == null) {

@@ -50,14 +50,19 @@
                                        itemValue="#{course}"/>
                     </b:selectOneMenu>
                 </b:row>
-                <p:inputTextarea label="Description/Topic: (300 characters max)" 
+                <b:column>
+                    <h:outputLabel value="Description/Topic: (300 characters max)"/>
+                </b:column>
+                <p:inputTextarea label="Description/Topic" 
                                  id="dt" placeholder="Enter a short description..." 
                                  value="#{requestBean.request.description}" 
                                  rows="5" cols="60" counter="display" maxlength="300" 
-                                 counterTemplate="{0} characters remaining." autoResize="false" />
-                <h:outputText id="display" style="font-weight:bold" />
+                                 counterTemplate="{0} characters remaining." autoResize="false" >
+                <f:validateLength minimum="10"/>
+                </p:inputTextarea>
+                <h:outputText id="display"  style="font-weight:bold" />
                 <b:column>
-                    /<b:message for="dt" span="3"/>
+                    <b:message for="dt" span="3"/>
                 </b:column>
                 <!-- length of session -->
                 <b:row>

@@ -29,12 +29,12 @@
         <h:form id="securityId">
             <p:dialog widgetVar="dlg3" header="Security Question" visible="true" closable="false" modal="true">  
                 <h:outputText value="What is your Email Address?"/>
-                <b:inputText value="#{sessionTimerBean.email}" id="inputEmail">
+                <b:inputText value="#{sessionBean.email}" id="inputEmail">
                     <f:validator validatorId="EmailValidator"/>
                     <f:attribute name="otherValue" value="#{userBean.user.email}"/>
                     <b:message for="inputEmail"/>
                 </b:inputText> 
-                <b:commandButton value="Submit" action="#{sessionTimerBean.isEmailValid(sessionTimerBean.email)}" oncomplete="if (#{sessionTimerBean.isCheckEmail()}) PF('dlg3').hide();" update="securityId"/>
+                <b:commandButton value="Submit" action="#{sessionBean.isEmailValid(sessionBean.email)}" oncomplete="if (#{sessionBean.isCheckEmail()}) PF('dlg3').hide();" update="securityId"/>
             </p:dialog>
             <p:dialog header="The tutoring session has begun!" widgetVar="dlg1" id="modalID1" minHeight="40"  >
                 <h:outputText value="The tutoring session has begun!" />
@@ -44,8 +44,8 @@
                 <b:button value="No!" outcome="/accounts/profile.xhtml"/>
             </p:dialog>
             <h:panelGrid columns="2">
-                <p:commandButton action= "#{sessionTimerBean.startTutorSession(SessionTimerBean.request)}" value="Start Session" style="width:100%" onclick="PF('dlg1').show();"/>
-                <p:commandButton action= "#{sessionTimerBean.endTutorSession(SessionTimerBean.request)}" value="End Session" style="width:100%" onclick="PF('dlg2').show();"/>
+                <p:commandButton action= "#{sessionBean.startTutorSession(SessionTimerBean.request)}" value="Start Session" style="width:100%" onclick="PF('dlg1').show();"/>
+                <p:commandButton action= "#{sessionBean.endTutorSession(SessionTimerBean.request)}" value="End Session" style="width:100%" onclick="PF('dlg2').show();"/>
             </h:panelGrid>
 
         </h:form>

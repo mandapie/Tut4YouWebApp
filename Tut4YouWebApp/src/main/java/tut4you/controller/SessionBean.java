@@ -21,7 +21,7 @@ import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 import tut4you.model.Request;
-import tut4you.model.SessionTimer;
+import tut4you.model.Session;
 import tut4you.model.Tut4YouApp;
 
 /**
@@ -30,7 +30,7 @@ import tut4you.model.Tut4YouApp;
  */
 @Named
 @RequestScoped
-public class SessionTimerBean implements Serializable{
+public class SessionBean implements Serializable{
     
     private static final long serialVersionUID = 1L;
     
@@ -40,7 +40,7 @@ public class SessionTimerBean implements Serializable{
     private String email;
     private boolean checkEmail;
     private Request request;
-    private SessionTimer sessionTimer;
+    private Session sessionTimer;
   
     /**
      * This checks and sees if the email inputted (for

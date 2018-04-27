@@ -113,7 +113,7 @@ public class Request implements Serializable {
     @OneToOne
     private Tutor tutor;
     @OneToOne
-    private SessionTimer session;
+    private Session session;
     private String description;
     private String dayOfWeek;
     @Temporal(TemporalType.TIME)
@@ -146,11 +146,11 @@ public class Request implements Serializable {
         this.lengthOfSession = lengthOfSession;
     }
     
-    public SessionTimer getSession() {
+    public Session getSession() {
         return session;
     }
 
-    public void setSession(SessionTimer session) {
+    public void setSession(Session session) {
         this.session = session;
     }
     

@@ -20,8 +20,8 @@ import javax.persistence.Table;
  * @author Syed Haider <shayder426@gmail.com>
  */
 @Entity
-@Table(name="SessionTimer")
-public class SessionTimer implements Serializable {
+@Table(name="Session")
+public class Session implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -39,7 +39,7 @@ public class SessionTimer implements Serializable {
     /**
      * Default SessionTimer constructor
      */
-    public SessionTimer() {
+    public Session() {
     }
 
 
@@ -50,7 +50,7 @@ public class SessionTimer implements Serializable {
      * @param endSessionTime ending millisecond of the session 
      * @param elapsedTimeOfSession total milliSeconds of the sessions
      */
-    public SessionTimer(Long startSessionTime, Long endSessionTime, Long elapsedTimeOfSession) {
+    public Session(Long startSessionTime, Long endSessionTime, Long elapsedTimeOfSession) {
         this.startSessionTime = startSessionTime;
         this.endSessionTime = endSessionTime;
         this.elapsedTimeOfSession = elapsedTimeOfSession;
@@ -146,10 +146,10 @@ public class SessionTimer implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof SessionTimer)) {
+        if (!(object instanceof Session)) {
             return false;
         }
-        SessionTimer other = (SessionTimer) object;
+        Session other = (Session) object;
         return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
     }
 

@@ -4,30 +4,59 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:b="http://bootsfaces.net/ui">
+    <!--
+        Licensed under the Academic Free License (AFL 3.0).
+        http://opensource.org/licenses/AFL-3.0
+
+        This code has been developed by a group of CSULB students working on their 
+        Computer Science senior project called Tutors4You.
+
+        Tutors4You is a web application that students can utilize to find a tutor and
+        ask them to meet at any location of their choosing. Students that struggle to understand 
+        the courses they are taking would benefit from this peer to peer tutoring service.
+
+        2017 Amanda Pan <daikiraidemodaisuki@gmail.com>
+        2017 Andrew Kaichi <ahkaichi@gmail.com>
+        2017 Keith Tran <keithtran25@gmail.com>
+        2017 Syed Haider <shayder426@gmail.com>
+    -->
     <!-- @author Amanda Pan <daikiraidemodaisuki@gmail.com> -->
     <ui:define name="title">Courses</ui:define>
     <ui:define name="content">
         <h1>Add Course</h1>
         <b:panel title="Add a course" collapsible="false" look="info">
-            <b:form>
+            <b:form id="addCourseForm">
                 <b:row>
-                    <b:selectOneMenu span="6" label="Subject" value="#{addCourseBean.subject}">
-                        <f:selectItem itemLabel="select Subect..." noSelectionOption="true"/>
-                        <f:selectItems value="#{addCourseBean.subjectList}"
-                                       var="subject"
-                                       itemLabel="#{subject.subjectName}"
-                                       itemValue="#{subject}"/>
-                        <!-- When you click a subject, it will only shown the courses related to that table in the drop-down menu for courses-->
-                        <f:ajax render="courseList" listener="#{addCourseBean.changeSubject}"/>
-                    </b:selectOneMenu>
-
-                    <b:selectOneMenu span="6" label="Course" id="courseList" value="#{addCourseBean.course}">
-                        <f:selectItem itemLabel="select Course..." noSelectionOption="true"/>
-                        <f:selectItems value="#{addCourseBean.courseList}"
-                                       var="course"
-                                       itemLabel="#{course.courseName}"
-                                       itemValue="#{course}"/>
-                    </b:selectOneMenu>
+                    <b:column medium-screen="2">
+                        <h:outputLabel value="Subject"/>
+                    </b:column>
+                    <b:column medium-screen="4">
+                        <b:message for="subjects"/>
+                        <b:selectOneMenu id="subjects" value="#{courseBean.subject}" required="true" requiredMessage="required">
+                            <f:selectItem itemLabel="Select Subject..." itemValue="" noSelectionOption="true"/>
+                            <f:selectItems value="#{courseBean.subjectList}"
+                                           var="subject"
+                                           itemLabel="#{subject.subjectName}"
+                                           itemValue="#{subject}"/>
+                            <!-- When you click a subject, it will only shown the courses related to that table in the drop-down menu for courses-->
+                            <f:ajax render="courses" listener="#{courseBean.changeSubject}"/>
+                        </b:selectOneMenu>
+                    </b:column>
+                </b:row>
+                <b:row>
+                    <b:column medium-screen="2">
+                        <h:outputLabel value="Subject"/>
+                    </b:column>
+                    <b:column medium-screen="4">
+                        <b:message for="courses"/>
+                        <b:selectOneMenu id="courses" value="#{courseBean.course}" required="true" requiredMessage="required">
+                            <f:selectItem itemLabel="Select Course..." itemValue="" noSelectionOption="true"/>
+                            <f:selectItems value="#{courseBean.courseList}"
+                                           var="course"
+                                           itemLabel="#{course.courseName}"
+                                           itemValue="#{course}"/>
+                        </b:selectOneMenu>
+                    </b:column>
                 </b:row>
                 <!-- If the course is not available, this redirects you the add new courses page -->
                 <b:row>
@@ -38,7 +67,7 @@
                     </b:container>
                 </b:row>
                 <b:row>
-                    <b:commandButton span="2" value="Submit" look="primary" action="#{addCourseBean.addCourse}" />
+                    <b:commandButton span="2" value="Submit" look="primary" action="#{courseBean.addCourse}" />
                 </b:row>
             </b:form>
         </b:panel>

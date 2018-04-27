@@ -4,27 +4,45 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:b="http://bootsfaces.net/ui">
+    <!--
+        Licensed under the Academic Free License (AFL 3.0).
+        http://opensource.org/licenses/AFL-3.0
+
+        This code has been developed by a group of CSULB students working on their 
+        Computer Science senior project called Tutors4You.
+
+        Tutors4You is a web application that students can utilize to find a tutor and
+        ask them to meet at any location of their choosing. Students that struggle to understand 
+        the courses they are taking would benefit from this peer to peer tutoring service.
+
+        2017 Amanda Pan <daikiraidemodaisuki@gmail.com>
+        2017 Andrew Kaichi <ahkaichi@gmail.com>
+        2017 Keith Tran <keithtran25@gmail.com>
+        2017 Syed Haider <shayder426@gmail.com>
+    -->
     <!-- @author Keith Tran <keithtran25@gmail.com> -->
     <ui:define name="title">Courses</ui:define>
     <ui:define name="content">
-        <h1>Add Course</h1>
-        <b:panel title="Add a course" collapsible="false" look="info">
-            <b:form>
+        <h1>Add New Course</h1>
+        <b:panel title="Add a new course" collapsible="false" look="info">
+            <b:form id="addNewCourseForm">
                 <!-- Choosing the subject of the course -->
                 <b:row>
-                    <b:selectOneMenu span="6" label="Subject" value="#{addCourseBean.subject}">
-                        <f:selectItem itemLabel="select Subect..." noSelectionOption="true"/>
-                        <f:selectItems value="#{addCourseBean.subjectList}"
-                                       var="subject"
-                                       itemLabel="#{subject.subjectName}"
-                                       itemValue="#{subject}"/>
-                        
-                    </b:selectOneMenu>
+                    <b:column medium-screen="2">
+                        <h:outputLabel value="Subject"/>
+                    </b:column>
+                    <b:column medium-screen="4">
+                        <b:message for="subjectList"/>
+                        <b:selectOneMenu id="subjectList" value="#{addCourseBean.subject}" required="true" requiredMessage="required">
+                            <f:selectItem itemLabel="Select Subject..." itemValue="" noSelectionOption="true"/>
+                            <f:selectItems value="#{addCourseBean.subjects}" var="subject" itemLabel="#{subject.subjectName}" itemValue="#{subject}"/>
+                        </b:selectOneMenu>
+                    </b:column>
                 </b:row>
                 <!-- Inputting the new course -->
                 <b:row>
                     <b:column medium-screen="2">
-                        <h:outputLabel value="courseName"/>
+                        <h:outputLabel value="Course Name"/>
                     </b:column>
                     <b:column medium-screen="4">
                         <b:inputText id="cn" placeholder="Enter Course Name" required="true" requiredMessage="required" value="#{addCourseBean.course.courseName}">

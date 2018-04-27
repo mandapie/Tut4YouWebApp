@@ -36,20 +36,33 @@ import javax.persistence.TemporalType;
 /**
  * Tutor inherits all attributes of a User class with added attributes that
  * defines a user as a tutor. A tutor is also a student.
+ *
  * @author Keith Tran <keithtran25@gmail.com>
  * @author Syed Haider <shayder426@gmail.com>
  */
-@Table(name="Tutor")
-@DiscriminatorColumn(name="user_type", discriminatorType=DiscriminatorType.STRING)
-@DiscriminatorValue(value="Tutor")
+
+
+@Table(name = "Tutor")
+@DiscriminatorColumn(name = "user_type", discriminatorType = DiscriminatorType.STRING)
+@DiscriminatorValue(value = "Tutor")
 @Entity
 @NamedQueries({
-    @NamedQuery(name = Tutor.FIND_TUTORS_BY_COURSE_DAY_TIME, query = "SELECT t FROM Tutor t JOIN t.courses c JOIN t.availability a WHERE c.courseName = :coursename AND a.dayOfWeek = :dayofweek AND a.startTime <= :requestTime AND a.endTime >= :requestTime AND t.doNotDisturb = :doNotDisturb"),
-    @NamedQuery(name = Tutor.FIND_TUTORS_BY_COURSE, query = "SELECT t FROM Tutor t JOIN t.courses c WHERE c.courseName = :coursename"),
+    @NamedQuery(name = Tutor.FIND_TUTORS_BY_COURSE_DAY_TIME_DZIP, query = "SELECT t FROM Tutor t JOIN t.courses c JOIN t.availabilities a WHERE c.courseName = :coursename AND a.dayOfWeek = :dayofweek AND a.startTime <= :requestTime AND a.endTime >= :requestTime AND t.doNotDisturb = :doNotDisturb AND t.defaultZip = :zipCode AND t.currentZip IS NULL UNION ALL SELECT t FROM Tutor t JOIN t.courses c JOIN t.availabilities a WHERE c.courseName = :coursename AND a.dayOfWeek = :dayofweek AND a.startTime <= :requestTime AND a.endTime >= :requestTime AND t.doNotDisturb = :doNotDisturb AND t.currentZip = :zipCode"),
+    //@NamedQuery(name = Tutor.FIND_TUTORS_BY_COURSE_DAY_TIME_DZIP, query = "SELECT t FROM Tutor t JOIN t.courses c JOIN t.availabilities a WHERE c.courseName = :coursename AND a.dayOfWeek = :dayofweek AND a.startTime <= :requestTime AND a.endTime >= :requestTime AND t.doNotDisturb = :doNotDisturb AND t.currentZip = :zipCode"),
+    @NamedQuery(name = Tutor.FIND_TUTORS_BY_COURSE, query = "SELECT COUNT(t) FROM Tutor t JOIN t.courses c WHERE c.courseName = :coursename"),
+    @NamedQuery(name = Tutor.FIND_TUTORS, query = "SELECT t FROM Tutor t"),
 })
-public class Tutor extends User implements Serializable {     
+public class Tutor extends User implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+    
     /**
-     * JPQL Query to obtain a list of tutors who taught a specific course and is available
+     * JPQL Query to obtain a list of tutors who taught a specific course and is available using default zip code
+     */
+    public static final String FIND_TUTORS_BY_COURSE_DAY_TIME_DZIP = "Tutor.findTutorsByCourseDayTimeDZip";
+    /**
+     * JPQL Query to obtain a list of tutors who taught a specific course and is
+     * available
      */
     public static final String FIND_TUTORS_BY_COURSE_DAY_TIME = "Tutor.findTutorsByCourseDayTime";
     /**
@@ -57,52 +70,89 @@ public class Tutor extends User implements Serializable {
      */
     public static final String FIND_TUTORS_BY_COURSE = "Tutor.findTutorsByCourse";
 
+    /**
+     * JPQL Query to obtain a list of tutors
+     */
+    public static final String FIND_TUTORS = "Tutor.findTutors";
+
     @Temporal(TemporalType.DATE)
-    private Date dateJoined;
-    private int numPeopleTutored;
+    private Date dateJoinedAsTutor;
+    private int numOfPeopleTutored;
     private double priceRate;
     private boolean doNotDisturb;
+    private String transcriptFilePath;
+    private int overallRating;
+    private String defaultZip;
+    private String currentZip;
+    private int maxRadius;
+    
     /**
-     * A Tutor can tutor multiple Courses and
-     * a Course can be tutored by multiple Tutors.
+     * A Tutor can tutor multiple Courses and a Course can be tutored by
+     * multiple Tutors.
      */
-    @ManyToMany(mappedBy="tutors", cascade=CascadeType.ALL)
+    @ManyToMany(mappedBy = "tutors", cascade = CascadeType.ALL)
     private Collection<Course> courses;
     /**
      * A tutor can set multiple Availabilities
      */
-    @OneToMany(mappedBy="tutor", cascade=CascadeType.ALL)
-    private Collection<Availability> availability;
+
+    @OneToMany(mappedBy = "tutor", cascade = CascadeType.ALL)
+    private Collection<Availability> availabilities;
+
     /**
      * Many tutors can view many requests
      */
-    @ManyToMany(mappedBy="availableTutors", cascade=CascadeType.ALL)
+    @ManyToMany(mappedBy = "availableTutors", cascade = CascadeType.ALL)
     private Collection<Request> pendingRequests;
-        
+
+    /**
+     * One tutor can view many ratings
+     */
+    @OneToMany(mappedBy = "tutorsList", cascade = CascadeType.ALL)
+    private Collection<Rating> ratings;
+
     /**
      * Tutor constructor
      */
     public Tutor() {
         priceRate = 0.00;
         doNotDisturb = false;
+        currentZip = null;
     }
-    
+
     /**
+     * Copy constructor
+     * @param newTutor
+     */
+    public Tutor(User newTutor) {
+        super(newTutor);
+    }
+
+   /**
      * Tutor overloaded constructor with existing attributes
+     *
      * @param dateJoined
      * @param numPeopleTutored
-     * @param priceRate 
-     * @param doNotDisturb 
+     * @param priceRate
+     * @param doNotDisturb
+     * @param transcriptFileLocation
+     * @param defaultZip
+     * @param currentZip
+     * @param maxRadius
      */
-    public Tutor(Date dateJoined, int numPeopleTutored, double priceRate, boolean doNotDisturb) {
-        this.dateJoined = dateJoined;
-        this.numPeopleTutored = numPeopleTutored;
+    public Tutor(Date dateJoined, int numPeopleTutored, double priceRate, boolean doNotDisturb, String transcriptFileLocation, String defaultZip, String currentZip, int maxRadius) {
+        this.dateJoinedAsTutor = dateJoined;
+        this.numOfPeopleTutored = numPeopleTutored;
         this.priceRate = priceRate;
         this.doNotDisturb = doNotDisturb;
+        this.transcriptFilePath = transcriptFileLocation;
+        this.defaultZip = defaultZip;
+        this.currentZip = currentZip;
+        this.maxRadius = maxRadius;
     }
-        
     /**
      * Tutor overloaded constructor with inherited and existing attributes
+     *
      * @param email
      * @param firstName
      * @param lastName
@@ -112,118 +162,151 @@ public class Tutor extends User implements Serializable {
      * @param university
      * @param dateJoined
      * @param numPeopleTutored
-     * @param priceRate 
-     * @param doNotDisturb 
+     * @param priceRate
+     * @param doNotDisturb
+     * @param defaultZip
+     * @param currentZip
+     * @param maxRadius
+     * @param transcriptFileLocation
      */
-    public Tutor(String email, String firstName, String lastName, String userName, String phoneNumber, String password, String university, Date dateJoined, int numPeopleTutored, double priceRate, boolean doNotDisturb) {
+    public Tutor(String email, String firstName, String lastName, String userName, String phoneNumber, String password, String university, Date dateJoined, int numPeopleTutored, double priceRate, boolean doNotDisturb, String defaultZip, String currentZip, int maxRadius, String transcriptFileLocation) {
         super(email, firstName, lastName, userName, phoneNumber, password, university);
-        this.dateJoined = dateJoined;
-        this.numPeopleTutored = numPeopleTutored;
+        this.dateJoinedAsTutor = dateJoined;
+        this.numOfPeopleTutored = numPeopleTutored;
         this.priceRate = priceRate;
         this.doNotDisturb = doNotDisturb;
+        this.transcriptFilePath = transcriptFileLocation;
+        this.defaultZip = defaultZip;
+        this.currentZip = currentZip;
+        this.maxRadius = maxRadius;
+    }
+
+    public int getNumOfPeopleTutored() {
+        return numOfPeopleTutored;
+    }
+
+    public void setNumOfPeopleTutored(int numOfPeopleTutored) {
+        this.numOfPeopleTutored = numOfPeopleTutored;
+    }
+
+    public int getOverallRating() {
+        return overallRating;
+    }
+
+    public void setOverallRating(int overallRating) {
+        this.overallRating = overallRating;
+    }
+
+    public Collection<Rating> getRatings() {
+        return ratings;
+    }
+
+    public void setRatings(Collection<Rating> ratings) {
+        this.ratings = ratings;
     }
     
     /**
      * Gets the state of doNotDistrub
+     *
      * @return doNotDisturb
      */
     public boolean isDoNotDisturb() {
         return doNotDisturb;
     }
-    
+
     /**
      * Sets the state of doNotDistrub
-     * @param doNotDisturb 
+     *
+     * @param doNotDisturb
      */
     public void setDoNotDisturb(boolean doNotDisturb) {
         this.doNotDisturb = doNotDisturb;
     }
-    
+
     /**
      * Gets the list of pending requests
+     *
      * @return list of pendingRequests
      */
     public Collection<Request> getPendingRequests() {
         return pendingRequests;
     }
-    
+
     /**
      * Sets the list of pending requests
-     * @param pendingRequests 
+     *
+     * @param pendingRequests
      */
     public void setPendingRequests(Collection<Request> pendingRequests) {
         this.pendingRequests = pendingRequests;
     }
-    
+
     /**
-     * Gets a collection of a Tutor's availabilities
-     * @return a collection of availabilities
+     * Gets the list of availabilities
+     *
+     * @return availabilities
      */
-    public Collection<Availability> getAvailability() {
-        return availability;
+    public Collection<Availability> getAvailabilities() {
+        return availabilities;
     }
 
     /**
-     * Sets a collection of a Tutor's availabilities
-     * @param availability the availability of a tutor
+     * Sets the list of availabilities
+     *
+     * @param availabilities
      */
-    public void setAvailability(Collection<Availability> availability) {
-        this.availability = availability;
+    public void setAvailabilities(Collection<Availability> availabilities) {
+        this.availabilities = availabilities;
     }
-    
-    /**
-     * Adds an availability to a collection
-     * if availability is null, create new HashSet
-     * @param availability 
-     */
-    public void addAvailability(Availability availability) {
-        if (this.availability == null)
-            this.availability = new HashSet();
-        this.availability.add(availability);
-    }
-    
+
     /**
      * Sets the date joined by a tutor
-     * @param dateJoined 
+     *
+     * @param dateJoinedAsTutor
      */
-    public void setTimeWorked(Date dateJoined) {
-        this.dateJoined = dateJoined;
+    public void setDateJoinedAsTutor(Date dateJoinedAsTutor) {
+        this.dateJoinedAsTutor = dateJoinedAsTutor;
     }
-    
+
     /**
      * Gets the date joined by a tutor
+     *
      * @return the date
      */
-    public Date getDateJoined() {
-        return dateJoined;
+    public Date getDateJoinedAsTutor() {
+        return dateJoinedAsTutor;
     }
-    
+
     /**
      * Sets the number of student taught by a tutor
-     * @param numPeopleTutored 
+     *
+     * @param numPeopleTutored
      */
     public void setNumTutored(int numPeopleTutored) {
-        this.numPeopleTutored = numPeopleTutored;
+        this.numOfPeopleTutored = numPeopleTutored;
     }
-    
+
     /**
      * Gets the number of student taught by a tutor
+     *
      * @return the number of student taught
      */
     public int getNumTutored() {
-        return numPeopleTutored;
+        return numOfPeopleTutored;
     }
-    
+
     /**
      * Sets the price rate a tutor wants to be compensated per hour
-     * @param priceRate 
+     *
+     * @param priceRate
      */
     public void setPriceRate(double priceRate) {
         this.priceRate = priceRate;
     }
-    
+
     /**
      * Gets the price rate a tutor wants to be compensated per hour
+     *
      * @return the price rate
      */
     public double getPriceRate() {
@@ -232,46 +315,127 @@ public class Tutor extends User implements Serializable {
 
     /**
      * Gets the collection of courses a tutor can teach
+     *
      * @return the list of courses
      */
     public Collection<Course> getCourses() {
         return courses;
     }
-    
+
     /**
      * Sets the collection of courses a tutor can teach
+     *
      * @param courses the list of courses
      */
     public void setCourse(Collection<Course> courses) {
         this.courses = courses;
     }
-    
+
     /**
-     * Add a course to a collection of Courses
-     * if collection of courses is null, create new HashSet
-     * @param course 
+     * Add a course to a collection of Courses if collection of courses is null,
+     * create new HashSet
+     *
+     * @param course
      */
     public void addCourse(Course course) {
-        if (this.courses == null)
+        if (this.courses == null) {
             this.courses = new HashSet();
+        }
         this.courses.add(course);
     }
-    
+    /**
+     * get Default Zip
+     * @return default zip
+     */
+    public String getDefaultZip() {
+        return defaultZip;
+    }
+    /**
+     * set default zip
+     * @param defaultZip 
+     */
+    public void setDefaultZip(String defaultZip) {
+        this.defaultZip = defaultZip;
+    }
+    /**
+     * get current zip
+     * @return currentZip
+     */
+    public String getCurrentZip() {
+        return currentZip;
+    }
+    /**
+     * set current zip
+     * @param currentZip 
+     */
+    public void setCurrentZip(String currentZip) {
+        this.currentZip = currentZip;
+    }
+    /**
+     * get max radius
+     * @return maxRadius
+     */
+    public int getMaxRadius() {
+        return maxRadius;
+    }
+    /**
+     * set max radius
+     * @param maxRadius 
+     */
+    public void setMaxRadius(int maxRadius) {
+        this.maxRadius = maxRadius;
+    }
     /**
      * Adds a pending request to the list
-     * @param pr 
+     *
+     * @param pr
      */
     public void addPendingRequest(Request pr) {
-        if (this.pendingRequests == null)
+        if (this.pendingRequests == null) {
             this.pendingRequests = new HashSet();
+        }
         this.pendingRequests.add(pr);
     }
-    
+
+    /**
+     * Adds a pending rating to the list
+     *
+     * @param rating
+     */
+    public void addPendingRating(Rating rating) {
+        if (this.ratings == null) {
+            this.ratings = new HashSet();
+        }
+        this.ratings.add(rating);
+    }
+
     /**
      * removes a pending request from the list
-     * @param pr 
+     *
+     * @param pr
      */
     public void removePendingRequest(Request pr) {
         pendingRequests.remove(pr);
+    }
+
+    /**
+     * Adds an availability to a collection if availability is null, create new
+     * HashSet
+     *
+     * @param availability
+     */
+    public void addAvailability(Availability availability) {
+        if (this.availabilities == null) {
+            this.availabilities = new HashSet();
+        }
+        this.availabilities.add(availability);
+    }
+
+    public String getTranscriptFilePath() {
+        return transcriptFilePath;
+    }
+
+    public void setTrancriptFileLocation(String transcriptFileLocation) {
+        this.transcriptFilePath = transcriptFileLocation;
     }
 }

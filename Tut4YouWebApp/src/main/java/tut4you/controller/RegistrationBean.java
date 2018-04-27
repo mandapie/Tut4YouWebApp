@@ -5,7 +5,7 @@
  *  This code has been developed by a group of CSULB students working on their 
  *  Computer Science senior project called Tutors4You.
  *  
- *  Tutors4You is a web application that students can utilize to find a tutor and
+ *  Tutors4You is a web application that students can utilize to findUser a tutor and
  *  ask them to meet at any location of their choosing. Students that struggle to understand 
  *  the courses they are taking would benefit from this peer to peer tutoring service.
  
@@ -17,74 +17,100 @@
 package tut4you.controller;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.ejb.EJB;
 import javax.inject.Named;
-import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
 import tut4you.model.*;
 import tut4you.exception.*;
 
 /**
- * RegistrationBean encapsulates all the functions/services involved 
- * in registering as a User or Tutor.
+ * RegistrationBean encapsulates all the functions/services involved in
+ * registering as a User or Tutor.
+ *
  * @author Amanda Pan <daikiraidemodaisuki@gmail.com>
  * @author Keith Tran <keithtran25@gmail.com>
  */
 @Named
-@RequestScoped
+@ViewScoped
 public class RegistrationBean implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     private static final Logger LOGGER = Logger.getLogger("RequestBean");
-    
+
     @EJB
     private Tut4YouApp tut4youApp;
-    
-    private User newStudent;
-    private Tutor newTutor;
+
+    private User newUser;
     private String confirmPassword;
     private String userType;
+    private String priceRate;
     private Boolean isStudent;
+    private String defaultZip;
+    private int maxRadius;
+    private Date joinedDateAsTutor;
     
-    /** Creates a new instance of Registration */
-    public RegistrationBean() {
-        newStudent = new User();
-        newTutor = new Tutor();
+    /**
+     * Creates a new instance of Registration
+     */
+    @PostConstruct
+    public void  createRegistrationBean() {
+        newUser = new User();
+    }
+    
+    /** 
+     * Destroy a new instance of Registration
+     */
+    @PreDestroy
+    public void destroyRegistrationBean() {
+        
     }
     
     /**
-     * Gets the new student who just registered
+     * get max radius
+     * @return maxRadius
+     */
+    public int getMaxRadius() {
+        return maxRadius;
+    }
+    
+    /**
+     * set max radius
+     * @param maxRadius 
+     */
+    public void setMaxRadius(int maxRadius) {
+        this.maxRadius = maxRadius;
+    }
+
+    /**
+     * Gets the new user who just registered
      * @return the new User entity
      */
-    public User getNewStudent() {
-        return newStudent;
+    public User getNewUser() {
+        return newUser;
     }
-    
+
     /**
      * Sets the user to be a User
-     * @param newStudent student who has just registered
+     * @param newUser student who has just registered
      */
-    public void setNewStudent(User newStudent) {
-        this.newStudent = newStudent;
+    public void setNewUser(User newUser) {
+        this.newUser = newUser;
     }
-    
-    /**
-     * Gets the tutor that has just registered
-     * @return newTutor the tutor that just registered
-     */
-    public Tutor getNewTutor() {
-        return newTutor;
-    }
-    
-    /**
-     * Sets the user to be a Tutor
-     * @param newTutor the newly registered Tutor
-     */
-    public void setNewTutor(Tutor newTutor) {
-        this.newTutor = newTutor;
-    }
-    
+
+
     /**
      * Gets the field of the confirm Password
      * @return the field of the confirm Password
@@ -92,7 +118,7 @@ public class RegistrationBean implements Serializable {
     public String getConfirmPassword() {
         return confirmPassword;
     }
-    
+
     /**
      * Sets the value in the confirm password to check if password match
      * @param confirmPassword the password matching the typed password
@@ -100,7 +126,7 @@ public class RegistrationBean implements Serializable {
     public void setConfirmPassword(String confirmPassword) {
         this.confirmPassword = confirmPassword;
     }
-    
+
     /**
      * Gets the userType
      * @return the userType is Tutor or User
@@ -108,13 +134,45 @@ public class RegistrationBean implements Serializable {
     public String getUserType() {
         return userType;
     }
-    
+
     /**
      * Sets the userType
      * @param userType the userType is tutor or student
      */
     public void setUserType(String userType) {
         this.userType = userType;
+    }
+    
+    /**
+     * get price rate
+     * @return priceRate
+     */
+    public String getPriceRate() {
+        return priceRate;
+    }
+    
+    /**
+     * set price rate
+     * @param priceRate 
+     */
+    public void setPriceRate(String priceRate) {
+        this.priceRate = priceRate;
+    }
+    
+    /**
+     * get default zip
+     * @return defaultZip
+     */
+    public String getDefaultZip() {
+        return defaultZip;
+    }
+    
+    /**
+     * set defaultZip
+     * @param defaultZip 
+     */
+    public void setDefaultZip(String defaultZip) {
+        this.defaultZip = defaultZip;
     }
     
     /**
@@ -126,53 +184,19 @@ public class RegistrationBean implements Serializable {
     }
     
     /**
-     * JSF Action that uses the information submitted in the registration page
-     * to add user as a registered User user.
-     * @return either failure, success, or register depending on successful
-     * registration.
+     * Gets join Date as a tutor
+     * @return joinedDateAsTutor
      */
-    public String createStudent() {
-        String result = "failure";
-        if (newStudent.isInformationValid(confirmPassword)) {
-            newStudent.setPassword(tut4you.controller.HashPassword.getSHA512Digest(newStudent.getPassword()));
-            try {
-                tut4youApp.registerStudent(newStudent, "tut4youapp.student");
-                result = "success";
-            } catch (StudentExistsException see) {
-                LOGGER.log(Level.SEVERE, null, see);
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("A user with that information already exists, try again."));
-                result = "register";
-            } catch (Exception e) {
-                LOGGER.log(Level.SEVERE, null, e);
-                result = "failure";
-            }
-        }
-        return result;
+    public Date getJoinedDateAsTutor() {
+        return joinedDateAsTutor;
     }
     
     /**
-     * JSF Action that uses the information submitted in the registration page
-     * to add user as a registered Tutor user.
-     * @return either failure, success, or register depending on successful 
-     * registration.
+     * Sets join Date as a tutor
+     * @param joinedDateAsTutor 
      */
-    public String createTutor() {
-        String result = "failure";
-        if (newTutor.isInformationValid(confirmPassword)) {
-            newTutor.setPassword(tut4you.controller.HashPassword.getSHA512Digest(newTutor.getPassword()));
-            try {
-                tut4youApp.registerTutor(newTutor, "tut4youapp.student", "tut4youapp.tutor");
-                result = "success";
-            } catch (StudentExistsException see) {
-                LOGGER.log(Level.SEVERE, null, see);
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("A user with that information already exists, try again."));
-                result = "register";
-            } catch (Exception e) {
-                LOGGER.log(Level.SEVERE, null, e);
-                result = "failure";
-            }
-        }
-        return result;
+    public void setJoinedDateAsTutor(Date joinedDateAsTutor) {
+        this.joinedDateAsTutor = joinedDateAsTutor;
     }
     
     /**
@@ -181,26 +205,41 @@ public class RegistrationBean implements Serializable {
      * @return either failure, success, or register depending on successful
      * registration.
      */
-    // IN PROGRESS
-//    public String createUser() {
-//        String result = "failure";
-//        if (newStudent.isInformationValid(confirmPassword)) {
-//            newStudent.setPassword(tut4you.controller.HashPassword.getSHA512Digest(newStudent.getPassword()));
-//            try {
-//                tut4youApp.registerStudent(newStudent, "tut4youapp.student");
-//                //if (userType == "Tutor") {
-//                    //newTutor = (Tutor) newStudent;
-//                    tut4youApp.addTutorRole(newStudent, "tut4youapp.tutor");
-//                //}
-//                result = "success";
-//            } catch (StudentExistsException see) {
-//                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("A user with that information already exists, try again."));
-//                result = "register";
-//            } catch (Exception e) {
-//                LOGGER.log(Level.SEVERE, null, e);
-//                result = "failure";
-//            }
-//        }
-//        return result;
-//    }
+    public String createUser() {
+        String result = "failure";
+        if (newUser.isInformationValid(confirmPassword)) {
+            newUser.setPassword(tut4you.controller.HashPassword.getSHA512Digest(newUser.getPassword()));
+            try {
+                double pr = 0;
+                if (priceRate != null) {
+                    pr = Double.parseDouble(priceRate);
+                }
+                joinedDateAsTutor = getCurrentDate();
+                tut4youApp.registerUser(newUser, userType, pr, defaultZip, maxRadius, joinedDateAsTutor);
+                result = "success";
+            }
+            catch (UserExistsException see) {
+                FacesContext.getCurrentInstance().addMessage("registration:em", new FacesMessage("A user with that information already exists, try again."));
+                result = "register";
+            }
+            catch (Exception e) {
+                LOGGER.log(Level.SEVERE, null, e);
+                result = "failure";
+            }
+        }
+        return result;
+    }
+    
+    /**
+     * https://stackoverflow.com/questions/33098603/convert-localtime-java-8-to-date
+     * gets the current date which is used for date joined attribute in tutor
+     * @return date joined
+     * @throws ParseException 
+     */
+    public Date getCurrentDate() throws ParseException {
+        LocalTime d = LocalTime.now();
+        Instant instant = d.atDate(LocalDate.now()).atZone(ZoneId.systemDefault()).toInstant();
+        Date time = Date.from(instant);
+        return time;
+    }
 }

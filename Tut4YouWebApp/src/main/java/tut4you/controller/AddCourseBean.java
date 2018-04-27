@@ -5,7 +5,7 @@
  *  This code has been developed by a group of CSULB students working on their 
  *  Computer Science senior project called Tutors4You.
  *  
- *  Tutors4You is a web application that students can utilize to find a tutor and
+ *  Tutors4You is a web application that students can utilize to findUser a tutor and
  *  ask them to meet at any location of their choosing. Students that struggle to understand 
  *  the courses they are taking would benefit from this peer to peer tutoring service.
  
@@ -19,150 +19,123 @@ package tut4you.controller;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.ejb.EJB;
-import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
+import javax.enterprise.context.RequestScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import tut4you.exception.CourseExistsException;
 import tut4you.model.*;
-import tut4you.model.Tut4YouApp;
 
 /**
- * Adds courses to the tutor.
- * @author Keith Tran <keithtran25@gmail.com>
- * @author Syed Haider <shayder426@gmail.com>
+ * Adds a new course to the database and tutor.
+ * @author Amanda Pan <daikiraidemodaisuki@gmail.com>
  */
 @Named
-@SessionScoped
+@RequestScoped
 public class AddCourseBean implements Serializable {
-    private static final Logger LOGGER = Logger.getLogger("AddCourseBean");
-    
+
+    private static final long serialVersionUID = 1L;
+
+    private static final Logger LOGGER = Logger.getLogger("AddNewCourseBean");
+
     @EJB
     private Tut4YouApp tut4youApp;
-    
-    private Course course;
+
     private Subject subject;
-    private List<Subject> subjectList = new ArrayList();
-    private List<Course> courseList = new ArrayList();
-    private List<Course> tutorCourses = new ArrayList();
-    
+    private Course course;
+    private List<Subject> subjects = new ArrayList();
+
     /**
-     * Creates an instance of the courseBean
+     * Creates a new instance of AddCourseBean
      */
-    public AddCourseBean() {
+    @PostConstruct
+    public void createAddCourseBean() {
         course = new Course();
     }
     
     /**
+     * Destroys a new instance of AddCourseBean
+     */
+    @PreDestroy
+    public void destroyAddCourseBean() {
+    }
+
+    /**
      * Gets the subject
-     * @return the subject
+     * @return subject
      */
     public Subject getSubject() {
         return subject;
     }
-    
+
     /**
-     * Sets the subject 
-     * @param s the subject associated to course
+     * Sets the subject
+     * @param subject 
      */
-    public void setSubject(Subject s) {
-        subject = s;
+    public void setSubject(Subject subject) {
+        this.subject = subject;
     }
-    
+
     /**
      * Gets the course
-     * @return the course
+     * @return course
      */
     public Course getCourse() {
         return course;
     }
-    
+
     /**
      * Sets the course
-     * @param course the course is set
+     * @param course 
      */
     public void setCourse(Course course) {
         this.course = course;
     }
-    
+
     /**
-     * Gets a list of the subjects in the EJB
-     * @return a list of subjects
+     * Gets the list of subjects from the database
+     * @return subjects
      */
-    public List<Subject> getSubjectList() {
-        if (subjectList.isEmpty()) {
-            subjectList = tut4youApp.getSubjects();
+    public List<Subject> getSubjects() {
+        if (subjects.isEmpty()) {
+            subjects = tut4youApp.getSubjects();
         }
-        return subjectList;
-    }
-    
-    /**
-     * Sets the subjectList
-     * @param s list of subjects
-     */
-    public void setSubjectList(List<Subject> s) {
-        subjectList = s;
-    }
-    
-    /**
-     * Gets the courses of the tutor
-     * @return list of courses of tutor
-     */
-    public List<Course> getTutorCourses() {
-        tutorCourses = tut4youApp.getTutorCourses();
-        return tutorCourses;
-    }
-    
-    /**
-     * Sets the courses of the tutor
-     * @param tutorCourses
-     */
-    public void setTutorCourses(List<Course> tutorCourses) {
-        this.tutorCourses = tutorCourses;
-    }
-    
-    /**
-     * Gets the list of courses
-     * @return the list of courses
-     */
-    public List<Course> getCourseList() {
-        return courseList;
-    }
-    
-    /**
-     * Sets the list of courses
-     * @param courseList list of courses
-     */
-    public void setCourseList(List<Course> courseList) {
-        this.courseList = courseList;
-    }
-    
-     /**
-     * Change the subject of the course
-     */
-    public void changeSubject() {
-        courseList = tut4youApp.getCourses(subject.getSubjectName());
+        return subjects;
     }
 
-    public String addCourse() throws CourseExistsException {
-        String result = "failure";
-        course = tut4youApp.addCourse(course);
-        if (course != null) {
-            result = "success";
-        }
-        return result;
+    /**
+     * Sets the list of subjects
+     * @param subjects 
+     */
+    public void setSubjects(List<Subject> subjects) {
+        this.subjects = subjects;
     }
-    
+
     /**
      * Adds course to the tutor's course list
      * @return success if the course was added successfully
      */
     public String addNewCourse() {
-       String result = "failure";
-       course.setSubject(subject);
-       course = tut4youApp.addNewCourse(course);
-        if (course != null) {
-            result = "success";
+        String result = "failure";
+        try {
+            this.course.setSubject(subject);
+            this.course = tut4youApp.addNewCourse(course);
+            if (this.course != null) {
+                result = "success";
+            }
+        }
+        catch (CourseExistsException see) {
+            FacesContext.getCurrentInstance().addMessage("addNewCourseForm:cn", new FacesMessage("This course already exists."));
+            result = "addNewCourse";
+        }
+        catch (Exception e) {
+            LOGGER.log(Level.SEVERE, null, e);
+            result = "failure";
         }
         return result;
    }

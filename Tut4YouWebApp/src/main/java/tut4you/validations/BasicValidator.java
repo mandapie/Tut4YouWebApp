@@ -5,7 +5,7 @@
  *  This code has been developed by a group of CSULB students working on their 
  *  Computer Science senior project called Tutors4You.
  *  
- *  Tutors4You is a web application that students can utilize to find a tutor and
+ *  Tutors4You is a web application that students can utilize to findUser a tutor and
  *  ask them to meet at any location of their choosing. Students that struggle to understand 
  *  the courses they are taking would benefit from this peer to peer tutoring service.
  *  
@@ -16,20 +16,30 @@
  */
 package tut4you.validations;
 
+import java.text.ParseException;
+import java.util.Date;
+import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
 import javax.inject.Named;
+import tut4you.controller.RequestBean;
+import tut4you.model.Tut4YouApp;
+import java.lang.String;
 
 /**
  * Validates (basic) correct format.
+ *
  * @author Alvaro Monge <alvaro.monge@csulb.edu>
  */
 @Named
 @RequestScoped
 public class BasicValidator {
+
+    @EJB
+    private Tut4YouApp tut4YouApp;
 
     /**
      * Creates a new instance of BasicValidator
@@ -38,18 +48,102 @@ public class BasicValidator {
     }
 
     /**
-     * validates an e-mail address to be in the (basic) correct format.
+     * validates an e-mail address to be in the (basic) correct format and
+     * validate that it is not already in the database
+     *
      * @param context the FacesContext
      * @param toValidate the UIComponent being validated (e-mail field)
      * @param value the value (email address) of the component
-     * @throws ValidatorException the Exception to throw b/c the value is not an e-mail address
-     * 
-     * TODO: currently only checks for @ symbol, need to implement a more sophisticated validator
+     * @throws ValidatorException the Exception to throw b/c the value is not an
+     * e-mail address
+     *
+     * TODO: currently only checks for @ symbol, need to implement a more
+     * sophisticated validator
      */
     public void validateEmail(FacesContext context, UIComponent toValidate, Object value) throws ValidatorException {
         String emailStr = (String) value;
         if (-1 == emailStr.indexOf("@")) {
             FacesMessage message = new FacesMessage("Invalid email address");
+            throw new ValidatorException(message);
+        }
+        for (String str : tut4YouApp.getUserEmails()) {
+            if (emailStr.equals(str)) {
+                FacesMessage message = new FacesMessage("email address already in use");
+                throw new ValidatorException(message);
+            }
+        }
+    }
+
+    /**
+     * validate userName is unique
+     *
+     * @param context
+     * @param toValidate
+     * @param value
+     * @throws ValidatorException
+     */
+    public void validateUserName(FacesContext context, UIComponent toValidate, Object value) throws ValidatorException {
+        String userName = (String) value;
+        for (String str : tut4YouApp.getUserUserNames()) {
+            if (userName.equals(str)) {
+                FacesMessage message = new FacesMessage("username already in use");
+                throw new ValidatorException(message);
+            }
+        }
+    }
+
+    /**
+     * https://stackoverflow.com/questions/42104546/java-regular-expressions-to-validate-phone-numbers
+     *
+     * @param context the FacesContext
+     * @param toValidate the UIComponent being validated (e-mail field)
+     * @param value the value (email address) of the component
+     */
+    public void validatePhoneNumber(FacesContext context, UIComponent toValidate, Object value) {
+        String phoneNum = (String) value;
+        String pattern = "\\d{10}|(?:\\d{3}-){2}\\d{4}|\\(\\d{3}\\)\\d{3}-?\\d{4}";
+        if (phoneNum.matches(pattern)) {
+
+        } else {
+            FacesMessage message = new FacesMessage("Invalid phone number");
+            throw new ValidatorException(message);
+        }
+    }
+
+    /**
+     * https://stackoverflow.com/questions/9043551/regex-match-integer-only
+     * validate zip is in integers
+     *
+     * @param context
+     * @param toValidate
+     * @param value
+     */
+    public void validateInteger(FacesContext context, UIComponent toValidate, Object value) {
+        String zip = (String) value;
+        String pattern = "^\\d+$";
+        if (zip.matches(pattern)) {
+
+        } else {
+            FacesMessage message = new FacesMessage("Invalid Input");
+            throw new ValidatorException(message);
+        }
+    }
+
+    /**
+     * validate that later time in request is not before the actual time
+     *
+     * @param context
+     * @param component
+     * @param value
+     * @throws ValidatorException
+     * @throws ParseException
+     */
+    public void validateLaterTime(FacesContext context, UIComponent component, Object value) throws ValidatorException, ParseException {
+        Date laterTime = (Date) value;
+        RequestBean requestBean = new RequestBean();
+        Date currentTime = requestBean.getCurrentTime();
+        if (laterTime.before(currentTime)) {
+            FacesMessage message = new FacesMessage("Invalid later time input");
             throw new ValidatorException(message);
         }
     }

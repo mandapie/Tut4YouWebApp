@@ -1,0 +1,50 @@
+<ui:composition template="/WEB-INF/templates/layout.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:p="http://primefaces.org/ui">
+    <!--
+        Licensed under the Academic Free License (AFL 3.0).
+        http://opensource.org/licenses/AFL-3.0
+
+        This code has been developed by a group of CSULB students working on their 
+        Computer Science senior project called Tutors4You.
+
+        Tutors4You is a web application that students can utilize to find a tutor and
+        ask them to meet at any location of their choosing. Students that struggle to understand 
+        the courses they are taking would benefit from this peer to peer tutoring service.
+
+        2017 Amanda Pan <daikiraidemodaisuki@gmail.com>
+        2017 Andrew Kaichi <ahkaichi@gmail.com>
+        2017 Keith Tran <keithtran25@gmail.com>
+        2017 Syed Haider <shayder426@gmail.com>
+    -->
+    <!-- @author Amanda Pan <daikiraidemodaisuki@gmail.com> -->
+    <ui:define name="title">Review</ui:define>
+    <ui:define name="content">
+        <b:panel title="Write a Review" collapsible="false" look="info">
+            <b:form>
+                <h:outputLabel value="Select your rating"/>
+                <p:rating id="rating" value="#{ratingBean.rating.ratingValue}" required="true" requiredMessage="A rating must be input.">
+                    <b:message for="rating"/>
+                </p:rating>
+                <br></br>
+                <p:inputTextarea label="Description/Topic: (300 characters max)" 
+                                 placeholder="Enter a short description..." 
+                                 value="#{ratingBean.rating.description}" 
+                                 rows="5" cols="60" counter="display" maxlength="300" 
+                                 counterTemplate="{0} characters remaining." autoResize="false" />
+                <br/>
+                <h:outputText id="display" style="font-weight:bold"/>
+                <!-- length of session -->
+                <b:row>
+                    <b:commandButton span="2" value="Submit" look="primary" action="#{ratingBean.createNewRating(ratingBean.tutor)}" />
+                </b:row>
+            </b:form>
+        </b:panel>
+
+        <ui:debug hotkey='x' />
+    </ui:define>
+</ui:composition>

@@ -5,6 +5,22 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:b="http://bootsfaces.net/ui"
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <!--
+        Licensed under the Academic Free License (AFL 3.0).
+        http://opensource.org/licenses/AFL-3.0
+
+        This code has been developed by a group of CSULB students working on their 
+        Computer Science senior project called Tutors4You.
+
+        Tutors4You is a web application that students can utilize to find a tutor and
+        ask them to meet at any location of their choosing. Students that struggle to understand 
+        the courses they are taking would benefit from this peer to peer tutoring service.
+
+        2017 Amanda Pan <daikiraidemodaisuki@gmail.com>
+        2017 Andrew Kaichi <ahkaichi@gmail.com>
+        2017 Keith Tran <keithtran25@gmail.com>
+        2017 Syed Haider <shayder426@gmail.com>
+    -->
     <!-- @author Amanda Pan <daikiraidemodaisuki@gmail.com> -->
     <ui:define name="title">Home</ui:define>
     <ui:define name="content">
@@ -19,10 +35,14 @@
                     Tutors will be paid according to their hourly rate they have set and the amount of time spent on the session.
                     Stop stressing and request for help at Tut4You!
                 </p>
-                <p>
-                    <a href="/Tut4YouWebApp/authentications/registerStudent.xhtml" class="btn btn-lg btn-info">Register as Student</a>
-                    <a href="/Tut4YouWebApp/authentications/registerTutor.xhtml" class="btn btn-lg btn-info">Register as Tutor</a>
-                </p>
+                <c:choose>
+                    <c:when test="#{userBean.isUserAuthenticated}"></c:when>
+                    <c:otherwise>
+                        <p>
+                            <b:button href="/Tut4YouWebApp/authentications/registration.xhtml" value="Register with Us" class="btn-lg btn-info"/>
+                        </p>
+                    </c:otherwise>
+                </c:choose>
             </b:container>
         </b:jumbotron>
         <ui:debug hotkey='x'/>

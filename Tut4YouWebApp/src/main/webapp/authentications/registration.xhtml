@@ -185,16 +185,18 @@
                 <!-- google reCAPTCHA -->
                 <b:row>
                     <b:column id="captcha" medium-screen="4" offset="2">
+<!--                    <p:message showDetail="true"/>
+                        <p:captcha label="Captcha" />-->
                         <script src='https://www.google.com/recaptcha/api.js'></script>
-                        <!-- source: https://stackoverflow.com/questions/46421887/how-to-use-recaptcha-v2-on-localhost?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa -->
-                        <div id="my-captcha" align="center" class="g-recaptcha" data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"></div>  <!-- This key is only for testing purposes -->
+                         <!-- source: https://stackoverflow.com/questions/46421887/how-to-use-recaptcha-v2-on-localhost?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa --> 
+                        <div id="my-captcha" align="center" class="g-recaptcha" data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"></div> <!-- This key is only for testing purposes -->
                     </b:column>
-                    <message for="my-captcha"/>
+                    <!--<message for="my-captcha"/>--> <!-- doesn't work -->
                 </b:row>
                 <!-- Registers User -->
                 <b:row>
                     <b:column span="2" offset="2">
-                        <b:commandButton value="Register" look="primary" style="width:100%" action="#{registrationBean.createUser}" onclick="prepCaptcha();"/>
+                        <b:commandButton value="Register" look="primary" style="width:100%" action="#{registrationBean.createUser}"/>
                     </b:column>
                     <b:column span="2">
                         <b:button value="Cancel" look="danger" style="width:100%" href="/Tut4YouWebApp/index.xhtml"/>

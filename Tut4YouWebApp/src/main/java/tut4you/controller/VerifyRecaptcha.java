@@ -18,6 +18,7 @@ import javax.net.ssl.HttpsURLConnection;
 /**
  * source: http://chillyfacts.com/add-recaptcha-i-m-not-a-robot-in-java-websites/
  * @author Jinu
+ * Modified by Amanda
  */
 public class VerifyRecaptcha {
     public static final String url = "https://www.google.com/recaptcha/api/siteverify";

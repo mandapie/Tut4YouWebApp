@@ -24,9 +24,6 @@
     <!-- @author Amanda Pan <daikiraidemodaisuki@gmail.com> 
          @author Andrew Kaichi <ahkaichi@gmail.com> -->
     <ui:define name="title">Registration</ui:define>
-    <h:head>
-        <h:outputStylesheet library="css" name="styles.css"/>
-    </h:head>
     <ui:define name="content">
         <b:panel title="Enter Your Information to Register" collapsible="false" look="info">
             <h:form id="registration">
@@ -185,10 +182,19 @@
                         </b:inputSecret>
                     </b:column>
                 </b:row>
+                <!-- google reCAPTCHA -->
+                <b:row>
+                    <b:column id="captcha" medium-screen="4" offset="2">
+                        <script src='https://www.google.com/recaptcha/api.js'></script>
+                        <!-- source: https://stackoverflow.com/questions/46421887/how-to-use-recaptcha-v2-on-localhost?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa -->
+                        <div id="my-captcha" align="center" class="g-recaptcha" data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"></div>  <!-- This key is only for testing purposes -->
+                    </b:column>
+                    <message for="my-captcha"/>
+                </b:row>
                 <!-- Registers User -->
                 <b:row>
                     <b:column span="2" offset="2">
-                        <b:commandButton value="Register" look="primary" style="width:100%" action="#{registrationBean.createUser}"/>
+                        <b:commandButton value="Register" look="primary" style="width:100%" action="#{registrationBean.createUser}" onclick="prepCaptcha();"/>
                     </b:column>
                     <b:column span="2">
                         <b:button value="Cancel" look="danger" style="width:100%" href="/Tut4YouWebApp/index.xhtml"/>

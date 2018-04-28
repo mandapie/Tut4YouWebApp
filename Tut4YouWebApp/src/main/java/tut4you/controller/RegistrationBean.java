@@ -207,25 +207,37 @@ public class RegistrationBean implements Serializable {
      */
     public String createUser() {
         String result = "failure";
-        if (newUser.isInformationValid(confirmPassword)) {
-            newUser.setPassword(tut4you.controller.HashPassword.getSHA512Digest(newUser.getPassword()));
-            try {
-                double pr = 0;
-                if (priceRate != null) {
-                    pr = Double.parseDouble(priceRate);
+        try {
+            // get reCAPTCHA request param
+            String gRecaptchaResponse = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("g-recaptcha-response");
+            boolean verify = VerifyRecaptcha.verify(gRecaptchaResponse);
+            System.out.println(verify);
+            if (verify) {
+                if (newUser.isInformationValid(confirmPassword)) {
+                    newUser.setPassword(tut4you.controller.HashPassword.getSHA512Digest(newUser.getPassword()));
+                    try {
+                        double pr = 0;
+                        if (priceRate != null) {
+                            pr = Double.parseDouble(priceRate);
+                        }
+                        joinedDateAsTutor = getCurrentDate();
+                        tut4youApp.registerUser(newUser, userType, pr, defaultZip, maxRadius, joinedDateAsTutor);
+                        result = "success";
+                    }
+                    catch (UserExistsException see) {
+                        FacesContext.getCurrentInstance().addMessage("registration:em", new FacesMessage("A user with that information already exists, try again."));
+                        result = "register";
+                    }
                 }
-                joinedDateAsTutor = getCurrentDate();
-                tut4youApp.registerUser(newUser, userType, pr, defaultZip, maxRadius, joinedDateAsTutor);
-                result = "success";
             }
-            catch (UserExistsException see) {
-                FacesContext.getCurrentInstance().addMessage("registration:em", new FacesMessage("A user with that information already exists, try again."));
+            else {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("We need to make sure that you are human!"));
                 result = "register";
             }
-            catch (Exception e) {
-                LOGGER.log(Level.SEVERE, null, e);
-                result = "failure";
-            }
+        }
+        catch (Exception e) {
+            LOGGER.log(Level.SEVERE, null, e);
+            result = "failure";
         }
         return result;
     }

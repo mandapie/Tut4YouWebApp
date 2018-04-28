@@ -62,7 +62,7 @@
         <navigation-case>
             <from-action>#{registrationBean.createUser}</from-action>
             <from-outcome>register</from-outcome>
-            <to-view-id>/authentications/registerStudent.xhtml</to-view-id>
+            <to-view-id>/authentications/registration.xhtml</to-view-id>
         </navigation-case>
         <navigation-case>
             <from-outcome>success</from-outcome>

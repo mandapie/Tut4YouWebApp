@@ -155,12 +155,6 @@ public class AvailabilityBean implements Serializable {
 
     /**
      * Adds the availability to the tutor
-     *
-     * @throws java.text.ParseException
-     */
-    /**
-     * Adds the availability to the tutor
-     *
      * @return result based on if the availability form was filled out properly
      * @throws java.text.ParseException
      */

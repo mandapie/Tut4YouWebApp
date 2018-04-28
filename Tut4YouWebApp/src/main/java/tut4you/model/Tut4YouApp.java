@@ -623,7 +623,7 @@ public class Tut4YouApp {
             } else {
                 Tutor newTutor = new Tutor(user);
                 newTutor.setDateJoinedAsTutor(joinedDateAsTutor);
-                newTutor.setPriceRate(priceRate);
+                newTutor.setHourlyRate(priceRate);
                 newTutor.setMaxRadius(maxRadius);
                 newTutor.setDefaultZip(defaultZip);
                 newTutor.addGroup(group); //Add user a student role

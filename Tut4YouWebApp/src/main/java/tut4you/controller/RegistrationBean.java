@@ -56,7 +56,7 @@ public class RegistrationBean implements Serializable {
     private User newUser;
     private String confirmPassword;
     private String userType;
-    private String priceRate;
+    private String hourlyRate;
     private Boolean isStudent;
     private String defaultZip;
     private int maxRadius;
@@ -145,18 +145,18 @@ public class RegistrationBean implements Serializable {
     
     /**
      * get price rate
-     * @return priceRate
+     * @return hourlyRate
      */
-    public String getPriceRate() {
-        return priceRate;
+    public String getHourlyRate() {
+        return hourlyRate;
     }
     
     /**
      * set price rate
-     * @param priceRate 
+     * @param hourlyRate 
      */
-    public void setPriceRate(String priceRate) {
-        this.priceRate = priceRate;
+    public void setHourlyRate(String hourlyRate) {
+        this.hourlyRate = hourlyRate;
     }
     
     /**
@@ -217,8 +217,8 @@ public class RegistrationBean implements Serializable {
                     newUser.setPassword(tut4you.controller.HashPassword.getSHA512Digest(newUser.getPassword()));
                     try {
                         double pr = 0;
-                        if (priceRate != null) {
-                            pr = Double.parseDouble(priceRate);
+                        if (hourlyRate != null) {
+                            pr = Double.parseDouble(hourlyRate);
                         }
                         joinedDateAsTutor = getCurrentDate();
                         tut4youApp.registerUser(newUser, userType, pr, defaultZip, maxRadius, joinedDateAsTutor);

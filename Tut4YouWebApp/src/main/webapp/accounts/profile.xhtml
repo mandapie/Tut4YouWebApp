@@ -84,7 +84,7 @@
                                 <h:outputLabel value="Hourly Rate:"/>
                             </b:column>
                             <b:column span="7">
-                                <h:outputText value="#{userBean.user.priceRate}">
+                                <h:outputText value="#{userBean.user.hourlyRate}">
                                     <f:convertNumber type="currency" currencySymbol="$" locale="en_US" />
                                 </h:outputText>
                             </b:column>
@@ -170,10 +170,10 @@
                         </b:tab>
                         <c:if test="#{userBean.isTutor}">
                             <b:tab title="Notifications">
-                                <!-- NOT WORKING PROPERLY -->
-        <!--                            <c:if test="#{notifyBean.hasNotif}">
+                                 <!--NOT WORKING PROPERLY--> 
+                                    <c:if test="#{notifyBean.hasNotif}">
                                     <f:facet name="anchor"><b:badge value="#{notifyBean.numofNotif}"/></f:facet>
-                                </c:if>-->
+                                </c:if>
                                 <br></br> <!-- for better spacing -->
                                 <b:dataTable value="#{notifyBean.pendingRequestList}" var="req">
                                     <b:dataTableColumn>

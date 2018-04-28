@@ -106,7 +106,7 @@
                                 <h:outputLabel value="Hourly Rate (0.01 - 99999.99)"/>
                             </b:column>
                             <b:column medium-screen="4">
-                                <b:inputText id="HourlyRate" placeholder="Enter Hourly Rate (0.01 - 99999.99)" required="true" requiredMessage="required" value="#{registrationBean.priceRate}" validatorMessage="Invalid format for hourly rate. "  converterMessage = "Hourly Rate must be a number.">
+                                <b:inputText id="HourlyRate" placeholder="Enter Hourly Rate (0.01 - 99999.99)" required="true" requiredMessage="required" value="#{registrationBean.hourlyRate}" validatorMessage="Invalid format for hourly rate. "  converterMessage = "Hourly Rate must be a number.">
                                     <b:message for="HourlyRate"/>
                                     <f:convertNumber minFractionDigits="2" />
                                     <f:validateLength minimum="1" maximum="5"/>

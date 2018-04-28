@@ -87,7 +87,6 @@ public class RequestBean implements Serializable {
         zipCodeByRadius = new ZipCodeByRadius();
         tutorList = new ArrayList();
         time = "Immediate";
-
     }
     
     public ZipCodeByRadius getZipCodeByRadius() {

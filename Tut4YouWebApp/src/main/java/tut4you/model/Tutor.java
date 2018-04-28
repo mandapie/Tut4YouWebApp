@@ -78,7 +78,7 @@ public class Tutor extends User implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date dateJoinedAsTutor;
     private int numOfPeopleTutored;
-    private double priceRate;
+    private double hourlyRate;
     private boolean doNotDisturb;
     private String transcriptFilePath;
     private int overallRating;
@@ -115,7 +115,7 @@ public class Tutor extends User implements Serializable {
      * Tutor constructor
      */
     public Tutor() {
-        priceRate = 0.00;
+        hourlyRate = 0.00;
         doNotDisturb = false;
         currentZip = null;
     }
@@ -143,7 +143,7 @@ public class Tutor extends User implements Serializable {
     public Tutor(Date dateJoined, int numPeopleTutored, double priceRate, boolean doNotDisturb, String transcriptFileLocation, String defaultZip, String currentZip, int maxRadius) {
         this.dateJoinedAsTutor = dateJoined;
         this.numOfPeopleTutored = numPeopleTutored;
-        this.priceRate = priceRate;
+        this.hourlyRate = priceRate;
         this.doNotDisturb = doNotDisturb;
         this.transcriptFilePath = transcriptFileLocation;
         this.defaultZip = defaultZip;
@@ -173,7 +173,7 @@ public class Tutor extends User implements Serializable {
         super(email, firstName, lastName, userName, phoneNumber, password, university);
         this.dateJoinedAsTutor = dateJoined;
         this.numOfPeopleTutored = numPeopleTutored;
-        this.priceRate = priceRate;
+        this.hourlyRate = priceRate;
         this.doNotDisturb = doNotDisturb;
         this.transcriptFilePath = transcriptFileLocation;
         this.defaultZip = defaultZip;
@@ -298,10 +298,10 @@ public class Tutor extends User implements Serializable {
     /**
      * Sets the price rate a tutor wants to be compensated per hour
      *
-     * @param priceRate
+     * @param hourlyRate
      */
-    public void setPriceRate(double priceRate) {
-        this.priceRate = priceRate;
+    public void setHourlyRate(double hourlyRate) {
+        this.hourlyRate = hourlyRate;
     }
 
     /**
@@ -309,8 +309,8 @@ public class Tutor extends User implements Serializable {
      *
      * @return the price rate
      */
-    public double getPriceRate() {
-        return priceRate;
+    public double getHourlyRate() {
+        return hourlyRate;
     }
 
     /**

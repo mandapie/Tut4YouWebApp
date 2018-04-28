@@ -211,7 +211,6 @@ public class RegistrationBean implements Serializable {
             // get reCAPTCHA request param
             String gRecaptchaResponse = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("g-recaptcha-response");
             boolean verify = VerifyRecaptcha.verify(gRecaptchaResponse);
-            System.out.println(verify);
             if (verify) {
                 if (newUser.isInformationValid(confirmPassword)) {
                     newUser.setPassword(tut4you.controller.HashPassword.getSHA512Digest(newUser.getPassword()));
@@ -231,7 +230,7 @@ public class RegistrationBean implements Serializable {
                 }
             }
             else {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("We need to make sure that you are human!"));
+                FacesContext.getCurrentInstance().addMessage("registration:captcha", new FacesMessage("We need to make sure that you are human!"));
                 result = "register";
             }
         }

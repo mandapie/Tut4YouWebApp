@@ -75,6 +75,8 @@ public class User implements Serializable {
     private String phoneNumber;
     private String password;
     private String university;
+//    private String securtyAnswer;
+    
     /**
      * A user can submit multiple Requests
      */

@@ -170,10 +170,10 @@
                         </b:tab>
                         <c:if test="#{userBean.isTutor}">
                             <b:tab title="Notifications">
-                                 <!--NOT WORKING PROPERLY--> 
-                                    <c:if test="#{notifyBean.hasNotif}">
+                                <!--NOT WORKING PROPERLY--> 
+                                <c:when test="#{notifyBean.hasNotif}">
                                     <f:facet name="anchor"><b:badge value="#{notifyBean.numofNotif}"/></f:facet>
-                                </c:if>
+                                </c:when>
                                 <br></br> <!-- for better spacing -->
                                 <b:dataTable value="#{notifyBean.pendingRequestList}" var="req">
                                     <b:dataTableColumn>

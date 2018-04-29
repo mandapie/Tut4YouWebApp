@@ -181,8 +181,8 @@ public class RatingBean implements Serializable {
      *
      * @return a list of subjects
      */
-    public List<Rating> getRatingList() {
-        ratingList = tut4youApp.getRatingList();
+    public List<Rating> getRatingList(String email) {
+        ratingList = tut4youApp.getRatingList(email);
         return ratingList;
     }
 

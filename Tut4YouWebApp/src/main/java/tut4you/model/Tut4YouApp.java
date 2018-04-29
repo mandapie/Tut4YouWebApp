@@ -59,7 +59,7 @@ public class Tut4YouApp {
 
     /**
      * Query all subjects from the database
-     *
+     * 
      * @return List of subjects
      */
     @RolesAllowed("tut4youapp.student")
@@ -484,7 +484,7 @@ public class Tut4YouApp {
      */
     @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public Availability addAvailability(Availability availability) throws AvailabilityExistsException{
+    public Availability addAvailability(Availability availability) throws AvailabilityExistsException {
         UserBean userBean = new UserBean();
         String currentUserEmail = userBean.getEmailFromSession();
         if (currentUserEmail == null) {
@@ -593,6 +593,24 @@ public class Tut4YouApp {
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public Tutor findTutor(String email) {
         return em.find(Tutor.class, email);
+    }
+
+    /**
+     * Gets a tutor by finding the email in the tutor entity.
+     *
+     * @param username
+     * @param email
+     * @return tutor email
+     * @Keith <keithtran25@gmail.com>
+     */
+    @PermitAll
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public Tutor findTutorEmail(String username) {
+        System.out.println("What is the " + username);
+        
+        TypedQuery<Tutor> tutorQuery = em.createNamedQuery(Tutor.FIND_TUTOR_BY_USERNAME, Tutor.class);
+        tutorQuery.setParameter("username", username);
+        return tutorQuery.getSingleResult();
     }
 
     /**

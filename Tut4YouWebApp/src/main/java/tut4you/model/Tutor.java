@@ -169,8 +169,8 @@ public class Tutor extends User implements Serializable {
      * @param maxRadius
      * @param transcriptFileLocation
      */
-    public Tutor(String email, String firstName, String lastName, String userName, String phoneNumber, String password, String university, Date dateJoined, int numPeopleTutored, double priceRate, boolean doNotDisturb, String defaultZip, String currentZip, int maxRadius, String transcriptFileLocation) {
-        super(email, firstName, lastName, userName, phoneNumber, password, university);
+    public Tutor(String email, String firstName, String lastName, String userName, String phoneNumber, String password, String university, String securityQuestion, String securityAnswer, Date dateJoined, int numPeopleTutored, double priceRate, boolean doNotDisturb, String defaultZip, String currentZip, int maxRadius, String transcriptFileLocation) {
+        super(email, firstName, lastName, userName, phoneNumber, password, university, securityQuestion, securityAnswer);
         this.dateJoinedAsTutor = dateJoined;
         this.numOfPeopleTutored = numPeopleTutored;
         this.hourlyRate = priceRate;

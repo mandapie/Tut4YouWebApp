@@ -263,7 +263,6 @@ public class UserBean implements Serializable {
 
     /**
      * Updates a User's information
-     *
      * @param user User or Tutor object
      * @return result
      */

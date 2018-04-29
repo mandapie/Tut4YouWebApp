@@ -152,6 +152,34 @@
                         </b:inputText>
                     </b:column>
                 </b:row>
+                <b:row>
+                    <b:column medium-screen="2">
+                        <h:outputLabel value="Security Question"/>
+                    </b:column>
+                    <b:column medium-screen="4">
+                        <b:selectOneMenu class="form-control" id="sq" value="#{registrationBean.newUser.securityQuestion}" required="true" requiredMessage="required">
+                            <f:selectItem itemLabel="Select a security question..." itemValue="" noSelectionOption="true"/>
+                            <f:selectItem itemValue="What was your childhood nickname?"/>
+                            <f:selectItem itemValue="In what city or town did your parents meet?"/> 
+                            <f:selectItem itemValue="What is your favorite music?"/>
+                            <f:selectItem itemValue="What was the last name of your third grade teacher?"/> 
+                            <f:selectItem itemValue="In what town was your first job?"/>
+                            <f:selectItem itemValue="What is the first name of the person that you first kissed?"/>
+                            <f:selectItem itemValue="What was the make and model of your first car?"/>
+                        </b:selectOneMenu>
+                    </b:column>
+                </b:row>
+                <!-- Security Answer -->
+                <b:row>
+                    <b:column medium-screen="2">
+                        <h:outputLabel value="Your Answer" />
+                    </b:column>
+                    <b:column medium-screen="4">
+                        <b:inputText id="sa" value="#{registrationBean.newUser.securityAnswer}" placeholder="Enter Your Answer" required="true" requiredMessage="required">
+                            <b:message for="sa"/>
+                        </b:inputText>
+                    </b:column>
+                </b:row>
                 <!-- Password that has a validator to check if password is 8 characters or more-->
                 <b:row>
                     <b:column medium-screen="2">

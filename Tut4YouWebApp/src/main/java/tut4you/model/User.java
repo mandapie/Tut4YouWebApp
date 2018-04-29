@@ -75,20 +75,18 @@ public class User implements Serializable {
     private String phoneNumber;
     private String password;
     private String university;
-//    private String securtyAnswer;
-    
+    private String securityQuestion;
+    private String securityAnswer;    
     /**
      * A user can submit multiple Requests
      */
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
     private Collection<Request> requests;
-
     /**
      * A user can submit multiple Ratings
      */
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
     private Collection<Rating> ratings;
-
     /**
      * A user can be in multiple Groups and A group can contain multiple users
      */
@@ -103,7 +101,6 @@ public class User implements Serializable {
 
     /**
      * Copy constructor
-     *
      * @param user
      */
     public User(User user) {
@@ -114,6 +111,8 @@ public class User implements Serializable {
         this.phoneNumber = user.phoneNumber;
         this.password = user.password;
         this.university = user.university;
+        this.securityQuestion = user.securityQuestion;
+        this.securityAnswer = user.securityAnswer;
     }
 
     /**
@@ -126,8 +125,10 @@ public class User implements Serializable {
      * @param phoneNumber
      * @param password
      * @param university
+     * @param securityQuestion
+     * @param securityAnswer
      */
-    public User(String email, String firstName, String lastName, String userName, String phoneNumber, String password, String university) {
+    public User(String email, String firstName, String lastName, String userName, String phoneNumber, String password, String university, String securityQuestion, String securityAnswer) {
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -135,6 +136,8 @@ public class User implements Serializable {
         this.phoneNumber = phoneNumber;
         this.password = password;
         this.university = university;
+        this.securityQuestion = securityQuestion;
+        this.securityAnswer = securityAnswer;
     }
 
     /**
@@ -263,6 +266,30 @@ public class User implements Serializable {
         this.university = university;
     }
 
+    public String getSecurityQuestion() {
+        return securityQuestion;
+    }
+
+    public void setSecurityQuestion(String securityQuestion) {
+        this.securityQuestion = securityQuestion;
+    }
+
+    public String getSecurityAnswer() {
+        return securityAnswer;
+    }
+
+    public void setSecurityAnswer(String securityAnswer) {
+        this.securityAnswer = securityAnswer;
+    }
+
+    public Collection<Rating> getRatings() {
+        return ratings;
+    }
+
+    public void setRatings(Collection<Rating> ratings) {
+        this.ratings = ratings;
+    }
+    
     /**
      * Gets the collection requests submitted by a user
      *

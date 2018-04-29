@@ -51,26 +51,20 @@
                     </b:selectOneMenu>
                 </b:row>
                 <b:column>
-                    <h:outputLabel value="Description/Topic: (300 characters max)"/>
+                    <h:outputLabel value="Description/Topic"/>
                 </b:column>
                 <p:inputTextarea label="Description/Topic" 
                                  id="dt" placeholder="Enter a short description..." 
                                  value="#{requestBean.request.description}" 
                                  rows="5" cols="60" counter="display" maxlength="300" 
-                                 counterTemplate="{0} characters remaining." autoResize="false" >
+                                 counterTemplate="{0} characters remaining." autoResize="false">
+                    <b:message for="dt" span="3"/>
                 <f:validateLength minimum="10"/>
                 </p:inputTextarea>
-                <h:outputText id="display"  style="font-weight:bold" />
-                <b:column>
-                    <b:message for="dt" span="3"/>
-                </b:column>
+                <h:outputText id="display"/>
                 <!-- length of session -->
                 <b:row>
-                    <b:selectOneMenu span="4"
-                                     label="Length of Session"
-                                     id="stringLengthOfSession"
-                                     value="#{requestBean.lengthOfSession}"
-                                     required="true" requiredMessage="required length of session">
+                    <b:selectOneMenu span="4" label="Length of Session" id="stringLengthOfSession" value="#{requestBean.lengthOfSession}" required="true" requiredMessage="required length of session">
                         <f:selectItem itemLabel="Select One..." itemValue="" noSelectionOption="true"/>
                         <f:selectItem itemLabel="30min" itemValue="30" /> 
                         <f:selectItem itemLabel="1 hour" itemValue="60" />
@@ -81,9 +75,6 @@
                         <f:selectItem itemLabel="3.5 hours" itemValue="210" />
                         <f:selectItem itemLabel="4 hours" itemValue="240" />     
                         <f:convertNumber type="number"/>
-                        <b:column>
-                            <b:message for="stringLengthOfSession" span="3"/>
-                        </b:column>
                     </b:selectOneMenu>
                 </b:row>
                 <!-- radio button to select for now or later -->
@@ -119,7 +110,7 @@
                 </b:row>
                 <b:row>
                     <b:inputText span="2" id="zip" label="Zip Code" placeholder="Enter current zip code..." value="#{requestBean.zipCode.zipCode}"
-                                 required="true" requiredMessage="required zip code" validator="#{basicValidator.validateInteger}">
+                                 required="true" requiredMessage="required zip code" validator="#{basicValidator.validateZipcode}">
                         <f:validateLength minimum="5" maximum="5"/> 
                         <b:column>
                             <b:message for="zip" span="3"/>
@@ -128,7 +119,7 @@
                     <b:column>
                         <b:selectOneMenu span="3" id="rad" class="form-control"
                                          value="#{requestBean.zipCode.maxRadius}"
-                                         required="true" requiredMessage="required radius">
+                                         required="true" requiredMessage="required">
                             <f:selectItem itemLabel="Select max radius..." itemValue="" noSelectionOption="true"/>
                             <f:selectItem itemLabel="1 mile" itemValue="1" />
                             <f:selectItem itemLabel="3 miles" itemValue="3" /> 

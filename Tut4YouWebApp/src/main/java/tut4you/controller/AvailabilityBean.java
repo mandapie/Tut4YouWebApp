@@ -43,7 +43,7 @@ import tut4you.model.Tut4YouApp;
  * modified by Syed Haider <shayder426@gmail.com>
  */
 @Named
-@SessionScoped
+@ViewScoped
 public class AvailabilityBean implements Serializable {
 
     private static final long serialVersionUID = 1L;

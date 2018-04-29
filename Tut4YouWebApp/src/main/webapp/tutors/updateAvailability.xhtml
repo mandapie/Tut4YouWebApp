@@ -12,32 +12,21 @@
         <h1>Edit Availability</h1>
         <b:panel title="Enter Your Availability" collapsible="false" look="info">
             <b:form id="availabilityID">
-
                 <b:column span="4">
                     <b:row>
                         <!-- Drop-down menu display Monday-Sunday -->
                         <h:outputLabel value="Day: "/>
-                        <h:outputText                           
-                            id="dayOfWeek"
-                            style=""
-                            value="#{updateAvailabilityBean.availability.dayOfWeek}"
-                            binding="#{day}">
-                        </h:outputText>
+                        <h:outputText id="dayOfWeek" value="#{updateAvailabilityBean.availability.dayOfWeek}" binding="#{day}"/>
                         <br></br>
                         <!-- Start Time -->
                         <h:outputLabel value="Start Time:"/>
-                        <b:inputText type="time" id="startTime"
-                                     value="#{updateAvailabilityBean.availability.startTime}"
-                                     required="true"
-                                     binding="#{availTime}">
+                        <b:inputText type="time" id="startTime" value="#{updateAvailabilityBean.availability.startTime}" required="true" binding="#{availTime}">
                             <f:convertDateTime type="time" pattern="HH:mm" dateStyle="full"/>
                             <b:message for="startTime"/>
                         </b:inputText>
                         <!-- End Time -->
                         <h:outputLabel value="End Time:" />
-                        <b:inputText type="time" id="endTime"
-                                     value="#{updateAvailabilityBean.availability.endTime}"
-                                     required="true" >
+                        <b:inputText type="time" id="endTime" value="#{updateAvailabilityBean.availability.endTime}" required="true" >
                             <f:convertDateTime type="time" pattern="HH:mm" dateStyle="full"/>
                             <b:message for="endTime"/>
                             <f:attribute name="AvailabilityList" value="#{updateAvailabilityBean.availabilityList}"/>

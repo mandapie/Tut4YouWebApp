@@ -51,6 +51,8 @@ import javax.persistence.TemporalType;
     //@NamedQuery(name = Tutor.FIND_TUTORS_BY_COURSE_DAY_TIME_DZIP, query = "SELECT t FROM Tutor t JOIN t.courses c JOIN t.availabilities a WHERE c.courseName = :coursename AND a.dayOfWeek = :dayofweek AND a.startTime <= :requestTime AND a.endTime >= :requestTime AND t.doNotDisturb = :doNotDisturb AND t.currentZip = :zipCode"),
     @NamedQuery(name = Tutor.FIND_TUTORS_BY_COURSE, query = "SELECT COUNT(t) FROM Tutor t JOIN t.courses c WHERE c.courseName = :coursename"),
     @NamedQuery(name = Tutor.FIND_TUTORS, query = "SELECT t FROM Tutor t"),
+        @NamedQuery(name = Tutor.FIND_TUTOR_BY_USERNAME, query = "SELECT t FROM Tutor t WHERE t.username = :username"),
+
 })
 public class Tutor extends User implements Serializable {
 
@@ -74,6 +76,11 @@ public class Tutor extends User implements Serializable {
      * JPQL Query to obtain a list of tutors
      */
     public static final String FIND_TUTORS = "Tutor.findTutors";
+    
+    /**
+     * JPQL Query to obtain a list of tutors by username
+     */
+    public static final String FIND_TUTOR_BY_USERNAME = "Tutor.findTutorByUsername";
 
     @Temporal(TemporalType.DATE)
     private Date dateJoinedAsTutor;

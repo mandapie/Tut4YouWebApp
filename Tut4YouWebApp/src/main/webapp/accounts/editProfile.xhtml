@@ -91,7 +91,7 @@
                             <h:outputLabel value="Default ZipCode"/>
                         </b:column>
                         <b:column medium-screen="4">
-                            <b:inputText id="zip" placeholder="Enter Default Zip" required="true" requiredMessage="required" value="#{userBean.user.defaultZip}" validator="#{basicValidator.validateInteger}">
+                            <b:inputText id="zip" placeholder="Enter Default Zip" required="true" requiredMessage="required" value="#{userBean.user.defaultZip}" validator="#{basicValidator.validateZipcode}">
                                 <b:message for="zip"/>
                                 <f:validateLength minimum="5" maximum="5"/>
                             </b:inputText>

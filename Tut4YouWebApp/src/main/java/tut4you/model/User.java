@@ -117,7 +117,6 @@ public class User implements Serializable {
 
     /**
      * User overloaded constructor
-     *
      * @param email
      * @param firstName
      * @param lastName
@@ -142,7 +141,6 @@ public class User implements Serializable {
 
     /**
      * Gets the email of a user
-     *
      * @return the email
      */
     public String getEmail() {
@@ -151,7 +149,6 @@ public class User implements Serializable {
 
     /**
      * Sets the email of a user
-     *
      * @param email
      */
     public void setEmail(String email) {
@@ -160,7 +157,6 @@ public class User implements Serializable {
 
     /**
      * Gets the first name of a user
-     *
      * @return first name
      */
     public String getFirstName() {
@@ -169,7 +165,6 @@ public class User implements Serializable {
 
     /**
      * Sets the first name of a user
-     *
      * @param firstName
      */
     public void setFirstName(String firstName) {
@@ -178,7 +173,6 @@ public class User implements Serializable {
 
     /**
      * Gets the last name of a student
-     *
      * @return the last name
      */
     public String getLastName() {
@@ -187,7 +181,6 @@ public class User implements Serializable {
 
     /**
      * Sets the last name of a user
-     *
      * @param lastName
      */
     public void setLastName(String lastName) {
@@ -196,7 +189,6 @@ public class User implements Serializable {
 
     /**
      * Gets the username of a user
-     *
      * @return username
      */
     public String getUsername() {
@@ -205,7 +197,6 @@ public class User implements Serializable {
 
     /**
      * Sets the username of a user
-     *
      * @param username
      */
     public void setUsername(String username) {
@@ -214,7 +205,6 @@ public class User implements Serializable {
 
     /**
      * Gets the phone number of a user
-     *
      * @return phone number
      */
     public String getPhoneNumber() {
@@ -223,7 +213,6 @@ public class User implements Serializable {
 
     /**
      * Sets the phone number of a user
-     *
      * @param phoneNumber
      */
     public void setPhoneNumber(String phoneNumber) {
@@ -232,7 +221,6 @@ public class User implements Serializable {
 
     /**
      * Gets the password of a user
-     *
      * @return password
      */
     public String getPassword() {
@@ -241,7 +229,6 @@ public class User implements Serializable {
 
     /**
      * Sets the password of a user
-     *
      * @param password
      */
     public void setPassword(String password) {
@@ -250,8 +237,7 @@ public class User implements Serializable {
 
     /**
      * gets the university of the user
-     *
-     * @return
+     * @return university
      */
     public String getUniversity() {
         return university;
@@ -259,40 +245,62 @@ public class User implements Serializable {
 
     /**
      * gets the university of the user
-     *
      * @param university
      */
     public void setUniversity(String university) {
         this.university = university;
     }
 
+    /**
+     * gets the security question
+     * @return securityQuestion
+     */
     public String getSecurityQuestion() {
         return securityQuestion;
     }
 
+    /**
+     * sets the security question
+     * @param securityQuestion 
+     */
     public void setSecurityQuestion(String securityQuestion) {
         this.securityQuestion = securityQuestion;
     }
 
+    /**
+     * gets the security answer
+     * @return securityAnswer
+     */
     public String getSecurityAnswer() {
         return securityAnswer;
     }
 
+    /**
+     * gets the security answer
+     * @param securityAnswer 
+     */
     public void setSecurityAnswer(String securityAnswer) {
         this.securityAnswer = securityAnswer;
     }
 
+    /**
+     * get a list of ratings
+     * @return list of ratings
+     */
     public Collection<Rating> getRatings() {
         return ratings;
     }
 
+    /**
+     * sets a list of ratings
+     * @param ratings 
+     */
     public void setRatings(Collection<Rating> ratings) {
         this.ratings = ratings;
     }
     
     /**
      * Gets the collection requests submitted by a user
-     *
      * @return collection of Requests
      */
     public Collection<Request> getRequests() {
@@ -301,7 +309,6 @@ public class User implements Serializable {
 
     /**
      * Sets the collection requests submitted by a user
-     *
      * @param requests
      */
     public void setRequests(Collection<Request> requests) {
@@ -310,7 +317,6 @@ public class User implements Serializable {
 
     /**
      * gets the groups that this user is a member of
-     *
      * @return a collection of groups that this user belongs to
      */
     public Collection<Group> getGroups() {
@@ -319,7 +325,6 @@ public class User implements Serializable {
 
     /**
      * sets the groups that this user belongs to
-     *
      * @param groups is the collection of groups that this user is a member of
      */
     public void setGroups(Collection<Group> groups) {
@@ -328,7 +333,6 @@ public class User implements Serializable {
 
     /**
      * Adds a request submitted to the collection of Requests
-     *
      * @param request
      */
     public void addRequest(Request request) {
@@ -340,7 +344,6 @@ public class User implements Serializable {
 
     /**
      * Adds a rating submitted to the collection of Rating
-     *
      * @param rating
      */
     public void addRating(Rating rating) {
@@ -352,7 +355,6 @@ public class User implements Serializable {
 
     /**
      * Add a group to the user's set of groups
-     *
      * @param group to be added
      */
     public void addGroup(Group group) {
@@ -364,7 +366,6 @@ public class User implements Serializable {
 
     /**
      * determines whether or not the information for this user is valid
-     *
      * @param confirmPassword the password to be confirmed
      * @return <code>true</code> if this user has valid information;
      * <code>false</code> otherwise
@@ -379,7 +380,6 @@ public class User implements Serializable {
     /**
      * gets the user type from the discriminator column
      * https://stackoverflow.com/questions/15208793/getting-the-value-of-the-discriminator-column
-     *
      * @return the user type
      */
     public String getDecriminatorValue() {
@@ -388,7 +388,6 @@ public class User implements Serializable {
 
     /**
      * Override hashCode
-     *
      * @return hash
      */
     @Override
@@ -400,7 +399,6 @@ public class User implements Serializable {
 
     /**
      * Overrides the equals method
-     *
      * @param object
      * @return true if object is User, else false
      */
@@ -419,7 +417,6 @@ public class User implements Serializable {
 
     /**
      * Override toString
-     *
      * @return User attributes
      */
     @Override

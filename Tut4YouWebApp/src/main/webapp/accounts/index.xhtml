@@ -1,16 +1,120 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        <title>TODO supply a title</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    </head>
-    <body>
-        <div>TODO write content</div>
-    </body>
-</html>
+<ui:composition template="/WEB-INF/templates/layout.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                xmlns:p="http://primefaces.org/ui">
+    <!--
+        Licensed under the Academic Free License (AFL 3.0).
+        http://opensource.org/licenses/AFL-3.0
+
+        This code has been developed by a group of CSULB students working on their 
+        Computer Science senior project called Tutors4You.
+
+        Tutors4You is a web application that students can utilize to find a tutor and
+        ask them to meet at any location of their choosing. Students that struggle to understand 
+        the courses they are taking would benefit from this peer to peer tutoring service.
+
+        2017 Amanda Pan <daikiraidemodaisuki@gmail.com>
+        2017 Andrew Kaichi <ahkaichi@gmail.com>
+        2017 Keith Tran <keithtran25@gmail.com>
+        2017 Syed Haider <shayder426@gmail.com>
+    -->
+    <!-- @author Amanda Pan <daikiraidemodaisuki@gmail.com> -->
+    <ui:define name="title">Dashboard</ui:define>
+    <ui:define name="content">
+        <h1>Dashboard</h1>
+        <b:container fluid="true">
+            <b:form>
+                <b:column medium-screen="two-thirds">
+                    <!-- tab column with request list, notification list, schedule, and course list-->
+                    <b:tabView active-index="#{userBean.tabIndex}"> <!-- number of activeIndex decides which tab show -->
+                        <b:tab title="Active Requests">
+                            <br></br> <!-- for better spacing -->
+                            <b:dataTable value="#{requestBean.requestList}" var="r">
+                                <b:dataTableColumn>
+                                    <f:facet name="header">Day of Week</f:facet>
+                                    #{r.dayOfWeek}
+                                </b:dataTableColumn>
+                                <b:dataTableColumn>
+                                    <f:facet name="header">Date and Time</f:facet>
+                                    <h:outputText value="#{r.currentTime}">
+                                        <!-- sets the date and time to a certain format-->
+                                        <f:convertDateTime pattern = "hh:mm a" />
+                                    </h:outputText>
+                                </b:dataTableColumn>
+                                <b:dataTableColumn value="#{r.description}" />
+                                <b:dataTableColumn>
+                                    <f:facet name="header">Action</f:facet>
+                                    <b:commandButton value="Cancel" look="danger" action="#{requestBean.cancelRequest(r)}" />
+                                </b:dataTableColumn>
+                            </b:dataTable>
+                        </b:tab>
+                        <c:if test="#{userBean.isTutor}">
+                            <b:tab title="Notifications">
+                                <!--NOT WORKING PROPERLY--> 
+                                <c:when test="#{notifyBean.hasNotif}">
+                                    <f:facet name="anchor"><b:badge value="#{notifyBean.numofNotif}"/></f:facet>
+                                </c:when>
+                                <br></br> <!-- for better spacing -->
+                                <b:dataTable value="#{notifyBean.pendingRequestList}" var="req">
+                                    <b:dataTableColumn>
+                                        <f:facet name="header">Day of Week</f:facet>
+                                            #{req.course.courseName}
+                                    </b:dataTableColumn>
+                                    <b:dataTableColumn value="#{req.description}" />
+                                    <h:column>
+                                        <f:facet name="header">Action</f:facet>  
+                                        <b:commandButton value="Accept" look="success" action="#{requestBean.setTutorToRequest(req)}"/>
+                                        <span></span> <!-- somehow can't make spacing unless using empty span-->
+                                        <b:commandButton value="Decline" action="#{requestBean.declineRequest(req)}"/>
+                                    </h:column>
+                                </b:dataTable>
+                            </b:tab>
+                            <b:tab title="Schedule">
+                                <br></br> <!-- for better spacing -->
+                                <b:dataTable value="#{availabilityBean.availabilityList}" var="avail" id="availabilityTable">
+                                    <b:dataTableColumn>
+                                        <f:facet name="header">Day of Week</f:facet>
+                                        <h:outputText value="#{avail.dayOfWeek}"/>
+                                    </b:dataTableColumn>
+                                    <b:dataTableColumn>
+                                        <f:facet name="header">Start Time</f:facet>
+                                        <h:outputText value="#{avail.startTime}">                        
+                                            <f:convertDateTime pattern="hh:mm a"></f:convertDateTime>
+                                        </h:outputText>
+                                    </b:dataTableColumn>
+                                    <b:dataTableColumn>
+                                        <f:facet name="header">End Time</f:facet>
+                                        <h:outputText value="#{avail.endTime}">                        
+                                            <f:convertDateTime pattern="hh:mm a"></f:convertDateTime>
+                                        </h:outputText>
+                                    </b:dataTableColumn>
+                                    <b:dataTableColumn>
+                                        <f:facet name="header">Action</f:facet>
+                                        <b:commandButton value="Edit" action="#{updateAvailabilityBean.goToUpdateAvailabilityPage(avail)}"/>
+                                        <span></span> <!-- somehow can't make spacing unless using empty span-->
+                                        <b:commandButton value="Delete" look="danger" action="#{availabilityBean.deleteAvailability(avail)}"/>
+                                    </b:dataTableColumn>
+                                </b:dataTable>  
+                            </b:tab>
+                            <b:tab title="Courses">
+                                <br></br> <!-- for better spacing -->
+                                <!-- Bootsfaces datatable to show the data in an organized fashion -->
+                                <b:dataTable value="#{courseBean.tutorCourses}" var="course">
+                                    <b:dataTableColumn>
+                                        <f:facet name="header">Courses You Have Taken</f:facet>
+                                            #{course.courseName}
+                                    </b:dataTableColumn>
+                                </b:dataTable>
+                            </b:tab>
+                        </c:if>
+                    </b:tabView>
+                </b:column>
+            </b:form>
+        </b:container>
+        <ui:debug hotkey='x'/>
+    </ui:define>
+</ui:composition>

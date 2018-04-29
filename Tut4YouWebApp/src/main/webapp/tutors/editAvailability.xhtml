@@ -5,8 +5,7 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:b="http://bootsfaces.net/ui"
                 xmlns:p="http://primefaces.org/ui">
-    <!-- @Author Keith Tran <keithtran25@gmail.com>
-         @author Andrew Kaichi <ahkaichi@gmail.com> 
+    <!-- 
          @author Syed Haider <shayder426@gmail.com> -->
     <ui:define name="title">Availability</ui:define>
     <ui:define name="content">
@@ -21,14 +20,14 @@
                         <h:outputText                           
                             id="dayOfWeek"
                             style=""
-                            value="#{availabilityBean.availability.dayOfWeek}"
+                            value="#{updateAvailabilityBean.availability.dayOfWeek}"
                             binding="#{day}">
                         </h:outputText>
                         <br></br>
                         <!-- Start Time -->
                         <h:outputLabel value="Start Time:"/>
                         <b:inputText type="time" id="startTime"
-                                     value="#{availabilityBean.availability.startTime}"
+                                     value="#{updateAvailabilityBean.availability.startTime}"
                                      required="true"
                                      binding="#{availTime}">
                             <f:convertDateTime type="time" pattern="HH:mm" dateStyle="full"/>
@@ -37,24 +36,24 @@
                         <!-- End Time -->
                         <h:outputLabel value="End Time:" />
                         <b:inputText type="time" id="endTime"
-                                     value="#{availabilityBean.availability.endTime}"
+                                     value="#{updateAvailabilityBean.availability.endTime}"
                                      required="true" >
                             <f:convertDateTime type="time" pattern="HH:mm" dateStyle="full"/>
                             <b:message for="endTime"/>
-                            <f:attribute name="AvailabilityList" value="#{availabilityBean.availabilityList}"/>
+                            <f:attribute name="AvailabilityList" value="#{updateAvailabilityBean.availabilityList}"/>
                             <f:attribute name="otherValue" value="#{availTime.value}" />
                             <f:attribute name="day" value="#{day.value}"/>
                             <f:validator validatorId="timeValidator"/>
                         </b:inputText>         
-                        <!-- Adds to availability in -->
-                        <b:commandButton value="Add Availability" style="width:100%" action="#{availabilityBean.updateAvailability(availabilityBean.availability)}">
+                        <!-- Update availability  -->
+                        <b:commandButton value="Update Availability" style="width:100%" action="#{updateAvailabilityBean.updateAvailability(updateAvailabilityBean.availability)}">
                         </b:commandButton>
                     </b:row>
                 </b:column>
 
                 <b:column span="8">
                     <h:outputLabel value="Your current availabilities"/>
-                    <b:dataTable value="#{availabilityBean.availabilityList}" var="avail" id="availabilityTable">
+                    <b:dataTable value="#{updateAvailabilityBean.availabilityList}" var="avail" id="availabilityTable">
                         <b:dataTableColumn>
                             <f:facet name="header">Day of Week</f:facet>
                             <h:outputText value="#{avail.dayOfWeek}"/>

@@ -37,18 +37,17 @@ import tut4you.model.*;
 import tut4you.model.Tut4YouApp;
 
 /**
- * Stores the availability of a tutor
+ * Updates the availability of a tutor
  *
- * @author Andrew Kaichi <Andrew.Kaichi@student.csulb.edu>
- * modified by Syed Haider <shayder426@gmail.com>
+ * @author Syed Haider <shayder426@gmail.com>
  */
 @Named
-@ViewScoped
-public class AvailabilityBean implements Serializable {
+@SessionScoped
+public class UpdateAvailabilityBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private static final Logger LOGGER = Logger.getLogger("AvailabilityBean");
+    private static final Logger LOGGER = Logger.getLogger("UpdateAvailabilityBean");
 
     @EJB
     private Tut4YouApp tut4youApp;
@@ -59,13 +58,11 @@ public class AvailabilityBean implements Serializable {
     @Temporal(TemporalType.TIME)
     private java.util.Date endTime;
     private List<Availability> availabilityList = new ArrayList();
-    private boolean addNewAvailability = false;
-    //private boolean addUpdatedAvailability = false;
 
     /**
      * Creates a new instance of the Availability entity
      */
-    public AvailabilityBean() {
+    public UpdateAvailabilityBean() {
         availability = new Availability();
     }
 
@@ -124,26 +121,6 @@ public class AvailabilityBean implements Serializable {
     }
 
     /**
-     * Gets the addNewAvailability which determines if the modal will show or
-     * not
-     *
-     * @return true if availability is added
-     */
-    public boolean isAddNewAvailability() {
-        return addNewAvailability;
-    }
-
-    /**
-     * Sets the addNewAvailability which determines if the modal will show or
-     * not
-     *
-     * @param addNewAvailability true/false if availability is added
-     */
-    public void setAddNewAvailability(boolean addNewAvailability) {
-        this.addNewAvailability = addNewAvailability;
-    }
-
-    /**
      * Gets a list of the availabilities of the Tutor from the database
      *
      * @return a list of availabilities
@@ -153,22 +130,6 @@ public class AvailabilityBean implements Serializable {
         return availabilityList;
     }
 
-    /**
-     * Adds the availability to the tutor
-     * @return result based on if the availability form was filled out properly
-     * @throws java.text.ParseException
-     */
-    public void addAvailability() throws ParseException {
-
-        availability.setStartTime(startTime);
-        availability.setEndTime(endTime);
-        try {
-            availability = tut4youApp.addAvailability(availability);
-            addNewAvailability = availability != null;
-        } catch (AvailabilityExistsException see) {
-            FacesContext.getCurrentInstance().addMessage("addAvailabilityForm:availability", new FacesMessage("You have already set this availability."));
-        }
-    }
 
     /**
      * Updates the current availability of the tutor
@@ -187,18 +148,6 @@ public class AvailabilityBean implements Serializable {
         availability.setEndTime(avail.getEndTime());
         tut4youApp.updateAvailability(availability, avail.getStartTime(), avail.getEndTime());
         return result;
-    }
-    
-
-
-    /**
-     * Delete the availability from the tutor
-     *
-     * @param avail
-     * @throws java.text.ParseException
-     */
-    public void deleteAvailability(Availability avail) throws ParseException {
-        tut4youApp.deleteAvailability(avail);
     }
 
     /**

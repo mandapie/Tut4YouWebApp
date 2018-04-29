@@ -22,6 +22,7 @@ import tut4you.model.*;
 /**
  *
  * @author Amanda
+ * modified by Syed Haider
  */
 @Named
 @SessionScoped
@@ -64,23 +65,13 @@ public class ProfileBean implements Serializable {
     }
 
     public void showUsername(String username) {
-        //String userEmail = userBean.returnEmailFromSession();
-        // System.out.println(userEmail);
-        UIComponent component = null;
-        //User user = (User)component.getAttributes().get("user");
-        System.out.println("Did this make it here");
-        System.out.println("from showusername: " + username);
-        String email = "amanda@gmail.com";
-        user = tut4youapp.findUser(email);
-        System.out.println(user);
-        //username = user.getUsername();
+        Tutor tutor = findTutorEmail(username);
+        user = tut4youapp.findUser(tutor.getEmail());
+    }
+    
+    public Tutor findTutorEmail(String username)
+    {
+        return tut4youapp.findTutorEmail(username);
     }
 
-    public String goToTutorProfile(Tutor tutor) {
-        user = tut4youapp.findTutor(tutor.getEmail());
-        System.out.println(user);
-        username = user.getUsername();
-        System.out.println(username);
-        return "tutorProfile";
-    }
 }

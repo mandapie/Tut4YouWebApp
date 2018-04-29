@@ -4,7 +4,8 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:b="http://bootsfaces.net/ui"
-                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                xmlns:p="http://primefaces.org/ui">
     <!--
         Licensed under the Academic Free License (AFL 3.0).
         http://opensource.org/licenses/AFL-3.0
@@ -23,12 +24,12 @@
     -->
     <!-- @author Amanda Pan <daikiraidemodaisuki@gmail.com> -->
     <ui:define name="metadata">
-        <f:metadata>
-            <f:viewParam name="username" value="#{profileBean.username}"/> <!--required="true" requiredMessage="Bad request. Please use a link from within the system."/>-->
-            <!--<f:event type="preRenderView" listener=""/>-->
-            <f:viewAction action="#{profileBean.showUsername}"/>
-        </f:metadata>
     </ui:define>
+    <f:metadata>
+        <f:viewParam name="username" value="#{profileBean.username}"/>
+        <f:event type="preRenderView" listener="#{profileBean.showUsername}">
+        </f:event>
+    </f:metadata>
     <ui:define name="title">Tutor's Profile Page</ui:define>
     <ui:define name="content">
         <h1>Tutor's Profile</h1>
@@ -47,7 +48,7 @@
                         <h:outputLabel value="Username:"/>
                     </b:column>
                     <b:column span="7">
-                        <h:outputText value="#{profileBean.user.userName}"/>
+                        <h:outputText value="#{profileBean.user.username}"/>
                     </b:column>
                 </b:row>
                 <b:row>
@@ -74,15 +75,10 @@
                         <h:outputText value="#{profileBean.user.university}"/>
                     </b:column>
                 </b:row>
-                <b:row>
-                    <b:column span="5">
-                        <h:outputLabel value="Price Rate:"/>
-                    </b:column>
-                    <b:column span="7">
-                        <h:outputText value="#{profileBean.user.hourlyRate}"/>
-                    </b:column>
-                </b:row>
             </b:panel>
+            
+
+        
         </b:container>
     </ui:define>
 </ui:composition>

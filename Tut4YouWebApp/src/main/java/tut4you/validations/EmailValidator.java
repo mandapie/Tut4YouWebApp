@@ -55,7 +55,6 @@ public class EmailValidator implements Validator {
         }
 
         if (!userEmail.equals(inputtedEmail)) {
-            System.out.println("Are you working bruv?");
             throw new ValidatorException(new FacesMessage("That is not your email."));
         }
     }

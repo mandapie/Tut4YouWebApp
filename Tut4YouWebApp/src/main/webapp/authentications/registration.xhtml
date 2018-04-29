@@ -36,7 +36,6 @@
                         <p:selectOneRadio id="ut" value="#{registrationBean.userType}" required="true" requiredMessage="required">
                             <b:message for="ut"/>
                             <f:selectItem itemLabel="Student" itemValue="Student" />
-                            
                             <f:selectItem itemValue="Tutor" itemLabel="Tutor" />
                             <f:ajax render="tutorFields" execute="ut"/>
                         </p:selectOneRadio>
@@ -64,7 +63,7 @@
                         </b:inputText>
                     </b:column>
                 </b:row>
-                <!-- UserName -->
+                <!-- Username -->
                 <b:row>
                     <b:column medium-screen="2">
                         <h:outputLabel value="Username"/>
@@ -103,13 +102,11 @@
                         <!-- Price Rate -->
                         <b:row>
                             <b:column medium-screen="2">
-                                <h:outputLabel value="Hourly Rate (0.01 - 99999.99)"/>
+                                <h:outputLabel value="Hourly Rate"/>
                             </b:column>
                             <b:column medium-screen="4">
-                                <b:inputText id="HourlyRate" placeholder="Enter Hourly Rate (0.01 - 99999.99)" required="true" requiredMessage="required" value="#{registrationBean.hourlyRate}" validatorMessage="Invalid format for hourly rate. "  converterMessage = "Hourly Rate must be a number.">
+                                <b:inputText id="HourlyRate" placeholder="Enter Hourly Rate (0.00 - 99.99)" required="true" requiredMessage="required" value="#{registrationBean.hourlyRate}" validator="#{basicValidator.validateHourlyRate}">
                                     <b:message for="HourlyRate"/>
-                                    <f:convertNumber minFractionDigits="2" />
-                                    <f:validateLength minimum="1" maximum="5"/>
                                 </b:inputText>
                             </b:column>
                         </b:row>
@@ -119,9 +116,8 @@
                                 <h:outputLabel value="Default Zip Code"/>
                             </b:column>
                             <b:column medium-screen="4">
-                                <b:inputText id="zip" placeholder="Enter Default Zip Code Location" required="true" requiredMessage="required" value="#{registrationBean.defaultZip}" validator="#{basicValidator.validateInteger}">
+                                <b:inputText id="zip" placeholder="Enter Default Zip Code Location" required="true" requiredMessage="required" value="#{registrationBean.defaultZip}" validator="#{basicValidator.validateZipcode}">
                                     <b:message for="zip"/>
-                                    <f:validateLength minimum="5" maximum="5"/>
                                 </b:inputText>
                             </b:column>
                         </b:row>
@@ -153,7 +149,6 @@
                     <b:column medium-screen="4">
                         <b:inputText id="em" placeholder="Enter Email Address" required="true" requiredMessage="required" value="#{registrationBean.newUser.email}" validator="#{basicValidator.validateEmail}">
                             <b:message for="em"/>
-                            <f:validateLength minimum="6"/>
                         </b:inputText>
                     </b:column>
                 </b:row>
@@ -163,7 +158,7 @@
                         <h:outputLabel value="Password" />
                     </b:column>
                     <b:column medium-screen="4">
-                        <b:inputSecret id="pasword" binding="#{passwordComponent}" required="true" requiredMessage="required" placeholder="Enter Password" validatorMessage="Please enter at least 8 characters" value="#{registrationBean.newUser.password}">
+                        <b:inputSecret id="pasword" binding="#{passwordComponent}" required="true" requiredMessage="required" placeholder="Enter Password" validatorMessage="Please enter at least 3 characters" value="#{registrationBean.newUser.password}">
                             <b:message for="pasword"/>
                             <f:validateLength minimum="3"/>
                         </b:inputSecret>
@@ -175,9 +170,8 @@
                         <h:outputLabel value="Confirm Password"/>
                     </b:column>
                     <b:column medium-screen="4">
-                        <b:inputSecret id="cp" placeholder="Enter Password" required="true" requiredMessage="required" value="#{registrationBean.confirmPassword}">
+                        <b:inputSecret id="cp" placeholder="Enter Password" required="true" requiredMessage="required" value="#{registrationBean.confirmPassword}" validator="#{basicValidator.validatePassword}">
                             <b:message for="cp"/>
-                            <f:validator validatorId="equalsValidator" />
                             <f:attribute name="otherValue" value="#{passwordComponent.value}" />
                         </b:inputSecret>
                     </b:column>

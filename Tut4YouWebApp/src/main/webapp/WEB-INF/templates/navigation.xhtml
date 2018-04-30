@@ -4,7 +4,8 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:b="http://bootsfaces.net/ui">
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <!--
         Licensed under the Academic Free License (AFL 3.0).
         http://opensource.org/licenses/AFL-3.0
@@ -24,5 +25,25 @@
     <!-- @author Amanda Pan <daikiraidemodaisuki@gmail.com> -->
     <!-- MIGHT NOT EVEN NEED THIS -->
     <ui:composition>
+        <b:navLink value="Request a Tutor" href="/Tut4YouWebApp/students/requestTutor.xhtml"/>
+        <br/>
+        <b:navLink value="View Previous Sessions" href="/Tut4YouWebApp/students/viewPreviousSessions.xhtml"/>
+        <c:if test="#{userBean.isTutor}">
+            <b:navLink value="" href=""/>
+            <b:navLink value="" href=""/>
+            <b:navLink value="" href=""/>
+            <b:navLink value="" href=""/>
+            <b:navLink value="" href=""/>
+            <a href="/Tut4YouWebApp/tutors/availability.xhtml">Add Availability</a>
+            <br></br>
+            <a href="/Tut4YouWebApp/tutors/addCourse.xhtml">Add Courses</a>
+            <br></br>
+            <a href="/Tut4YouWebApp/tutors/viewReviews.xhtml">View Reviews</a>
+            <br></br>
+            <a href="/Tut4YouWebApp/tutors/sessionTimer.xhtml">Session Timer</a>
+            <br></br>
+            <a href="/Tut4YouWebApp/tutors/uploadTranscript.xhtml">Add Transcript</a>
+            <br></br>
+        </c:if>
     </ui:composition>
 </html>

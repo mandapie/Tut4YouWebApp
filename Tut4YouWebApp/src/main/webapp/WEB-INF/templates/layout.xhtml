@@ -34,13 +34,18 @@
         </ui:insert>
         
         <b:container>
-            <ui:insert name="pageNavigation" >
-                <ui:include src="navigation.xhtml" />
-            </ui:insert>
-            
-            <ui:insert name="content" >
-            </ui:insert>
-        
+            <b:row>
+               <b:column medium-screen="two-thirds">
+                    <ui:insert name="content" >
+                    </ui:insert>
+                </b:column>
+
+                <b:column medium-screen="one-third">
+                    <ui:insert name="pageNavigation" >
+                        <ui:include src="navigation.xhtml" />
+                    </ui:insert>
+                </b:column> 
+            </b:row>            
             <ui:insert name="footer" >
                 <ui:include src="footer.xhtml" />
             </ui:insert>

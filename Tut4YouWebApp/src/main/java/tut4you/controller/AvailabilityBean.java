@@ -180,9 +180,6 @@ public class AvailabilityBean implements Serializable {
     public String updateAvailability(Availability avail) throws ParseException {
         String result = "updatedAvailability";
         this.availability = avail;
-        System.out.println("Have you been called");
-        System.out.println(avail.getStartTime());
-        System.out.println(avail.getEndTime());
         availability.setStartTime(avail.getStartTime());
         availability.setEndTime(avail.getEndTime());
         tut4youApp.updateAvailability(availability, avail.getStartTime(), avail.getEndTime());

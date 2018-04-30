@@ -21,7 +21,8 @@
                             id="dayOfWeek"
                             style=""
                             value="#{updateAvailabilityBean.availability.dayOfWeek}"
-                            binding="#{day}">
+                            binding="#{day}"
+                            >
                         </h:outputText>
                         <br></br>
                         <!-- Start Time -->
@@ -29,6 +30,7 @@
                         <b:inputText type="time" id="startTime"
                                      value="#{updateAvailabilityBean.availability.startTime}"
                                      required="true"
+                                     requiredMessage="required"
                                      binding="#{availTime}">
                             <f:convertDateTime type="time" pattern="HH:mm" dateStyle="full"/>
                             <b:message for="startTime"/>
@@ -37,7 +39,8 @@
                         <h:outputLabel value="End Time:" />
                         <b:inputText type="time" id="endTime"
                                      value="#{updateAvailabilityBean.availability.endTime}"
-                                     required="true" >
+                                     required="true"
+                                     requiredMessage="required" >
                             <f:convertDateTime type="time" pattern="HH:mm" dateStyle="full"/>
                             <b:message for="endTime"/>
                             <f:attribute name="AvailabilityList" value="#{updateAvailabilityBean.availabilityList}"/>

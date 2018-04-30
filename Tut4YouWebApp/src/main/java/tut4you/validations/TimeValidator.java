@@ -30,15 +30,14 @@ public class TimeValidator implements Validator {
         String day = (String) component.getAttributes().get("day");
         Object listValue = component.getAttributes().get("AvailabilityList");
         List<Availability> list = (List<Availability>) listValue;
-        System.out.println(day);
-        System.out.println(startTime);
-        System.out.println(endTime);
         for (Availability avail : list) {
-          if (day.equals(avail.getDayOfWeek()) && (startTime.equals(avail.getStartTime()) && endTime.equals(avail.getEndTime()))) {
+            if (day.equals(avail.getDayOfWeek()) && (startTime.equals(avail.getStartTime()) && endTime.equals(avail.getEndTime()))) {
                 FacesMessage message = new FacesMessage("You currently have this date and time set for your availability.");
                 throw new ValidatorException(message);
-            }
-           else if (startTime.after(endTime)) {
+            } else if (startTime.equals(endTime)) {
+                FacesMessage message = new FacesMessage("Start Time cannot be the same as the End Time");
+                throw new ValidatorException(message);
+            } else if (startTime.after(endTime)) {
                 FacesMessage message = new FacesMessage("Start Time must be before End Time");
                 throw new ValidatorException(message);
             } else if (day.equals(avail.getDayOfWeek()) && (startTime.after(avail.getStartTime()) && startTime.before(avail.getEndTime()))) {

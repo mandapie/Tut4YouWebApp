@@ -25,6 +25,8 @@ import java.util.List;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import tut4you.model.*;
@@ -119,7 +121,7 @@ public class RatingBean implements Serializable {
         return result;
     }
 
-    public void showUsername() {
+    public void showUsername(String username) {
         Tutor tutor = findTutorEmail(username);
         this.tutor = tutor;
     }
@@ -155,6 +157,11 @@ public class RatingBean implements Serializable {
     public String createNewRating() throws ParseException {
         String result = "success";
         Date date = new Date();
+        if(rating.getRatingValue()<=0)
+        {
+                  FacesMessage message = new FacesMessage("Click 1-5 stars!");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+        }
         rating.setDateRated(date);
         rating = tut4youApp.newRating(rating, tutor);
         return result;

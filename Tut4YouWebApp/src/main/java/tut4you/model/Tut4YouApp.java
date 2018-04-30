@@ -620,14 +620,14 @@ public class Tut4YouApp {
      * @param userType
      * @param priceRate
      * @param defaultZip
-     * @param maxRadius
+     * @param zipCode
      * @param joinedDateAsTutor
      * @throws tut4you.exception.UserExistsException
      * @throws java.text.ParseException
      */
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void registerUser(User user, String userType, double priceRate, String defaultZip, int maxRadius, Date joinedDateAsTutor) throws UserExistsException, ParseException {
+    public void registerUser(User user, String userType, double priceRate, String defaultZip, ZipCode zipCode, Date joinedDateAsTutor) throws UserExistsException, ParseException {
         if (null == em.find(User.class, user.getEmail())) {
             Group group = em.find(Group.class, "tut4youapp.student");
             User newStudent = new User(user);
@@ -642,14 +642,18 @@ public class Tut4YouApp {
                 Tutor newTutor = new Tutor(user);
                 newTutor.setDateJoinedAsTutor(joinedDateAsTutor);
                 newTutor.setHourlyRate(priceRate);
-                newTutor.setMaxRadius(maxRadius);
+                newTutor.setZipCode(zipCode);
+                zipCode.addTutor(newTutor);
+                
                 newTutor.setDefaultZip(defaultZip);
                 newTutor.addGroup(group); //Add user a student role
                 group.addTutor(newTutor);
                 group = em.find(Group.class, "tut4youapp.tutor");
                 newTutor.addGroup(group); //Add user a tutor role
                 group.addTutor(newTutor);
+                em.persist(zipCode);
                 em.persist(newTutor);
+                
             }
             em.flush();
         } else {
@@ -926,7 +930,8 @@ public class Tut4YouApp {
         UserBean userBean = new UserBean();
         String currentUserEmail = userBean.getEmailFromSession();
         Tutor tutor = findTutor(currentUserEmail);
-        tutor.setCurrentZip(currentZip);
+        tutor.getZipCode().setCurrentZipCode(currentZip);
+        //tutor.setCurrentZip(currentZip);
         em.merge(tutor);
         em.flush();
         return tutor;
@@ -971,7 +976,7 @@ public class Tut4YouApp {
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public ZipCode addZipCode(ZipCode zipCode) {
         TypedQuery<ZipCode> Query = em.createNamedQuery(ZipCode.FIND_ZIP_BY_ZIP_MAXRADIUS, ZipCode.class);
-        Query.setParameter("zipCode", zipCode.getZipCode());
+        Query.setParameter("zipCode", zipCode.getCurrentZipCode());
         Query.setParameter("maxRadius", zipCode.getMaxRadius());
         if (Query.getResultList().isEmpty()) {
             em.persist(zipCode);
@@ -979,7 +984,6 @@ public class Tut4YouApp {
         }
         return Query.getSingleResult();
     }
-
     /**
      * Add ZipCodeByRadius if it does not belong to zip code location
      *

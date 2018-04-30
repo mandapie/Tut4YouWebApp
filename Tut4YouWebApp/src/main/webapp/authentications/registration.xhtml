@@ -127,7 +127,7 @@
                                 <h:outputLabel value="Max Radius"/>
                             </b:column>
                             <b:column medium-screen="4">
-                                <b:selectOneMenu class="form-control" id="maxRadius" value="#{registrationBean.maxRadius}" required="true" requiredMessage="required">
+                                <b:selectOneMenu class="form-control" id="maxRadius" value="#{registrationBean.zipCode.maxRadius}" required="true" requiredMessage="required">
                                     <f:selectItem itemLabel="Select max radius..." noSelectionOption="true"/>
                                     <f:selectItem itemLabel="1 mile" itemValue="1" />
                                     <f:selectItem itemLabel="3 miles" itemValue="3" /> 

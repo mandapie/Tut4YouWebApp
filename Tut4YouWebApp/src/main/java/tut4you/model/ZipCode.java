@@ -40,26 +40,42 @@ import javax.persistence.Table;
 @Entity
 @NamedQueries({
     @NamedQuery(name = ZipCode.FIND_LOCATIONS, query = "SELECT t from ZipCode t"),
-    @NamedQuery(name = ZipCode.FIND_ZIP_BY_ZIP_MAXRADIUS, query = "SELECT t from ZipCode t WHERE t.zipCode = :zipCode AND t.maxRadius = :maxRadius")
+    @NamedQuery(name = ZipCode.FIND_ZIP_BY_ZIP_MAXRADIUS, query = "SELECT t from ZipCode t WHERE t.currentZipCode = :zipCode AND t.maxRadius = :maxRadius")
 })
 public class ZipCode implements Serializable {
     /**
-     * JPQL Query to obtain a zipCode locations
+     * JPQL Query to obtain a currentZipCode locations
      */
     public static final String FIND_LOCATIONS = "ZipCode.FindLocations";
     /**
-     * JPQL Query to obtain zipCode based on zipCode and max radius
+     * JPQL Query to obtain currentZipCode based on currentZipCode and max radius
      */
     public static final String FIND_ZIP_BY_ZIP_MAXRADIUS = "ZipCode.FindZipByZipMaxRadius";
     
+    /**
+     * default constructor
+     */
     public ZipCode() {
         
     }
-
+    /**
+     * overloaded constructor that takes in zipCode and maxRadius
+     * @param zipCode
+     * @param maxRadius 
+     */
     public ZipCode(String zipCode, int maxRadius) {
-        this.zipCode = zipCode;
+        this.currentZipCode = zipCode;
         this.maxRadius = maxRadius;
     }
+    /**
+     * overloaded constructor that takes in maxRadius
+     * @param maxRadius 
+     */
+    public ZipCode(int maxRadius) {
+        this.currentZipCode = "00000";
+        this.maxRadius = maxRadius;
+    }
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -69,8 +85,37 @@ public class ZipCode implements Serializable {
     private Collection<Request> requests;
     @ManyToMany(mappedBy="zipCodes", cascade=CascadeType.PERSIST)
     private Collection<ZipCodeByRadius> zipCodesByRadius;    
-    private String zipCode;
+    private String currentZipCode;
     private int maxRadius;
+    
+    @OneToMany(mappedBy="zipCode", cascade=CascadeType.ALL)
+    private Collection<Tutor> tutors;
+    
+    /**
+     * get collection of Tutors
+     * @return tutors
+     */
+    public Collection<Tutor> getTutors() {
+        return tutors;
+    }
+    /**
+     * set collection of tutors
+     * @param tutors 
+     */
+    public void setTutors(Collection<Tutor> tutors) {
+        this.tutors = tutors;
+    }
+    /**
+     * adds a tutor to ZipCode
+     *
+     * @param tutor is the user to be added to the ZipCode
+     */
+    public void addTutor(Tutor tutor) {
+        if (this.tutors == null) {
+            this.tutors = new HashSet();
+        }
+        this.tutors.add(tutor);
+    }
     
     /**
      * Gets the id of a ZipCode
@@ -109,12 +154,12 @@ public class ZipCode implements Serializable {
         this.maxRadius = maxRadius;
     }
     
-    public String getZipCode() {
-        return zipCode;
+    public String getCurrentZipCode() {
+        return currentZipCode;
     }
 
-    public void setZipCode(String zipCode) {
-        this.zipCode = zipCode;
+    public void setCurrentZipCode(String currentZipCode) {
+        this.currentZipCode = currentZipCode;
     }
     
     /**
@@ -171,7 +216,7 @@ public class ZipCode implements Serializable {
     }
     @Override
     public String toString() {
-        return "tut4you.model.ZipCode[ id=" + id + " zipCode=" + zipCode + " maxRad=" + maxRadius ;
+        return "tut4you.model.ZipCode[ id=" + id + " zipCode=" + currentZipCode + " maxRad=" + maxRadius ;
     }
     
     

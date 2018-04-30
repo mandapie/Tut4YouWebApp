@@ -388,7 +388,7 @@ public class RequestBean implements Serializable {
             numOfTutors = tut4youApp.getNumOfTutorsFromCourse(request.getCourse().getCourseName());
             result = "success";
 
-            for( String str : getData(zipCode.getMaxRadius(), zipCode.getZipCode()) ) {
+            for( String str : getData(zipCode.getMaxRadius(), zipCode.getCurrentZipCode()) ) {
                 System.out.println(str);
                 zipCodesByRadiusList = Arrays.asList(str.substring(1, str.length() - 1).split(", "));
             }

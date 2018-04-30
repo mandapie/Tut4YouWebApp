@@ -404,6 +404,26 @@ public class Tut4YouApp {
             return groupCourse;
         }
     }
+    
+      /**
+     * Only a tutor can delete his/her course
+     *
+     * @param availability
+     * @author Syed Haider <shayder426@gmail.com>
+     */
+    @RolesAllowed("tut4youapp.tutor")
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void deleteCourse(Course course) {
+        UserBean userBean = new UserBean();
+        String currentUserEmail = userBean.getEmailFromSession();
+        Course toBeDeleted = em.find(Course.class, course.getCourseName());
+        if (toBeDeleted == null) {
+            toBeDeleted = course;
+        }
+        Tutor tutor = findTutor(currentUserEmail);
+        em.merge(tutor);
+        em.remove(em.merge(course));
+    }
 
     /**
      * Only a tutor can view the list of courses that they can teach.

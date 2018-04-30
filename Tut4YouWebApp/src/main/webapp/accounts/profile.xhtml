@@ -224,6 +224,11 @@
                                         <f:facet name="header">Courses You Have Taken</f:facet>
                                             #{course.courseName}
                                     </b:dataTableColumn>
+                                        <b:dataTableColumn>
+                                        <f:facet name="header">Action</f:facet>
+                                        <b:commandButton value="Delete Course" action="#{courseBean.deleteCourse(course)}">
+                                        </b:commandButton>
+                                    </b:dataTableColumn>
                                 </b:dataTable>
                             </b:tab>
                         </c:if>

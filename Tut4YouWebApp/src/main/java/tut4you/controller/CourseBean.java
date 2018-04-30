@@ -183,4 +183,9 @@ public class CourseBean implements Serializable {
         }
         return result;
     }
+    
+    public void deleteCourse(Course course)
+    {
+        tut4youApp.deleteCourse(course);
+    }
 }

@@ -91,7 +91,6 @@ public class BasicValidator {
 
     /**
      * https://stackoverflow.com/questions/42104546/java-regular-expressions-to-validate-phone-numbers
-     *
      * @param context the FacesContext
      * @param toValidate the UIComponent being validated (e-mail field)
      * @param value the value (email address) of the component
@@ -107,7 +106,6 @@ public class BasicValidator {
 
     /**
      * validates hourly rate to range between 0.00 - 99.99
-     *
      * @param context
      * @param toValidate
      * @param value
@@ -125,7 +123,6 @@ public class BasicValidator {
     /**
      * https://stackoverflow.com/questions/9043551/regex-match-integer-only
      * validate zip is in integers
-     *
      * @param context
      * @param toValidate
      * @param value Modified by Amanda: combined integer and length validations
@@ -143,7 +140,6 @@ public class BasicValidator {
     /**
      * EqualsValidator extends the Validator class to determine if two fields
      * are duplicates
-     *
      * @author Brian Leathem in StackOverflow Modified by Syed Haider
      * <shayder426@gmail.com>
      * http://stackoverflow.com/questions/2909021/jsf-2-0-validate-equality-of-2-inputsecret-fields-confirm-password-without-wri
@@ -163,7 +159,6 @@ public class BasicValidator {
 
     /**
      * validate that later time in request is not before the actual time
-     *
      * @param context
      * @param component
      * @param value
@@ -183,7 +178,6 @@ public class BasicValidator {
     public void validateRating(FacesContext context, UIComponent component, Object value) {
         int rating = (int) value;
         if (rating <= 0) {
-            System.out.println("THROW ME");
             FacesMessage message = new FacesMessage("Rating is required.");
             throw new ValidatorException(message);
         }

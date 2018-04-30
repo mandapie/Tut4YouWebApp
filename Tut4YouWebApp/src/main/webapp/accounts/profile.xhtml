@@ -96,7 +96,7 @@
                                 <h:outputLabel value="Avg Rating:"/>
                             </b:column>
                             <b:column span="7">
-                                <p:rating value="#{ratingBean.avgRating}" readonly="true" />
+                                <p:rating value="#{ratingBean.getAvgRating(userBean.user.email)}" readonly="true" />
                             </b:column>
                         </b:row>
                     </c:if>

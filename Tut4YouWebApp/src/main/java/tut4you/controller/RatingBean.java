@@ -61,7 +61,6 @@ public class RatingBean implements Serializable {
         this.username = username;
     }
 
-
     /**
      * RatingBean encapsulates all the functions/services involved in making a
      * rating
@@ -119,18 +118,15 @@ public class RatingBean implements Serializable {
         result = "writeReview";
         return result;
     }
-    
-        public void showUsername(String username) {
-            System.out.println(username);
+
+    public void showUsername() {
         Tutor tutor = findTutorEmail(username);
         this.tutor = tutor;
     }
-    
-    public Tutor findTutorEmail(String username)
-    {
+
+    public Tutor findTutorEmail(String username) {
         return tut4youApp.findTutorEmail(username);
     }
-    
 
     /**
      * Convert string to Time
@@ -214,7 +210,7 @@ public class RatingBean implements Serializable {
         return requestList;
     }
 
-    public int getAvgRating() {
-        return (int) tut4youApp.getAverageRating();
+    public int getAvgRating(String email) {
+        return (int) tut4youApp.getAverageRating(email);
     }
 }

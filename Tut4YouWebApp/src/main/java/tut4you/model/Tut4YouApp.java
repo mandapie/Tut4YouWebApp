@@ -655,7 +655,7 @@ public class Tut4YouApp {
         }
     }
 
- /**
+    /**
      * This method can only be called by a student. This methods gets the
      * username of the current session and checks if the username is null, if so
      * return null. Otherwise, findUser the user email to add the rating to be
@@ -675,11 +675,8 @@ public class Tut4YouApp {
         } else {
             User student = findUser(currentUserEmail);
             if (student != null) {
-                System.out.println(rating);
                 student.addRating(rating);
                 rating.setStudent(student);
-                System.out.println(tutor);
-                System.out.println(student);
                 tutor.addPendingRating(rating);
                 rating.setTutor(tutor);
             } else {
@@ -690,7 +687,7 @@ public class Tut4YouApp {
         em.merge(tutor);
         em.flush();
         return rating;
-}
+    }
 
     /**
      * This method can only be called by a student.
@@ -715,8 +712,8 @@ public class Tut4YouApp {
         updatedRating.setRatingValue(ratingValue);
         System.out.println("ANYTHING THE NEW ONE: " + updatedRating.getRatingValue());
 
-       // updatedRating.setDateRated(date);
-       // System.out.println(date);
+        // updatedRating.setDateRated(date);
+        // System.out.println(date);
         em.merge(updatedRating);
         em.flush();
     }
@@ -854,8 +851,16 @@ public class Tut4YouApp {
      */
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-    public double getAverageRating() {
+    public double getAverageRating(String email) {
         TypedQuery<Double> averageRatingQuery = em.createNamedQuery(Rating.FIND_AVG_RATING_BY_TUTOR, Double.class);
+        UserBean userBean = new UserBean();
+        String currentUserEmail = userBean.getEmailFromSession();
+        if(!currentUserEmail.equals(email))
+            currentUserEmail = email;
+        Tutor tutor = findTutor(currentUserEmail);
+        System.out.println(email);
+        averageRatingQuery.setParameter("email", email);
+
         return averageRatingQuery.getSingleResult();
     }
 

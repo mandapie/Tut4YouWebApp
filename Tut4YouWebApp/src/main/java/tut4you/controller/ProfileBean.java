@@ -25,7 +25,7 @@ import tut4you.model.*;
  * modified by Syed Haider
  */
 @Named
-@SessionScoped
+@ViewScoped
 public class ProfileBean implements Serializable {
 
     private static final Logger LOGGER = Logger.getLogger("ProfileBean");

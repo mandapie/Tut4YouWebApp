@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
+import javax.faces.view.ViewScoped;
 import tut4you.model.*;
 
 /**
@@ -34,7 +35,7 @@ import tut4you.model.*;
  * @author Amanda Pan <daikiraidemodaisuki@gmail.com>
  */
 @Named
-@SessionScoped
+@ViewScoped
 public class RatingBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -50,6 +51,15 @@ public class RatingBean implements Serializable {
     private Rating rating;
     private Tutor tutor; //the tutor who accepts te rating
     private String studentName;
+    private String username;
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
 
     /**
@@ -109,6 +119,18 @@ public class RatingBean implements Serializable {
         result = "writeReview";
         return result;
     }
+    
+        public void showUsername(String username) {
+            System.out.println(username);
+        Tutor tutor = findTutorEmail(username);
+        this.tutor = tutor;
+    }
+    
+    public Tutor findTutorEmail(String username)
+    {
+        return tut4youApp.findTutorEmail(username);
+    }
+    
 
     /**
      * Convert string to Time
@@ -134,11 +156,11 @@ public class RatingBean implements Serializable {
         return integer;
     }
 
-    public String createNewRating(Tutor t) throws ParseException {
+    public String createNewRating() throws ParseException {
         String result = "success";
         Date date = new Date();
         rating.setDateRated(date);
-        rating = tut4youApp.newRating(rating, t);
+        rating = tut4youApp.newRating(rating, tutor);
         return result;
     }
 
@@ -172,6 +194,7 @@ public class RatingBean implements Serializable {
      * @throws java.text.ParseException
      */
     public void deleteRating(Rating rating) throws ParseException {
+        System.out.println(rating);
         tut4youApp.deleteRating(rating);
 
     }

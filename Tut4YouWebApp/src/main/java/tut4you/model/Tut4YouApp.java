@@ -655,7 +655,7 @@ public class Tut4YouApp {
         }
     }
 
-    /**
+ /**
      * This method can only be called by a student. This methods gets the
      * username of the current session and checks if the username is null, if so
      * return null. Otherwise, findUser the user email to add the rating to be
@@ -675,8 +675,11 @@ public class Tut4YouApp {
         } else {
             User student = findUser(currentUserEmail);
             if (student != null) {
+                System.out.println(rating);
                 student.addRating(rating);
                 rating.setStudent(student);
+                System.out.println(tutor);
+                System.out.println(student);
                 tutor.addPendingRating(rating);
                 rating.setTutor(tutor);
             } else {
@@ -687,7 +690,7 @@ public class Tut4YouApp {
         em.merge(tutor);
         em.flush();
         return rating;
-    }
+}
 
     /**
      * This method can only be called by a student.
@@ -702,14 +705,18 @@ public class Tut4YouApp {
     @RolesAllowed("tut4youapp.student")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void updateRating(Rating rating, String description, Integer ratingValue) {
-        Date date = new Date();
+        //Date date = new Date();
         Rating updatedRating = em.find(Rating.class, rating.getId());
         if (updatedRating == null) {
             updatedRating = rating;
         }
         updatedRating.setDescription(description);
+        System.out.println("NOTHING MY NEW GUY: " + updatedRating.getDescription());
         updatedRating.setRatingValue(ratingValue);
-        updatedRating.setDateRated(date);
+        System.out.println("ANYTHING THE NEW ONE: " + updatedRating.getRatingValue());
+
+       // updatedRating.setDateRated(date);
+       // System.out.println(date);
         em.merge(updatedRating);
         em.flush();
     }
@@ -723,14 +730,15 @@ public class Tut4YouApp {
     @RolesAllowed("tut4youapp.student")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void deleteRating(Rating rating) {
+        System.out.println("WHY DOEL " + rating);
         UserBean userBean = new UserBean();
         String currentUserEmail = userBean.getEmailFromSession();
         Rating toBeDeleted = em.find(Rating.class, rating.getId());
         if (toBeDeleted == null) {
             toBeDeleted = rating;
         }
-        Tutor tutor = findTutor(currentUserEmail);
-        em.merge(tutor);
+        User user = findUser(currentUserEmail);
+        em.merge(user);
         em.remove(em.merge(rating));
     }
 
@@ -776,7 +784,6 @@ public class Tut4YouApp {
     public boolean checkIfUserRated(String ratingEmail) {
         UserBean userBean = new UserBean();
         String currentUserEmail = userBean.getEmailFromSession();
-        System.out.println("PLS WORK: " + ratingEmail.equals(currentUserEmail));
         return ratingEmail.equals(currentUserEmail);
     }
 

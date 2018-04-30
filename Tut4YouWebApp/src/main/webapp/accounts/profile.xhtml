@@ -23,127 +23,61 @@
         2017 Syed Haider <shayder426@gmail.com>
     -->
     <!-- @author Amanda Pan <daikiraidemodaisuki@gmail.com> -->
-    <ui:define name="title">Dashboard</ui:define>
+    <ui:define name="title">Profile</ui:define>
     <ui:define name="content">
-        <h1>Dashboard</h1>
-        <b:form>
-            <p:dialog header="Request Declined" widgetVar="modalID" minHeight="40" visible="#{requestBean.declinedRequest.size() != 0}" closable="false">
-                <ui:repeat var="re" value="#{requestBean.declinedRequest}">
-                    <p>Your request with the description: #{re.description} has been declined</p>
-                    <p:commandButton value="Dismiss" style="width:100%" action="#{requestBean.cancelRequest(re)}" oncomplete="PF('modalID').hide();"/>
-                </ui:repeat> 
-            </p:dialog>
-        </b:form>
-        <c:if test="#{userBean.isTutor}">
-            <c:if test="#{userBean.condition}">#{userBean.updateCurrentZip()}</c:if>
-            <b:form>
-                <p:dialog header="Current Zip Code" widgetVar="myDialog" minHeight="40" visible="true" rendered="#{userBean.condition}" closable="false" modal="true">
-                    <h:outputText value="Enter current zip code (Defauilt is: " />
-                    <h:outputText value="#{userBean.user.defaultZip}" />
-                    <h:outputText value=")" />
-                    <b:inputText id="currentZip" placeholder="press enter to submit" required="true" requiredMessage="required" value="#{userBean.currentZip}">
-                        <b:message for="currentZip"/>
-                    </b:inputText>
-                </p:dialog>
-            </b:form>
-        </c:if>
+        <h1>Profile Page</h1>
         <b:container fluid="true">
+            <!-- profile info and links row -->
             <b:row>
-                <!-- column with tab view: pending request list and notifications (if user is tutor) -->
-                <b:form>
-                    <b:tabView active-index="#{userBean.tabIndex}"> <!-- number of activeIndex decides which tab show -->
-                        <b:tab title="Active Requests">
-                            <br/> <!-- for better spacing -->
-                            <b:button style="font-weight:strong;" look="info" value="Request for a Tutor" outcome=""/>
-                            <br/> <!-- for better spacing -->
-                            <div style="max-height:400px;overflow:auto;margin-bottom:15px;">
-                                <ui:repeat value="#{requestBean.requestList}" var="r">
-                                    <div style="border-bottom:solid 1px;padding:15px;">
-                                        <h:outputText value="#{r.course.courseName}" style="font-size:20px;"/>
-                                        <span/>
-                                        <h:outputText value="#{r.dayOfWeek}"/>
-                                        <span/>
-                                        <h:outputText value="#{r.currentTime}">
-                                            <!-- sets the date and time to a certain format-->
-                                            <f:convertDateTime pattern = "hh:mm a" />
-                                        </h:outputText>
-                                        <br/>
-                                        <h:outputText value="#{r.description}"/>
-                                        <b:commandButton style="float:right" value="Cancel" look="danger" action="#{requestBean.cancelRequest(r)}" />
-                                    </div>
-                                </ui:repeat>
-                            </div>
-                        </b:tab>
+                <b:panel>
+                    <!--<div align="center">-->
+                        <b:row>
+                            <h:outputLabel value="Name:" style="padding:0 2px;"/>
+                            <h:outputText value="#{userBean.user.firstName} #{userBean.user.lastName}" style="padding:0 2px;"/>
+                        </b:row>
+                        <b:row>
+                            <h:outputLabel value="Username:" style="padding:0 2px;"/>
+                            <h:outputText value="#{userBean.user.username}" style="padding:0 2px;"/>
+                        </b:row>
+                        <b:row>
+                            <h:outputLabel value="Email:" style="padding:0 2px;"/>
+                            <h:outputText value="#{userBean.user.email}" style="padding:0 2px;"/>
+                        </b:row>
+                        <b:row>
+                            <h:outputLabel value="Phone Number:" style="padding:0 2px;"/>
+                            <h:outputText value="#{userBean.user.phoneNumber}" style="padding:0 2px;"/>
+                        </b:row>
+                        <b:row>
+                            <h:outputLabel value="University:" style="padding:0 2px;"/>
+                            <h:outputText value="#{userBean.user.university}" style="padding:0 2px;"/>
+                        </b:row>
                         <c:if test="#{userBean.isTutor}">
-                            <b:tab title="Notifications">
-                                <!--NOT WORKING PROPERLY--> 
-<!--                                    <c:when test="#{notifyBean.hasNotif}">
-                                    <f:facet name="anchor"><b:badge value="#{notifyBean.numofNotif}"/></f:facet>
-                                </c:when>-->
-                                <br/> <!-- for better spacing -->
-                                <div style="max-height:400px;overflow:auto;margin-bottom:15px;">
-                                    <ui:repeat value="#{notifyBean.pendingRequestList}" var="req">
-                                        <div style="border-bottom:solid 1px;padding:15px;">
-                                            <h:outputText value="#{req.course.courseName}" style="font-size:20px;"/>
-                                            <span/>
-                                            <h:outputText value="#{req.dayOfWeek}"/>
-                                            <span/>
-                                            <h:outputText value="#{req.currentTime}">
-                                                <!-- sets the date and time to a certain format-->
-                                                <f:convertDateTime pattern = "hh:mm a" />
-                                            </h:outputText>
-                                            <br/>
-                                            <h:outputText value="#{req.description}"/>
-                                            <b:commandButton style="float:right;margin:0 2px;" value="Accept" look="success" action="#{requestBean.setTutorToRequest(req)}"/>
-                                            <b:commandButton style="float:right;margin:0 2px;" value="Cancel" look="danger" action="#{requestBean.declineRequest(req)}"/>
-                                        </div>
-                                    </ui:repeat>
-                                </div>
-                            </b:tab>
-                            <b:tab title="Schedule">
-                                <b:switch label="Do Not Disturb" value="#{userBean.user.doNotDisturb}" id="doNotDisturb" update="@form">
-                                    <f:ajax event="change" render="doNotDisturb" listener="#{userBean.switchDoNotDisturb(userBean.user.doNotDisturb)}" />
-                                </b:switch>
-                                <b:dataTable value="#{availabilityBean.availabilityList}" var="avail" id="availabilityTable">
-                                    <b:dataTableColumn>
-                                        <f:facet name="header">Day of Week</f:facet>
-                                        <h:outputText value="#{avail.dayOfWeek}"/>
-                                    </b:dataTableColumn>
-                                    <b:dataTableColumn>
-                                        <f:facet name="header">Start Time</f:facet>
-                                        <h:outputText value="#{avail.startTime}">                        
-                                            <f:convertDateTime pattern="hh:mm a"></f:convertDateTime>
-                                        </h:outputText>
-                                    </b:dataTableColumn>
-                                    <b:dataTableColumn>
-                                        <f:facet name="header">End Time</f:facet>
-                                        <h:outputText value="#{avail.endTime}">                        
-                                            <f:convertDateTime pattern="hh:mm a"></f:convertDateTime>
-                                        </h:outputText>
-                                    </b:dataTableColumn>
-                                    <b:dataTableColumn>
-                                        <f:facet name="header">Action</f:facet>
-                                        <b:commandButton value="Edit" action="#{updateAvailabilityBean.goToUpdateAvailabilityPage(avail)}"/>
-                                        <span></span> <!-- somehow can't make spacing unless using empty span-->
-                                        <b:commandButton value="Delete" look="danger" action="#{availabilityBean.deleteAvailability(avail)}"/>
-                                    </b:dataTableColumn>
-                                </b:dataTable>
-                            </b:tab>
+                            <b:row>
+                                <h:outputLabel value="Hourly Rate:" style="padding:0 2px;"/>
+                                <h:outputText value="#{userBean.user.hourlyRate}" style="padding:0 2px;">
+                                    <f:convertNumber type="currency" currencySymbol="$" locale="en_US" />
+                                </h:outputText>
+                            </b:row>
                         </c:if>
-                    </b:tabView>
+                        <c:if test="#{userBean.isTutor}">
+                            <b:row>
+                                <h:outputLabel value="Avg Rating:" style="padding:0 2px;"/>
+                                <!--<p:rating value="#{ratingBean.avgRating}" readonly="true" style="padding:0 2px;"/>-->
+                            </b:row>
+                        </c:if>
+                        <b:row style="padding-left:13px">
+                            <b:button value="Edit Profile" href="/Tut4YouWebApp/accounts/editProfile.xhtml" />
+                        </b:row>
+                    <!--</div>-->
+                </b:panel>
+                <b:form>
+                    <b:dataTable value="#{courseBean.tutorCourses}" var="course">
+                        <b:dataTableColumn>
+                            <f:facet name="header">Courses You Have Taken</f:facet>
+                                #{course.courseName}
+                        </b:dataTableColumn>
+                    </b:dataTable>
                 </b:form>
-            </b:row>
-            <b:row>
-                <b:column medium-screen="half">
-                    <b:panel title="Upcomming Sessions" collapsible="false" look="info">
-
-                    </b:panel>
-                </b:column>
-                <b:column medium-screen="half">
-                    <b:panel title="Previous Sessions" collapsible="false" look="info">
-
-                    </b:panel>
-                </b:column>
             </b:row>
         </b:container>
         <ui:debug hotkey='x'/>

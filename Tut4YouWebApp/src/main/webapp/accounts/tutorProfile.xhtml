@@ -96,19 +96,12 @@
                                 </h:outputText>
                                 <b:commandButton value ="Edit Rating" action="#{updateRatingBean.goToEditRatingPage(rating)}" rendered="#{profileBean.checkIfUserRated(rating.student.email)}"/>
                                 <b:commandButton value ="Delete Rating" action="#{ratingBean.deleteRating(rating)}" rendered="#{profileBean.checkIfUserRated(rating.student.email)}"/>
-
-
                                 <br></br>
-
                             </h:panelGrid>
                         </p:outputPanel>
                     </h:panelGrid>
                 </p:dataScroller>
-
             </h:form>
-
-
-
         </b:container>
     </ui:define>
 </ui:composition>

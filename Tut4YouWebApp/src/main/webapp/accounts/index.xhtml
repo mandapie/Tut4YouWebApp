@@ -145,6 +145,16 @@
                     </b:panel>
                 </b:column>
             </b:row>
+            <b:row>
+                <b:navLink value="View Previous Sessions" href="/Tut4YouWebApp/students/viewPreviousSessions.xhtml"/>
+                <c:if test="#{userBean.isTutor}">
+                    <b:navLink value="Add Availability" href="/Tut4YouWebApp/tutors/availability.xhtml"/>
+                    <b:navLink value="Add Courses" href="/Tut4YouWebApp/tutors/addCourse.xhtml"/>
+                    <b:navLink value="View Reviews" href="/Tut4YouWebApp/tutors/viewReviews.xhtml"/>
+                    <b:navLink value="Session Timer" href="/Tut4YouWebApp/tutors/sessionTimer.xhtml"/>
+                    <b:navLink value="Add Transcript" href="/Tut4YouWebApp/tutors/uploadTranscript.xhtml"/>
+                </c:if>
+            </b:row>
         </b:container>
         <ui:debug hotkey='x'/>
     </ui:define>

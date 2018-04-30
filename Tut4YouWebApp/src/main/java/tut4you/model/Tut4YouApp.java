@@ -642,7 +642,8 @@ public class Tut4YouApp {
                 Tutor newTutor = new Tutor(user);
                 newTutor.setDateJoinedAsTutor(joinedDateAsTutor);
                 newTutor.setHourlyRate(priceRate);
-                newTutor.setMaxRadius(maxRadius);
+                newTutor.getZipCode().setMaxRadius(maxRadius);
+                //newTutor.setMaxRadius(maxRadius);
                 newTutor.setDefaultZip(defaultZip);
                 newTutor.addGroup(group); //Add user a student role
                 group.addTutor(newTutor);
@@ -926,7 +927,8 @@ public class Tut4YouApp {
         UserBean userBean = new UserBean();
         String currentUserEmail = userBean.getEmailFromSession();
         Tutor tutor = findTutor(currentUserEmail);
-        tutor.setCurrentZip(currentZip);
+        tutor.getZipCode().setCurrentZipCode(currentZip);
+        //tutor.setCurrentZip(currentZip);
         em.merge(tutor);
         em.flush();
         return tutor;
@@ -971,7 +973,7 @@ public class Tut4YouApp {
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public ZipCode addZipCode(ZipCode zipCode) {
         TypedQuery<ZipCode> Query = em.createNamedQuery(ZipCode.FIND_ZIP_BY_ZIP_MAXRADIUS, ZipCode.class);
-        Query.setParameter("zipCode", zipCode.getZipCode());
+        Query.setParameter("zipCode", zipCode.getCurrentZipCode());
         Query.setParameter("maxRadius", zipCode.getMaxRadius());
         if (Query.getResultList().isEmpty()) {
             em.persist(zipCode);

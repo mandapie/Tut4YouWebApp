@@ -26,6 +26,7 @@ import javax.persistence.DiscriminatorType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -90,9 +91,17 @@ public class Tutor extends User implements Serializable {
     private String transcriptFilePath;
     private int overallRating;
     private String defaultZip;
-    private String currentZip;
-    private int maxRadius;
     
+    @ManyToOne
+    private ZipCode zipCode;
+
+    public ZipCode getZipCode() {
+        return zipCode;
+    }
+
+    public void setZipCode(ZipCode zipCode) {
+        this.zipCode = zipCode;
+    }
     /**
      * A Tutor can tutor multiple Courses and a Course can be tutored by
      * multiple Tutors.
@@ -124,7 +133,7 @@ public class Tutor extends User implements Serializable {
     public Tutor() {
         hourlyRate = 0.00;
         doNotDisturb = false;
-        currentZip = null;
+        //currentZip = null;
     }
 
     /**
@@ -144,18 +153,15 @@ public class Tutor extends User implements Serializable {
      * @param doNotDisturb
      * @param transcriptFileLocation
      * @param defaultZip
-     * @param currentZip
-     * @param maxRadius
      */
-    public Tutor(Date dateJoined, int numPeopleTutored, double priceRate, boolean doNotDisturb, String transcriptFileLocation, String defaultZip, String currentZip, int maxRadius) {
+    public Tutor(Date dateJoined, int numPeopleTutored, double priceRate, boolean doNotDisturb, String transcriptFileLocation, String defaultZip) {
         this.dateJoinedAsTutor = dateJoined;
         this.numOfPeopleTutored = numPeopleTutored;
         this.hourlyRate = priceRate;
         this.doNotDisturb = doNotDisturb;
         this.transcriptFilePath = transcriptFileLocation;
         this.defaultZip = defaultZip;
-        this.currentZip = currentZip;
-        this.maxRadius = maxRadius;
+
     }
     /**
      * Tutor overloaded constructor with inherited and existing attributes
@@ -167,16 +173,16 @@ public class Tutor extends User implements Serializable {
      * @param phoneNumber
      * @param password
      * @param university
+     * @param securityQuestion
+     * @param securityAnswer
      * @param dateJoined
      * @param numPeopleTutored
      * @param priceRate
      * @param doNotDisturb
      * @param defaultZip
-     * @param currentZip
-     * @param maxRadius
      * @param transcriptFileLocation
      */
-    public Tutor(String email, String firstName, String lastName, String userName, String phoneNumber, String password, String university, String securityQuestion, String securityAnswer, Date dateJoined, int numPeopleTutored, double priceRate, boolean doNotDisturb, String defaultZip, String currentZip, int maxRadius, String transcriptFileLocation) {
+    public Tutor(String email, String firstName, String lastName, String userName, String phoneNumber, String password, String university, String securityQuestion, String securityAnswer, Date dateJoined, int numPeopleTutored, double priceRate, boolean doNotDisturb, String defaultZip, String transcriptFileLocation) {
         super(email, firstName, lastName, userName, phoneNumber, password, university, securityQuestion, securityAnswer);
         this.dateJoinedAsTutor = dateJoined;
         this.numOfPeopleTutored = numPeopleTutored;
@@ -184,8 +190,6 @@ public class Tutor extends User implements Serializable {
         this.doNotDisturb = doNotDisturb;
         this.transcriptFilePath = transcriptFileLocation;
         this.defaultZip = defaultZip;
-        this.currentZip = currentZip;
-        this.maxRadius = maxRadius;
     }
 
     public int getNumOfPeopleTutored() {
@@ -363,34 +367,6 @@ public class Tutor extends User implements Serializable {
      */
     public void setDefaultZip(String defaultZip) {
         this.defaultZip = defaultZip;
-    }
-    /**
-     * get current zip
-     * @return currentZip
-     */
-    public String getCurrentZip() {
-        return currentZip;
-    }
-    /**
-     * set current zip
-     * @param currentZip 
-     */
-    public void setCurrentZip(String currentZip) {
-        this.currentZip = currentZip;
-    }
-    /**
-     * get max radius
-     * @return maxRadius
-     */
-    public int getMaxRadius() {
-        return maxRadius;
-    }
-    /**
-     * set max radius
-     * @param maxRadius 
-     */
-    public void setMaxRadius(int maxRadius) {
-        this.maxRadius = maxRadius;
     }
     /**
      * Adds a pending request to the list

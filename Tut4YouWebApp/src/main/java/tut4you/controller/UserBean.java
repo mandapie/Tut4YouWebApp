@@ -256,7 +256,7 @@ public class UserBean implements Serializable {
      */
     public void updateCurrentZip() {
         Tutor tutor = tut4youapp.updateCurrentZip(currentZip);
-        if (tutor.getCurrentZip() != null) {
+        if (tutor.getZipCode().getCurrentZipCode()!= null) {
             condition = false;
         }
     }

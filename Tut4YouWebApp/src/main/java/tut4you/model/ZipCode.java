@@ -44,11 +44,11 @@ import javax.persistence.Table;
 })
 public class ZipCode implements Serializable {
     /**
-     * JPQL Query to obtain a zipCode locations
+     * JPQL Query to obtain a currentZipCode locations
      */
     public static final String FIND_LOCATIONS = "ZipCode.FindLocations";
     /**
-     * JPQL Query to obtain zipCode based on zipCode and max radius
+     * JPQL Query to obtain currentZipCode based on currentZipCode and max radius
      */
     public static final String FIND_ZIP_BY_ZIP_MAXRADIUS = "ZipCode.FindZipByZipMaxRadius";
     
@@ -57,7 +57,7 @@ public class ZipCode implements Serializable {
     }
 
     public ZipCode(String zipCode, int maxRadius) {
-        this.zipCode = zipCode;
+        this.currentZipCode = zipCode;
         this.maxRadius = maxRadius;
     }
 
@@ -69,8 +69,19 @@ public class ZipCode implements Serializable {
     private Collection<Request> requests;
     @ManyToMany(mappedBy="zipCodes", cascade=CascadeType.PERSIST)
     private Collection<ZipCodeByRadius> zipCodesByRadius;    
-    private String zipCode;
+    private String currentZipCode;
     private int maxRadius;
+    
+    @OneToMany(mappedBy="zipCode", cascade=CascadeType.ALL)
+    private Collection<Tutor> tutors;
+
+    public Collection<Tutor> getTutors() {
+        return tutors;
+    }
+
+    public void setTutors(Collection<Tutor> tutors) {
+        this.tutors = tutors;
+    }
     
     /**
      * Gets the id of a ZipCode
@@ -109,12 +120,12 @@ public class ZipCode implements Serializable {
         this.maxRadius = maxRadius;
     }
     
-    public String getZipCode() {
-        return zipCode;
+    public String getCurrentZipCode() {
+        return currentZipCode;
     }
 
-    public void setZipCode(String zipCode) {
-        this.zipCode = zipCode;
+    public void setCurrentZipCode(String currentZipCode) {
+        this.currentZipCode = currentZipCode;
     }
     
     /**
@@ -171,7 +182,7 @@ public class ZipCode implements Serializable {
     }
     @Override
     public String toString() {
-        return "tut4you.model.ZipCode[ id=" + id + " zipCode=" + zipCode + " maxRad=" + maxRadius ;
+        return "tut4you.model.ZipCode[ id=" + id + " zipCode=" + currentZipCode + " maxRad=" + maxRadius ;
     }
     
     

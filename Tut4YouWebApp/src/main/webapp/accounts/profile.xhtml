@@ -81,15 +81,19 @@
                         </b:row>
                     <!--</div>-->
                 </b:panel>
-                <b:form>
-                    <b:dataTable value="#{courseBean.tutorCourses}" var="course">
-                        <b:dataTableColumn>
-                            <f:facet name="header">Courses You Have Taken</f:facet>
-                            #{course.courseName}
-                        </b:dataTableColumn>
-                    </b:dataTable>
-                </b:form>
             </b:row>
+            <c:if test="#{userBean.isTutor}">
+            <b:row>
+                <b:form>
+                        <b:dataTable value="#{courseBean.tutorCourses}" var="course">
+                            <b:dataTableColumn>
+                                <f:facet name="header">Courses You Have Taken</f:facet>
+                                #{course.courseName}
+                            </b:dataTableColumn>
+                        </b:dataTable>
+                    </b:form>
+                </b:row>
+            </c:if>
         </b:container>
         <ui:debug hotkey='x'/>
     </ui:define>

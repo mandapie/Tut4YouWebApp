@@ -89,7 +89,4 @@ public class ProfileBean implements Serializable {
     {
         return tut4youapp.findTutorEmail(username);
     }
-    
-    
-
 }

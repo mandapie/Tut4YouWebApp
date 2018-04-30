@@ -109,7 +109,7 @@
                     </h:panelGroup>
                 </b:row>
                 <b:row>
-                    <b:inputText span="2" id="zip" label="Zip Code" placeholder="Enter current zip code..." value="#{requestBean.zipCode.zipCode}"
+                    <b:inputText span="2" id="zip" label="Zip Code" placeholder="Enter current zip code..." value="#{requestBean.zipCode.currentZipCode}"
                                  required="true" requiredMessage="required zip code" validator="#{basicValidator.validateZipcode}">
                         <f:validateLength minimum="5" maximum="5"/> 
                         <b:column>

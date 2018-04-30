@@ -54,7 +54,7 @@
                     <b:tabView active-index="#{userBean.tabIndex}"> <!-- number of activeIndex decides which tab show -->
                         <b:tab title="Active Requests">
                             <br/> <!-- for better spacing -->
-                            <b:button style="font-weight:strong;" look="info" value="Request for a Tutor" outcome=""/>
+                            <b:button style="font-weight:strong;" look="info" value="Request for a Tutor" outcome="/students/requestTutor.xhtml"/>
                             <br/> <!-- for better spacing -->
                             <div style="max-height:400px;overflow:auto;margin-bottom:15px;">
                                 <ui:repeat value="#{requestBean.requestList}" var="r">

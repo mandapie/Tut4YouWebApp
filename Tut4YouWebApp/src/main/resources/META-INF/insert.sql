@@ -89,7 +89,7 @@ INSERT INTO Availability(DAYOFWEEK, ENDTIME, STARTTIME, TUTOR_EMAIL) VALUES ('We
 INSERT INTO Requests_tutors(id,email) VALUES (1,'amanda@gmail.com')
 INSERT INTO Requests_tutors(id,email) VALUES (2,'amanda@gmail.com')
 
-INSERT INTO Rating(student_email,description,ratingValue) VALUES ('daniel@gmail.com','He was a good tutor.',4)
-INSERT INTO Rating(student_email,description,ratingValue) VALUES ('daniel@gmail.com','I liked him.',3)
-INSERT INTO Rating(student_email,description,ratingValue) VALUES ('daniel@gmail.com','He did well.',3)
-INSERT INTO Rating(student_email,description,ratingValue) VALUES ('daniel@gmail.com','He did well.',2)
+INSERT INTO Rating(student_email,description,ratingValue,tutor_email) VALUES ('daniel@gmail.com','He was a good tutor.', 1,'andrew@gmail.com')
+INSERT INTO Rating(student_email,description,ratingValue,tutor_email) VALUES ('evan@gmail.com','I liked him.',1,'andrew@gmail.com')
+INSERT INTO Rating(student_email,description,ratingValue,tutor_email) VALUES ('daniel@gmail.com','He did well.',5,'amanda@gmail.com')
+INSERT INTO Rating(student_email,description,ratingValue,tutor_email) VALUES ('evan@gmail.com','He did well.',5,'amanda@gmail.com')

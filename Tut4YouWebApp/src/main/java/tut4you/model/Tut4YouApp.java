@@ -59,7 +59,7 @@ public class Tut4YouApp {
 
     /**
      * Query all subjects from the database
-     * 
+     *
      * @return List of subjects
      */
     @RolesAllowed("tut4youapp.student")
@@ -404,6 +404,26 @@ public class Tut4YouApp {
             return groupCourse;
         }
     }
+    
+      /**
+     * Only a tutor can delete his/her course
+     *
+     * @param availability
+     * @author Syed Haider <shayder426@gmail.com>
+     */
+    @RolesAllowed("tut4youapp.tutor")
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void deleteCourse(Course course) {
+        UserBean userBean = new UserBean();
+        String currentUserEmail = userBean.getEmailFromSession();
+        Course toBeDeleted = em.find(Course.class, course.getCourseName());
+        if (toBeDeleted == null) {
+            toBeDeleted = course;
+        }
+        Tutor tutor = findTutor(currentUserEmail);
+        em.merge(tutor);
+        em.remove(em.merge(course));
+    }
 
     /**
      * Only a tutor can view the list of courses that they can teach.
@@ -606,8 +626,6 @@ public class Tut4YouApp {
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public Tutor findTutorEmail(String username) {
-        System.out.println("What is the " + username);
-        
         TypedQuery<Tutor> tutorQuery = em.createNamedQuery(Tutor.FIND_TUTOR_BY_USERNAME, Tutor.class);
         tutorQuery.setParameter("username", username);
         return tutorQuery.getSingleResult();
@@ -708,14 +726,18 @@ public class Tut4YouApp {
     @RolesAllowed("tut4youapp.student")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void updateRating(Rating rating, String description, Integer ratingValue) {
-        Date date = new Date();
+        //Date date = new Date();
         Rating updatedRating = em.find(Rating.class, rating.getId());
         if (updatedRating == null) {
             updatedRating = rating;
         }
         updatedRating.setDescription(description);
+        System.out.println("NOTHING MY NEW GUY: " + updatedRating.getDescription());
         updatedRating.setRatingValue(ratingValue);
-        updatedRating.setDateRated(date);
+        System.out.println("ANYTHING THE NEW ONE: " + updatedRating.getRatingValue());
+
+        // updatedRating.setDateRated(date);
+        // System.out.println(date);
         em.merge(updatedRating);
         em.flush();
     }
@@ -729,29 +751,37 @@ public class Tut4YouApp {
     @RolesAllowed("tut4youapp.student")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void deleteRating(Rating rating) {
+        System.out.println("WHY DOEL " + rating);
         UserBean userBean = new UserBean();
         String currentUserEmail = userBean.getEmailFromSession();
         Rating toBeDeleted = em.find(Rating.class, rating.getId());
         if (toBeDeleted == null) {
             toBeDeleted = rating;
         }
-        Tutor tutor = findTutor(currentUserEmail);
-        em.merge(tutor);
+        User user = findUser(currentUserEmail);
+        em.merge(user);
         em.remove(em.merge(rating));
     }
 
     /**
      * Get a list of ratings of a tutor.
      *
+     * @param tutorEmail
      * @return the list of courses to the bean
      * @author: Syed Haider <shayder426@gmail.com>
      */
-    @RolesAllowed("tut4youapp.tutor")
+    @PermitAll
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-    public List<Rating> getRatingList() {
+    public List<Rating> getRatingList(String tutorEmail) {
         UserBean userBean = new UserBean();
         String currentUserEmail = userBean.getEmailFromSession();
         String email;
+        /*Checks to see if tutor is viewing reviews or student
+        is looking at a tutor's profile
+         */
+        if (!currentUserEmail.equals(tutorEmail)) {
+            currentUserEmail = tutorEmail;
+        }
         if (currentUserEmail == null) {
             return null;
         } else {
@@ -761,6 +791,21 @@ public class Tut4YouApp {
             ratingQuery.setParameter("email", email);
             return ratingQuery.getResultList();
         }
+    }
+
+    /**
+     * Get a list of ratings of a tutor.
+     *
+     * @param ratingEmail
+     * @return the list of courses to the bean
+     * @author: Syed Haider <shayder426@gmail.com>
+     */
+    @PermitAll
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public boolean checkIfUserRated(String ratingEmail) {
+        UserBean userBean = new UserBean();
+        String currentUserEmail = userBean.getEmailFromSession();
+        return ratingEmail.equals(currentUserEmail);
     }
 
     /**
@@ -793,7 +838,8 @@ public class Tut4YouApp {
      */
     @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void setRequestToComplete(Request r) {
+    public void setRequestToComplete(Request r
+    ) {
         UserBean userBean = new UserBean();
         String currentUserEmail = userBean.getEmailFromSession();
         Long endTime = System.currentTimeMillis();
@@ -813,7 +859,8 @@ public class Tut4YouApp {
      */
     @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void startSessionTime(Request r) {
+    public void startSessionTime(Request r
+    ) {
         Request request = em.find(Request.class, r.getId());
         Long startTime = System.currentTimeMillis();
         em.merge(r);
@@ -828,8 +875,16 @@ public class Tut4YouApp {
      */
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-    public double getAverageRating() {
+    public double getAverageRating(String email) {
         TypedQuery<Double> averageRatingQuery = em.createNamedQuery(Rating.FIND_AVG_RATING_BY_TUTOR, Double.class);
+        UserBean userBean = new UserBean();
+        String currentUserEmail = userBean.getEmailFromSession();
+        if(!currentUserEmail.equals(email))
+            currentUserEmail = email;
+        Tutor tutor = findTutor(currentUserEmail);
+        System.out.println(email);
+        averageRatingQuery.setParameter("email", email);
+
         return averageRatingQuery.getSingleResult();
     }
 
@@ -876,7 +931,8 @@ public class Tut4YouApp {
      */
     @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-    public boolean checkEmail(String email) {
+    public boolean checkEmail(String email
+    ) {
         UserBean userBean = new UserBean();
         String currentUserEmail = userBean.getEmailFromSession();
         return currentUserEmail.equals(email);
@@ -884,7 +940,8 @@ public class Tut4YouApp {
 
     @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void addTranscriptFileLocation(String transcriptFileLocation) {
+    public void addTranscriptFileLocation(String transcriptFileLocation
+    ) {
         UserBean userBean = new UserBean();
         String currentUserEmail = userBean.getEmailFromSession();
         Tutor tutor = findTutor(currentUserEmail);
@@ -895,7 +952,8 @@ public class Tut4YouApp {
 
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void updateUser(User updateUser) {
+    public void updateUser(User updateUser
+    ) {
         UserBean userBean = new UserBean();
         String currentUserEmail = userBean.getEmailFromSession();
         Tutor tutor = findTutor(currentUserEmail);
@@ -926,7 +984,8 @@ public class Tut4YouApp {
      */
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     @RolesAllowed("tut4youapp.tutor")
-    public Tutor updateCurrentZip(String currentZip) {
+    public Tutor updateCurrentZip(String currentZip
+    ) {
         UserBean userBean = new UserBean();
         String currentUserEmail = userBean.getEmailFromSession();
         Tutor tutor = findTutor(currentUserEmail);
@@ -974,7 +1033,8 @@ public class Tut4YouApp {
      */
     @RolesAllowed("tut4youapp.student")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public ZipCode addZipCode(ZipCode zipCode) {
+    public ZipCode addZipCode(ZipCode zipCode
+    ) {
         TypedQuery<ZipCode> Query = em.createNamedQuery(ZipCode.FIND_ZIP_BY_ZIP_MAXRADIUS, ZipCode.class);
         Query.setParameter("zipCode", zipCode.getCurrentZipCode());
         Query.setParameter("maxRadius", zipCode.getMaxRadius());
@@ -993,7 +1053,8 @@ public class Tut4YouApp {
      */
     @RolesAllowed("tut4youapp.student")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public ZipCodeByRadius addZipCodeByRadius(ZipCode zipCode, ZipCodeByRadius zipCodeByRadius) {
+    public ZipCodeByRadius addZipCodeByRadius(ZipCode zipCode, ZipCodeByRadius zipCodeByRadius
+    ) {
         ZipCodeByRadius zipCodeByRadiusTemp = em.find(ZipCodeByRadius.class, zipCodeByRadius.getZipCodeByRadius());
         if (zipCodeByRadiusTemp == null) {
             zipCode.addZipCodeByRadius(zipCodeByRadius);
@@ -1012,7 +1073,8 @@ public class Tut4YouApp {
      */
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void saveMessage(Message message) {
+    public void saveMessage(Message message
+    ) {
         em.persist(message);
         em.flush();
     }

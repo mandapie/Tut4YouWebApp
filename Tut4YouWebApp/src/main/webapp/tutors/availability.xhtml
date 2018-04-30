@@ -23,7 +23,9 @@
                             id="dayOfWeek"
                             value="#{availabilityBean.availability.dayOfWeek}"
                             required="true"
-                            binding="#{day}">
+                            binding="#{day}"
+                            requiredMessage="required"
+                            >
                             <f:selectItem itemLabel="Select One..." itemValue="" noSelectionOption="true"/>
                             <f:selectItem itemValue="Monday"/>
                             <f:selectItem itemValue="Tuesday"/>
@@ -38,7 +40,8 @@
                         <b:inputText type="time" id="startTime"
                                      value="#{availabilityBean.startTime}"
                                      binding="#{availTime}"
-                                     required="true">
+                                     required="true"
+                                      requiredMessage="required">
                             <f:convertDateTime type="time" pattern="HH:mm" dateStyle="full"/>
                             <b:message for="startTime"/>
                         </b:inputText>
@@ -47,7 +50,8 @@
                         <h:outputLabel value="End Time:" />
                         <b:inputText type="time" id="endTime"
                                      value="#{availabilityBean.endTime}"
-                                     required="true" >
+                                     required="true"
+                                     requiredMessage="required">
                             <f:convertDateTime type="time" pattern="HH:mm" dateStyle="full"/>
                             <b:message for="endTime"/>
                             <f:validator validatorId="timeValidator" />

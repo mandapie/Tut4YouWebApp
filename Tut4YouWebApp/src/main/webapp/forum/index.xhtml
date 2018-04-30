@@ -1,0 +1,50 @@
+<ui:composition template="/WEB-INF/templates/layout.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <!--
+        Licensed under the Academic Free License (AFL 3.0).
+        http://opensource.org/licenses/AFL-3.0
+
+        This code has been developed by a group of CSULB students working on their 
+        Computer Science senior project called Tutors4You.
+
+        Tutors4You is a web application that students can utilize to find a tutor and
+        ask them to meet at any location of their choosing. Students that struggle to understand 
+        the courses they are taking would benefit from this peer to peer tutoring service.
+
+        2017 Amanda Pan <daikiraidemodaisuki@gmail.com>
+        2017 Andrew Kaichi <ahkaichi@gmail.com>
+        2017 Keith Tran <keithtran25@gmail.com>
+        2017 Syed Haider <shayder426@gmail.com>
+    -->
+    <!-- @author Andrew Kaichi <ahkaichi@gmail.com> -->
+    <ui:define name="title">Forum</ui:define>
+    <ui:define name="content">
+        <b:jumbotron>
+            <b:container>
+                <h1>Welcome to Tut4You!</h1>
+                <p>
+                    At Tut4You, we understand college is hard and want to develop a tool that students can use to get help.
+                    Tut4You allows any student to request for a tutor where they need the tutors to be.
+                    Students are able to be anywhere and request for a tutor to be at their location when in need of help with their homework and/or answering questions on any course desired.
+                    Students from all colleges and universities will have the ability to access this web application. Students that struggle to understand the courses they are taking would benefit from this peer to peer tutoring service.
+                    Tutors will be paid according to their hourly rate they have set and the amount of time spent on the session.
+                    Stop stressing and request for help at Tut4You!
+                </p>
+                <c:choose>
+                    <c:when test="#{userBean.isUserAuthenticated}"></c:when>
+                    <c:otherwise>
+                        <p>
+                            <b:button href="/Tut4YouWebApp/authentications/registration.xhtml" value="Register with Us" class="btn-lg btn-info"/>
+                        </p>
+                    </c:otherwise>
+                </c:choose>
+            </b:container>
+        </b:jumbotron>
+        <ui:debug hotkey='x'/>
+    </ui:define>
+</ui:composition>

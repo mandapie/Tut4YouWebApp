@@ -1,0 +1,82 @@
+<ui:composition template="/WEB-INF/templates/layout.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:p="http://primefaces.org/ui">
+    <!--
+        Licensed under the Academic Free License (AFL 3.0).
+        http://opensource.org/licenses/AFL-3.0
+
+        This code has been developed by a group of CSULB students working on their 
+        Computer Science senior project called Tutors4You.
+
+        Tutors4You is a web application that students can utilize to find a tutor and
+        ask them to meet at any location of their choosing. Students that struggle to understand 
+        the courses they are taking would benefit from this peer to peer tutoring service.
+
+        2017 Amanda Pan <daikiraidemodaisuki@gmail.com>
+        2017 Andrew Kaichi <ahkaichi@gmail.com>
+        2017 Keith Tran <keithtran25@gmail.com>
+        2017 Syed Haider <shayder426@gmail.com>
+    -->
+    <!-- @author Andrew Kaichi <ahkaichi@gmail.com> -->
+    <ui:define name="title">Question</ui:define>
+    <ui:define name="content">
+
+        <b:panel title="Fill out the following information to post a question to the forum." collapsible="false" look="info">
+            <b:form>
+                <b:row>
+                    <b:selectOneMenu span="6" label="Subject" id="subjectList" value="#{forumBean.subject}" required="true" requiredMessage="required subject">
+                        <f:selectItem itemLabel="select Subject..." itemValue="" noSelectionOption="true"/>
+                        <f:selectItems value="#{forumBean.subjectList}"
+                                       var="subject"
+                                       itemLabel="#{subject.subjectName}"
+                                       itemValue="#{subject}"/>
+                        <b:column>
+                            <b:message for="subjectList" span="3"/>
+                        </b:column>
+                        <!-- source: https://stackoverflow.com/questions/18498194/loading-hselectonemenu-depending-of-another-hselectonemenu-value -->
+                        <f:ajax render="courseList" listener="#{forumBean.changeSubject}"/>
+
+                    </b:selectOneMenu>
+
+                    <b:selectOneMenu span="6" label="Course" id="courseList" value="#{forumBean.request.course}" required="true" requiredMessage="required course">
+                        <f:selectItem itemLabel="select Course..." itemValue="" noSelectionOption="true"/>
+                        <f:selectItems value="#{forumBean.courseList}"
+                                       var="course"
+                                       itemLabel="#{course.courseName}"
+                                       itemValue="#{course}"/>
+                    </b:selectOneMenu>
+                </b:row>
+                <b:column>
+                    <h:outputLabel value="Description/Topic"/>
+                </b:column>
+                <p:inputTextarea label="Description/Topic" 
+                                 id="dt" placeholder="Enter a description..." 
+                                 value="#{forumBean.request.description}" 
+                                 rows="5" cols="60" counter="display" maxlength="300" 
+                                 counterTemplate="{0} characters remaining." autoResize="false">
+                    <b:message for="dt" span="3"/>
+                <f:validateLength minimum="10"/>
+                </p:inputTextarea>
+                <h:outputText id="display"/>
+
+                <b:row>
+                    <b:inputText span="2" id="zip" label="Zip Code" placeholder="Enter current zip code..." value="#{requestBean.zipCode.zipCode}"
+                                 required="true" requiredMessage="required zip code" validator="#{basicValidator.validateZipcode}">
+                        <f:validateLength minimum="5" maximum="5"/> 
+                        <b:column>
+                            <b:message for="zip" span="3"/>
+                        </b:column>
+                    </b:inputText> 
+                </b:row>
+                <b:row>
+                    <b:commandButton span="2" value="Submit" look="primary" action="#{requestBean.createNewRequest}" />
+                </b:row>
+            </b:form>
+        </b:panel>        
+        <ui:debug hotkey='x' />
+    </ui:define>
+</ui:composition>

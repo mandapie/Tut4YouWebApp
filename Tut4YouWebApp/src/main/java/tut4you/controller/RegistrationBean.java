@@ -61,6 +61,15 @@ public class RegistrationBean implements Serializable {
     private String defaultZip;
     private int maxRadius;
     private Date joinedDateAsTutor;
+    private ZipCode zipCode;
+
+    public Tut4YouApp getTut4youApp() {
+        return tut4youApp;
+    }
+
+    public void setTut4youApp(Tut4YouApp tut4youApp) {
+        this.tut4youApp = tut4youApp;
+    }
     
     /**
      * Creates a new instance of Registration
@@ -68,6 +77,7 @@ public class RegistrationBean implements Serializable {
     @PostConstruct
     public void  createRegistrationBean() {
         newUser = new User();
+        zipCode = new ZipCode();
     }
     
     /** 
@@ -77,7 +87,12 @@ public class RegistrationBean implements Serializable {
     public void destroyRegistrationBean() {
         
     }
-    
+    public ZipCode getZipCode() {
+        return zipCode;
+    }
+    public void setZipCode(ZipCode zipCode) {
+        this.zipCode = zipCode;
+    }
     /**
      * get max radius
      * @return maxRadius
@@ -220,7 +235,7 @@ public class RegistrationBean implements Serializable {
                             pr = Double.parseDouble(hourlyRate);
                         }
                         joinedDateAsTutor = getCurrentDate();
-                        tut4youApp.registerUser(newUser, userType, pr, defaultZip, maxRadius, joinedDateAsTutor);
+                        tut4youApp.registerUser(newUser, userType, pr, defaultZip, zipCode, joinedDateAsTutor);
                         result = "success";
                     }
                     catch (UserExistsException see) {

@@ -132,7 +132,7 @@
                         </c:if>
                         <p:dialog header="Current Zip Code" widgetVar="myDialog" minHeight="40" visible="true" rendered="#{userBean.condition}" closable="false" modal="true">
                             <h:form>
-                                <h:outputText value="Enter current zip code (Defauilt is: " />
+                                <h:outputText value="Enter current zip code (Default Zip Code: " />
                                 <h:outputText value="#{userBean.user.defaultZip}" />
                                 <h:outputText value=")" />
                                 <b:inputText id="currentZip" placeholder="press enter to submit" required="true" requiredMessage="required" value="#{userBean.currentZip}">

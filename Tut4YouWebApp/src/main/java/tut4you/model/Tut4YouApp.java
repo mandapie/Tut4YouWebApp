@@ -620,14 +620,14 @@ public class Tut4YouApp {
      * @param userType
      * @param priceRate
      * @param defaultZip
-     * @param maxRadius
+     * @param zipCode
      * @param joinedDateAsTutor
      * @throws tut4you.exception.UserExistsException
      * @throws java.text.ParseException
      */
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void registerUser(User user, String userType, double priceRate, String defaultZip, int maxRadius, Date joinedDateAsTutor) throws UserExistsException, ParseException {
+    public void registerUser(User user, String userType, double priceRate, String defaultZip, ZipCode zipCode, Date joinedDateAsTutor) throws UserExistsException, ParseException {
         if (null == em.find(User.class, user.getEmail())) {
             Group group = em.find(Group.class, "tut4youapp.student");
             User newStudent = new User(user);
@@ -642,15 +642,18 @@ public class Tut4YouApp {
                 Tutor newTutor = new Tutor(user);
                 newTutor.setDateJoinedAsTutor(joinedDateAsTutor);
                 newTutor.setHourlyRate(priceRate);
-                newTutor.getZipCode().setMaxRadius(maxRadius);
-                //newTutor.setMaxRadius(maxRadius);
+                newTutor.setZipCode(zipCode);
+                zipCode.addTutor(newTutor);
+                
                 newTutor.setDefaultZip(defaultZip);
                 newTutor.addGroup(group); //Add user a student role
                 group.addTutor(newTutor);
                 group = em.find(Group.class, "tut4youapp.tutor");
                 newTutor.addGroup(group); //Add user a tutor role
                 group.addTutor(newTutor);
+                em.persist(zipCode);
                 em.persist(newTutor);
+                
             }
             em.flush();
         } else {
@@ -981,7 +984,6 @@ public class Tut4YouApp {
         }
         return Query.getSingleResult();
     }
-
     /**
      * Add ZipCodeByRadius if it does not belong to zip code location
      *

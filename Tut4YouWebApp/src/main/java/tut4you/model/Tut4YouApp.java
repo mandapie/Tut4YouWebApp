@@ -606,8 +606,6 @@ public class Tut4YouApp {
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public Tutor findTutorEmail(String username) {
-        System.out.println("What is the " + username);
-
         TypedQuery<Tutor> tutorQuery = em.createNamedQuery(Tutor.FIND_TUTOR_BY_USERNAME, Tutor.class);
         tutorQuery.setParameter("username", username);
         return tutorQuery.getSingleResult();
@@ -751,312 +749,297 @@ public class Tut4YouApp {
         String email;
         /*Checks to see if tutor is viewing reviews or student
         is looking at a tutor's profile
-        */
+         */
         if (!currentUserEmail.equals(tutorEmail)) {
-           currentUserEmail = tutorEmail;
-        } 
-            if (currentUserEmail == null) {
-                return null;
-            } else {
-                Tutor tutor = findTutor(currentUserEmail);
-                email = tutor.getEmail();
-                TypedQuery<Rating> ratingQuery = em.createNamedQuery(Rating.FIND_RATING_BY_TUTOR, Rating.class);
-                ratingQuery.setParameter("email", email);
-                return ratingQuery.getResultList();
-            }
+            currentUserEmail = tutorEmail;
+        }
+        if (currentUserEmail == null) {
+            return null;
+        } else {
+            Tutor tutor = findTutor(currentUserEmail);
+            email = tutor.getEmail();
+            TypedQuery<Rating> ratingQuery = em.createNamedQuery(Rating.FIND_RATING_BY_TUTOR, Rating.class);
+            ratingQuery.setParameter("email", email);
+            return ratingQuery.getResultList();
+        }
     }
 
-        
-
-        /**
-         * Gets a list of the requests that have been completed
-         *
-         * @return a list of completed requests for a user
-         */
-        @RolesAllowed("tut4youapp.student")
-        @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-        public List<Request> getCompletedRequests
-        
-            () {
+    /**
+     * Get a list of ratings of a tutor.
+     *
+     * @param ratingEmail
+     * @return the list of courses to the bean
+     * @author: Syed Haider <shayder426@gmail.com>
+     */
+    @PermitAll
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public boolean checkIfUserRated(String ratingEmail) {
         UserBean userBean = new UserBean();
-            String currentUserEmail = userBean.getEmailFromSession();
-            String email;
-            if (currentUserEmail == null) {
-                return null;
-            } else {
-                User user = findUser(currentUserEmail);
-                email = user.getEmail();
-                TypedQuery<Request> requestQuery = em.createNamedQuery(Request.FIND_REQUEST_BY_EMAIL, Request.class);
-                requestQuery.setParameter("student_email", email);
-                requestQuery.setParameter("status", Request.Status.COMPLETED);
-                return requestQuery.getResultList();
-            }
-        }
+        String currentUserEmail = userBean.getEmailFromSession();
+        System.out.println("PLS WORK: " + ratingEmail.equals(currentUserEmail));
+        return ratingEmail.equals(currentUserEmail);
+    }
 
-        /**
-         * Sets a tutor to the request when a tutor completes the request.
-         *
-         * @param r the request to be set to completed
-         */
-        @RolesAllowed("tut4youapp.tutor")
-        @TransactionAttribute(TransactionAttributeType.REQUIRED)
-        public void setRequestToComplete
-        (Request r
-        
-            ) {
+    /**
+     * Gets a list of the requests that have been completed
+     *
+     * @return a list of completed requests for a user
+     */
+    @RolesAllowed("tut4youapp.student")
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public List<Request> getCompletedRequests() {
         UserBean userBean = new UserBean();
-            String currentUserEmail = userBean.getEmailFromSession();
-            Long endTime = System.currentTimeMillis();
-            Tutor tutor = findTutor(currentUserEmail);
-            r.setStatus(Request.Status.COMPLETED);
-            r.setTutor(tutor);
-            em.merge(r);
-            em.flush();
+        String currentUserEmail = userBean.getEmailFromSession();
+        String email;
+        if (currentUserEmail == null) {
+            return null;
+        } else {
+            User user = findUser(currentUserEmail);
+            email = user.getEmail();
+            TypedQuery<Request> requestQuery = em.createNamedQuery(Request.FIND_REQUEST_BY_EMAIL, Request.class);
+            requestQuery.setParameter("student_email", email);
+            requestQuery.setParameter("status", Request.Status.COMPLETED);
+            return requestQuery.getResultList();
         }
+    }
 
-        /**
-         * Sets a tutor to the request when a tutor completes the request. IN
-         * PROGRESS
-         *
-         * @param r request that is being partaken
-         * @param s
-         */
-        @RolesAllowed("tut4youapp.tutor")
-        @TransactionAttribute(TransactionAttributeType.REQUIRED)
-        public void startSessionTime
-        (Request r
-        
-            ) {
+    /**
+     * Sets a tutor to the request when a tutor completes the request.
+     *
+     * @param r the request to be set to completed
+     */
+    @RolesAllowed("tut4youapp.tutor")
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void setRequestToComplete(Request r
+    ) {
+        UserBean userBean = new UserBean();
+        String currentUserEmail = userBean.getEmailFromSession();
+        Long endTime = System.currentTimeMillis();
+        Tutor tutor = findTutor(currentUserEmail);
+        r.setStatus(Request.Status.COMPLETED);
+        r.setTutor(tutor);
+        em.merge(r);
+        em.flush();
+    }
+
+    /**
+     * Sets a tutor to the request when a tutor completes the request. IN
+     * PROGRESS
+     *
+     * @param r request that is being partaken
+     * @param s
+     */
+    @RolesAllowed("tut4youapp.tutor")
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void startSessionTime(Request r
+    ) {
         Request request = em.find(Request.class, r.getId());
-            Long startTime = System.currentTimeMillis();
-            em.merge(r);
-            em.flush();
-        }
-
-        /**
-         * Gets the average rating of the tutor
-         *
-         * @return the average rating of the tutor
-         * @author Syed Haider <shayder426@gmail.com>
-         */
-        @PermitAll
-        @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-        public double getAverageRating
-        
-            () {
-        TypedQuery<Double> averageRatingQuery = em.createNamedQuery(Rating.FIND_AVG_RATING_BY_TUTOR, Double.class);
-            return averageRatingQuery.getSingleResult();
-        }
-
-        @PermitAll
-        @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-        public int sortByDayOfWeek
-        (Object o1, Object o2
-        
-            ) {
-        List<String> dates = Arrays.asList(new String[]{
-                "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
-            });
-            Comparator<String> dateComparator = new Comparator<String>() {
-                @Override
-                public int compare(String s1, String s2) {
-                    int value;
-                    try {
-                        SimpleDateFormat format = new SimpleDateFormat("EEE");
-                        Date d1 = format.parse(s1);
-                        Date d2 = format.parse(s2);
-                        if (d1.equals(d2)) {
-                            value = s1.substring(s1.indexOf(" ") + 1).compareTo(s2.substring(s2.indexOf(" ") + 1));
-                        } else {
-                            Calendar cal1 = Calendar.getInstance();
-                            Calendar cal2 = Calendar.getInstance();
-                            cal1.setTime(d1);
-                            cal2.setTime(d2);
-                            value = cal1.get(Calendar.DAY_OF_WEEK) - cal2.get(Calendar.DAY_OF_WEEK);
-                        }
-                        return value;
-                    } catch (ParseException pe) {
-                        throw new RuntimeException(pe);
-                    }
-                }
-            };
-            Collections.sort(dates, dateComparator);
-            return 0;
-        }
-
-        /**
-         * Checks to see if user inputted email and email in database are
-         * equivalent
-         *
-         * @param email
-         * @return true if emails are equivalent
-         * @author Syed Haider <shayder426@gmail.com>
-         */
-        @RolesAllowed("tut4youapp.tutor")
-        @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-        public boolean checkEmail
-        (String email
-        
-            ) {
-        UserBean userBean = new UserBean();
-            String currentUserEmail = userBean.getEmailFromSession();
-            return currentUserEmail.equals(email);
-        }
-
-        @RolesAllowed("tut4youapp.tutor")
-        @TransactionAttribute(TransactionAttributeType.REQUIRED)
-        public void addTranscriptFileLocation
-        (String transcriptFileLocation
-        
-            ) {
-        UserBean userBean = new UserBean();
-            String currentUserEmail = userBean.getEmailFromSession();
-            Tutor tutor = findTutor(currentUserEmail);
-            tutor.setTrancriptFileLocation(transcriptFileLocation);
-            em.merge(tutor);
-            em.flush();
-        }
-
-        @PermitAll
-        @TransactionAttribute(TransactionAttributeType.REQUIRED)
-        public void updateUser
-        (User updateUser
-        
-            ) {
-        UserBean userBean = new UserBean();
-            String currentUserEmail = userBean.getEmailFromSession();
-            Tutor tutor = findTutor(currentUserEmail);
-            if (tutor == null) {
-                User student;
-                student = (User) updateUser;
-                em.merge(student);
-                em.flush();
-            } else {
-                User student;
-                student = (User) updateUser;
-                tutor = (Tutor) updateUser;
-                em.merge(student);
-                em.merge(tutor);
-                em.flush();
-            }
-            FacesMessage message = new FacesMessage("Successfully Updated Profile");
-            FacesContext.getCurrentInstance().addMessage(null, message);
-
-        }
-
-        /**
-         * update current zip code of tutor
-         *
-         * @param currentZip
-         * @return tutor
-         * @author Keith Tran <keithtran25@gmail.com>
-         */
-        @TransactionAttribute(TransactionAttributeType.REQUIRED)
-        @RolesAllowed("tut4youapp.tutor")
-        public Tutor updateCurrentZip
-        (String currentZip
-        
-            ) {
-        UserBean userBean = new UserBean();
-            String currentUserEmail = userBean.getEmailFromSession();
-            Tutor tutor = findTutor(currentUserEmail);
-            tutor.setCurrentZip(currentZip);
-            em.merge(tutor);
-            em.flush();
-            return tutor;
-        }
-
-        /**
-         * retrieve list of user email
-         *
-         * @return list of user email
-         * @author Keith Tran <keithtran25@gmail.com>
-         */
-        @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-        @PermitAll
-        public List<String> getUserEmails
-        
-            () {
-        TypedQuery<String> Query = em.createNamedQuery(User.FIND_USER_EMAILS, String.class);
-            return Query.getResultList();
-        }
-
-        /**
-         * retrieve list of user usernames
-         *
-         * @return list of usernames
-         * @author Keith Tran <keithtran25@gmail.com>
-         */
-        @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-        @PermitAll
-        public List<String> getUserUserNames
-        
-            () {
-        TypedQuery<String> Query = em.createNamedQuery(User.FIND_USER_USERNAMES, String.class);
-            return Query.getResultList();
-        }
-
-        /**
-         * Adds ZipCode to DB if it is not already in DB but first checks if it
-         * is in the DB
-         *
-         * @param zipCode
-         * @return zipcode
-         * @author Keith Tran <keithtran25@gmail.com>
-         *
-         */
-        @RolesAllowed("tut4youapp.student")
-        @TransactionAttribute(TransactionAttributeType.REQUIRED)
-        public ZipCode addZipCode
-        (ZipCode zipCode
-        
-            ) {
-        TypedQuery<ZipCode> Query = em.createNamedQuery(ZipCode.FIND_ZIP_BY_ZIP_MAXRADIUS, ZipCode.class);
-            Query.setParameter("zipCode", zipCode.getZipCode());
-            Query.setParameter("maxRadius", zipCode.getMaxRadius());
-            if (Query.getResultList().isEmpty()) {
-                em.persist(zipCode);
-                em.flush();
-            }
-            return Query.getSingleResult();
-        }
-
-        /**
-         * Add ZipCodeByRadius if it does not belong to zip code location
-         *
-         * @param zipCode
-         * @param zipCodeByRadius
-         * @return ZipCodeByRadius Keith Tran <keithtran25@gmail.com>
-         */
-        @RolesAllowed("tut4youapp.student")
-        @TransactionAttribute(TransactionAttributeType.REQUIRED)
-        public ZipCodeByRadius addZipCodeByRadius
-        (ZipCode zipCode, ZipCodeByRadius zipCodeByRadius
-        
-            ) {
-        ZipCodeByRadius zipCodeByRadiusTemp = em.find(ZipCodeByRadius.class, zipCodeByRadius.getZipCodeByRadius());
-            if (zipCodeByRadiusTemp == null) {
-                zipCode.addZipCodeByRadius(zipCodeByRadius);
-                zipCodeByRadius.addZipCode(zipCode);
-                em.persist(zipCodeByRadius);
-                em.flush();
-            }
-            return zipCodeByRadius;
-
-        }
-
-        /**
-         * saves the message to the database
-         *
-         * @param message
-         */
-        @PermitAll
-        @TransactionAttribute(TransactionAttributeType.REQUIRED)
-        public void saveMessage
-        (Message message
-        
-            ) {
-        em.persist(message);
-            em.flush();
-        }
+        Long startTime = System.currentTimeMillis();
+        em.merge(r);
+        em.flush();
     }
+
+    /**
+     * Gets the average rating of the tutor
+     *
+     * @return the average rating of the tutor
+     * @author Syed Haider <shayder426@gmail.com>
+     */
+    @PermitAll
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public double getAverageRating() {
+        TypedQuery<Double> averageRatingQuery = em.createNamedQuery(Rating.FIND_AVG_RATING_BY_TUTOR, Double.class);
+        return averageRatingQuery.getSingleResult();
+    }
+
+    @PermitAll
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public int sortByDayOfWeek(Object o1, Object o2
+    ) {
+        List<String> dates = Arrays.asList(new String[]{
+            "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
+        });
+        Comparator<String> dateComparator = new Comparator<String>() {
+            @Override
+            public int compare(String s1, String s2) {
+                int value;
+                try {
+                    SimpleDateFormat format = new SimpleDateFormat("EEE");
+                    Date d1 = format.parse(s1);
+                    Date d2 = format.parse(s2);
+                    if (d1.equals(d2)) {
+                        value = s1.substring(s1.indexOf(" ") + 1).compareTo(s2.substring(s2.indexOf(" ") + 1));
+                    } else {
+                        Calendar cal1 = Calendar.getInstance();
+                        Calendar cal2 = Calendar.getInstance();
+                        cal1.setTime(d1);
+                        cal2.setTime(d2);
+                        value = cal1.get(Calendar.DAY_OF_WEEK) - cal2.get(Calendar.DAY_OF_WEEK);
+                    }
+                    return value;
+                } catch (ParseException pe) {
+                    throw new RuntimeException(pe);
+                }
+            }
+        };
+        Collections.sort(dates, dateComparator);
+        return 0;
+    }
+
+    /**
+     * Checks to see if user inputted email and email in database are equivalent
+     *
+     * @param email
+     * @return true if emails are equivalent
+     * @author Syed Haider <shayder426@gmail.com>
+     */
+    @RolesAllowed("tut4youapp.tutor")
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public boolean checkEmail(String email
+    ) {
+        UserBean userBean = new UserBean();
+        String currentUserEmail = userBean.getEmailFromSession();
+        return currentUserEmail.equals(email);
+    }
+
+    @RolesAllowed("tut4youapp.tutor")
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void addTranscriptFileLocation(String transcriptFileLocation
+    ) {
+        UserBean userBean = new UserBean();
+        String currentUserEmail = userBean.getEmailFromSession();
+        Tutor tutor = findTutor(currentUserEmail);
+        tutor.setTrancriptFileLocation(transcriptFileLocation);
+        em.merge(tutor);
+        em.flush();
+    }
+
+    @PermitAll
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void updateUser(User updateUser
+    ) {
+        UserBean userBean = new UserBean();
+        String currentUserEmail = userBean.getEmailFromSession();
+        Tutor tutor = findTutor(currentUserEmail);
+        if (tutor == null) {
+            User student;
+            student = (User) updateUser;
+            em.merge(student);
+            em.flush();
+        } else {
+            User student;
+            student = (User) updateUser;
+            tutor = (Tutor) updateUser;
+            em.merge(student);
+            em.merge(tutor);
+            em.flush();
+        }
+        FacesMessage message = new FacesMessage("Successfully Updated Profile");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+
+    }
+
+    /**
+     * update current zip code of tutor
+     *
+     * @param currentZip
+     * @return tutor
+     * @author Keith Tran <keithtran25@gmail.com>
+     */
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    @RolesAllowed("tut4youapp.tutor")
+    public Tutor updateCurrentZip(String currentZip
+    ) {
+        UserBean userBean = new UserBean();
+        String currentUserEmail = userBean.getEmailFromSession();
+        Tutor tutor = findTutor(currentUserEmail);
+        tutor.setCurrentZip(currentZip);
+        em.merge(tutor);
+        em.flush();
+        return tutor;
+    }
+
+    /**
+     * retrieve list of user email
+     *
+     * @return list of user email
+     * @author Keith Tran <keithtran25@gmail.com>
+     */
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    @PermitAll
+    public List<String> getUserEmails() {
+        TypedQuery<String> Query = em.createNamedQuery(User.FIND_USER_EMAILS, String.class);
+        return Query.getResultList();
+    }
+
+    /**
+     * retrieve list of user usernames
+     *
+     * @return list of usernames
+     * @author Keith Tran <keithtran25@gmail.com>
+     */
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    @PermitAll
+    public List<String> getUserUserNames() {
+        TypedQuery<String> Query = em.createNamedQuery(User.FIND_USER_USERNAMES, String.class);
+        return Query.getResultList();
+    }
+
+    /**
+     * Adds ZipCode to DB if it is not already in DB but first checks if it is
+     * in the DB
+     *
+     * @param zipCode
+     * @return zipcode
+     * @author Keith Tran <keithtran25@gmail.com>
+     *
+     */
+    @RolesAllowed("tut4youapp.student")
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public ZipCode addZipCode(ZipCode zipCode
+    ) {
+        TypedQuery<ZipCode> Query = em.createNamedQuery(ZipCode.FIND_ZIP_BY_ZIP_MAXRADIUS, ZipCode.class);
+        Query.setParameter("zipCode", zipCode.getZipCode());
+        Query.setParameter("maxRadius", zipCode.getMaxRadius());
+        if (Query.getResultList().isEmpty()) {
+            em.persist(zipCode);
+            em.flush();
+        }
+        return Query.getSingleResult();
+    }
+
+    /**
+     * Add ZipCodeByRadius if it does not belong to zip code location
+     *
+     * @param zipCode
+     * @param zipCodeByRadius
+     * @return ZipCodeByRadius Keith Tran <keithtran25@gmail.com>
+     */
+    @RolesAllowed("tut4youapp.student")
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public ZipCodeByRadius addZipCodeByRadius(ZipCode zipCode, ZipCodeByRadius zipCodeByRadius
+    ) {
+        ZipCodeByRadius zipCodeByRadiusTemp = em.find(ZipCodeByRadius.class, zipCodeByRadius.getZipCodeByRadius());
+        if (zipCodeByRadiusTemp == null) {
+            zipCode.addZipCodeByRadius(zipCodeByRadius);
+            zipCodeByRadius.addZipCode(zipCode);
+            em.persist(zipCodeByRadius);
+            em.flush();
+        }
+        return zipCodeByRadius;
+
+    }
+
+    /**
+     * saves the message to the database
+     *
+     * @param message
+     */
+    @PermitAll
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void saveMessage(Message message
+    ) {
+        em.persist(message);
+        em.flush();
+    }
+}

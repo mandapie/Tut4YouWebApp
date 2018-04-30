@@ -51,6 +51,7 @@ public class RatingBean implements Serializable {
     private Tutor tutor; //the tutor who accepts te rating
     private String studentName;
 
+
     /**
      * RatingBean encapsulates all the functions/services involved in making a
      * rating
@@ -135,14 +136,13 @@ public class RatingBean implements Serializable {
 
     public String createNewRating(Tutor t) throws ParseException {
         String result = "success";
-        System.out.println("Tutor t: " + t.toString());
         Date date = new Date();
         rating.setDateRated(date);
         rating = tut4youApp.newRating(rating, t);
         return result;
     }
-    
-      /**
+
+    /**
      * Updates the current availability of the tutor
      *
      * @param avail
@@ -156,7 +156,7 @@ public class RatingBean implements Serializable {
         rating.setRatingValue(rating.getRatingValue());
         rating.setDescription(rating.getDescription());
         rating.setDateRated(date);
-        tut4youApp.updateRating(rating,rating.getDescription(),rating.getRatingValue());
+        tut4youApp.updateRating(rating, rating.getDescription(), rating.getRatingValue());
         if (rating != null) {
             result = "success";
             LOGGER.severe("Rating added");
@@ -173,7 +173,7 @@ public class RatingBean implements Serializable {
      */
     public void deleteRating(Rating rating) throws ParseException {
         tut4youApp.deleteRating(rating);
-       
+
     }
 
     /**

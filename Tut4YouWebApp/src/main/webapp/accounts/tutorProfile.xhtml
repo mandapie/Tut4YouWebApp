@@ -96,6 +96,8 @@
                                 <h:outputText value="#{rating.dateRated}">
                                     <f:convertDateTime pattern="M-d-yyyy"/>
                                 </h:outputText>
+                                <b:button value ="Edit Rating" rendered="#{profileBean.checkIfUserRated(rating.student.email)}"/>
+
 
                                 <br></br>
 

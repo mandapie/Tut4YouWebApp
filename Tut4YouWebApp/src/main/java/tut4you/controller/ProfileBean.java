@@ -40,6 +40,10 @@ public class ProfileBean implements Serializable {
 
     @ManagedProperty("#{param.username}")
     private String username;
+    
+    private boolean userRated;
+
+
 
     /**
      * Creates a new instance of ProfileBean
@@ -63,6 +67,18 @@ public class ProfileBean implements Serializable {
     public void setUser(User user) {
         this.user = user;
     }
+    
+        public boolean isUserRated() {
+        return userRated;
+    }
+
+    public void setUserRated(boolean userRated) {
+        this.userRated = userRated;
+    }
+    public boolean checkIfUserRated(String email)
+    {
+        return tut4youapp.checkIfUserRated(email);
+    }
 
     public void showUsername(String username) {
         Tutor tutor = findTutorEmail(username);
@@ -73,5 +89,7 @@ public class ProfileBean implements Serializable {
     {
         return tut4youapp.findTutorEmail(username);
     }
+    
+    
 
 }

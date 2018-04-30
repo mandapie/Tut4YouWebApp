@@ -50,7 +50,8 @@ import javax.persistence.Table;
 
 @NamedQueries({
     @NamedQuery(name = User.FIND_USER_EMAILS, query = "SELECT t.email FROM User t"),
-    @NamedQuery(name = User.FIND_USER_USERNAMES, query = "SELECT t.username FROM User t")
+    @NamedQuery(name = User.FIND_USER_USERNAMES, query = "SELECT t.username FROM User t"),
+
 
 })
 public class User implements Serializable {
@@ -62,6 +63,11 @@ public class User implements Serializable {
      * JPQL Query to obtain a list of users username
      */
     public static final String FIND_USER_USERNAMES = "Tutor.FindUserUsernames";
+     /**
+     * JPQL Query to obtain the user by rating
+     */
+    public static final String FIND_USER_BY_RATING = "User.FindUserByRating";
+    
     
     private static final long serialVersionUID = 1L;
 

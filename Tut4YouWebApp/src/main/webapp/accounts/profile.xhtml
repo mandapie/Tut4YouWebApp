@@ -26,123 +26,59 @@
     <ui:define name="title">Profile</ui:define>
     <ui:define name="content">
         <h1>Profile Page</h1>
-        <b:form>
-            <p:dialog header="Request Declined" widgetVar="modalID" minHeight="40" visible="#{requestBean.declinedRequest.size() != 0}" closable="false">
-                <ui:repeat var="re" value="#{requestBean.declinedRequest}">
-                    <p>Your request with the description: #{re.description} has been declined</p>
-                    <p:commandButton value="Dismiss" style="width:100%" action="#{requestBean.cancelRequest(re)}" oncomplete="PF('modalID').hide();"/>
-                </ui:repeat> 
-            </p:dialog>
-        </b:form>
         <b:container fluid="true">
-            <!-- profile info and links column -->
-            <b:column medium-screen="one-third">
+            <!-- profile info and links row -->
+            <b:row>
                 <b:panel>
-                    <b:row>
-                        <b:column span="5">
-                            <h:outputLabel value="Name:"/>
-                        </b:column>
-                        <b:column span="7">
-                            <h:outputText value="#{userBean.user.firstName} #{userBean.user.lastName}"/>
-                        </b:column>
-                    </b:row>
-                    <b:row>
-                        <b:column span="5">
-                            <h:outputLabel value="Username:"/>
-                        </b:column>
-                        <b:column span="7">
-                            <h:outputText value="#{userBean.user.username}"/>
-                        </b:column>
-                    </b:row>
-                    <b:row>
-                        <b:column span="5">
-                            <h:outputLabel value="Email:"/>
-                        </b:column>
-                        <b:column span="7">
-                            <h:outputText value="#{userBean.user.email}"/>
-                        </b:column>
-                    </b:row>
-                    <b:row>
-                        <b:column span="5">
-                            <h:outputLabel value="Phone Number:"/>
-                        </b:column>
-                        <b:column span="7">
-                            <h:outputText value="#{userBean.user.phoneNumber}"/>
-                        </b:column>
-                    </b:row>
-                    <b:row>
-                        <b:column span="5">
-                            <h:outputLabel value="University:"/>
-                        </b:column>
-                        <b:column span="7">
-                            <h:outputText value="#{userBean.user.university}"/>
-                        </b:column>
-                    </b:row>
-                    <c:if test="#{userBean.isTutor}">
+                    <!--<div align="center">-->
                         <b:row>
-                            <b:column span="5">
-                                <h:outputLabel value="Hourly Rate:"/>
-                            </b:column>
-                            <b:column span="7">
-                                <h:outputText value="#{userBean.user.hourlyRate}">
+                            <h:outputLabel value="Name:" style="padding:0 2px;"/>
+                            <h:outputText value="#{userBean.user.firstName} #{userBean.user.lastName}" style="padding:0 2px;"/>
+                        </b:row>
+                        <b:row>
+                            <h:outputLabel value="Username:" style="padding:0 2px;"/>
+                            <h:outputText value="#{userBean.user.username}" style="padding:0 2px;"/>
+                        </b:row>
+                        <b:row>
+                            <h:outputLabel value="Email:" style="padding:0 2px;"/>
+                            <h:outputText value="#{userBean.user.email}" style="padding:0 2px;"/>
+                        </b:row>
+                        <b:row>
+                            <h:outputLabel value="Phone Number:" style="padding:0 2px;"/>
+                            <h:outputText value="#{userBean.user.phoneNumber}" style="padding:0 2px;"/>
+                        </b:row>
+                        <b:row>
+                            <h:outputLabel value="University:" style="padding:0 2px;"/>
+                            <h:outputText value="#{userBean.user.university}" style="padding:0 2px;"/>
+                        </b:row>
+                        <c:if test="#{userBean.isTutor}">
+                            <b:row>
+                                <h:outputLabel value="Hourly Rate:" style="padding:0 2px;"/>
+                                <h:outputText value="#{userBean.user.hourlyRate}" style="padding:0 2px;">
                                     <f:convertNumber type="currency" currencySymbol="$" locale="en_US" />
                                 </h:outputText>
-                            </b:column>
-                        </b:row>
-                    </c:if>
-                    <c:if test="#{userBean.isTutor}">
-                        <b:row>
-                            <b:column span="5">
-                                <h:outputLabel value="Avg Rating:"/>
-                            </b:column>
-                            <b:column span="7">
-                                <p:rating value="#{ratingBean.avgRating}" readonly="true" />
-                            </b:column>
-                        </b:row>
-                    </c:if>
-                    <b:row style="padding-left:13px">
-                        <b:button value="Edit Profile" href="/Tut4YouWebApp/accounts/editProfile.xhtml" />
-                    </b:row>
-                </b:panel>
-                <c:if test="#{userBean.isTutor}">
-                    <h:form id="doNotDisturb">
-                        <b:switch label="Do Not Disturb" value="#{userBean.user.doNotDisturb}" id="doNotDisturb" update="@form">
-                            <f:ajax event="change" render="doNotDisturb" listener="#{userBean.switchDoNotDisturb(userBean.user.doNotDisturb)}" />
-                        </b:switch>
-                    </h:form>
-                </c:if>
-                <b:row>
-                    <a href="/Tut4YouWebApp/students/requestTutor.xhtml">Request for a Tutor</a>
-                    <br></br>
-                    <a href="/Tut4YouWebApp/students/viewPreviousSessions.xhtml">View Previous Sessions</a>
-                    <br></br>
-                    <c:if test="#{userBean.isTutor}">
-                        <a href="/Tut4YouWebApp/tutors/availability.xhtml">Add Availability</a>
-                        <br></br>
-                        <a href="/Tut4YouWebApp/tutors/addCourse.xhtml">Add Courses</a>
-                        <br></br>
-                        <a href="/Tut4YouWebApp/tutors/viewReviews.xhtml">View Reviews</a>
-                        <br></br>
-                        <a href="/Tut4YouWebApp/tutors/sessionTimer.xhtml">Session Timer</a>
-                        <br></br>
-                        <a href="/Tut4YouWebApp/tutors/uploadTranscript.xhtml">Add Transcript</a>
-                        <br></br>
-                        <c:if test="#{userBean.condition}">  
-                            #{userBean.updateCurrentZip()}
+                            </b:row>
                         </c:if>
-                        <p:dialog header="Current Zip Code" widgetVar="myDialog" minHeight="40" visible="true" rendered="#{userBean.condition}" closable="false" modal="true">
-                            <h:form>
-                                <h:outputText value="Enter current zip code (Defauilt is: " />
-                                <h:outputText value="#{userBean.user.defaultZip}" />
-                                <h:outputText value=")" />
-                                <b:inputText id="currentZip" placeholder="press enter to submit" required="true" requiredMessage="required" value="#{userBean.currentZip}">
-                                    <b:message for="currentZip"/>
-                                </b:inputText>
-                            </h:form>
-                        </p:dialog>
-                    </c:if>
-                </b:row>
-            </b:column>
+                        <c:if test="#{userBean.isTutor}">
+                            <b:row>
+                                <h:outputLabel value="Avg Rating:" style="padding:0 2px;"/>
+                                <p:rating value="#{ratingBean.avgRating}" readonly="true" style="padding:0 2px;"/>
+                            </b:row>
+                        </c:if>
+                        <b:row style="padding-left:13px">
+                            <b:button value="Edit Profile" href="/Tut4YouWebApp/accounts/editProfile.xhtml" />
+                        </b:row>
+                    <!--</div>-->
+                </b:panel>
+                <b:form>
+                    <b:dataTable value="#{courseBean.tutorCourses}" var="course">
+                        <b:dataTableColumn>
+                            <f:facet name="header">Courses You Have Taken</f:facet>
+                                #{course.courseName}
+                        </b:dataTableColumn>
+                    </b:dataTable>
+                </b:form>
+            </b:row>
         </b:container>
         <ui:debug hotkey='x'/>
     </ui:define>

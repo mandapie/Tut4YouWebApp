@@ -1,7 +1,18 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Licensed under the Academic Free License (AFL 3.0).
+ *     http://opensource.org/licenses/AFL-3.0
+ * 
+ *  This code has been developed by a group of CSULB students working on their 
+ *  Computer Science senior project called Tutors4You.
+ *  
+ *  Tutors4You is a web application that students can utilize to find a tutor and
+ *  ask them to meet at any location of their choosing. Students that struggle to understand 
+ *  the courses they are taking would benefit from this peer to peer tutoring service.
+ 
+ *  2017 Amanda Pan <daikiraidemodaisuki@gmail.com>
+ *  2017 Andrew Kaichi <ahkaichi@gmail.com>
+ *  2017 Keith Tran <keithtran25@gmail.com>
+ *  2017 Syed Haider <shayder426@gmail.com>
  */
 package tut4you.controller;
 
@@ -9,23 +20,18 @@ import java.io.Serializable;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.enterprise.context.SessionScoped;
-import javax.enterprise.context.RequestScoped;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.component.UIComponent;
-
-import javax.inject.Named;
 import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
+import javax.inject.Named;
 import tut4you.model.*;
 
 /**
- *
- * @author Amanda
+ * ProfileBean gets the username to show the profile of a user
+ * @author Amanda Pan <daikiraidemodaisuki@gmail.com>
  * modified by Syed Haider
  */
 @Named
-@SessionScoped
+@ViewScoped
 public class ProfileBean implements Serializable {
 
     private static final Logger LOGGER = Logger.getLogger("ProfileBean");
@@ -33,11 +39,7 @@ public class ProfileBean implements Serializable {
     @EJB
     private Tut4YouApp tut4youapp;
 
-    @Inject
-    private UserBean userBean;
-
     private User user;
-
     @ManagedProperty("#{param.username}")
     private String username;
 
@@ -69,9 +71,7 @@ public class ProfileBean implements Serializable {
         user = tut4youapp.findUser(tutor.getEmail());
     }
     
-    public Tutor findTutorEmail(String username)
-    {
+    public Tutor findTutorEmail(String username) {
         return tut4youapp.findTutorEmail(username);
     }
-
 }

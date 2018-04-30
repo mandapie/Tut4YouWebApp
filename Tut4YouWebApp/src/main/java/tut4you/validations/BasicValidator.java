@@ -22,17 +22,14 @@ import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
 import javax.inject.Named;
-import org.primefaces.util.MessageFactory;
 import tut4you.controller.RequestBean;
 import tut4you.model.Tut4YouApp;
 
 /**
  * Validates (basic) correct format.
- *
  * @author Alvaro Monge <alvaro.monge@csulb.edu>
  * Modified by Keith Tran <keithtran25@gmail.com>
  * Modified by Syed Haider <shayder426@gmail.com>
@@ -53,18 +50,16 @@ public class BasicValidator {
     /**
      * validates an e-mail address to be in the (basic) correct format and
      * validate that it is not already in the database
-     *
      * @param context the FacesContext
      * @param toValidate the UIComponent being validated (e-mail field)
      * @param value the value (email address) of the component
      * @throws ValidatorException the Exception to throw b/c the value is not an
      * e-mail address Modified by Amanda Pan: made regex pattern to validate
-     * email format source:
-     * https://stackoverflow.com/questions/8204680/java-regex-email?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
+     * email format source: https://howtodoinjava.com/regex/java-regex-validate-email-address/
      */
     public void validateEmail(FacesContext context, UIComponent toValidate, Object value) {
         String emailStr = (String) value;
-        String pattern = "^[a-zA-Z0-9_.-]+@[a-zA-Z0-9]+.(.+)$";
+        String pattern = "^[a-zA-Z0-9_.-]+@[a-zA-Z0-9]+(\\.[a-zA-Z0-9]+)+$";
         if (!emailStr.matches(pattern)) {
             FacesMessage message = new FacesMessage("Invalid email address");
             throw new ValidatorException(message);
@@ -78,8 +73,7 @@ public class BasicValidator {
     }
 
     /**
-     * validate userName is unique
-     *
+     * validate username is unique
      * @param context
      * @param toValidate
      * @param value
@@ -97,7 +91,6 @@ public class BasicValidator {
 
     /**
      * https://stackoverflow.com/questions/42104546/java-regular-expressions-to-validate-phone-numbers
-     *
      * @param context the FacesContext
      * @param toValidate the UIComponent being validated (e-mail field)
      * @param value the value (email address) of the component
@@ -113,7 +106,6 @@ public class BasicValidator {
 
     /**
      * validates hourly rate to range between 0.00 - 99.99
-     *
      * @param context
      * @param toValidate
      * @param value
@@ -131,7 +123,6 @@ public class BasicValidator {
     /**
      * https://stackoverflow.com/questions/9043551/regex-match-integer-only
      * validate zip is in integers
-     *
      * @param context
      * @param toValidate
      * @param value Modified by Amanda: combined integer and length validations
@@ -149,7 +140,6 @@ public class BasicValidator {
     /**
      * EqualsValidator extends the Validator class to determine if two fields
      * are duplicates
-     *
      * @author Brian Leathem in StackOverflow Modified by Syed Haider
      * <shayder426@gmail.com>
      * http://stackoverflow.com/questions/2909021/jsf-2-0-validate-equality-of-2-inputsecret-fields-confirm-password-without-wri
@@ -169,7 +159,6 @@ public class BasicValidator {
 
     /**
      * validate that later time in request is not before the actual time
-     *
      * @param context
      * @param component
      * @param value
@@ -189,7 +178,6 @@ public class BasicValidator {
     public void validateRating(FacesContext context, UIComponent component, Object value) {
         int rating = (int) value;
         if (rating <= 0) {
-            System.out.println("THROW ME");
             FacesMessage message = new FacesMessage("Rating is required.");
             throw new ValidatorException(message);
         }

@@ -38,7 +38,7 @@
             </b:navbarLinks>
             <c:if test="#{userBean.isUserAuthenticated}">
                 <b:navbarLinks pull="right">
-                    <b:navLink value="Welcome back, #{userBean.user.firstName}!" outcome="/accounts/profile.xhtml navbar-right"/>
+                    <b:navLink value="Welcome back, #{userBean.user.firstName}!" outcome="/accounts/profile.xhtml"/>
                     <b:form styleClass="navbar-form navbar-right">
                         <b:commandButton action="#{userBean.logout}" value="Sign Out" look="success" iconAlign="right"/>
                     </b:form>

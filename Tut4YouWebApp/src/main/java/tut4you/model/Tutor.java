@@ -227,7 +227,6 @@ public class Tutor extends User implements Serializable {
     
     /**
      * Gets the state of doNotDistrub
-     *
      * @return doNotDisturb
      */
     public boolean isDoNotDisturb() {
@@ -236,7 +235,6 @@ public class Tutor extends User implements Serializable {
 
     /**
      * Sets the state of doNotDistrub
-     *
      * @param doNotDisturb
      */
     public void setDoNotDisturb(boolean doNotDisturb) {
@@ -245,7 +243,6 @@ public class Tutor extends User implements Serializable {
 
     /**
      * Gets the list of pending requests
-     *
      * @return list of pendingRequests
      */
     public Collection<Request> getPendingRequests() {
@@ -254,7 +251,6 @@ public class Tutor extends User implements Serializable {
 
     /**
      * Sets the list of pending requests
-     *
      * @param pendingRequests
      */
     public void setPendingRequests(Collection<Request> pendingRequests) {
@@ -263,7 +259,6 @@ public class Tutor extends User implements Serializable {
 
     /**
      * Gets the list of availabilities
-     *
      * @return availabilities
      */
     public Collection<Availability> getAvailabilities() {
@@ -272,7 +267,6 @@ public class Tutor extends User implements Serializable {
 
     /**
      * Sets the list of availabilities
-     *
      * @param availabilities
      */
     public void setAvailabilities(Collection<Availability> availabilities) {
@@ -281,7 +275,6 @@ public class Tutor extends User implements Serializable {
 
     /**
      * Sets the date joined by a tutor
-     *
      * @param dateJoinedAsTutor
      */
     public void setDateJoinedAsTutor(Date dateJoinedAsTutor) {
@@ -290,7 +283,6 @@ public class Tutor extends User implements Serializable {
 
     /**
      * Gets the date joined by a tutor
-     *
      * @return the date
      */
     public Date getDateJoinedAsTutor() {
@@ -299,7 +291,6 @@ public class Tutor extends User implements Serializable {
 
     /**
      * Sets the number of student taught by a tutor
-     *
      * @param numPeopleTutored
      */
     public void setNumTutored(int numPeopleTutored) {
@@ -308,7 +299,6 @@ public class Tutor extends User implements Serializable {
 
     /**
      * Gets the number of student taught by a tutor
-     *
      * @return the number of student taught
      */
     public int getNumTutored() {
@@ -317,7 +307,6 @@ public class Tutor extends User implements Serializable {
 
     /**
      * Sets the price rate a tutor wants to be compensated per hour
-     *
      * @param hourlyRate
      */
     public void setHourlyRate(double hourlyRate) {
@@ -326,7 +315,6 @@ public class Tutor extends User implements Serializable {
 
     /**
      * Gets the price rate a tutor wants to be compensated per hour
-     *
      * @return the price rate
      */
     public double getHourlyRate() {
@@ -335,7 +323,6 @@ public class Tutor extends User implements Serializable {
 
     /**
      * Gets the collection of courses a tutor can teach
-     *
      * @return the list of courses
      */
     public Collection<Course> getCourses() {
@@ -344,7 +331,6 @@ public class Tutor extends User implements Serializable {
 
     /**
      * Sets the collection of courses a tutor can teach
-     *
      * @param courses the list of courses
      */
     public void setCourse(Collection<Course> courses) {
@@ -354,7 +340,6 @@ public class Tutor extends User implements Serializable {
     /**
      * Add a course to a collection of Courses if collection of courses is null,
      * create new HashSet
-     *
      * @param course
      */
     public void addCourse(Course course) {
@@ -363,6 +348,7 @@ public class Tutor extends User implements Serializable {
         }
         this.courses.add(course);
     }
+    
     /**
      * get Default Zip
      * @return default zip
@@ -370,6 +356,7 @@ public class Tutor extends User implements Serializable {
     public String getDefaultZip() {
         return defaultZip;
     }
+    
     /**
      * set default zip
      * @param defaultZip 
@@ -377,9 +364,9 @@ public class Tutor extends User implements Serializable {
     public void setDefaultZip(String defaultZip) {
         this.defaultZip = defaultZip;
     }
+    
     /**
      * Adds a pending request to the list
-     *
      * @param pr
      */
     public void addPendingRequest(Request pr) {
@@ -391,7 +378,6 @@ public class Tutor extends User implements Serializable {
 
     /**
      * Adds a pending rating to the list
-     *
      * @param rating
      */
     public void addPendingRating(Rating rating) {
@@ -403,7 +389,6 @@ public class Tutor extends User implements Serializable {
 
     /**
      * removes a pending request from the list
-     *
      * @param pr
      */
     public void removePendingRequest(Request pr) {
@@ -413,7 +398,6 @@ public class Tutor extends User implements Serializable {
     /**
      * Adds an availability to a collection if availability is null, create new
      * HashSet
-     *
      * @param availability
      */
     public void addAvailability(Availability availability) {

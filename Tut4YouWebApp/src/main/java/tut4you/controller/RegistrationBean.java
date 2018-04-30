@@ -87,9 +87,11 @@ public class RegistrationBean implements Serializable {
     public void destroyRegistrationBean() {
         
     }
+    
     public ZipCode getZipCode() {
         return zipCode;
     }
+    
     public void setZipCode(ZipCode zipCode) {
         this.zipCode = zipCode;
     }

@@ -28,13 +28,10 @@
         <h1>Tutoring Session</h1>
         <h:form id="securityId">
             <p:dialog widgetVar="dlg3" header="Security Question" visible="true" closable="false" modal="true">  
-                <h:outputText value="What is your Email Address?"/>
-                <b:inputText value="#{sessionBean.email}" id="inputEmail">
-                    <f:validator validatorId="EmailValidator"/>
-                    <f:attribute name="otherValue" value="#{userBean.user.email}"/>
-                    <b:message for="inputEmail"/>
+                <h:outputText value="#{sessionBean.securityQuestion}"/>
+                <b:inputText value="#{sessionBean.securityAnswer}" id="inputEmail" required="true" requiredMessage="true">
                 </b:inputText> 
-                <b:commandButton value="Submit" action="#{sessionBean.isEmailValid(sessionBean.email)}" oncomplete="if (#{sessionBean.isCheckEmail()}) PF('dlg3').hide();" update="securityId"/>
+                <b:commandButton value="Submit" action="#{sessionBean.checkAnswer()}" oncomplete="if (#{sessionBean.isCheckEmail()}) PF('dlg3').hide();" update="securityId"/>
             </p:dialog>
             <p:dialog header="The tutoring session has begun!" widgetVar="dlg1" id="modalID1" minHeight="40"  >
                 <h:outputText value="The tutoring session has begun!" />

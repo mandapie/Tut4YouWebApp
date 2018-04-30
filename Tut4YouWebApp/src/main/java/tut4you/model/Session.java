@@ -6,6 +6,7 @@
 package tut4you.model;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -32,8 +33,8 @@ public class Session implements Serializable {
     @OneToOne
     @JoinColumn(nullable = false)
     private Request request;
-    private long startSessionTime;
-    private long endSessionTime;
+    private Date startSessionTime;
+    private Date endSessionTime;
     private long elapsedTimeOfSession;
 
     /**
@@ -50,7 +51,7 @@ public class Session implements Serializable {
      * @param endSessionTime ending millisecond of the session 
      * @param elapsedTimeOfSession total milliSeconds of the sessions
      */
-    public Session(Long startSessionTime, Long endSessionTime, Long elapsedTimeOfSession) {
+    public Session(Date startSessionTime, Date endSessionTime, Long elapsedTimeOfSession) {
         this.startSessionTime = startSessionTime;
         this.endSessionTime = endSessionTime;
         this.elapsedTimeOfSession = elapsedTimeOfSession;
@@ -92,7 +93,7 @@ public class Session implements Serializable {
      * Gets the start session time
      * @return startSessionTime the start session time
      */
-    public long getStartSessionTime() {
+    public Date getStartSessionTime() {
         return startSessionTime;
     }
 
@@ -100,7 +101,7 @@ public class Session implements Serializable {
      * Sets the start session time
      * @param startSessionTime the start session time
      */
-    public void setStartSessionTime(long startSessionTime) {
+    public void setStartSessionTime(Date startSessionTime) {
         this.startSessionTime = startSessionTime;
     }
 
@@ -108,7 +109,7 @@ public class Session implements Serializable {
      * Gets the end session time
      * @return endSessionTime the end session time
      */
-    public long getEndSessionTime() {
+    public Date getEndSessionTime() {
         return endSessionTime;
     }
 
@@ -116,7 +117,7 @@ public class Session implements Serializable {
      * Sets the end session time
      * @param endSessionTime the end session time
      */
-    public void setEndSessionTime(long endSessionTime) {
+    public void setEndSessionTime(Date endSessionTime) {
         this.endSessionTime = endSessionTime;
     }
 

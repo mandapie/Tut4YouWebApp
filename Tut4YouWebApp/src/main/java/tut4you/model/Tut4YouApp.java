@@ -404,8 +404,8 @@ public class Tut4YouApp {
             return groupCourse;
         }
     }
-    
-      /**
+
+    /**
      * Only a tutor can delete his/her course
      *
      * @param availability
@@ -662,7 +662,7 @@ public class Tut4YouApp {
                 newTutor.setHourlyRate(priceRate);
                 newTutor.setZipCode(zipCode);
                 zipCode.addTutor(newTutor);
-                
+
                 newTutor.setDefaultZip(defaultZip);
                 newTutor.addGroup(group); //Add user a student role
                 group.addTutor(newTutor);
@@ -671,7 +671,7 @@ public class Tut4YouApp {
                 group.addTutor(newTutor);
                 em.persist(zipCode);
                 em.persist(newTutor);
-                
+
             }
             em.flush();
         } else {
@@ -855,16 +855,30 @@ public class Tut4YouApp {
      * PROGRESS
      *
      * @param r request that is being partaken
+     * @param sessionTimer
      * @param s
      */
     @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void startSessionTime(Request r
-    ) {
+    public void startSessionTime(Request r, Session sessionTimer) {
         Request request = em.find(Request.class, r.getId());
-        Long startTime = System.currentTimeMillis();
+        Date startTime = new Date();
+        sessionTimer.setStartSessionTime(startTime);
+        request.setSession(sessionTimer);
+        sessionTimer.setRequest(request);
+        em.persist(sessionTimer);
         em.merge(r);
         em.flush();
+    }
+    
+    public boolean checkAnswer(String answer)
+    {
+        UserBean userBean = new UserBean();
+        String currentUserEmail = userBean.getEmailFromSession();
+        User user = findUser(currentUserEmail);
+        
+        String securityAnswer = user.getSecurityAnswer();
+        return securityAnswer.equals(answer);
     }
 
     /**
@@ -879,8 +893,9 @@ public class Tut4YouApp {
         TypedQuery<Double> averageRatingQuery = em.createNamedQuery(Rating.FIND_AVG_RATING_BY_TUTOR, Double.class);
         UserBean userBean = new UserBean();
         String currentUserEmail = userBean.getEmailFromSession();
-        if(!currentUserEmail.equals(email))
+        if (!currentUserEmail.equals(email)) {
             currentUserEmail = email;
+        }
         Tutor tutor = findTutor(currentUserEmail);
         System.out.println(email);
         averageRatingQuery.setParameter("email", email);
@@ -1044,6 +1059,7 @@ public class Tut4YouApp {
         }
         return Query.getSingleResult();
     }
+
     /**
      * Add ZipCodeByRadius if it does not belong to zip code location
      *

@@ -74,9 +74,41 @@
                     </b:column>
                 </b:row>
             </b:panel>
-            
-            
-   
+            <h:form>
+                <p:dataScroller value="#{ratingBean.getRatingList(profileBean.user.email)}" var="rating" chunkSize="10">
+                    <h:panelGrid columns="2" style="width:100%">
+                        <p:outputPanel>
+                            <h:panelGrid columns="2" cellpadding="5">
+                                <f:facet name="header">Past Ratings </f:facet>
+                                <h:outputText value="Student: " style="font-weight: bold" />
+                                #{rating.student.firstName}
+                                #{rating.student.lastName}
+
+                                <h:outputText value="Rating: " style="font-weight: bold" />
+                                <p:rating value="#{rating.ratingValue}" readonly="true"/>
+
+                                <h:outputText value="Review: "  style="font-weight:bold" />
+                                <h:outputText value="#{rating.description}"/>
+
+                                <h:outputText value="Date of Review:   " style="font-weight: bold" />
+                                <h:outputText value="#{rating.dateRated}">
+                                    <f:convertDateTime pattern="M-d-yyyy"/>
+                                </h:outputText>
+                                <b:commandButton value ="Edit Rating" action="#{updateRatingBean.goToEditRatingPage(rating)}" rendered="#{profileBean.checkIfUserRated(rating.student.email)}"/>
+                                <b:commandButton value ="Delete Rating" action="#{ratingBean.deleteRating(rating)}" rendered="#{profileBean.checkIfUserRated(rating.student.email)}"/>
+
+
+                                <br></br>
+
+                            </h:panelGrid>
+                        </p:outputPanel>
+                    </h:panelGrid>
+                </p:dataScroller>
+
+            </h:form>
+
+
+
         </b:container>
     </ui:define>
 </ui:composition>

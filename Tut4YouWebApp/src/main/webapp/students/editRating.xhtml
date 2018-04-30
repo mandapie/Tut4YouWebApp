@@ -1,3 +1,8 @@
+
+
+
+
+
 <ui:composition template="/WEB-INF/templates/layout.xhtml"
                 xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
@@ -22,37 +27,29 @@
         2017 Syed Haider <shayder426@gmail.com>
     -->
     <!-- @author Amanda Pan <daikiraidemodaisuki@gmail.com> -->
-    <ui:define name="metadata">
-    </ui:define>
-    <f:metadata>
-        <f:viewParam name="username" value="#{ratingBean.username}"/>
-        <f:event type="preRenderView" listener="#{ratingBean.showUsername(ratingBean.username)}">
-        </f:event>
-    </f:metadata>
     <ui:define name="title">Review</ui:define>
     <ui:define name="content">
         <b:panel title="Write a Review" collapsible="false" look="info">
-            <b:form id="ratingForm">
+            <b:form>
                 <h:outputLabel value="Choose 1-5 stars!"/>
-                
-                <p:rating id="rating" value="#{ratingBean.rating.ratingValue}" required="true" cancel="true" validator="#{basicValidator.validateRating}">
+                <p:rating id="rating" value="#{updateRatingBean.rating.ratingValue}" required="true" cancel="true" validator="#{basicValidator.validateRating}">
                     <p:message for="rating"/>
                 </p:rating>
                 <br></br>
                 <p:inputTextarea required="true" label="Description/Topic: (300 characters max)" 
                                  placeholder="Enter a short description..." 
-                                 value="#{ratingBean.rating.description}" 
+                                 value="#{updateRatingBean.rating.description}" 
                                  rows="5" cols="60" counter="display" maxlength="300" 
                                  counterTemplate="{0} characters remaining." autoResize="false" />
                 <br/>
                 <h:outputText id="display" style="font-weight:bold"/>
                 <!-- length of session -->
                 <b:row>
-                    <b:commandButton span="2" value="Submit" look="primary" action="#{ratingBean.createNewRating}" />
+                    <b:commandButton span="2" value="Update Rating" look="primary" action="#{updateRatingBean.updateRating(updateRatingBean.rating)}" />
                 </b:row>
             </b:form>
         </b:panel>
-
+        
         <ui:debug hotkey='x' />
     </ui:define>
 </ui:composition>

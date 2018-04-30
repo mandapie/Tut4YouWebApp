@@ -25,7 +25,10 @@ import java.util.List;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
+import javax.faces.view.ViewScoped;
 import tut4you.model.*;
 
 /**
@@ -34,7 +37,7 @@ import tut4you.model.*;
  * @author Amanda Pan <daikiraidemodaisuki@gmail.com>
  */
 @Named
-@SessionScoped
+@ViewScoped
 public class RatingBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -50,6 +53,15 @@ public class RatingBean implements Serializable {
     private Rating rating;
     private Tutor tutor; //the tutor who accepts te rating
     private String studentName;
+    private String username;
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
     /**
      * RatingBean encapsulates all the functions/services involved in making a
@@ -109,6 +121,15 @@ public class RatingBean implements Serializable {
         return result;
     }
 
+    public void showUsername(String username) {
+        Tutor tutor = findTutorEmail(username);
+        this.tutor = tutor;
+    }
+
+    public Tutor findTutorEmail(String username) {
+        return tut4youApp.findTutorEmail(username);
+    }
+
     /**
      * Convert string to Time
      *
@@ -133,16 +154,20 @@ public class RatingBean implements Serializable {
         return integer;
     }
 
-    public String createNewRating(Tutor t) throws ParseException {
+    public String createNewRating() throws ParseException {
         String result = "success";
-        System.out.println("Tutor t: " + t.toString());
         Date date = new Date();
+        if(rating.getRatingValue()<=0)
+        {
+                  FacesMessage message = new FacesMessage("Click 1-5 stars!");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+        }
         rating.setDateRated(date);
-        rating = tut4youApp.newRating(rating, t);
+        rating = tut4youApp.newRating(rating, tutor);
         return result;
     }
-    
-      /**
+
+    /**
      * Updates the current availability of the tutor
      *
      * @param avail
@@ -156,7 +181,7 @@ public class RatingBean implements Serializable {
         rating.setRatingValue(rating.getRatingValue());
         rating.setDescription(rating.getDescription());
         rating.setDateRated(date);
-        tut4youApp.updateRating(rating,rating.getDescription(),rating.getRatingValue());
+        tut4youApp.updateRating(rating, rating.getDescription(), rating.getRatingValue());
         if (rating != null) {
             result = "success";
             LOGGER.severe("Rating added");
@@ -172,8 +197,9 @@ public class RatingBean implements Serializable {
      * @throws java.text.ParseException
      */
     public void deleteRating(Rating rating) throws ParseException {
+        System.out.println(rating);
         tut4youApp.deleteRating(rating);
-       
+
     }
 
     /**
@@ -181,8 +207,8 @@ public class RatingBean implements Serializable {
      *
      * @return a list of subjects
      */
-    public List<Rating> getRatingList() {
-        ratingList = tut4youApp.getRatingList();
+    public List<Rating> getRatingList(String email) {
+        ratingList = tut4youApp.getRatingList(email);
         return ratingList;
     }
 
@@ -191,7 +217,7 @@ public class RatingBean implements Serializable {
         return requestList;
     }
 
-    public int getAvgRating() {
-        return (int) tut4youApp.getAverageRating();
+    public int getAvgRating(String email) {
+        return (int) tut4youApp.getAverageRating(email);
     }
 }

@@ -29,7 +29,7 @@
         <h3>Average Rating</h3><p:rating value="#{ratingBean.getAvgRating()}" readonly="true" />
         
         <h:form>
-            <p:dataScroller value="#{ratingBean.ratingList}" var="rating" chunkSize="10">
+            <p:dataScroller value="#{ratingBean.getRatingList(userBean.user.email)}" var="rating" chunkSize="10">
                 <h:panelGrid columns="2" style="width:100%">
                     <p:outputPanel>
                         <h:panelGrid columns="2" cellpadding="5">

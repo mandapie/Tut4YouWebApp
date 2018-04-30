@@ -34,8 +34,9 @@
                 </b:dataTableColumn>
                 <b:dataTableColumn>
                     <f:facet name="header">Rating</f:facet>
-                    <b:commandButton value="Write a Review" action="#{ratingBean.writeReviewPage(tutor)}">
-                    </b:commandButton>
+                    <b:button value="Write a Review" outcome="writeReview">
+                        <f:param name="username" value="#{tutor.username}" />
+                    </b:button>
                 </b:dataTableColumn>
             </b:dataTable>
         </h:form>

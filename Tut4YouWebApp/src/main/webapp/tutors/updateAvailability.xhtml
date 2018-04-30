@@ -1,0 +1,83 @@
+<ui:composition template="/WEB-INF/templates/layout.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:p="http://primefaces.org/ui">
+    <!-- 
+         @author Syed Haider <shayder426@gmail.com> -->
+    <ui:define name="title">Availability</ui:define>
+    <ui:define name="content">
+        <h1>Edit Availability</h1>
+        <b:panel title="Enter Your Availability" collapsible="false" look="info">
+            <b:form id="availabilityID">
+
+                <b:column span="4">
+                    <b:row>
+                        <!-- Drop-down menu display Monday-Sunday -->
+                        <h:outputLabel value="Day: "/>
+                        <h:outputText                           
+                            id="dayOfWeek"
+                            style=""
+                            value="#{updateAvailabilityBean.availability.dayOfWeek}"
+                            binding="#{day}"
+                            >
+                        </h:outputText>
+                        <br></br>
+                        <!-- Start Time -->
+                        <h:outputLabel value="Start Time:"/>
+                        <b:inputText type="time" id="startTime"
+                                     value="#{updateAvailabilityBean.availability.startTime}"
+                                     required="true"
+                                     requiredMessage="required"
+                                     binding="#{availTime}">
+                            <f:convertDateTime type="time" pattern="HH:mm" dateStyle="full"/>
+                            <b:message for="startTime"/>
+                        </b:inputText>
+                        <!-- End Time -->
+                        <h:outputLabel value="End Time:" />
+                        <b:inputText type="time" id="endTime"
+                                     value="#{updateAvailabilityBean.availability.endTime}"
+                                     required="true"
+                                     requiredMessage="required" >
+                            <f:convertDateTime type="time" pattern="HH:mm" dateStyle="full"/>
+                            <b:message for="endTime"/>
+                            <f:attribute name="AvailabilityList" value="#{updateAvailabilityBean.availabilityList}"/>
+                            <f:attribute name="otherValue" value="#{availTime.value}" />
+                            <f:attribute name="day" value="#{day.value}"/>
+                            <f:validator validatorId="timeValidator"/>
+                        </b:inputText>         
+                        <!-- Update availability  -->
+                        <b:commandButton value="Update Availability" style="width:100%" action="#{updateAvailabilityBean.updateAvailability(updateAvailabilityBean.availability)}">
+                        </b:commandButton>
+                    </b:row>
+                </b:column>
+
+                <b:column span="8">
+                    <h:outputLabel value="Your current availabilities"/>
+                    <b:dataTable value="#{updateAvailabilityBean.availabilityList}" var="avail" id="availabilityTable">
+                        <b:dataTableColumn>
+                            <f:facet name="header">Day of Week</f:facet>
+                            <h:outputText value="#{avail.dayOfWeek}"/>
+                        </b:dataTableColumn>
+                        <b:dataTableColumn>
+                            <f:facet name="header">Start Time</f:facet>
+                            <h:outputText value="#{avail.startTime}">                        
+                                <f:convertDateTime pattern="hh:mm a"></f:convertDateTime>
+                            </h:outputText>
+                        </b:dataTableColumn>
+                        <b:dataTableColumn>
+                            <f:facet name="header">End Time</f:facet>
+                            <h:outputText value="#{avail.endTime}">                        
+                                <f:convertDateTime pattern="hh:mm a"></f:convertDateTime>
+                            </h:outputText>
+                        </b:dataTableColumn>
+                    </b:dataTable>  
+                </b:column>
+
+            </b:form>
+        </b:panel>
+        <ui:debug hotkey='x'/>
+    </ui:define>
+</ui:composition>

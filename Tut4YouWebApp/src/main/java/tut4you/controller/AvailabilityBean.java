@@ -23,11 +23,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
-import javax.enterprise.context.RequestScoped;
-import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.faces.event.ActionEvent;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import javax.persistence.Temporal;
@@ -60,7 +57,6 @@ public class AvailabilityBean implements Serializable {
     private java.util.Date endTime;
     private List<Availability> availabilityList = new ArrayList();
     private boolean addNewAvailability = false;
-    //private boolean addUpdatedAvailability = false;
 
     /**
      * Creates a new instance of the Availability entity
@@ -71,7 +67,6 @@ public class AvailabilityBean implements Serializable {
 
     /**
      * Gets the availability of the tutor
-     *
      * @return the availability of the tutor
      */
     public Availability getAvailability() {
@@ -80,7 +75,6 @@ public class AvailabilityBean implements Serializable {
 
     /**
      * Sets the availability of the tutor (not used)
-     *
      * @param availability the availability of the tutor
      */
     public void setAvailability(Availability availability) {
@@ -89,7 +83,6 @@ public class AvailabilityBean implements Serializable {
 
     /**
      * Gets the start time
-     *
      * @return startTime
      */
     public Date getStartTime() {
@@ -98,7 +91,6 @@ public class AvailabilityBean implements Serializable {
 
     /**
      * Sets the start time
-     *
      * @param startTime
      */
     public void setStartTime(java.util.Date startTime) {
@@ -107,7 +99,6 @@ public class AvailabilityBean implements Serializable {
 
     /**
      * Gets the end time
-     *
      * @return endTime
      */
     public Date getEndTime() {
@@ -116,7 +107,6 @@ public class AvailabilityBean implements Serializable {
 
     /**
      * Sets the end time
-     *
      * @param endTime
      */
     public void setEndTime(Date endTime) {
@@ -126,7 +116,6 @@ public class AvailabilityBean implements Serializable {
     /**
      * Gets the addNewAvailability which determines if the modal will show or
      * not
-     *
      * @return true if availability is added
      */
     public boolean isAddNewAvailability() {
@@ -136,7 +125,6 @@ public class AvailabilityBean implements Serializable {
     /**
      * Sets the addNewAvailability which determines if the modal will show or
      * not
-     *
      * @param addNewAvailability true/false if availability is added
      */
     public void setAddNewAvailability(boolean addNewAvailability) {
@@ -145,7 +133,6 @@ public class AvailabilityBean implements Serializable {
 
     /**
      * Gets a list of the availabilities of the Tutor from the database
-     *
      * @return a list of availabilities
      */
     public List<Availability> getAvailabilityList() {
@@ -155,11 +142,9 @@ public class AvailabilityBean implements Serializable {
 
     /**
      * Adds the availability to the tutor
-     * @return result based on if the availability form was filled out properly
      * @throws java.text.ParseException
      */
     public void addAvailability() throws ParseException {
-
         availability.setStartTime(startTime);
         availability.setEndTime(endTime);
         try {
@@ -172,7 +157,6 @@ public class AvailabilityBean implements Serializable {
 
     /**
      * Updates the current availability of the tutor
-     *
      * @param avail the availability of the tutor
      * @return goes to home page if successful
      * @throws java.text.ParseException
@@ -186,11 +170,8 @@ public class AvailabilityBean implements Serializable {
         return result;
     }
     
-
-
     /**
      * Delete the availability from the tutor
-     *
      * @param avail
      * @throws java.text.ParseException
      */
@@ -200,7 +181,6 @@ public class AvailabilityBean implements Serializable {
 
     /**
      * Goes to the edit availability page
-     *
      * @param avail the availability to be edited
      * @return the webpage of edit availability
      * @throws ParseException

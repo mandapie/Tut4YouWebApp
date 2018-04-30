@@ -23,12 +23,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
-import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.SessionScoped;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
-import javax.faces.event.ActionEvent;
-import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -141,9 +136,6 @@ public class UpdateAvailabilityBean implements Serializable {
     public String updateAvailability(Availability avail) throws ParseException {
         String result = "updatedAvailability";
         this.availability = avail;
-        System.out.println("Have you been called");
-        System.out.println(avail.getStartTime());
-        System.out.println(avail.getEndTime());
         availability.setStartTime(avail.getStartTime());
         availability.setEndTime(avail.getEndTime());
         tut4youApp.updateAvailability(availability, avail.getStartTime(), avail.getEndTime());
@@ -157,10 +149,10 @@ public class UpdateAvailabilityBean implements Serializable {
      * @return the webpage of edit availability
      * @throws ParseException
      */
-    public String goToEditAvailabilityPage(Availability avail) throws ParseException {
+    public String goToUpdateAvailabilityPage(Availability avail) throws ParseException {
         String result;
         availability = avail;
-        result = "editAvailability";
+        result = "updateAvailability";
         return result;
     }
 }

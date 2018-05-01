@@ -92,8 +92,8 @@
                             <h:outputText value="#{rating.student.firstName} #{rating.student.lastName}"/>
                         </b:column>
                         <!-- using dropButton because kebab doesn't work -->
-<!--                        <b:column tiny-screen="2">
-                            <b:dropButton size="xs" value="action" rendered="#{profileBean.checkIfUserRated(rating.student.email)}">-->
+                        <b:column tiny-screen="2">
+                            <!--<b:dropButton size="xs" value="action" rendered="#{profileBean.checkIfUserRated(rating.student.email)}">-->
                             <!--<b:listLinks>-->
                                 <b:navCommandLink value="Edit Rating" action="#{updateRatingBean.goToEditRatingPage(rating)}"/>
                                 <span/>

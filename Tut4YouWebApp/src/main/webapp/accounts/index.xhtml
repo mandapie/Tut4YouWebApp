@@ -37,13 +37,15 @@
         <c:if test="#{userBean.isTutor}">
             <c:if test="#{userBean.condition}">#{userBean.updateCurrentZip()}</c:if>
             <b:form>
-                <p:dialog header="Current Zip Code" widgetVar="myDialog" minHeight="40" visible="true" rendered="#{userBean.condition}" closable="false" modal="true">
-                    <h:outputText value="Enter current zip code (Defauilt is: " />
-                    <h:outputText value="#{userBean.user.defaultZip}" />
-                    <h:outputText value=")" />
-                    <b:inputText id="currentZip" placeholder="press enter to submit" required="true" requiredMessage="required" value="#{userBean.currentZip}">
+                <p:dialog header="Update Current Zip Code" widgetVar="myDialog" minHeight="40" visible="true" rendered="#{userBean.condition}" closable="false" modal="true">
+                    <h:outputText value="Default: " />
+                    <h:outputText value="#{userBean.user.defaultZip} " />
+                    <br/>
+                    <h:outputText value=" Click 'Do Not Update' if you are currently at Default Zip location" />
+                    <b:inputText id="currentZip" placeholder="press enter to submit"  requiredMessage="required" value="#{userBean.currentZip}">
                         <b:message for="currentZip"/>
                     </b:inputText>
+                    <b:commandButton value="Do Not Update" look="danger" action="#{userBean.setCondition(false)}"/>
                 </p:dialog>
             </b:form>
         </c:if>

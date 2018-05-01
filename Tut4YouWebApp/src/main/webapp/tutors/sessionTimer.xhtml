@@ -25,25 +25,31 @@
     <!-- @author Syed Haider <shayder426@gmail.com> -->
     <ui:define name="title">Session</ui:define>
     <ui:define name="content">
+
         <h1>Tutoring Session</h1>
         <h:form id="securityId">
-            <p:dialog widgetVar="dlg3" header="Security Question" visible="true" closable="false" modal="true">  
-                <h:outputText value="#{sessionBean.securityQuestion}"/>
-                <b:inputText value="#{sessionBean.securityAnswer}" id="inputEmail" required="true" requiredMessage="true">
-                </b:inputText> 
-                <b:commandButton value="Submit" action="#{sessionBean.checkAnswer()}" oncomplete="if (#{sessionBean.isCheckEmail()}) PF('dlg3').hide();" update="securityId"/>
+            <p:dialog  widgetVar="dlg3" header="Security Question" visible="#{!sessionBean.checkAnswer}" closable="false" modal="true">  
+                <h:outputText value="#{sessionBean.securityQuestion}">
+                </h:outputText>
+                <b:inputText value="#{sessionBean.securityAnswer}" id="securityAnswer" required="true" requiredMessage="required">
+                </b:inputText>
+                <p:commandButton value="Submit" action="#{sessionBean.checkAnswer(sessionBean.securityAnswer)}" oncomplete="if (#{sessionBean.checkAnswer}) PF('dlg3').hide();" ajax="false" update="securityId">
+                </p:commandButton>
+                <h:messages for ="securityAnswer"/>
             </p:dialog>
+
+
+
+
             <p:dialog header="The tutoring session has begun!" widgetVar="dlg1" id="modalID1" minHeight="40"  >
                 <h:outputText value="The tutoring session has begun!" />
             </p:dialog>
-            <p:dialog header="The tutoring session has ended!! Would you like to rate your tutor?" widgetVar="dlg2" closable="false" modal="true" id="modalID2" minHeight="40"  >
-                <b:commandButton value="Yes!" action="#{ratingBean.writeReviewPage(requestBean.tutor)}"/>
-                <b:button value="No!" outcome="/accounts/profile.xhtml"/>
-            </p:dialog>
+
             <h:panelGrid columns="2">
-                <p:commandButton action= "#{sessionBean.startTutorSession(SessionTimerBean.request)}" value="Start Session" style="width:100%" onclick="PF('dlg1').show();"/>
-                <p:commandButton action= "#{sessionBean.endTutorSession(SessionTimerBean.request)}" value="End Session" style="width:100%" onclick="PF('dlg2').show();"/>
+                <b:commandButton action= "#{sessionBean.startTutorSession()}" value="Start Session" style="width:100%" onclick="PF('dlg1').show();"/>
+                <b:commandButton action= "#{sessionBean.endTutorSession()}" value="End Session" style="width:100%" onclick="PF('dlg2').show();"/>
             </h:panelGrid>
+
         </h:form>
         <ui:debug hotkey='x'/>
     </ui:define>

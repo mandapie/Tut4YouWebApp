@@ -20,6 +20,8 @@ import java.io.Serializable;
 import java.util.Date;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import tut4you.model.Request;
 import tut4you.model.Session;
@@ -46,8 +48,29 @@ public class SessionBean implements Serializable {
     private Session sessionTimer;
     private String securityAnswer;
     private String securityQuestion;
-    private User user;
-    
+    private User student;
+    private SessionBean sessionBean;
+
+    public SessionBean() {
+        sessionTimer = new Session();
+    }
+
+    public SessionBean getSessionBean() {
+        return sessionBean;
+    }
+
+    public void setSessionBean(SessionBean sessionBean) {
+        this.sessionBean = sessionBean;
+    }
+
+    public User getStudent() {
+        return student;
+    }
+
+    public void setStudent(User student) {
+        this.student = student;
+    }
+
     public String getSecurityAnswer() {
         return securityAnswer;
     }
@@ -64,7 +87,6 @@ public class SessionBean implements Serializable {
         this.securityQuestion = securityQuestion;
     }
 
-
     public Request getRequest() {
         return request;
     }
@@ -79,14 +101,6 @@ public class SessionBean implements Serializable {
 
     public void setSessionTimer(Session sessionTimer) {
         this.sessionTimer = sessionTimer;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     /**
@@ -132,22 +146,48 @@ public class SessionBean implements Serializable {
      *
      * @param r the active request of the tutoring session
      */
-    public void startTutorSession(Request r) {
+    public void startTutorSession() {
+        System.out.println("have ya been hit");
         Date startTime = new Date();
-        sessionTimer.setStartSessionTime(startTime);
+        System.out.println(startTime);
         System.out.println(sessionTimer);
-        tut4youApp.startSessionTime(r, sessionTimer);
+        sessionTimer.setStartSessionTime(startTime);
+        // sessionTimer.setEndSessionTime(startTime);
+        System.out.println(request);
+
+        tut4youApp.startSessionTime(request, sessionTimer);
+    }
+
+    public String endTutorSession() {
+        String result;
+        System.out.println("End Session");
+        Date endTime = new Date();
+        System.out.println(endTime);
+        System.out.println(sessionTimer);
+        System.out.println(request);
+        result = tut4youApp.setRequestToComplete(request,sessionTimer);
+        return result;
+    }
+
+    public Date getDate() {
+        Date date = new Date();
+        return date;
     }
 
     public boolean checkAnswer(String answer) {
-
-        checkAnswer = tut4youApp.checkAnswer(answer);
+        //System.out.println("answer: "  + answer);
+        String email = request.getStudent().getEmail();
+        checkAnswer = tut4youApp.checkAnswer(answer, email);
+        //System.out.println("checkAnswer:" + checkAnswer);
+        if (!checkAnswer) {
+            FacesMessage message = new FacesMessage("Answer is false. Try again.");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        }
         return checkAnswer;
     }
-    
-    public void loadData(User user)
-    {
-        this.user = user;
+
+    public void loadData(User user) {
+        this.student = user;
     }
 
     /**
@@ -156,10 +196,6 @@ public class SessionBean implements Serializable {
      *
      * @param r the active request of the tutoring session
      */
-    public void endTutorSession(Request r) {
-        tut4youApp.setRequestToComplete(r);
-    }
-
     /**
      * This will forward the tutor to the session timer page to start the
      * tutoring session
@@ -167,12 +203,11 @@ public class SessionBean implements Serializable {
      * @param r the active request
      * @return the webpage of the session timer
      */
-    public String goToSessionTimerPage() {
+    public String goToSessionTimerPage(Request r) {
         String result;
-        System.out.println("PLS");
-        //this.request = r;
-        //this.securityQuestion = request.getStudent().getSecurityQuestion();
-        //this.securityAnswer = request.getStudent().getSecurityAnswer();
+        this.request = r;
+        this.student = request.getStudent();
+        this.securityQuestion = request.getStudent().getSecurityQuestion();
         result = "sessionTimer";
         return result;
     }

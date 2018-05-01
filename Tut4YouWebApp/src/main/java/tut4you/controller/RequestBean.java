@@ -71,6 +71,10 @@ public class RequestBean implements Serializable {
     private List<Request> requestList = new ArrayList(); //list of pending requests
     private List<Request> cancelledList = new ArrayList(); //list of cancelled requests
     private List<Request> declinedList = new ArrayList(); //list of declined requests
+    private List<Request> acceptedList = new ArrayList(); //list of accepted requests
+    private List<Request> completedList = new ArrayList(); //list of completed requests
+
+
     private List<Tutor> tutorList; //list of available tutors
     private List<Tutor> temp = new ArrayList();
     private List<String> zipCodesByRadiusList = new ArrayList();
@@ -185,6 +189,25 @@ public class RequestBean implements Serializable {
      */
     public void setRequestList(List<Request> requestList) {
         this.requestList = requestList;
+    }
+
+    public List<Request> getAcceptedList() {
+        acceptedList = tut4youApp.getAcceptedRequestList();
+        return acceptedList;
+    }
+
+    public void setAcceptedList(List<Request> acceptedList) {
+        this.acceptedList = acceptedList;
+    }
+    
+    
+    public List<Request> getCompletedList() {
+        completedList = tut4youApp.getCompletedRequests();
+        return completedList;
+    }
+
+    public void setCompletedList(List<Request> completedList) {
+        this.completedList = completedList;
     }
 
     /**

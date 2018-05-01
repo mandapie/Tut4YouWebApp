@@ -134,16 +134,40 @@
                 </b:form>
             </b:row>
             <b:row>
-                <b:column medium-screen="half">
-                    <b:panel title="Upcomming Sessions" collapsible="false" look="info">
-
-                    </b:panel>
-                </b:column>
-                <b:column medium-screen="half">
-                    <b:panel title="Previous Sessions" collapsible="false" look="info">
-
-                    </b:panel>
-                </b:column>
+                <h:form>
+                    <b:column medium-screen="half">
+                        <b:panel title="Upcoming Sessions" collapsible="false" look="info">
+                            <b:dataTable value="#{requestBean.acceptedList}" var="req" id="accepetedTable">
+                                <b:dataTableColumn>
+                                    <f:facet name="header">Tutor</f:facet>
+                                    <h:outputText value="#{req.tutor.firstName}"/>                        
+                                </b:dataTableColumn>
+                                <b:dataTableColumn>
+                                    <f:facet name="header">Student</f:facet>
+                                    <h:outputText value="#{req.student.firstName}"/>
+                                </b:dataTableColumn>
+                                <b:dataTableColumn>
+                                    <f:facet name="header">Action</f:facet>
+                                    <b:commandButton value="Start Session" action="#{sessionBean.goToSessionTimerPage(req)}"/>                        
+                                </b:dataTableColumn>
+                            </b:dataTable>  
+                        </b:panel>
+                    </b:column>
+                    <b:column medium-screen="half">
+                        <b:panel title="Previous Sessions" collapsible="false" look="info">
+                            <b:dataTable value="#{requestBean.completedList}" var="req" id="completedTable">
+                                <b:dataTableColumn>
+                                    <f:facet name="header">Tutor</f:facet>
+                                    <h:outputText value="#{req.tutor.firstName}"/>                        
+                                </b:dataTableColumn>
+                                <b:dataTableColumn>
+                                    <f:facet name="header">Student</f:facet>
+                                    <h:outputText value="#{req.student.firstName}"/>
+                                </b:dataTableColumn>
+                            </b:dataTable>  
+                        </b:panel>
+                    </b:column>
+                </h:form>
             </b:row>
             <b:row>
                 <b:navLink value="View Previous Sessions" href="/Tut4YouWebApp/students/viewPreviousSessions.xhtml"/>

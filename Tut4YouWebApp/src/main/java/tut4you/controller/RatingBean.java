@@ -132,7 +132,7 @@ public class RatingBean implements Serializable {
      * @return
      * @throws java.text.ParseException
      */
-    public java.util.Date StringToTime(String time) throws ParseException {
+    public Date StringToTime(String time) throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
         Date date = sdf.parse(time);
         return date;

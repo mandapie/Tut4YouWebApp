@@ -32,7 +32,6 @@ import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
-import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -100,7 +99,7 @@ public class RequestBean implements Serializable {
     public Date getCurrentTime() throws ParseException {
         String stringCurrentTime = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
         SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
-        java.util.Date currentTime = sdf.parse(stringCurrentTime);
+        Date currentTime = sdf.parse(stringCurrentTime);
         return currentTime;
     }
 

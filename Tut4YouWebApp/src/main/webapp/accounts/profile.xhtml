@@ -31,69 +31,97 @@
             <b:row>
                 <b:panel>
                     <!--<div align="center">-->
-                        <b:row>
-                            <h:outputLabel value="Name:" style="padding:0 2px;"/>
+                    <b:row>
+                        <b:column medium-screen="2">
+                            <h:outputLabel value="Name" style="padding:0 2px;"/>
+                        </b:column>
+                        <b:column medium-screen="4">
                             <h:outputText value="#{userBean.user.firstName} #{userBean.user.lastName}" style="padding:0 2px;"/>
-                        </b:row>
-                        <b:row>
-                            <h:outputLabel value="Username:" style="padding:0 2px;"/>
+                        </b:column>
+                    </b:row>
+                    <b:row>
+                        <b:column medium-screen="2">
+                            <h:outputLabel value="Username" style="padding:0 2px;"/>
+                        </b:column>
+                        <b:column medium-screen="4">
                             <h:outputText value="#{userBean.user.username}" style="padding:0 2px;"/>
-                        </b:row>
-                        <b:row>
-                            <h:outputLabel value="Email:" style="padding:0 2px;"/>
+                        </b:column>
+                    </b:row>
+                    <b:row>
+                        <b:column medium-screen="2">
+                            <h:outputLabel value="Email" style="padding:0 2px;"/>
+                        </b:column>
+                        <b:column medium-screen="4">
                             <h:outputText value="#{userBean.user.email}" style="padding:0 2px;"/>
-                        </b:row>
-                        <b:row>
-                            <h:outputLabel value="Phone Number:" style="padding:0 2px;"/>
+                        </b:column>
+                    </b:row>
+                    <b:row>
+                        <b:column medium-screen="2">
+                            <h:outputLabel value="Phone Number" style="padding:0 2px;"/>
+                        </b:column>
+                        <b:column medium-screen="4">
                             <h:outputText value="#{userBean.user.phoneNumber}" style="padding:0 2px;"/>
-                        </b:row>
-                        <b:row>
-                            <h:outputLabel value="University:" style="padding:0 2px;"/>
+                        </b:column>
+                    </b:row>
+                    <b:row>
+                        <b:column medium-screen="2">
+                            <h:outputLabel value="University" style="padding:0 2px;"/>
+                        </b:column>
+                        <b:column medium-screen="4">
                             <h:outputText value="#{userBean.user.university}" style="padding:0 2px;"/>
-                        </b:row>
-                        <b:row>
-                            <h:outputLabel value="Security Question:" style="padding:0 2px;"/>
+                        </b:column>
+                    </b:row>
+                    <b:row>
+                        <b:column medium-screen="2">
+                            <h:outputLabel value="Security Question" style="padding:0 2px;"/>
+                        </b:column>
+                        <b:column medium-screen="4">
                             <h:outputText value="#{userBean.user.securityQuestion}" style="padding:0 2px;"/>
-                        </b:row>
-                        <b:row>
-                            <h:outputLabel value="Security Answer:" style="padding:0 2px;"/>
+                        </b:column>
+                    </b:row>
+                    <b:row>
+                        <b:column medium-screen="2">
+                            <h:outputLabel value="Security Answer" style="padding:0 2px;"/>
+                        </b:column>
+                        <b:column medium-screen="4">
                             <h:outputText value="#{userBean.user.securityAnswer}" style="padding:0 2px;"/>
-                        </b:row>
-                        <c:if test="#{userBean.isTutor}">
-                            <b:row>
-                                <h:outputLabel value="Hourly Rate:" style="padding:0 2px;"/>
+                        </b:column>
+                    </b:row>
+                    <c:if test="#{userBean.isTutor}">
+                        <b:row>
+                            <b:column medium-screen="2">
+                                <h:outputLabel value="Hourly Rate" style="padding:0 2px;"/>
+                            </b:column>
+                            <b:column medium-screen="4">
                                 <h:outputText value="#{userBean.user.hourlyRate}" style="padding:0 2px;">
                                     <f:convertNumber type="currency" currencySymbol="$" locale="en_US" />
                                 </h:outputText>
-                            </b:row>
-                            <b:row>
-                                <h:outputLabel value="Default Zipcode:" style="padding:0 2px;"/>
-                                <h:outputText value="#{userBean.user.defaultZip}" style="padding:0 2px;"/>
-                            </b:row>
-                            <!-- need to show max radius -->
-                            <b:row>
-                                <h:outputLabel value="Avg Rating:" style="padding:0 2px;"/>
-                                <p:rating value="#{ratingBean.getAvgRating(userBean.user.email)}" readonly="true"  style="padding:0 2px;"/>
-                            </b:row>
-                        </c:if>
-                        <b:row style="padding-left:13px">
-                            <b:button value="Edit Profile" href="/Tut4YouWebApp/accounts/editProfile.xhtml" />
+                            </b:column>
                         </b:row>
+                        <b:row>
+                            <b:column medium-screen="2">
+                                <h:outputLabel value="Default Zipcode" style="padding:0 2px;"/>
+                            </b:column>
+                            <b:column medium-screen="4">
+                                <h:outputText value="#{userBean.user.defaultZip}" style="padding:0 2px;"/>
+                            </b:column>
+                        </b:row>
+                        <!-- need to show max radius -->
+                        <b:row>
+                            <b:column medium-screen="2">
+                                <h:outputLabel value="Avg Rating" style="padding:0 2px;"/>
+                            </b:column>
+                            <b:column medium-screen="4">
+                                <p:rating value="#{ratingBean.getAvgRating(userBean.user.email)}" readonly="true"  style="padding:0 2px;"/>
+                            </b:column>
+                        </b:row>
+                    </c:if>
+                    <b:row style="padding-left:13px">
+                        <b:button value="Edit Profile" href="/Tut4YouWebApp/accounts/editProfile.xhtml" />
+                    </b:row>
                     <!--</div>-->
                 </b:panel>
             </b:row>
-            <c:if test="#{userBean.isTutor}">
-            <b:row>
-                <b:form>
-                        <b:dataTable value="#{courseBean.tutorCourses}" var="course">
-                            <b:dataTableColumn>
-                                <f:facet name="header">Courses You Have Taken</f:facet>
-                                #{course.courseName}
-                            </b:dataTableColumn>
-                        </b:dataTable>
-                    </b:form>
-                </b:row>
-            </c:if>
         </b:container>
         <ui:debug hotkey='x'/>
     </ui:define>

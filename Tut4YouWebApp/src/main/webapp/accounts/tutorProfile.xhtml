@@ -34,73 +34,103 @@
         <b:container fluid="true">
             <b:panel>
                 <b:row>
-                    <b:column span="5">
-                        <h:outputLabel value="Name:"/>
+                    <b:column tiny-screen="2">
+                        <h:outputLabel value="Name"/>
                     </b:column>
-                    <b:column span="7">
+                    <b:column tiny-screen="4">
                         <h:outputText value="#{profileBean.user.firstName} #{profileBean.user.lastName}"/>
                     </b:column>
                 </b:row>
                 <b:row>
-                    <b:column span="5">
-                        <h:outputLabel value="Username:"/>
+                    <b:column tiny-screen="2">
+                        <h:outputLabel value="Username"/>
                     </b:column>
-                    <b:column span="7">
+                    <b:column tiny-screen="4">
                         <h:outputText value="#{profileBean.user.username}"/>
                     </b:column>
                 </b:row>
                 <b:row>
-                    <b:column span="5">
-                        <h:outputLabel value="Email:"/>
+                    <b:column tiny-screen="2">
+                        <h:outputLabel value="Email"/>
                     </b:column>
-                    <b:column span="7">
+                    <b:column tiny-screen="4">
                         <h:outputText value="#{profileBean.user.email}"/>
                     </b:column>
                 </b:row>
                 <b:row>
-                    <b:column span="5">
-                        <h:outputLabel value="Phone Number:"/>
+                    <b:column tiny-screen="2">
+                        <h:outputLabel value="Phone Number"/>
                     </b:column>
-                    <b:column span="7">
+                    <b:column tiny-screen="4">
                         <h:outputText value="#{profileBean.user.phoneNumber}"/>
                     </b:column>
                 </b:row>
                 <b:row>
-                    <b:column span="5">
-                        <h:outputLabel value="University:"/>
+                    <b:column tiny-screen="2">
+                        <h:outputLabel value="University"/>
                     </b:column>
-                    <b:column span="7">
+                    <b:column tiny-screen="4">
                         <h:outputText value="#{profileBean.user.university}"/>
                     </b:column>
                 </b:row>
+                <b:row>
+                    <b:column tiny-screen="2">
+                        <h:outputLabel value="Average Rating"/>
+                    </b:column>
+                    <b:column tiny-screen="4">
+                        <p:rating value="#{ratingBean.getAvgRating(profileBean.user.email)}" readonly="true" />
+                    </b:column>
+                </b:row>
             </b:panel>
-            <h:form>
+            <b:form>
                 <p:dataScroller value="#{ratingBean.getRatingList(profileBean.user.email)}" var="rating" chunkSize="10">
-                    <h:panelGrid columns="2" style="width:100%">
-                        <p:outputPanel>
-                            <h:panelGrid columns="2" cellpadding="5">
-                                <f:facet name="header">Past Ratings </f:facet>
-                                <h:outputText value="Student: " style="font-weight: bold" />
-                                #{rating.student.firstName}
-                                #{rating.student.lastName}
-                                <h:outputText value="Rating: " style="font-weight: bold" />
-                                <p:rating value="#{rating.ratingValue}" readonly="true"/>
-
-                                <h:outputText value="Review: " style="font-weight:bold" />
-                                <h:outputText value="#{rating.description}"/>
-
-                                <h:outputText value="Date of Review:   " style="font-weight: bold" />
-                                <h:outputText value="#{rating.dateRated}">
-                                    <f:convertDateTime pattern="M-d-yyyy"/>
-                                </h:outputText>
-                                <b:commandButton value ="Edit Rating" action="#{updateRatingBean.goToEditRatingPage(rating)}" rendered="#{profileBean.checkIfUserRated(rating.student.email)}"/>
-                                <b:commandButton value ="Delete Rating" action="#{ratingBean.deleteRating(rating)}" rendered="#{profileBean.checkIfUserRated(rating.student.email)}"/>
-                                <br></br>
-                            </h:panelGrid>
-                        </p:outputPanel>
-                    </h:panelGrid>
+                    <b:row>
+                        <b:column tiny-screen="2">
+                            <h:outputLabel value="Student"/>
+                        </b:column>
+                        <b:column tiny-screen="4">
+                            <h:outputText value="#{rating.student.firstName} #{rating.student.lastName}"/>
+                        </b:column>
+                        <!-- using dropButton because kebab doesn't work -->
+<!--                        <b:column tiny-screen="2">
+                            <b:dropButton size="xs" value="action" rendered="#{profileBean.checkIfUserRated(rating.student.email)}">-->
+                            <!--<b:listLinks>-->
+                                <b:navCommandLink value="Edit Rating" action="#{updateRatingBean.goToEditRatingPage(rating)}"/>
+                                <span/>
+                                <b:navCommandLink value="Delete Rating" action="#{ratingBean.deleteRating(rating)}"/>
+                            <!--</b:listLinks>-->
+                        <!--</b:dropButton>-->
+                        </b:column>
+                    </b:row>
+                    <b:row>
+                        <b:column tiny-screen="2">
+                            <h:outputLabel value="Rating"/>
+                        </b:column>
+                        <b:column tiny-screen="4">
+                            <p:rating value="#{rating.ratingValue}" readonly="true"/>
+                        </b:column>
+                    </b:row>
+                    <b:row>
+                        <b:column tiny-screen="2">
+                            <h:outputLabel value="Review"/>
+                        </b:column>
+                        <b:column tiny-screen="10">
+                            <h:outputText value="#{rating.description}"/>
+                        </b:column>
+                    </b:row>
+                    <b:row>
+                        <b:column tiny-screen="2">
+                            <h:outputLabel value="Date"/>
+                        </b:column>
+                        <b:column tiny-screen="4">
+                            <h:outputText value="#{rating.dateRated}">
+                                <f:convertDateTime pattern="M-d-yyyy"/>
+                            </h:outputText>
+                        </b:column>
+                    </b:row>
+                    <br/>
                 </p:dataScroller>
-            </h:form>
+            </b:form>
         </b:container>
     </ui:define>
 </ui:composition>

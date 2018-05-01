@@ -22,41 +22,50 @@
         2017 Syed Haider <shayder426@gmail.com>
     -->
     <!-- @author Syed Haider <shayder426@gmail.com> -->
-
-
     <ui:define name="content">
         <h1>Reviews</h1>
-        <h3>Average Rating</h3><p:rating value="#{ratingBean.getAvgRating()}" readonly="true" />
-        
-        <h:form>
+        <h3>Average Rating</h3>
+        <p:rating value="#{ratingBean.getAvgRating(userBean.user.email)}" readonly="true" />
+        <h3>Past Ratings</h3>
+        <b:form>
             <p:dataScroller value="#{ratingBean.getRatingList(userBean.user.email)}" var="rating" chunkSize="10">
-                <h:panelGrid columns="2" style="width:100%">
-                    <p:outputPanel>
-                        <h:panelGrid columns="2" cellpadding="5">
-                            <f:facet name="header">Past Ratings </f:facet>
-                            <h:outputText value="Student: " style="font-weight: bold" />
-                            #{rating.student.firstName}
-                            #{rating.student.lastName}
-
-                            <h:outputText value="Rating: " style="font-weight: bold" />
-                            <p:rating value="#{rating.ratingValue}" readonly="true"/>
-
-                            <h:outputText value="Review: "  style="font-weight:bold" />
-                            <h:outputText value="#{rating.description}"/>
-
-                            <h:outputText value="Date of Review:   " style="font-weight: bold" />
-                            <h:outputText value="#{rating.dateRated}">
-                                <f:convertDateTime pattern="M-d-yyyy"/>
-                            </h:outputText>
-                            
-                            <br></br>
-
-                        </h:panelGrid>
-                    </p:outputPanel>
-                </h:panelGrid>
+                <b:row>
+                    <b:column tiny-screen="2">
+                        <h:outputLabel value="Student"/>
+                    </b:column>
+                    <b:column tiny-screen="4">
+                        <h:outputText value="#{rating.student.firstName} #{rating.student.lastName}"/>
+                    </b:column>
+                </b:row>
+                <b:row>
+                    <b:column tiny-screen="2">
+                        <h:outputLabel value="Rating"/>
+                    </b:column>
+                    <b:column tiny-screen="4">
+                        <p:rating value="#{rating.ratingValue}" readonly="true"/>
+                    </b:column>
+                </b:row>
+                <b:row>
+                    <b:column tiny-screen="2">
+                        <h:outputLabel value="Review"/>
+                    </b:column>
+                    <b:column tiny-screen="10">
+                        <h:outputText value="#{rating.description}"/>
+                    </b:column>
+                </b:row>
+                <b:row>
+                    <b:column tiny-screen="2">
+                        <h:outputLabel value="Date"/>
+                    </b:column>
+                    <b:column tiny-screen="4">
+                        <h:outputText value="#{rating.dateRated}">
+                            <f:convertDateTime pattern="M-d-yyyy"/>
+                        </h:outputText>
+                    </b:column>
+                </b:row>
+                <br/>
             </p:dataScroller>
-
-        </h:form>
+        </b:form>
         <ui:debug hotkey='x'/>
     </ui:define>
 </ui:composition>

@@ -140,6 +140,7 @@ public class Tutor extends User implements Serializable {
      */
     public Tutor() {
         hourlyRate = 0.00;
+        overallRating = 0;
         doNotDisturb = false;
         this.zipCode = new ZipCode();
         //currentZip = null;
@@ -155,23 +156,24 @@ public class Tutor extends User implements Serializable {
 
    /**
      * Tutor overloaded constructor with existing attributes
-     *
      * @param dateJoined
      * @param numPeopleTutored
      * @param priceRate
      * @param doNotDisturb
      * @param transcriptFileLocation
+     * @param overallRating
      * @param defaultZip
      */
-    public Tutor(Date dateJoined, int numPeopleTutored, double priceRate, boolean doNotDisturb, String transcriptFileLocation, String defaultZip) {
+    public Tutor(Date dateJoined, int numPeopleTutored, double priceRate, boolean doNotDisturb, String transcriptFileLocation, int overallRating, String defaultZip) {
         this.dateJoinedAsTutor = dateJoined;
         this.numOfPeopleTutored = numPeopleTutored;
         this.hourlyRate = priceRate;
         this.doNotDisturb = doNotDisturb;
         this.transcriptFilePath = transcriptFileLocation;
+        this.overallRating = overallRating;
         this.defaultZip = defaultZip;
-
     }
+    
     /**
      * Tutor overloaded constructor with inherited and existing attributes
      *
@@ -184,6 +186,7 @@ public class Tutor extends User implements Serializable {
      * @param university
      * @param securityQuestion
      * @param securityAnswer
+     * @param overallRating
      * @param dateJoined
      * @param numPeopleTutored
      * @param priceRate
@@ -191,12 +194,13 @@ public class Tutor extends User implements Serializable {
      * @param defaultZip
      * @param transcriptFileLocation
      */
-    public Tutor(String email, String firstName, String lastName, String userName, String phoneNumber, String password, String university, String securityQuestion, String securityAnswer, Date dateJoined, int numPeopleTutored, double priceRate, boolean doNotDisturb, String defaultZip, String transcriptFileLocation) {
+    public Tutor(String email, String firstName, String lastName, String userName, String phoneNumber, String password, String university, String securityQuestion, String securityAnswer, int overallRating, Date dateJoined, int numPeopleTutored, double priceRate, boolean doNotDisturb, String defaultZip, String transcriptFileLocation) {
         super(email, firstName, lastName, userName, phoneNumber, password, university, securityQuestion, securityAnswer);
         this.dateJoinedAsTutor = dateJoined;
         this.numOfPeopleTutored = numPeopleTutored;
         this.hourlyRate = priceRate;
         this.doNotDisturb = doNotDisturb;
+        this.overallRating = overallRating;
         this.transcriptFilePath = transcriptFileLocation;
         this.defaultZip = defaultZip;
     }

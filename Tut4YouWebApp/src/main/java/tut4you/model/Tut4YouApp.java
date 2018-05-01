@@ -1171,6 +1171,13 @@ public class Tut4YouApp {
             em.persist(zipCodeByRadius);
             em.flush();
         }
+        else {
+            zipCode.addZipCodeByRadius(zipCodeByRadius);
+            zipCodeByRadius.addZipCode(zipCode);
+            em.merge(zipCodeByRadius);
+            em.merge(zipCode);
+            em.flush();
+        }
         return zipCodeByRadius;
 
     }

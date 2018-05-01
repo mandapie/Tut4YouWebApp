@@ -37,24 +37,26 @@
         <c:if test="#{userBean.isTutor}">
             <c:if test="#{userBean.condition}">#{userBean.updateCurrentZip()}</c:if>
             <b:form>
-                <p:dialog header="Current Zip Code" widgetVar="myDialog" minHeight="40" visible="true" rendered="#{userBean.condition}" closable="false" modal="true">
-                    <h:outputText value="Enter current zip code (Defauilt is: " />
-                    <h:outputText value="#{userBean.user.defaultZip}" />
-                    <h:outputText value=")" />
-                    <b:inputText id="currentZip" placeholder="press enter to submit" required="true" requiredMessage="required" value="#{userBean.currentZip}">
+                <p:dialog header="Update Current Zip Code" widgetVar="myDialog" minHeight="40" visible="true" rendered="#{userBean.condition}" closable="false" modal="true">
+                    <h:outputText value="Default: " />
+                    <h:outputText value="#{userBean.user.defaultZip} " />
+                    <br/>
+                    <h:outputText value=" Click 'Do Not Update' if you are currently at Default Zip location" />
+                    <b:inputText id="currentZip" placeholder="press enter to submit"  requiredMessage="required" value="#{userBean.currentZip}">
                         <b:message for="currentZip"/>
                     </b:inputText>
+                    <b:commandButton value="Do Not Update" look="danger" action="#{userBean.setCondition(false)}"/>
                 </p:dialog>
             </b:form>
         </c:if>
         <b:container fluid="true">
-            <b:row>
+            <b:column medium-screen="two-thirds">
                 <!-- column with tab view: pending request list and notifications (if user is tutor) -->
                 <b:form>
                     <b:tabView active-index="#{userBean.tabIndex}"> <!-- number of activeIndex decides which tab show -->
                         <b:tab title="Active Requests">
                             <br/> <!-- for better spacing -->
-                            <b:button style="font-weight:strong;" look="info" value="Request for a Tutor" outcome="/students/requestTutor.xhtml"/>
+                            <b:button style="font-weight:bold;font-size:20px;" look="primary" value="Request for a Tutor" outcome="/students/requestTutor.xhtml"/>
                             <br/> <!-- for better spacing -->
                             <div style="max-height:400px;overflow:auto;margin-bottom:15px;">
                                 <ui:repeat value="#{requestBean.requestList}" var="r">
@@ -129,56 +131,64 @@
                                     </b:dataTableColumn>
                                 </b:dataTable>
                             </b:tab>
+                            <b:tab title="Courses">
+                                <b:dataTable value="#{courseBean.tutorCourses}" var="course">
+                                    <b:dataTableColumn>
+                                        <f:facet name="header">Courses You Have Taken</f:facet>
+                                            #{course.courseName}
+                                    </b:dataTableColumn>
+                                </b:dataTable>
+                            </b:tab>
                         </c:if>
                     </b:tabView>
                 </b:form>
-            </b:row>
-            <b:row>
-                <h:form>
-                    <b:column medium-screen="half">
-                        <b:panel title="Upcoming Sessions" collapsible="false" look="info">
-                            <b:dataTable value="#{requestBean.acceptedList}" var="req" id="accepetedTable">
-                                <b:dataTableColumn>
-                                    <f:facet name="header">Tutor</f:facet>
-                                    <h:outputText value="#{req.tutor.firstName}"/>                        
-                                </b:dataTableColumn>
-                                <b:dataTableColumn>
-                                    <f:facet name="header">Student</f:facet>
-                                    <h:outputText value="#{req.student.firstName}"/>
-                                </b:dataTableColumn>
-                                <b:dataTableColumn>
-                                    <f:facet name="header">Action</f:facet>
-                                    <b:commandButton value="Start Session" action="#{sessionBean.goToSessionTimerPage(req)}"/>                        
-                                </b:dataTableColumn>
-                            </b:dataTable>  
-                        </b:panel>
-                    </b:column>
-                    <b:column medium-screen="half">
-                        <b:panel title="Previous Sessions" collapsible="false" look="info">
-                            <b:dataTable value="#{requestBean.completedList}" var="req" id="completedTable">
-                                <b:dataTableColumn>
-                                    <f:facet name="header">Tutor</f:facet>
-                                    <h:outputText value="#{req.tutor.firstName}"/>                        
-                                </b:dataTableColumn>
-                                <b:dataTableColumn>
-                                    <f:facet name="header">Student</f:facet>
-                                    <h:outputText value="#{req.student.firstName}"/>
-                                </b:dataTableColumn>
-                            </b:dataTable>  
-                        </b:panel>
-                    </b:column>
-                </h:form>
-            </b:row>
-            <b:row>
-                <b:navLink value="View Previous Sessions" href="/Tut4YouWebApp/students/viewPreviousSessions.xhtml"/>
-                <c:if test="#{userBean.isTutor}">
-                    <b:navLink value="Add Availability" href="/Tut4YouWebApp/tutors/availability.xhtml"/>
-                    <b:navLink value="Add Courses" href="/Tut4YouWebApp/tutors/addCourse.xhtml"/>
-                    <b:navLink value="View Reviews" href="/Tut4YouWebApp/tutors/viewReviews.xhtml"/>
-                    <b:navLink value="Session Timer" href="/Tut4YouWebApp/tutors/sessionTimer.xhtml"/>
-                    <b:navLink value="Add Transcript" href="/Tut4YouWebApp/tutors/uploadTranscript.xhtml"/>
-                </c:if>
-            </b:row>
+            </b:column>
+            <b:column medium-screen="one-third">
+                <b:row>
+                    <b:panel title="Upcoming Sessions" collapsible="false" look="info">
+                        <b:dataTable value="#{requestBean.acceptedList}" var="req" id="accepetedTable">
+                            <b:dataTableColumn>
+                                <f:facet name="header">Tutor</f:facet>
+                                <h:outputText value="#{req.tutor.firstName}"/>                        
+                            </b:dataTableColumn>
+                            <b:dataTableColumn>
+                                <f:facet name="header">Student</f:facet>
+                                <h:outputText value="#{req.student.firstName}"/>
+                            </b:dataTableColumn>
+                            <b:dataTableColumn>
+                                <f:facet name="header">Action</f:facet>
+                                <b:commandButton value="Start Session" action="#{sessionBean.goToSessionTimerPage(req)}"/>                        
+                            </b:dataTableColumn>
+                        </b:dataTable>  
+                    </b:panel>
+                </b:row>
+                <b:row>
+                    <b:panel title="Previous Sessions" collapsible="false" look="info">
+                        <b:dataTable value="#{requestBean.completedList}" var="req" id="completedTable">
+                            <b:dataTableColumn>
+                                <f:facet name="header">Tutor</f:facet>
+                                <h:outputText value="#{req.tutor.firstName}"/>                        
+                            </b:dataTableColumn>
+                            <b:dataTableColumn>
+                                <f:facet name="header">Student</f:facet>
+                                <h:outputText value="#{req.student.firstName}"/>
+                            </b:dataTableColumn>
+                        </b:dataTable>  
+                    </b:panel>
+                </b:row>
+                <b:row>
+                    <b:listLinks>
+                        <b:navLink value="View Previous Sessions" href="/Tut4YouWebApp/students/viewPreviousSessions.xhtml"/>
+                        <c:if test="#{userBean.isTutor}">
+                            <b:navLink value="Add Availability" href="/Tut4YouWebApp/tutors/availability.xhtml"/>
+                            <b:navLink value="Add Courses" href="/Tut4YouWebApp/tutors/addCourse.xhtml"/>
+                            <b:navLink value="View Reviews" href="/Tut4YouWebApp/tutors/viewReviews.xhtml"/>
+                            <b:navLink value="Session Timer" href="/Tut4YouWebApp/tutors/sessionTimer.xhtml"/>
+                            <b:navLink value="Add Transcript" href="/Tut4YouWebApp/tutors/uploadTranscript.xhtml"/>
+                        </c:if>
+                    </b:listLinks>
+                </b:row>
+            </b:column>            
         </b:container>
         <ui:debug hotkey='x'/>
     </ui:define>

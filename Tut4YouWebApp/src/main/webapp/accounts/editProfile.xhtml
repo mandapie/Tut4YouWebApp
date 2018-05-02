@@ -118,7 +118,7 @@
                             <h:outputLabel value="Hourly Rate"/>
                         </b:column>
                         <b:column medium-screen="4">
-                            <b:inputText id="ehr" placeholder="Enter Hourly Rate" required="true" requiredMessage="required" >
+                            <b:inputText id="ehr" placeholder="Enter Hourly Rate" required="true" requiredMessage="required" value="#{userBean.user.hourlyRate}" converter="javax.faces.Double" validator="#{basicValidator.validateHourlyRate}">
                                 <b:message for="ehr"/>
                             </b:inputText>
                         </b:column>

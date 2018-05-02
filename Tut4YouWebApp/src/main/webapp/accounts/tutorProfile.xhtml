@@ -78,7 +78,7 @@
                         <h:outputLabel value="Average Rating"/>
                     </b:column>
                     <b:column tiny-screen="4">
-                        <p:rating value="#{ratingBean.getAvgRating(profileBean.user.email)}" readonly="true" />
+                        <p:rating value="#{profileBean.user.overallRating}" readonly="true" />
                     </b:column>
                 </b:row>
             </b:panel>
@@ -93,13 +93,12 @@
                         </b:column>
                         <!-- using dropButton because kebab doesn't work -->
                         <b:column tiny-screen="2">
-                            <!--<b:dropButton size="xs" value="action" rendered="#{profileBean.checkIfUserRated(rating.student.email)}">-->
-                            <!--<b:listLinks>-->
-                                <b:navCommandLink value="Edit Rating" action="#{updateRatingBean.goToEditRatingPage(rating)}"/>
-                                <span/>
-                                <b:navCommandLink value="Delete Rating" action="#{ratingBean.deleteRating(rating)}"/>
-                            <!--</b:listLinks>-->
-                        <!--</b:dropButton>-->
+                            <b:kebab rendered="#{profileBean.checkIfUserRated(rating.student.email)}">
+                                <b:listLinks>
+                                    <b:navCommandLink value="Edit Rating" action="#{updateRatingBean.goToEditRatingPage(rating)}"/>
+                                    <b:navCommandLink value="Delete Rating" action="#{ratingBean.deleteRating(rating)}"/>
+                                </b:listLinks>
+                            </b:kebab>
                         </b:column>
                     </b:row>
                     <b:row>

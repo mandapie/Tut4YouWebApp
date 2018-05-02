@@ -31,7 +31,7 @@ import java.util.List;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.enterprise.context.SessionScoped;
+import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -45,7 +45,7 @@ import tut4you.model.*;
  * @author Amanda Pan <daikiraidemodaisuki@gmail.com>
  */
 @Named
-@SessionScoped
+@ViewScoped
 public class RequestBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -411,6 +411,7 @@ public class RequestBean implements Serializable {
         }
         return result;
     }
+    
 
     /**
      * Send request to a specific tutor
@@ -479,4 +480,5 @@ public class RequestBean implements Serializable {
             Arrays.toString(zipCodeAPI.getDataList())
          };
     }
+
 }

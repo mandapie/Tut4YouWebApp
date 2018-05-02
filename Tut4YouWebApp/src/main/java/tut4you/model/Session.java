@@ -35,7 +35,7 @@ public class Session implements Serializable {
     private Request request;
     private Date startSessionTime;
     private Date endSessionTime;
-    private long elapsedTimeOfSession;
+    private double elapsedTimeOfSession;
 
     /**
      * Default SessionTimer constructor
@@ -51,7 +51,7 @@ public class Session implements Serializable {
      * @param endSessionTime ending millisecond of the session 
      * @param elapsedTimeOfSession total milliSeconds of the sessions
      */
-    public Session(Date startSessionTime, Date endSessionTime, Long elapsedTimeOfSession) {
+    public Session(Date startSessionTime, Date endSessionTime, double elapsedTimeOfSession) {
         this.startSessionTime = startSessionTime;
         this.endSessionTime = endSessionTime;
         this.elapsedTimeOfSession = elapsedTimeOfSession;
@@ -125,7 +125,7 @@ public class Session implements Serializable {
      * Gets the elapsed time of the session
      * @return elapsedTimeOfSession the total time of the session
      */
-    public long getElapsedTimeOfSession() {
+    public double getElapsedTimeOfSession() {
         return elapsedTimeOfSession;
     }
 
@@ -133,7 +133,7 @@ public class Session implements Serializable {
      * Sets the elapsed time of the session
      * @param elapsedTimeOfSession the total time of the session
      */
-    public void setElapsedTimeOfSession(long elapsedTimeOfSession) {
+    public void setElapsedTimeOfSession(double elapsedTimeOfSession) {
         this.elapsedTimeOfSession = elapsedTimeOfSession;
     }
 

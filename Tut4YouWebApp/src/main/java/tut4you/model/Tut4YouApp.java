@@ -37,6 +37,7 @@ import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
 import tut4you.exception.*;
 import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
 import javax.faces.application.FacesMessage;
 import tut4you.controller.UserBean;
 
@@ -872,7 +873,7 @@ public class Tut4YouApp {
         return ratingEmail.equals(currentUserEmail);
     }
 
-     /**
+    /**
      *
      * @return a list of requests from a user
      */
@@ -906,33 +907,6 @@ public class Tut4YouApp {
         return list;
     }
 
-
-    /**
-     * Sets a tutor to the request when a tutor completes the request.
-     *
-     * @param r the request to be set to completed
-     */
-    @RolesAllowed("tut4youapp.tutor")
-    @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public String setRequestToComplete(Request r, Session sessionTimer) {
-        Date endTime = new Date();
-        Session session = em.find(Session.class, sessionTimer.getId());
-        System.out.println(session);
-        session.setEndSessionTime(endTime);
-        //request.setSession(sessionTimer);
-        //sessionTimer.setRequest(request);
-        UserBean userBean = new UserBean();
-        String currentUserEmail = userBean.getEmailFromSession();
-        Tutor tutor = findTutor(currentUserEmail);
-        Request request = em.find(Request.class, r.getId());
-        r.setStatus(Request.Status.COMPLETED);
-        r.setTutor(tutor);
-        em.persist(sessionTimer);
-        em.merge(r);
-        em.flush();
-        return "sessionCompleted";
-    }
-
     /**
      * Sets a tutor to the request when a tutor completes the request. IN
      * PROGRESS
@@ -943,17 +917,53 @@ public class Tut4YouApp {
      */
     @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void startSessionTime(Request r, Session sessionTimer) {
+    public Session startSessionTime(Request r, Session sessionTimer) {
         Request request = em.find(Request.class,
                 r.getId());
         Date startTime = new Date();
-        System.out.println(sessionTimer);
         sessionTimer.setStartSessionTime(startTime);
         request.setSession(sessionTimer);
         sessionTimer.setRequest(request);
         em.persist(sessionTimer);
         em.merge(r);
         em.flush();
+        return sessionTimer;
+    }
+
+    /**
+     * Sets a tutor to the request when a tutor completes the request.
+     *
+     * @param r the request to be set to completed
+     * @return
+     */
+    @RolesAllowed("tut4youapp.tutor")
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public String setRequestToComplete(Request r, Session sessionTimer) {
+        Date endTime = new Date();
+        //Session session = em.find(Session.class, sessionTimer.getId());
+        System.out.println(sessionTimer);
+        sessionTimer.setEndSessionTime(endTime);
+        UserBean userBean = new UserBean();
+        String currentUserEmail = userBean.getEmailFromSession();
+        double elapsedTime = endTime.getTime() - sessionTimer.getStartSessionTime().getTime();
+        System.out.println("endTime: " + endTime.getTime());
+        System.out.println("startTime: " + sessionTimer.getStartSessionTime().getTime());
+        System.out.println("ElapsedTime " + elapsedTime);
+        double minutes = (elapsedTime / 1000) / 60;
+        double hours = minutes / 60;
+        sessionTimer.setElapsedTimeOfSession(hours);
+        em.merge(sessionTimer);
+        
+        
+        
+        Tutor tutor = findTutor(currentUserEmail);
+        Request request = em.find(Request.class, r.getId());
+        request.setStatus(Request.Status.COMPLETED);
+        request.setTutor(tutor);
+        em.merge(request);
+        
+        em.flush();
+        return "sessionCompleted";
     }
 
     public boolean checkAnswer(String answer, String email) {
@@ -1170,8 +1180,7 @@ public class Tut4YouApp {
             zipCodeByRadius.addZipCode(zipCode);
             em.persist(zipCodeByRadius);
             em.flush();
-        }
-        else {
+        } else {
             zipCode.addZipCodeByRadius(zipCodeByRadius);
             zipCodeByRadius.addZipCode(zipCode);
             em.merge(zipCodeByRadius);

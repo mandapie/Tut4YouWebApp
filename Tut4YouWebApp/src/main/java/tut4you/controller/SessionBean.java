@@ -147,26 +147,11 @@ public class SessionBean implements Serializable {
      * @param r the active request of the tutoring session
      */
     public void startTutorSession() {
-        System.out.println("have ya been hit");
-        Date startTime = new Date();
-        System.out.println(startTime);
-        System.out.println(sessionTimer);
-        sessionTimer.setStartSessionTime(startTime);
-        // sessionTimer.setEndSessionTime(startTime);
-        System.out.println(request);
-
-        tut4youApp.startSessionTime(request, sessionTimer);
+        sessionTimer = tut4youApp.startSessionTime(request, sessionTimer);
     }
 
     public String endTutorSession() {
-        String result;
-        System.out.println("End Session");
-        Date endTime = new Date();
-        System.out.println(endTime);
-        System.out.println(sessionTimer);
-        System.out.println(request);
-        result = tut4youApp.setRequestToComplete(request,sessionTimer);
-        return result;
+        return tut4youApp.setRequestToComplete(request,sessionTimer);
     }
 
     public Date getDate() {

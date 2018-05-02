@@ -144,6 +144,7 @@
                 </b:form>
             </b:column>
             <b:column medium-screen="one-third">
+                <b:form>
                 <b:row>
                     <b:panel title="Upcoming Sessions" collapsible="false" look="info">
                         <b:dataTable value="#{requestBean.acceptedList}" var="req" id="accepetedTable">
@@ -176,6 +177,7 @@
                         </b:dataTable>  
                     </b:panel>
                 </b:row>
+                </b:form>
                 <b:row>
                     <b:listLinks>
                         <b:navLink value="View Previous Sessions" href="/Tut4YouWebApp/students/viewPreviousSessions.xhtml"/>

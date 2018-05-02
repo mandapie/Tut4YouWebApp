@@ -1035,6 +1035,7 @@ public class Tut4YouApp {
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public ZipCode addZipCode(ZipCode zipCode
     ) {
+        
         TypedQuery<ZipCode> Query = em.createNamedQuery(ZipCode.FIND_ZIP_BY_ZIP_MAXRADIUS, ZipCode.class);
         Query.setParameter("zipCode", zipCode.getCurrentZipCode());
         Query.setParameter("maxRadius", zipCode.getMaxRadius());
@@ -1042,7 +1043,10 @@ public class Tut4YouApp {
             em.persist(zipCode);
             em.flush();
         }
-        return Query.getSingleResult();
+        else {
+            zipCode = Query.getSingleResult();
+        }
+        return zipCode;
     }
     /**
      * Add ZipCodeByRadius if it does not belong to zip code location
@@ -1063,11 +1067,10 @@ public class Tut4YouApp {
             em.flush();
         }
         else {
-            zipCode.addZipCodeByRadius(zipCodeByRadius);
-            zipCodeByRadius.addZipCode(zipCode);
-            em.merge(zipCodeByRadius);
-            em.merge(zipCode);
-            em.flush();
+            zipCodeByRadiusTemp.addZipCode(zipCode);
+            zipCode.addZipCodeByRadius(zipCodeByRadiusTemp);      
+            em.merge(zipCode); 
+
         }
         return zipCodeByRadius;
 

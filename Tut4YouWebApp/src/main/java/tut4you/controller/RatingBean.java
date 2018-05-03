@@ -180,6 +180,7 @@ public class RatingBean implements Serializable {
      */
     public void deleteRating(Rating rating) throws ParseException {
         tut4youApp.deleteRating(rating);
+        tut4youApp.updateAverageRating(rating.getTutor().getEmail());
     }
     
     public List<Request> getRequestList() {

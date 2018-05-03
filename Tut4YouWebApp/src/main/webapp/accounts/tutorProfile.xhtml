@@ -92,14 +92,13 @@
                             <h:outputText value="#{rating.student.firstName} #{rating.student.lastName}"/>
                         </b:column>
                         <!-- using dropButton because kebab doesn't work -->
-                        <b:column tiny-screen="2">
-                            <b:kebab rendered="#{profileBean.checkIfUserRated(rating.student.email)}">
+<!--                        <b:column tiny-screen="2">
+                            <b:kebab rendered="">
                                 <b:listLinks>
-                                    <b:navCommandLink value="Edit Rating" action="#{updateRatingBean.goToEditRatingPage(rating)}"/>
-                                    <b:navCommandLink value="Delete Rating" action="#{ratingBean.deleteRating(rating)}"/>
+                                    
                                 </b:listLinks>
                             </b:kebab>
-                        </b:column>
+                        </b:column>-->
                     </b:row>
                     <b:row>
                         <b:column tiny-screen="2">
@@ -125,6 +124,13 @@
                             <h:outputText value="#{rating.dateRated}">
                                 <f:convertDateTime pattern="M-d-yyyy"/>
                             </h:outputText>
+                        </b:column>
+                    </b:row>
+                    <b:row>
+                        <b:column>
+                            <b:navCommandLink value="Edit Rating" action="#{updateRatingBean.goToEditRatingPage(rating)}" rendered="#{profileBean.checkIfUserRated(rating.student.email)}"/>
+                            <span/>
+                            <b:navCommandLink value="Delete Rating" action="#{ratingBean.deleteRating(rating)}" rendered="#{profileBean.checkIfUserRated(rating.student.email)}"/>
                         </b:column>
                     </b:row>
                     <br/>

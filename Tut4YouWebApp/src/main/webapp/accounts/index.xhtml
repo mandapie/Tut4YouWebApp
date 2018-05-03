@@ -103,6 +103,7 @@
                                 </div>
                             </b:tab>
                             <b:tab title="Schedule">
+                                <br/>
                                 <b:switch label="Do Not Disturb" value="#{userBean.user.doNotDisturb}" id="doNotDisturb" update="@form">
                                     <f:ajax event="change" render="doNotDisturb" listener="#{userBean.switchDoNotDisturb(userBean.user.doNotDisturb)}" />
                                 </b:switch>
@@ -132,6 +133,7 @@
                                 </b:dataTable>
                             </b:tab>
                             <b:tab title="Courses">
+                                <br/>
                                 <b:dataTable value="#{courseBean.tutorCourses}" var="course">
                                     <b:dataTableColumn>
                                         <f:facet name="header">Courses You Have Taken</f:facet>

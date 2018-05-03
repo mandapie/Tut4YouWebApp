@@ -147,6 +147,7 @@ public class RatingBean implements Serializable {
         }
         rating.setDateRated(date);
         rating = tut4youApp.newRating(rating, tutor);
+        tut4youApp.updateAverageRating(tutor.getEmail());
         return result;
     }
 
@@ -164,6 +165,7 @@ public class RatingBean implements Serializable {
         rating.setDescription(rating.getDescription());
         rating.setDateRated(date);
         tut4youApp.updateRating(rating, rating.getDescription(), rating.getRatingValue());
+        tut4youApp.updateAverageRating(rating.getTutor().getEmail());
         if (rating != null) {
             result = "success";
             LOGGER.severe("Rating added");
@@ -177,8 +179,8 @@ public class RatingBean implements Serializable {
      * @throws java.text.ParseException
      */
     public void deleteRating(Rating rating) throws ParseException {
-        System.out.println(rating);
         tut4youApp.deleteRating(rating);
+        tut4youApp.updateAverageRating(rating.getTutor().getEmail());
     }
     
     public List<Request> getRequestList() {
@@ -188,6 +190,7 @@ public class RatingBean implements Serializable {
 
     /**
      * Gets a list of the availabilities of the Tutor in the EJB
+     * @param email
      * @return a list of subjects
      */
     public List<Rating> getRatingList(String email) {
@@ -195,7 +198,7 @@ public class RatingBean implements Serializable {
         return ratingList;
     }
 
-    public int getAvgRating(String email) {
-        return (int) tut4youApp.getAverageRating(email);
-    }
+//    public void getAvgRating(String email) {
+//        tut4youApp.getAverageRating(email);
+//    }
 }

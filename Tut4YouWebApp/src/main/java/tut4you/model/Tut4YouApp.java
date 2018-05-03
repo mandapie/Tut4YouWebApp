@@ -776,9 +776,8 @@ public class Tut4YouApp {
     }
 
     /**
-     * This method can only be called by a student.
-     *
-     * It will update the rating that a student has previously submitted.
+     * This method can only be called by a student. It will update the rating
+     * that a student has previously submitted.
      *
      * @param rating the rating being updated
      * @param description the description being updated
@@ -788,19 +787,12 @@ public class Tut4YouApp {
     @RolesAllowed("tut4youapp.student")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void updateRating(Rating rating, String description, Integer ratingValue) {
-        //Date date = new Date();
-        Rating updatedRating = em.find(Rating.class,
-                rating.getId());
+        Rating updatedRating = em.find(Rating.class, rating.getId());
         if (updatedRating == null) {
             updatedRating = rating;
         }
         updatedRating.setDescription(description);
-        System.out.println("NOTHING MY NEW GUY: " + updatedRating.getDescription());
         updatedRating.setRatingValue(ratingValue);
-        System.out.println("ANYTHING THE NEW ONE: " + updatedRating.getRatingValue());
-
-        // updatedRating.setDateRated(date);
-        // System.out.println(date);
         em.merge(updatedRating);
         em.flush();
     }
@@ -907,7 +899,7 @@ public class Tut4YouApp {
         return list;
     }
 
-    /**
+      /**
      * Sets a tutor to the request when a tutor completes the request. IN
      * PROGRESS
      *
@@ -975,29 +967,28 @@ public class Tut4YouApp {
         FacesMessage message = new FacesMessage("Answer is false. Try again.");
         FacesContext.getCurrentInstance().addMessage(null, message);
         return val;
-    }
-
-    /**
-     * Gets the average rating of the tutor
+}
+      /**
+     * Updates the average rating of the tutor
      *
-     * @return the average rating of the tutor
      * @author Syed Haider <shayder426@gmail.com>
+     * @param email
      */
     @PermitAll
-    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-    public double getAverageRating(String email) {
-        TypedQuery<Double> averageRatingQuery = em.createNamedQuery(Rating.FIND_AVG_RATING_BY_TUTOR, Double.class
-        );
+
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void updateAverageRating(String email) {
+        TypedQuery<Double> averageRatingQuery = em.createNamedQuery(Rating.FIND_AVG_RATING_BY_TUTOR, Double.class);
+        averageRatingQuery.setParameter("email", email);
         UserBean userBean = new UserBean();
         String currentUserEmail = userBean.getEmailFromSession();
         if (!currentUserEmail.equals(email)) {
             currentUserEmail = email;
         }
         Tutor tutor = findTutor(currentUserEmail);
-        System.out.println(email);
-        averageRatingQuery.setParameter("email", email);
-
-        return averageRatingQuery.getSingleResult();
+        int avgRating = averageRatingQuery.getSingleResult().intValue();
+        tutor.setOverallRating(avgRating);
+        em.merge(tutor);
     }
 
     @PermitAll
@@ -1135,7 +1126,7 @@ public class Tut4YouApp {
         );
         return Query.getResultList();
     }
-
+  
     /**
      * Adds ZipCode to DB if it is not already in DB but first checks if it is
      * in the DB
@@ -1147,20 +1138,21 @@ public class Tut4YouApp {
      */
     @RolesAllowed("tut4youapp.student")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public ZipCode
-            addZipCode(ZipCode zipCode
-            ) {
-        TypedQuery<ZipCode> Query = em.createNamedQuery(ZipCode.FIND_ZIP_BY_ZIP_MAXRADIUS, ZipCode.class
-        );
+    public ZipCode addZipCode(ZipCode zipCode
+    ) {
+        
+        TypedQuery<ZipCode> Query = em.createNamedQuery(ZipCode.FIND_ZIP_BY_ZIP_MAXRADIUS, ZipCode.class);
         Query.setParameter("zipCode", zipCode.getCurrentZipCode());
         Query.setParameter("maxRadius", zipCode.getMaxRadius());
         if (Query.getResultList().isEmpty()) {
             em.persist(zipCode);
             em.flush();
         }
-        return Query.getSingleResult();
+        else {
+            zipCode = Query.getSingleResult();
+        }
+        return zipCode;
     }
-
     /**
      * Add ZipCodeByRadius if it does not belong to zip code location
      *
@@ -1170,22 +1162,20 @@ public class Tut4YouApp {
      */
     @RolesAllowed("tut4youapp.student")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public ZipCodeByRadius
-            addZipCodeByRadius(ZipCode zipCode, ZipCodeByRadius zipCodeByRadius
-            ) {
-        ZipCodeByRadius zipCodeByRadiusTemp = em.find(ZipCodeByRadius.class,
-                zipCodeByRadius.getZipCodeByRadius());
+    public ZipCodeByRadius addZipCodeByRadius(ZipCode zipCode, ZipCodeByRadius zipCodeByRadius
+    ) {
+        ZipCodeByRadius zipCodeByRadiusTemp = em.find(ZipCodeByRadius.class, zipCodeByRadius.getZipCodeByRadius());
         if (zipCodeByRadiusTemp == null) {
             zipCode.addZipCodeByRadius(zipCodeByRadius);
             zipCodeByRadius.addZipCode(zipCode);
             em.persist(zipCodeByRadius);
             em.flush();
-        } else {
-            zipCode.addZipCodeByRadius(zipCodeByRadius);
-            zipCodeByRadius.addZipCode(zipCode);
-            em.merge(zipCodeByRadius);
-            em.merge(zipCode);
-            em.flush();
+        }
+        else {
+            zipCodeByRadiusTemp.addZipCode(zipCode);
+            zipCode.addZipCodeByRadius(zipCodeByRadiusTemp);      
+            em.merge(zipCode); 
+
         }
         return zipCodeByRadius;
 

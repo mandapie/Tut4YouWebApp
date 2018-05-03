@@ -58,7 +58,7 @@ public class ZipCode implements Serializable {
     private Long id;
     @OneToMany(mappedBy="zipCode",cascade=CascadeType.ALL)
     private Collection<Request> requests;
-    @ManyToMany(mappedBy="zipCodes", cascade=CascadeType.PERSIST)
+    @ManyToMany(mappedBy="zipCodes")
     private Collection<ZipCodeByRadius> zipCodesByRadius;    
     private String currentZipCode;
     private int maxRadius;

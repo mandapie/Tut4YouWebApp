@@ -112,7 +112,7 @@
                                 <h:outputLabel value="Avg Rating" style="padding:0 2px;"/>
                             </b:column>
                             <b:column medium-screen="4">
-                                <p:rating value="#{ratingBean.getAvgRating(userBean.user.email)}" readonly="true"  style="padding:0 2px;"/>
+                                <p:rating value="#{userBean.user.overallRating}" readonly="true"  style="padding:0 2px;"/>
                             </b:column>
                         </b:row>
                     </c:if>

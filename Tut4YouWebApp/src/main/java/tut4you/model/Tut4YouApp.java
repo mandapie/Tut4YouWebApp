@@ -159,7 +159,7 @@ public class Tut4YouApp {
             user = findUser(currentUserEmail);
             email = user.getEmail();
             requestQuery = em.createNamedQuery(Request.FIND_REQUEST_BY_EMAIL, Request.class);
-            requestQuery.setParameter("student__email", email);
+            requestQuery.setParameter("student_email", email);
 
         } else {
             email = tutor.getEmail();
@@ -895,7 +895,7 @@ public class Tut4YouApp {
             user = findUser(currentUserEmail);
             email = user.getEmail();
             requestQuery = em.createNamedQuery(Request.FIND_REQUEST_BY_EMAIL, Request.class);
-            requestQuery.setParameter("student__email", email);
+            requestQuery.setParameter("student_email", email);
 
         } else {
             email = tutor.getEmail();

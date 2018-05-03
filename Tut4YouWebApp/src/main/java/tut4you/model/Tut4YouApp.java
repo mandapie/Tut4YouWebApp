@@ -684,7 +684,6 @@ public class Tut4YouApp {
      * username of the current session and checks if the username is null, if so
      * return null. Otherwise, findUser the user email to add the rating to be
      * submitted.
-     *
      * @param tutor the tutor receiving the rating
      * @param rating to be submitted
      * @return rating if successful
@@ -696,7 +695,8 @@ public class Tut4YouApp {
         String currentUserEmail = userBean.getEmailFromSession();
         if (currentUserEmail == null) {
             return null;
-        } else {
+        }
+        else {
             User student = findUser(currentUserEmail);
             if (student != null) {
                 student.addRating(rating);
@@ -715,9 +715,7 @@ public class Tut4YouApp {
 
     /**
      * This method can only be called by a student.
-     *
      * It will update the rating that a student has previously submitted.
-     *
      * @param rating the rating being updated
      * @param description the description being updated
      * @param ratingValue the ratingValue being updated
@@ -726,18 +724,12 @@ public class Tut4YouApp {
     @RolesAllowed("tut4youapp.student")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void updateRating(Rating rating, String description, Integer ratingValue) {
-        //Date date = new Date();
         Rating updatedRating = em.find(Rating.class, rating.getId());
         if (updatedRating == null) {
             updatedRating = rating;
         }
         updatedRating.setDescription(description);
-        System.out.println("NOTHING MY NEW GUY: " + updatedRating.getDescription());
         updatedRating.setRatingValue(ratingValue);
-        System.out.println("ANYTHING THE NEW ONE: " + updatedRating.getRatingValue());
-
-        // updatedRating.setDateRated(date);
-        // System.out.println(date);
         em.merge(updatedRating);
         em.flush();
     }
@@ -784,7 +776,8 @@ public class Tut4YouApp {
         }
         if (currentUserEmail == null) {
             return null;
-        } else {
+        }
+        else {
             Tutor tutor = findTutor(currentUserEmail);
             email = tutor.getEmail();
             TypedQuery<Rating> ratingQuery = em.createNamedQuery(Rating.FIND_RATING_BY_TUTOR, Rating.class);
@@ -838,8 +831,7 @@ public class Tut4YouApp {
      */
     @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void setRequestToComplete(Request r
-    ) {
+    public void setRequestToComplete(Request r) {
         UserBean userBean = new UserBean();
         String currentUserEmail = userBean.getEmailFromSession();
         Long endTime = System.currentTimeMillis();
@@ -853,14 +845,11 @@ public class Tut4YouApp {
     /**
      * Sets a tutor to the request when a tutor completes the request. IN
      * PROGRESS
-     *
      * @param r request that is being partaken
-     * @param s
      */
     @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void startSessionTime(Request r
-    ) {
+    public void startSessionTime(Request r) {
         Request request = em.find(Request.class, r.getId());
         Long startTime = System.currentTimeMillis();
         em.merge(r);
@@ -868,24 +857,23 @@ public class Tut4YouApp {
     }
 
     /**
-     * Gets the average rating of the tutor
-     *
-     * @return the average rating of the tutor
+     * Updates the average rating of the tutor
      * @author Syed Haider <shayder426@gmail.com>
+     * @param email
      */
     @PermitAll
-    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-    public double getAverageRating(String email) {
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void updateAverageRating(String email) {
         TypedQuery<Double> averageRatingQuery = em.createNamedQuery(Rating.FIND_AVG_RATING_BY_TUTOR, Double.class);
+        averageRatingQuery.setParameter("email", email);
         UserBean userBean = new UserBean();
         String currentUserEmail = userBean.getEmailFromSession();
         if(!currentUserEmail.equals(email))
             currentUserEmail = email;
         Tutor tutor = findTutor(currentUserEmail);
-        System.out.println(email);
-        averageRatingQuery.setParameter("email", email);
-
-        return averageRatingQuery.getSingleResult();
+        int avgRating = averageRatingQuery.getSingleResult().intValue();
+        tutor.setOverallRating(avgRating);
+        em.merge(tutor);
     }
 
     @PermitAll

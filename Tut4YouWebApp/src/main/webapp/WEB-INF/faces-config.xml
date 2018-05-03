@@ -26,6 +26,11 @@
             <to-view-id>/students/editReview.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
+           <navigation-case>
+            <from-outcome>sessionCompleted</from-outcome>
+            <to-view-id>/tutors/sessionCompleted.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
         <navigation-case>
             <from-action>#{requestBean.setTutorToRequest(Request r)}</from-action>
             <from-outcome>chat</from-outcome>
@@ -80,6 +85,10 @@
         <navigation-case>
             <from-outcome>editRating</from-outcome>
             <to-view-id>/students/editRating.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>sessionTimer</from-outcome>
+            <to-view-id>/tutors/sessionTimer.xhtml</to-view-id>
         </navigation-case>
         <navigation-case>
             <from-outcome>tutorProfile</from-outcome>

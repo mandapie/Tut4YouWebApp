@@ -4,11 +4,11 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd"
     version="2.2">
-   <application>
-       <resource-handler>org.omnifaces.resourcehandler.CombinedResourceHandler</resource-handler>
-   </application>
+    <application>
+        <resource-handler>org.omnifaces.resourcehandler.CombinedResourceHandler</resource-handler>
+    </application>
    
-   <!-- NAVIGATION RULES -->
+    <!-- NAVIGATION RULES -->
     <navigation-rule>
         <from-view-id>*</from-view-id>
         <navigation-case>
@@ -24,6 +24,11 @@
         <navigation-case>
             <from-outcome>editReview</from-outcome>
             <to-view-id>/students/editReview.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+           <navigation-case>
+            <from-outcome>sessionCompleted</from-outcome>
+            <to-view-id>/tutors/sessionCompleted.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
         <navigation-case>
@@ -73,23 +78,40 @@
             <from-outcome>failure</from-outcome>
             <to-view-id>/errors/internal.xhtml</to-view-id>
         </navigation-case>
-         <navigation-case>
+        <navigation-case>
             <from-outcome>updatedAvailability</from-outcome>
             <to-view-id>/tutors/updatedAvailSuccess.xhtml</to-view-id>
         </navigation-case>
-         <navigation-case>
+        <navigation-case>
             <from-outcome>editRating</from-outcome>
             <to-view-id>/students/editRating.xhtml</to-view-id>
         </navigation-case>
-           <navigation-case>
+        <navigation-case>
+            <from-outcome>sessionTimer</from-outcome>
+            <to-view-id>/tutors/sessionTimer.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
             <from-outcome>tutorProfile</from-outcome>
             <to-view-id>/accounts/tutorProfile.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{userBean.updateUser(userBean.user)}</from-action>
+            <from-outcome>success</from-outcome>
+            <to-view-id>/accounts/profile.xhtml</to-view-id>
+            <redirect/>
         </navigation-case>
         <navigation-case>
             <from-action>#{userBean.logout}</from-action>
             <from-outcome>success</from-outcome>
             <to-view-id>/accounts/index.xhtml</to-view-id>
             <redirect/>
-        </navigation-case>       
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{sessionBean.checkAnswer(sessionBean.securityAnswer)}</from-action>
+            <from-outcome>true</from-outcome>
+            <to-view-id>/tutors/sessionTimer.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+               
     </navigation-rule>
 </faces-config>

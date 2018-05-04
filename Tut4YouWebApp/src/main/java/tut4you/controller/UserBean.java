@@ -61,6 +61,7 @@ public class UserBean implements Serializable {
     public void createUserBean() {
         user = null;
         condition = true;
+        
     }
 
     /**
@@ -78,7 +79,6 @@ public class UserBean implements Serializable {
     public String getCurrentZip() {
         return currentZip;
     }
-
     /**
      * set current zip
      *

@@ -50,7 +50,7 @@ public class ZipCodeByRadius implements Serializable {
         joinColumns={
           @JoinColumn(name="zipCodeByRadius")
         },
-        inverseJoinColumns=@JoinColumn(name="id"))
+        inverseJoinColumns=@JoinColumn(name="zipCode_ID"))
     private Collection<ZipCode> zipCodes;
 
     public ZipCodeByRadius() {

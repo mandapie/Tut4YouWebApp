@@ -52,12 +52,26 @@ public class ZipCode implements Serializable {
      */
     public static final String FIND_ZIP_BY_ZIP_MAXRADIUS = "ZipCode.FindZipByZipMaxRadius";
     
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false, unique = true)
+    private Long id;
+    @OneToMany(mappedBy="zipCode",cascade=CascadeType.ALL)
+    private Collection<Request> requests;
+    @ManyToMany(mappedBy="zipCodes")
+    private Collection<ZipCodeByRadius> zipCodesByRadius;    
+    private String currentZipCode;
+    private int maxRadius;
+    @OneToMany(mappedBy="zipCode", cascade=CascadeType.ALL)
+    private Collection<Tutor> tutors;
+    
     /**
      * default constructor
      */
     public ZipCode() {
         
     }
+    
     /**
      * overloaded constructor that takes in zipCode and maxRadius
      * @param zipCode
@@ -67,6 +81,7 @@ public class ZipCode implements Serializable {
         this.currentZipCode = zipCode;
         this.maxRadius = maxRadius;
     }
+    
     /**
      * overloaded constructor that takes in maxRadius
      * @param maxRadius 
@@ -75,21 +90,6 @@ public class ZipCode implements Serializable {
         this.currentZipCode = "00000";
         this.maxRadius = maxRadius;
     }
-
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false, unique = true)
-    private Long id;
-    @OneToMany(mappedBy="zipCode",cascade=CascadeType.ALL)
-    private Collection<Request> requests;
-    @ManyToMany(mappedBy="zipCodes", cascade=CascadeType.PERSIST)
-    private Collection<ZipCodeByRadius> zipCodesByRadius;    
-    private String currentZipCode;
-    private int maxRadius;
-    
-    @OneToMany(mappedBy="zipCode", cascade=CascadeType.ALL)
-    private Collection<Tutor> tutors;
     
     /**
      * get collection of Tutors
@@ -98,6 +98,7 @@ public class ZipCode implements Serializable {
     public Collection<Tutor> getTutors() {
         return tutors;
     }
+    
     /**
      * set collection of tutors
      * @param tutors 
@@ -105,6 +106,7 @@ public class ZipCode implements Serializable {
     public void setTutors(Collection<Tutor> tutors) {
         this.tutors = tutors;
     }
+    
     /**
      * adds a tutor to ZipCode
      *

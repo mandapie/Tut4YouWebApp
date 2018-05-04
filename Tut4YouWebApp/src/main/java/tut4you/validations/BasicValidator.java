@@ -22,13 +22,12 @@ import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
 import javax.inject.Named;
-import org.primefaces.util.MessageFactory;
 import tut4you.controller.RequestBean;
 import tut4you.model.Tut4YouApp;
+import tut4you.model.User;
 
 /**
  * Validates (basic) correct format.
@@ -60,11 +59,11 @@ public class BasicValidator {
      * @throws ValidatorException the Exception to throw b/c the value is not an
      * e-mail address Modified by Amanda Pan: made regex pattern to validate
      * email format source:
-     * https://stackoverflow.com/questions/8204680/java-regex-email?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
+     * https://howtodoinjava.com/regex/java-regex-validate-email-address/
      */
     public void validateEmail(FacesContext context, UIComponent toValidate, Object value) {
         String emailStr = (String) value;
-        String pattern = "^[a-zA-Z0-9_.-]+@[a-zA-Z0-9]+.(.+)$";
+        String pattern = "^[a-zA-Z0-9_.-]+@[a-zA-Z0-9]+(\\.[a-zA-Z0-9]+)+$";
         if (!emailStr.matches(pattern)) {
             FacesMessage message = new FacesMessage("Invalid email address");
             throw new ValidatorException(message);
@@ -78,7 +77,7 @@ public class BasicValidator {
     }
 
     /**
-     * validate userName is unique
+     * validate username is unique
      *
      * @param context
      * @param toValidate
@@ -189,9 +188,10 @@ public class BasicValidator {
     public void validateRating(FacesContext context, UIComponent component, Object value) {
         int rating = (int) value;
         if (rating <= 0) {
-            System.out.println("THROW ME");
             FacesMessage message = new FacesMessage("Rating is required.");
             throw new ValidatorException(message);
         }
     }
+
+  
 }

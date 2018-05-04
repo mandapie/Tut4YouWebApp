@@ -10,7 +10,10 @@
          @author Syed Haider <shayder426@gmail.com> -->
     <ui:define name="title">Availability</ui:define>
     <ui:define name="content">
-        <h1>Add Availability</h1>
+        <h:panelGrid columns="1" style="text-align:center; margin-left: 40%">
+            <h1 style="font-weight:bold">My Availability</h1>
+            <p:separator />                       
+        </h:panelGrid>
         <b:panel title="Enter Your Availability" collapsible="false" look="info">
             <b:form id="availabilityID">
 
@@ -41,7 +44,7 @@
                                      value="#{availabilityBean.startTime}"
                                      binding="#{availTime}"
                                      required="true"
-                                      requiredMessage="required">
+                                     requiredMessage="required">
                             <f:convertDateTime type="time" pattern="HH:mm" dateStyle="full"/>
                             <b:message for="startTime"/>
                         </b:inputText>
@@ -63,7 +66,7 @@
                         <p:dialog header="Submitted!" widgetVar="dlg1" id="modalID" minHeight="40" visible="#{availabilityBean.addNewAvailability}" closable="false" modal="true" >
                             <h:outputText value="Do you want to add another availability?" />
                             <p:button value="Yes" outcome="/tutors/availability.xhtml" />
-                            <p:button value="No"  outcome="/accounts/profile.xhtml"/>
+                            <p:button value="No"  outcome="/accounts/index.xhtml"/>
                         </p:dialog>
                         <b:commandButton value="Add Availability" style="width:100%" action="#{availabilityBean.addAvailability}" oncomplete="if (#{availabilityBean.addNewAvailability}){PF('dlg1').show()}" update="availabilityID">
                         </b:commandButton>

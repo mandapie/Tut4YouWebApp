@@ -105,6 +105,13 @@
             <from-outcome>success</from-outcome>
             <to-view-id>/accounts/index.xhtml</to-view-id>
             <redirect/>
-        </navigation-case>       
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{sessionBean.checkAnswer(sessionBean.securityAnswer)}</from-action>
+            <from-outcome>true</from-outcome>
+            <to-view-id>/tutors/sessionTimer.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+               
     </navigation-rule>
 </faces-config>

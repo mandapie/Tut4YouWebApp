@@ -964,8 +964,6 @@ public class Tut4YouApp {
         User user = findUser(email);
         String securityAnswer = user.getSecurityAnswer();
         boolean val = securityAnswer.equals(answer);
-        FacesMessage message = new FacesMessage("Answer is false. Try again.");
-        FacesContext.getCurrentInstance().addMessage(null, message);
         return val;
 }
       /**

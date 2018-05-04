@@ -22,7 +22,7 @@ INSERT INTO ZipCode(maxRadius) VALUES (3)
 INSERT INTO ZipCode(maxRadius) VALUES (1)
 INSERT INTO ZipCode(maxRadius) VALUES (10)
 
-INSERT INTO Users(email,user_type,firstName,lastName,password,phoneNumber,username,university,hourlyRate,defaultZip,ZipCode_ID) VALUES ('amanda@gmail.com','Tutor','Amanda','Pan','CD639F5ECF3514CCC33B9985B55A118727A21782C04A714AB6A7634BE91DC4B6E8BFF6456B546E382EF00057550952F019993BBE6B8D84FE09C2B961149BFA2A','7141234567','apan','CSULB',15.00,'92704',1)
+INSERT INTO Users(email,user_type,firstName,lastName,password,phoneNumber,username,university,hourlyRate,defaultZip,ZipCode_ID,securityQuestion,securityAnswer) VALUES ('amanda@gmail.com','Tutor','Amanda','Pan','CD639F5ECF3514CCC33B9985B55A118727A21782C04A714AB6A7634BE91DC4B6E8BFF6456B546E382EF00057550952F019993BBE6B8D84FE09C2B961149BFA2A','7141234567','apan','CSULB',15.00,'92704',1,'What was your childhood nickname?','amanda')
 INSERT INTO Users(email,user_type,firstName,lastName,password,phoneNumber,username,university,hourlyRate,doNotDisturb,defaultZip,ZipCode_ID) VALUES ('andrew@gmail.com','Tutor','Andrew','Kaichi','6E99F65920D0B34E678A1FFBA8AA834568A1EF9EFB4D94AD0FB34B42FF2C49C39C228BF5FA619A647831BC0745C49D9FF2171A1513B8591B37FA83B6FC9E2827','7141234567','aKaichi','CSULB',15.50,1,'92708',2)
 INSERT INTO Users(email,user_type,firstName,lastName,password,phoneNumber,username,university,hourlyRate,defaultZip,ZipCode_ID) VALUES ('keith@gmail.com','Tutor','Kieth','Tran','0C0BAAA4ECC4C21265E4E41B966C54B806315CDDFF946F6C8D86C352DD8E6F6B8D158F97C6DC310A82202FFC3785996A631E66D02E0CC8FC52623B74A0D646E0','7141234567','kTran','CSULB',20.00,'92703',3)
 INSERT INTO Users(email,user_type,firstName,lastName,password,phoneNumber,username,university,hourlyRate,defaultZip,ZipCode_ID) VALUES ('syed@gmail.com','Tutor','Syed','Haider','E82C6184E06670CE275027FE9177D95C85E81AA04160FA6095924F514FEE43C3150F14D65EDC4D4ECD105D5E69C9A5B3A5CC7ECCA10C5EE9B80A25863FEA1E08','7141234567','sHaider','CSULB',13.00,'92655',4)
@@ -74,6 +74,7 @@ INSERT INTO Request(student_email,course_courseName,description,status) VALUES (
 INSERT INTO Request(student_email,course_courseName,description,status) VALUES ('daniel@gmail.com','General Biology I','Kreb cycle',0)
 INSERT INTO Request(student_email,course_courseName,description,status,tutor_email) VALUES ('daniel@gmail.com','Computer Security','Hacking',1,'andrew@gmail.com')
 INSERT INTO Request(student_email,tutor_email,course_courseName,description,status) VALUES ('evan@gmail.com','amanda@gmail.com','General Biology I','Photosynthesis process',1)
+INSERT INTO Request(student_email,tutor_email,course_courseName,description,status) VALUES ('daniel@gmail.com','amanda@gmail.com','General Biology I','Photosynthesis process',1)
 
 INSERT INTO Availability(DAYOFWEEK, ENDTIME, STARTTIME, TUTOR_EMAIL) VALUES ('Monday', '03:59:00', '02:00:00', 'amanda@gmail.com')
 INSERT INTO Availability(DAYOFWEEK, ENDTIME, STARTTIME, TUTOR_EMAIL) VALUES ('Monday', '04:59:00', '04:00:00', 'amanda@gmail.com')

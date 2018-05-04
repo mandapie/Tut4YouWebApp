@@ -27,9 +27,11 @@ import javax.faces.validator.ValidatorException;
 import javax.inject.Named;
 import tut4you.controller.RequestBean;
 import tut4you.model.Tut4YouApp;
+import tut4you.model.User;
 
 /**
  * Validates (basic) correct format.
+ *
  * @author Alvaro Monge <alvaro.monge@csulb.edu>
  * Modified by Keith Tran <keithtran25@gmail.com>
  * Modified by Syed Haider <shayder426@gmail.com>
@@ -50,12 +52,14 @@ public class BasicValidator {
     /**
      * validates an e-mail address to be in the (basic) correct format and
      * validate that it is not already in the database
+     *
      * @param context the FacesContext
      * @param toValidate the UIComponent being validated (e-mail field)
      * @param value the value (email address) of the component
      * @throws ValidatorException the Exception to throw b/c the value is not an
      * e-mail address Modified by Amanda Pan: made regex pattern to validate
-     * email format source: https://howtodoinjava.com/regex/java-regex-validate-email-address/
+     * email format source:
+     * https://howtodoinjava.com/regex/java-regex-validate-email-address/
      */
     public void validateEmail(FacesContext context, UIComponent toValidate, Object value) {
         String emailStr = (String) value;
@@ -74,6 +78,7 @@ public class BasicValidator {
 
     /**
      * validate username is unique
+     *
      * @param context
      * @param toValidate
      * @param value
@@ -91,6 +96,7 @@ public class BasicValidator {
 
     /**
      * https://stackoverflow.com/questions/42104546/java-regular-expressions-to-validate-phone-numbers
+     *
      * @param context the FacesContext
      * @param toValidate the UIComponent being validated (e-mail field)
      * @param value the value (email address) of the component
@@ -106,6 +112,7 @@ public class BasicValidator {
 
     /**
      * validates hourly rate to range between 0.00 - 99.99
+     *
      * @param context
      * @param toValidate
      * @param value
@@ -123,6 +130,7 @@ public class BasicValidator {
     /**
      * https://stackoverflow.com/questions/9043551/regex-match-integer-only
      * validate zip is in integers
+     *
      * @param context
      * @param toValidate
      * @param value Modified by Amanda: combined integer and length validations
@@ -140,6 +148,7 @@ public class BasicValidator {
     /**
      * EqualsValidator extends the Validator class to determine if two fields
      * are duplicates
+     *
      * @author Brian Leathem in StackOverflow Modified by Syed Haider
      * <shayder426@gmail.com>
      * http://stackoverflow.com/questions/2909021/jsf-2-0-validate-equality-of-2-inputsecret-fields-confirm-password-without-wri
@@ -159,6 +168,7 @@ public class BasicValidator {
 
     /**
      * validate that later time in request is not before the actual time
+     *
      * @param context
      * @param component
      * @param value
@@ -182,4 +192,6 @@ public class BasicValidator {
             throw new ValidatorException(message);
         }
     }
+
+  
 }

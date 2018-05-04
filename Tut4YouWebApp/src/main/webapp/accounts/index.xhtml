@@ -103,7 +103,6 @@
                                 </div>
                             </b:tab>
                             <b:tab title="Schedule">
-                                <br/>
                                 <b:switch label="Do Not Disturb" value="#{userBean.user.doNotDisturb}" id="doNotDisturb" update="@form">
                                     <f:ajax event="change" render="doNotDisturb" listener="#{userBean.switchDoNotDisturb(userBean.user.doNotDisturb)}" />
                                 </b:switch>
@@ -147,22 +146,46 @@
                 </b:form>
             </b:column>
             <b:column medium-screen="one-third">
+                <b:form>
                 <b:row>
                     <b:panel title="Upcoming Sessions" collapsible="false" look="info">
-
+                        <b:dataTable value="#{requestBean.acceptedList}" var="req" id="accepetedTable">
+                            <b:dataTableColumn>
+                                <f:facet name="header">Tutor</f:facet>
+                                <h:outputText value="#{req.tutor.firstName}"/>                        
+                            </b:dataTableColumn>
+                            <b:dataTableColumn>
+                                <f:facet name="header">Student</f:facet>
+                                <h:outputText value="#{req.student.firstName}"/>
+                            </b:dataTableColumn>
+                            <b:dataTableColumn>
+                                <f:facet name="header">Action</f:facet>
+                                <b:commandButton value="Start Session" action="#{sessionBean.goToSessionTimerPage(req)}"/>                        
+                            </b:dataTableColumn>
+                        </b:dataTable>  
                     </b:panel>
                 </b:row>
                 <b:row>
                     <b:panel title="Previous Sessions" collapsible="false" look="info">
-
+                        <b:dataTable value="#{requestBean.completedList}" var="req" id="completedTable">
+                            <b:dataTableColumn>
+                                <f:facet name="header">Tutor</f:facet>
+                                <h:outputText value="#{req.tutor.firstName}"/>                        
+                            </b:dataTableColumn>
+                            <b:dataTableColumn>
+                                <f:facet name="header">Student</f:facet>
+                                <h:outputText value="#{req.student.firstName}"/>
+                            </b:dataTableColumn>
+                        </b:dataTable>  
                     </b:panel>
                 </b:row>
+                </b:form>
                 <b:row>
                     <b:listLinks>
                         <b:navLink value="View Previous Sessions" href="/Tut4YouWebApp/students/viewPreviousSessions.xhtml"/>
                         <c:if test="#{userBean.isTutor}">
                             <b:navLink value="Add Availability" href="/Tut4YouWebApp/tutors/availability.xhtml"/>
-                            <h:link value="View Reviews" outcome="tutorProfile" includeViewParams="true">
+                            <b:navLink value="View Reviews" outcome="tutorProfile" includeViewParams="true">
                                 <f:param name="username" value="#{userBean.user.username}" />
                             </b:navLink>
                             <b:navLink value="Session Timer" href="/Tut4YouWebApp/tutors/sessionTimer.xhtml"/>

@@ -30,6 +30,12 @@
                     <c:when test="#{userBean.isUserAuthenticated}">
                         <b:navLink value="Dashboard" outcome="/accounts/index.xhtml"/>
                         <b:navLink value="Forum" outcome="/forum/index.xhtml"/>
+                        <b:dropMenu value="My Account">
+                            <b:navLink value="My Profile" outcome="/accounts/profile.xhtml"></b:navLink>
+                            <b:navLink value="My Availability" outcome="/tutors/availability.xhtml"></b:navLink>
+                            <b:navLink value="My Courses" outcome="/tutors/course.xhtml"></b:navLink>
+                            <b:navLink value="My Sessions" outcome="/accounts/mySessions.xhtml"></b:navLink>
+                        </b:dropMenu>
                     </c:when>
                     <c:otherwise>
                         <b:navLink value="Login" outcome="/accounts/index.xhtml"/>

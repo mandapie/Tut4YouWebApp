@@ -149,7 +149,7 @@
                 <b:form>
                 <b:row>
                     <b:panel title="Upcoming Sessions" collapsible="false" look="info">
-                        <b:dataTable value="#{requestBean.acceptedList}" var="req" id="accepetedTable">
+                        <b:dataTable value="#{requestBean.acceptedList[0]}" var="req" id="accepetedTable">
                             <b:dataTableColumn>
                                 <f:facet name="header">Tutor</f:facet>
                                 <h:outputText value="#{req.tutor.firstName}"/>                        
@@ -167,7 +167,7 @@
                 </b:row>
                 <b:row>
                     <b:panel title="Previous Sessions" collapsible="false" look="info">
-                        <b:dataTable value="#{requestBean.completedList}" var="req" id="completedTable">
+                        <b:dataTable value="#{requestBean.completedList[0]}" var="req" id="completedTable">
                             <b:dataTableColumn>
                                 <f:facet name="header">Tutor</f:facet>
                                 <h:outputText value="#{req.tutor.firstName}"/>                        

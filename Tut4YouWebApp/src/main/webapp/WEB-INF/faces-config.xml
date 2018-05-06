@@ -32,7 +32,6 @@
             <redirect/>
         </navigation-case>
         <navigation-case>
-            <from-action>#{requestBean.setTutorToRequest(Request r)}</from-action>
             <from-outcome>chat</from-outcome>
             <to-view-id>/accounts/message.xhtml</to-view-id>
             <redirect/>

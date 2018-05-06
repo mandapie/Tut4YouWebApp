@@ -489,9 +489,11 @@ public class RequestBean implements Serializable {
      * Sets a tutor to the request if tutor accepts
      *
      * @param r
+     * @return 
      */
-    public void setTutorToRequest(Request r) {
+    public String setTutorToRequest(Request r) {
         tut4youApp.setTutorToRequest(r);
+        return "chat";
     }
 
     /**

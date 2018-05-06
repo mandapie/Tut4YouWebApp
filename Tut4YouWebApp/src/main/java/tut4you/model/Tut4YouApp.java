@@ -1052,6 +1052,47 @@ public class Tut4YouApp {
         em.merge(tutor);
         em.flush();
     }
+    @PermitAll
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void addResumeFileLocation(String resumeFilePath, String reason
+    ) {
+        UserBean userBean = new UserBean();
+        String currentUserEmail = userBean.getEmailFromSession();
+        //User user = findUser(currentUserEmail);
+        Tutor tutor = findTutor(currentUserEmail);
+        if (tutor == null) {
+            User student = findUser(currentUserEmail);
+            student = (User) student;
+            Moderator moderator= new Moderator(student);
+            moderator.setResumeFilePath(resumeFilePath);
+            moderator.setReason(reason);
+            
+            User clone = em.find(User.class, currentUserEmail);
+            System.out.print("CLONE: " + clone);
+            em.detach(clone);
+            //clone.setEmail(null);
+            //em.persist(clone);   
+            //em.persist(moderator);
+        }
+        else {
+            User student = findUser(currentUserEmail);
+            student = (User) student;
+            User clone = em.find(User.class, currentUserEmail);
+            System.out.print("CLONE: " + clone);
+            em.remove(clone);
+            em.flush();
+            //clone.setEmail("jimmy@gmail.com");
+            
+            Moderator moderator= new Moderator(clone);
+            moderator.setResumeFilePath(resumeFilePath);
+            moderator.setReason(reason);
+            
+            //clone.setEmail(null);
+            //em.persist(clone);   
+            em.persist(moderator);
+            em.flush();
+        }
+    }
 
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.REQUIRED)

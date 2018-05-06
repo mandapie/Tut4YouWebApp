@@ -1,0 +1,121 @@
+<ui:composition template="/WEB-INF/templates/layout.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:p="http://primefaces.org/ui">
+    <!-- @Author Keith Tran <keithtran25@gmail.com>
+         @author Andrew Kaichi <ahkaichi@gmail.com> 
+         @author Syed Haider <shayder426@gmail.com> -->
+    <ui:define name="title">Course</ui:define>
+    <ui:define name="content">
+        <h:panelGrid columns="1" style="text-align:center; margin-left: 40%">
+            <h1 style="font-weight:bold">My Courses</h1>
+            <p:separator />                       
+        </h:panelGrid>
+        <b:panel title="Add Courses" collapsible="false" look="info">
+            <b:form id="addCourseForm">
+                <b:column span="6">
+                    <b:row>
+                        <b:column medium-screen="2">
+                            <h:outputLabel value="Subject"/>
+                        </b:column>
+                        <b:column medium-screen="6">
+                            <b:message for="subjects"/>
+                            <b:selectOneMenu id="subjects" value="#{courseBean.subject}" required="true" requiredMessage="required">
+                                <f:selectItem itemLabel="Select Subject..." itemValue="" noSelectionOption="true"/>
+                                <f:selectItems value="#{courseBean.subjectList}"
+                                               var="subject"
+                                               itemLabel="#{subject.subjectName}"
+                                               itemValue="#{subject}"/>
+                                <!-- When you click a subject, it will only shown the courses related to that table in the drop-down menu for courses-->
+                                <f:ajax render="courses" listener="#{courseBean.changeSubject}"/>
+                            </b:selectOneMenu>
+                        </b:column>
+                    </b:row>
+                    <b:row>
+                        <b:column medium-screen="2">
+                            <h:outputLabel value="Course"/>
+                        </b:column>
+                        <b:column medium-screen="6">
+                            <b:message for="courses"/>
+                            <b:selectOneMenu id="courses" value="#{courseBean.course}" required="true" requiredMessage="required">
+                                <f:selectItem itemLabel="Select Course..." itemValue="" noSelectionOption="true"/>
+                                <f:selectItems value="#{courseBean.courseList}"
+                                               var="course"
+                                               itemLabel="#{course.courseName}"
+                                               itemValue="#{course}"/>
+                            </b:selectOneMenu>
+                        </b:column>
+                    </b:row>
+                    <!-- If the course is not available, this redirects you the add new courses page -->
+                    <b:row>
+                        <b:container>
+                            <p>
+                                Don't see your course? <a href="/Tut4YouWebApp/tutors/addNewCourse.xhtml">Add a new one</a>!
+                            </p>
+                        </b:container>
+                    </b:row>
+                    <b:row>
+                        <b:commandButton span="2" value="Submit" look="primary" action="#{courseBean.addCourse}" />
+                    </b:row>
+                </b:column>
+
+
+                <b:column span="6">
+                    <h:outputLabel value="My Courses"/>
+                    <b:dataTable value="#{courseBean.tutorCourses}" var="course" id="courseTable">
+                        <b:dataTableColumn>
+                            <f:facet name="header">Course</f:facet>
+                            <h:outputText value=" #{course.courseName}"/>
+                        </b:dataTableColumn>
+                        <b:dataTableColumn>
+                            <f:facet name="header">Action</f:facet>
+                            <b:commandButton value="Delete Course" action="#{courseBean.deleteCourse(course)}">
+                            </b:commandButton>                        
+                        </b:dataTableColumn>
+                    </b:dataTable>  
+                </b:column>
+            </b:form>
+        </b:panel>
+        <ui:debug hotkey='x'/>
+    </ui:define>
+</ui:composition>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

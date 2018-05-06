@@ -50,6 +50,24 @@ public class SessionBean implements Serializable {
     private String securityQuestion;
     private User student;
     private SessionBean sessionBean;
+    private boolean checkStartButtonState = false;
+    private boolean checkEndButtonState = true;
+
+    public boolean isCheckStartButtonState() {
+        return checkStartButtonState;
+    }
+
+    public void setCheckStartButtonState(boolean checkStartButtonState) {
+        this.checkStartButtonState = checkStartButtonState;
+    }
+
+    public boolean isCheckEndButtonState() {
+        return checkEndButtonState;
+    }
+
+    public void setCheckEndButtonState(boolean checkEndButtonState) {
+        this.checkEndButtonState = checkEndButtonState;
+    }
 
     public SessionBean() {
         sessionTimer = new Session();
@@ -148,10 +166,16 @@ public class SessionBean implements Serializable {
      */
     public void startTutorSession() {
         sessionTimer = tut4youApp.startSessionTime(request, sessionTimer);
+        checkStartButtonState = true;
+        checkEndButtonState = false;
     }
 
     public String endTutorSession() {
-        return tut4youApp.setRequestToComplete(request,sessionTimer);
+        return tut4youApp.setRequestToComplete(request, sessionTimer);
+    }
+
+    public String reloadPage() {
+        return "success";
     }
 
     public Date getDate() {
@@ -196,4 +220,10 @@ public class SessionBean implements Serializable {
         result = "sessionTimer";
         return result;
     }
+
+    public void showGrowlStartMessage() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.addMessage(null, new FacesMessage("Successful!", "You started your session!"));
+    }
+
 }

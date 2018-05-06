@@ -208,6 +208,7 @@ public class RequestBean implements Serializable {
     public void setCompletedList(List<Request> completedList) {
         this.completedList = completedList;
     }
+    
 
     /**
      * gets the declined request

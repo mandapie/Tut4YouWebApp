@@ -10,7 +10,10 @@
          @author Syed Haider <shayder426@gmail.com> -->
     <ui:define name="title">Availability</ui:define>
     <ui:define name="content">
-        <h1>Add Availability</h1>
+        <h:panelGrid columns="1" style="text-align:center; margin-left: 40%">
+            <h1 style="font-weight:bold">My Availability</h1>
+            <p:separator />                       
+        </h:panelGrid>
         <b:panel title="Enter Your Availability" collapsible="false" look="info">
             <b:form id="availabilityID">
 
@@ -41,7 +44,7 @@
                                      value="#{availabilityBean.startTime}"
                                      binding="#{availTime}"
                                      required="true"
-                                      requiredMessage="required">
+                                     requiredMessage="required">
                             <f:convertDateTime type="time" pattern="HH:mm" dateStyle="full"/>
                             <b:message for="startTime"/>
                         </b:inputText>

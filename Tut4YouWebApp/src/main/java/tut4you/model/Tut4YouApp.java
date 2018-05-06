@@ -1075,6 +1075,20 @@ public class Tut4YouApp {
         FacesContext.getCurrentInstance().addMessage(null, message);
 
     }
+    
+    @PermitAll
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void changePassword(String newPassword) {
+        UserBean userBean = new UserBean();
+        String currentUserEmail = userBean.getEmailFromSession();
+        User user = findUser(currentUserEmail);
+        if (user != null){
+            user.setPassword(newPassword);
+            em.merge(user);
+            em.flush();  
+        }
+        
+    }
 
     /**
      * update current zip code of tutor

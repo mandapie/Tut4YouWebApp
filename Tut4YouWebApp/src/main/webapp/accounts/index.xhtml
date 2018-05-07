@@ -181,6 +181,9 @@
                 <b:row>
                     <b:listLinks>
                         <b:navLink value="View Previous Sessions" href="/Tut4YouWebApp/students/viewPreviousSessions.xhtml"/>
+                        <c:if test="#{!(userBean.isTutor)}">
+                            <b:navLink value="Become Tutor" href="/Tut4YouWebApp/students/becomeTutor.xhtml"/>
+                        </c:if>
                         <c:if test="#{userBean.isTutor}">
                             <b:navLink value="Add Availability" href="/Tut4YouWebApp/tutors/availability.xhtml"/>
                             <b:navLink value="Add Courses" href="/Tut4YouWebApp/tutors/addCourse.xhtml"/>

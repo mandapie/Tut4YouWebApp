@@ -160,7 +160,7 @@ public class BecomeTutorBean implements Serializable {
     }
     public void showGrowlMessage() {
         FacesContext context = FacesContext.getCurrentInstance();
-        context.addMessage(null, new FacesMessage("Successful!", "Please log out and log back in to access tutor features"));
+        context.addMessage(null, new FacesMessage("Successful!", "you will have access to all tutor features the next time you log in"));
     }
 
 }

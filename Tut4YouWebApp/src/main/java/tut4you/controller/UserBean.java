@@ -17,6 +17,12 @@
 package tut4you.controller;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -55,8 +61,15 @@ public class UserBean implements Serializable {
     boolean doNotDisturb;
     int tabIndex;
     boolean condition;
+    //boolean isTutor;
     private String currentZip;
+    private String hourlyRate;
 
+    private ZipCode zipCode;
+
+    private String defaultZip;
+    private int maxRadius;
+    private Date joinedDateAsTutor;
     /**
      * Creates a new instance of UserIdentity
      */
@@ -64,7 +77,8 @@ public class UserBean implements Serializable {
     public void createUserBean() {
         user = null;
         condition = true;
-        
+        zipCode = new ZipCode();
+        //isTutor = false;
     }
 
     /**
@@ -72,6 +86,44 @@ public class UserBean implements Serializable {
      */
     @PreDestroy
     public void destroyUserBean() {
+    }
+    public ZipCode getZipCode() {
+        return zipCode;
+    }
+
+    public void setZipCode(ZipCode zipCode) {
+        this.zipCode = zipCode;
+    }
+    public String getHourlyRate() {
+        return hourlyRate;
+    }
+
+    public void setHourlyRate(String hourlyRate) {
+        this.hourlyRate = hourlyRate;
+    }
+
+    public String getDefaultZip() {
+        return defaultZip;
+    }
+
+    public void setDefaultZip(String defaultZip) {
+        this.defaultZip = defaultZip;
+    }
+
+    public int getMaxRadius() {
+        return maxRadius;
+    }
+
+    public void setMaxRadius(int maxRadius) {
+        this.maxRadius = maxRadius;
+    }
+
+    public Date getJoinedDateAsTutor() {
+        return joinedDateAsTutor;
+    }
+
+    public void setJoinedDateAsTutor(Date joinedDateAsTutor) {
+        this.joinedDateAsTutor = joinedDateAsTutor;
     }
 
     /**
@@ -238,6 +290,7 @@ public class UserBean implements Serializable {
             HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
             isTutor = request.isUserInRole("tut4youapp.tutor");
         }
+        System.out.println("ISTUTOR: " + isTutor);
         return isTutor;
     }
 
@@ -304,6 +357,21 @@ public class UserBean implements Serializable {
         tut4youapp.updateUser(user);
         return "success";
     }
+    
+    /**
+     * https://stackoverflow.com/questions/33098603/convert-localtime-java-8-to-date
+     * gets the current date which is used for date joined attribute in tutor
+     * @return date joined
+     * @throws ParseException 
+     */
+    public Date getCurrentDate() throws ParseException {
+        LocalTime d = LocalTime.now();
+        Instant instant = d.atDate(LocalDate.now()).atZone(ZoneId.systemDefault()).toInstant();
+        Date time = Date.from(instant);
+        return time;
+    }
+
+    
     /**
      * confirms if the user entered the correct password and if so allows them to change their password
      * @param user
@@ -329,5 +397,6 @@ public class UserBean implements Serializable {
         }
     return result;
     }
+
 
 }

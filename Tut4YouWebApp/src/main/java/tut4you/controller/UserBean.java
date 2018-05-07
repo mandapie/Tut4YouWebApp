@@ -29,6 +29,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.servlet.ServletException;
@@ -55,6 +56,8 @@ public class UserBean implements Serializable {
     private Tut4YouApp tut4youapp;
 
     private User user;
+    private String oldPassword;
+    private String newPassword;
     boolean doNotDisturb;
     int tabIndex;
     boolean condition;
@@ -175,7 +178,38 @@ public class UserBean implements Serializable {
     public void setUser(User user) {
         this.user = user;
     }
+        /**
+     * Gets the field of the oldPassword
+     * @return the field of the old Password
+     */
+    public String getOldPassword() {
+        return oldPassword;
+    }
 
+    /**
+     * Sets the value in the old password to check if password match
+     * @param oldPassword the password matching the typed password
+     */
+    public void setOldPassword(String oldPassword) {
+        this.oldPassword = oldPassword;
+    }
+    
+    /**
+     * Gets the field of the new Password
+     * @return the field of the new Password
+     */
+    public String getNewPassword() {
+        return newPassword;
+    }
+
+    /**
+     * Sets the value of the new passcode
+     * @param newPassword 
+     */
+    public void setNewPassword(String newPassword) {
+        this.newPassword = newPassword;
+    }
+    
     /**
      * Gets the state of doNotDisturb is on or off
      *
@@ -323,6 +357,7 @@ public class UserBean implements Serializable {
         tut4youapp.updateUser(user);
         return "success";
     }
+    
     /**
      * https://stackoverflow.com/questions/33098603/convert-localtime-java-8-to-date
      * gets the current date which is used for date joined attribute in tutor
@@ -335,10 +370,33 @@ public class UserBean implements Serializable {
         Date time = Date.from(instant);
         return time;
     }
-    public void reload(User updatedUser) {
-        this.user = updatedUser;
-    }
 
     
+    /**
+     * confirms if the user entered the correct password and if so allows them to change their password
+     * @param user
+     * @param oldPassword
+     * @param newPassword
+     * @return 
+     */
+    public String changePassword(String oldPassword, String newPassword) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        String confirmPassword = tut4you.controller.HashPassword.getSHA512Digest(oldPassword);
+        String result;
+        
+        String currentPassword = user.getPassword();
+        
+        if(confirmPassword.equalsIgnoreCase(currentPassword)) {
+            tut4youapp.changePassword(tut4you.controller.HashPassword.getSHA512Digest(newPassword));
+            context.addMessage(null, new FacesMessage("Successful",  "Password successfully changed") );
+            result = "successful";
+        }
+        else {
+            context.addMessage(null, new FacesMessage("Failed",  "Password entered does not match your current password") );
+            result = "failed";
+        }
+    return result;
+    }
+
 
 }

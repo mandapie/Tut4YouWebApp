@@ -19,5 +19,5 @@
         password=app
         userName=app
         jdbcUrl=jdbc:derby://localhost:1527/tut4youWebAppDB;create=true
-    </Resource> 
+    </Resource>
 </resources>

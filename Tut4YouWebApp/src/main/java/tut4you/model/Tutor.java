@@ -48,14 +48,10 @@ import javax.persistence.TemporalType;
 @DiscriminatorValue(value = "Tutor")
 @Entity
 @NamedQueries({
-    //@NamedQuery(name = Tutor.FIND_TUTORS_BY_COURSE_DAY_TIME_DZIP, query = "SELECT t FROM Tutor t JOIN t.courses c JOIN t.availabilities a WHERE c.courseName = :coursename AND a.dayOfWeek = :dayofweek AND a.startTime <= :requestTime AND a.endTime >= :requestTime AND t.doNotDisturb = :doNotDisturb AND t.defaultZip = :zipCode AND t.currentZip IS NULL UNION ALL SELECT t FROM Tutor t JOIN t.courses c JOIN t.availabilities a WHERE c.courseName = :coursename AND a.dayOfWeek = :dayofweek AND a.startTime <= :requestTime AND a.endTime >= :requestTime AND t.doNotDisturb = :doNotDisturb AND t.currentZip = :zipCode"),
-    @NamedQuery(name = Tutor.FIND_TUTORS_BY_COURSE_DAY_TIME_DZIP, query = "SELECT t FROM Tutor t JOIN t.courses c JOIN t.availabilities a JOIN t.zipCode z WHERE c.courseName = :coursename AND a.dayOfWeek = :dayofweek AND a.startTime <= :requestTime AND a.endTime >= :requestTime AND t.doNotDisturb = :doNotDisturb AND t.defaultZip = :zipCode AND z.currentZipCode IS NULL UNION ALL SELECT t FROM Tutor t JOIN t.courses c JOIN t.availabilities a JOIN t.zipCode z WHERE c.courseName = :coursename AND a.dayOfWeek = :dayofweek AND a.startTime <= :requestTime AND a.endTime >= :requestTime AND t.doNotDisturb = :doNotDisturb AND z.currentZipCode = :zipCode"),
-    //@NamedQuery(name = Tutor.FIND_TUTORS_BY_COURSE_DAY_TIME_DZIP, query = "SELECT t FROM Tutor t JOIN t.courses c JOIN t.availabilities a WHERE c.courseName = :coursename AND a.dayOfWeek = :dayofweek AND a.startTime <= :requestTime AND a.endTime >= :requestTime AND t.doNotDisturb = :doNotDisturb AND t.currentZip = :zipCode"),
+    @NamedQuery(name = Tutor.FIND_TUTORS_BY_COURSE_DAY_TIME_DZIP, query = "SELECT t FROM Tutor t JOIN t.courses c JOIN t.availabilities a JOIN t.zipCode z WHERE c.courseName = :coursename AND a.dayOfWeek = :dayofweek AND a.startTime <= :requestTime AND a.endTime >= :requestTime AND t.doNotDisturb = :doNotDisturb AND t.defaultZip = :zipCode AND z.currentZipCode IS NULL UNION SELECT t FROM Tutor t JOIN t.courses c JOIN t.availabilities a JOIN t.zipCode z WHERE c.courseName = :coursename AND a.dayOfWeek = :dayofweek AND a.startTime <= :requestTime AND a.endTime >= :requestTime AND t.doNotDisturb = :doNotDisturb AND z.currentZipCode = :zipCode AND z.currentZipCode IS NOT NULL"),
     @NamedQuery(name = Tutor.FIND_TUTORS_BY_COURSE, query = "SELECT COUNT(t) FROM Tutor t JOIN t.courses c WHERE c.courseName = :coursename"),
     @NamedQuery(name = Tutor.FIND_TUTORS, query = "SELECT t FROM Tutor t"),
-        @NamedQuery(name = Tutor.FIND_TUTOR_BY_USERNAME, query = "SELECT t FROM Tutor t WHERE t.username = :username"),
-
-})
+    @NamedQuery(name = Tutor.FIND_TUTOR_BY_USERNAME, query = "SELECT t FROM Tutor t WHERE t.username = :username")})
 public class Tutor extends User implements Serializable {
 
     private static final long serialVersionUID = 1L;

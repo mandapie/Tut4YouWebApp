@@ -40,9 +40,11 @@
                 <b:navbarLinks pull="right">
                     <b:dropMenu value="My Account">
                         <b:navLink value="My Profile" outcome="/accounts/profile.xhtml"></b:navLink>
-                        <b:navLink value="View Reviews" outcome="tutorProfile" includeViewParams="true">
-                            <f:param name="username" value="#{userBean.user.username}" />
-                        </b:navLink>
+                        <c:if test="#{userBean.isTutor}">
+                            <b:navLink value="View Reviews" outcome="tutorProfile" includeViewParams="true">
+                                <f:param name="username" value="#{userBean.user.username}" />
+                            </b:navLink>
+                        </c:if>
                     </b:dropMenu>
                     <b:form styleClass="navbar-form navbar-right">
                         <b:commandButton action="#{userBean.logout}" value="Sign Out" look="success" iconAlign="right"/>

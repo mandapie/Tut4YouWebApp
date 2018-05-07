@@ -61,7 +61,6 @@ public class UserBean implements Serializable {
     boolean doNotDisturb;
     int tabIndex;
     boolean condition;
-    //boolean isTutor;
     private String currentZip;
     private String hourlyRate;
 
@@ -290,7 +289,6 @@ public class UserBean implements Serializable {
             HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
             isTutor = request.isUserInRole("tut4youapp.tutor");
         }
-        System.out.println("ISTUTOR: " + isTutor);
         return isTutor;
     }
 

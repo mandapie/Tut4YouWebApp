@@ -42,9 +42,11 @@
                     <h:outputText value="#{userBean.user.defaultZip} " />
                     <br/>
                     <h:outputText value=" Click 'Do Not Update' if you are currently at Default Zip location" />
-                    <b:inputText id="currentZip" placeholder="press enter to submit"  requiredMessage="required" value="#{userBean.currentZip}">
+                    <b:inputText id="currentZip" placeholder="press enter to submit" requiredMessage="required" value="#{userBean.currentZip}">
                         <b:message for="currentZip"/>
                     </b:inputText>
+                    <b:commandButton value="Update" look="primary" action="#{userBean.updateCurrentZip}"/>
+                    <span/>
                     <b:commandButton value="Do Not Update" look="danger" action="#{userBean.setCondition(false)}"/>
                 </p:dialog>
             </b:form>

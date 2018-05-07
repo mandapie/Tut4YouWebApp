@@ -31,93 +31,91 @@
     <ui:define name="title">Tutor's Profile Page</ui:define>
     <ui:define name="content">
         <h1>Tutor's Profile</h1>
-        <b:container fluid="true">
-            <b:panel>
-                <b:row>
-                    <b:column tiny-screen="2">
-                        <h:outputLabel value="Name"/>
-                    </b:column>
-                    <b:column tiny-screen="4">
-                        <h:outputText value="#{profileBean.user.firstName} #{profileBean.user.lastName}"/>
-                    </b:column>
-                </b:row>
-                <b:row>
-                    <b:column tiny-screen="2">
-                        <h:outputLabel value="Username"/>
-                    </b:column>
-                    <b:column tiny-screen="4">
-                        <h:outputText value="#{profileBean.user.username}"/>
-                    </b:column>
-                </b:row>
-                <b:row>
-                    <b:column tiny-screen="2">
-                        <h:outputLabel value="Email"/>
-                    </b:column>
-                    <b:column tiny-screen="4">
-                        <h:outputText value="#{profileBean.user.email}"/>
-                    </b:column>
-                </b:row>
-                <b:row>
-                    <b:column tiny-screen="2">
-                        <h:outputLabel value="Phone Number"/>
-                    </b:column>
-                    <b:column tiny-screen="4">
-                        <h:outputText value="#{profileBean.user.phoneNumber}"/>
-                    </b:column>
-                </b:row>
-                <b:row>
-                    <b:column tiny-screen="2">
-                        <h:outputLabel value="University"/>
-                    </b:column>
-                    <b:column tiny-screen="4">
-                        <h:outputText value="#{profileBean.user.university}"/>
-                    </b:column>
-                </b:row>
-                <b:row>
-                    <b:column tiny-screen="2">
-                        <h:outputLabel value="Average Rating"/>
-                    </b:column>
-                    <b:column tiny-screen="4">
-                        <p:rating value="#{profileBean.user.overallRating}" readonly="true" />
-                    </b:column>
-                </b:row>
-            </b:panel>
-            <b:form>
-                <p:dataScroller value="#{ratingBean.getRatingList(profileBean.user.email)}" var="rating" chunkSize="10">
-                    <div style="border-bottom:solid 1px;">
-                        <b:row>
-                            <b:column tiny-screen="3">
-                                    <h:outputLabel value="#{rating.student.firstName} #{rating.student.lastName}"/>
-                            </b:column>
-                            <b:column tiny-screen="9">
-                                <b:row>
-                                    <b:column tiny-screen="3">
-                                        <p:rating value="#{rating.ratingValue}" readonly="true"/>
-                                    </b:column>
-                                    <b:column>
-                                        <h:outputText value="#{rating.dateRated}">
-                                            <f:convertDateTime pattern="M-d-yyyy"/>
-                                        </h:outputText>
-                                    </b:column>
-                                </b:row>
-                                <b:row>
-                                    <b:column>
-                                        <h:outputText value="#{rating.description}"/>
-                                    </b:column>
-                                </b:row>
-                                <b:row style="margin-bottom:5px;">
-                                    <b:column>
-                                        <b:commandLink style="color:#6ba2ff;" value="Edit Rating" action="#{updateRatingBean.goToEditRatingPage(rating)}" rendered="#{profileBean.checkIfUserRated(rating.student.email)}"/>
-                                        <span/>
-                                        <b:commandLink style="color:#6ba2ff;" value="Delete Rating" action="#{ratingBean.deleteRating(rating)}" rendered="#{profileBean.checkIfUserRated(rating.student.email)}"/>
-                                    </b:column>
-                                </b:row>
-                            </b:column>
-                        </b:row>
-                    </div>
-                    <br/>
-                </p:dataScroller>
-            </b:form>
-        </b:container>
+        <b:panel>
+            <b:row>
+                <b:column small-screen="2">
+                    <h:outputLabel value="Name"/>
+                </b:column>
+                <b:column small-screen="4">
+                    <h:outputText value="#{profileBean.user.firstName} #{profileBean.user.lastName}"/>
+                </b:column>
+            </b:row>
+            <b:row>
+                <b:column small-screen="2">
+                    <h:outputLabel value="Username"/>
+                </b:column>
+                <b:column small-screen="4">
+                    <h:outputText value="#{profileBean.user.username}"/>
+                </b:column>
+            </b:row>
+            <b:row>
+                <b:column small-screen="2">
+                    <h:outputLabel value="Email"/>
+                </b:column>
+                <b:column small-screen="4">
+                    <h:outputText value="#{profileBean.user.email}"/>
+                </b:column>
+            </b:row>
+            <b:row>
+                <b:column small-screen="2">
+                    <h:outputLabel value="Phone Number"/>
+                </b:column>
+                <b:column small-screen="4">
+                    <h:outputText value="#{profileBean.user.phoneNumber}"/>
+                </b:column>
+            </b:row>
+            <b:row>
+                <b:column small-screen="2">
+                    <h:outputLabel value="University"/>
+                </b:column>
+                <b:column small-screen="4">
+                    <h:outputText value="#{profileBean.user.university}"/>
+                </b:column>
+            </b:row>
+            <b:row>
+                <b:column small-screen="2">
+                    <h:outputLabel value="Average Rating"/>
+                </b:column>
+                <b:column small-screen="4">
+                    <p:rating value="#{profileBean.user.overallRating}" readonly="true" />
+                </b:column>
+            </b:row>
+        </b:panel>
+        <b:form>
+            <p:dataScroller value="#{ratingBean.getRatingList(profileBean.user.email)}" var="rating" chunkSize="10">
+                <div style="border-bottom:solid 1px;">
+                    <b:row>
+                        <b:column small-screen="3">
+                                <h:outputLabel value="#{rating.student.firstName} #{rating.student.lastName}"/>
+                        </b:column>
+                        <b:column small-screen="9">
+                            <b:row>
+                                <b:column tiny-screen="3">
+                                    <p:rating value="#{rating.ratingValue}" readonly="true"/>
+                                </b:column>
+                                <b:column>
+                                    <h:outputText value="#{rating.dateRated}">
+                                        <f:convertDateTime pattern="M-d-yyyy"/>
+                                    </h:outputText>
+                                </b:column>
+                            </b:row>
+                            <b:row>
+                                <b:column>
+                                    <h:outputText value="#{rating.description}"/>
+                                </b:column>
+                            </b:row>
+                            <b:row style="margin-bottom:5px;">
+                                <b:column>
+                                    <b:commandLink style="color:#6ba2ff;" value="Edit Rating" action="#{updateRatingBean.goToEditRatingPage(rating)}" rendered="#{profileBean.checkIfUserRated(rating.student.email)}"/>
+                                    <span/>
+                                    <b:commandLink style="color:#6ba2ff;" value="Delete Rating" action="#{ratingBean.deleteRating(rating)}" rendered="#{profileBean.checkIfUserRated(rating.student.email)}"/>
+                                </b:column>
+                            </b:row>
+                        </b:column>
+                    </b:row>
+                </div>
+                <br/>
+            </p:dataScroller>
+        </b:form>
     </ui:define>
 </ui:composition>

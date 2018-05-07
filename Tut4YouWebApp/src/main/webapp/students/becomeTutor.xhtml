@@ -67,11 +67,13 @@
                         </b:selectOneMenu>
                     </b:column>
                 </b:row>
-
+                <p:growl id="startGrowl" showDetail="true" sticky="true" autoUpdate="false" /> 
                 <!-- Registers User -->
                 <b:row>
                     <b:column span="2" offset="2">
-                        <b:commandButton value="Become Tutor" look="primary" style="width:100%" action="#{becomeTutorBean.becomeTutor()}"/>
+                        <b:commandButton value="Become Tutor" look="primary" style="width:100%" action="#{becomeTutorBean.becomeTutor()}"
+                                         actionListener="#{becomeTutorBean.showGrowlMessage()}">
+                        </b:commandButton>
                     </b:column>
                     <b:column span="2">
                         <b:button value="Cancel" look="danger" style="width:100%" href="/Tut4YouWebApp/index.xhtml"/>
@@ -79,9 +81,7 @@
                 </b:row>
                 
             </h:form>
-            <h:form id="initializePageDataForm">
-                    <p:remoteCommand name="initializePageDataCommand" autoRun="true" action="#{userBean.createUserBean()}" />
-                </h:form>
+
         </b:panel>
         <ui:debug hotkey='x'/>
     </ui:define>

@@ -29,6 +29,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -58,15 +59,6 @@ public class BecomeTutorBean implements Serializable {
     @Inject UserBean userBean;
     private String currentZip;
     private String hourlyRate;
-    private User user;
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
     private ZipCode zipCode;
 
     private String defaultZip;
@@ -164,9 +156,11 @@ public class BecomeTutorBean implements Serializable {
             pr = Double.parseDouble(hourlyRate);
         }
         joinedDateAsTutor = getCurrentDate();
-        user = tut4youapp.becomeTutor(user, pr, joinedDateAsTutor, defaultZip, zipCode);
-        userBean.setUser(user);
+        tut4youapp.becomeTutor(pr, joinedDateAsTutor, defaultZip, zipCode);
     }
-    
+    public void showGrowlMessage() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.addMessage(null, new FacesMessage("Successful!", "Please log out and log back in to access tutor features"));
+    }
 
 }

@@ -33,7 +33,7 @@
                         <h:outputLabel value="Hourly Rate"/>
                     </b:column>
                     <b:column medium-screen="4">
-                        <b:inputText id="HourlyRate" placeholder="Enter Hourly Rate (0.00 - 99.99)" required="true" requiredMessage="required" value="#{userBean.hourlyRate}" validator="#{basicValidator.validateHourlyRate}">
+                        <b:inputText id="HourlyRate" placeholder="Enter Hourly Rate (0.00 - 99.99)" required="true" requiredMessage="required" value="#{becomeTutorBean.hourlyRate}" validator="#{basicValidator.validateHourlyRate}">
                             <b:message for="HourlyRate"/>
                         </b:inputText>
                     </b:column>
@@ -44,7 +44,7 @@
                         <h:outputLabel value="Default Zip Code"/>
                     </b:column>
                     <b:column medium-screen="4">
-                        <b:inputText id="zip" placeholder="Enter Default Zip Code Location" required="true" requiredMessage="required" value="#{userBean.defaultZip}" validator="#{basicValidator.validateZipcode}">
+                        <b:inputText id="zip" placeholder="Enter Default Zip Code Location" required="true" requiredMessage="required" value="#{becomeTutorBean.defaultZip}" validator="#{basicValidator.validateZipcode}">
                             <b:message for="zip"/>
                         </b:inputText>
                     </b:column>
@@ -55,7 +55,7 @@
                         <h:outputLabel value="Max Radius"/>
                     </b:column>
                     <b:column medium-screen="4">
-                        <b:selectOneMenu id="maxRadius" value="#{userBean.zipCode.maxRadius}" required="true" requiredMessage="required">
+                        <b:selectOneMenu id="maxRadius" value="#{becomeTutorBean.zipCode.maxRadius}" required="true" requiredMessage="required">
                             <f:selectItem itemLabel="Select max radius..." noSelectionOption="true"/>
                             <f:selectItem itemLabel="1 mile" itemValue="1" />
                             <f:selectItem itemLabel="3 miles" itemValue="3" /> 
@@ -71,13 +71,17 @@
                 <!-- Registers User -->
                 <b:row>
                     <b:column span="2" offset="2">
-                        <b:commandButton value="Become Tutor" look="primary" style="width:100%" action="#{userBean.becomeTutor()}"/>
+                        <b:commandButton value="Become Tutor" look="primary" style="width:100%" action="#{becomeTutorBean.becomeTutor()}"/>
                     </b:column>
                     <b:column span="2">
                         <b:button value="Cancel" look="danger" style="width:100%" href="/Tut4YouWebApp/index.xhtml"/>
                     </b:column>
                 </b:row>
+                
             </h:form>
+            <h:form id="initializePageDataForm">
+                    <p:remoteCommand name="initializePageDataCommand" autoRun="true" action="#{userBean.createUserBean()}" />
+                </h:form>
         </b:panel>
         <ui:debug hotkey='x'/>
     </ui:define>

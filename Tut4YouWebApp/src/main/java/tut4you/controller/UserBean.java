@@ -335,18 +335,10 @@ public class UserBean implements Serializable {
         Date time = Date.from(instant);
         return time;
     }
-    /**
-     * Allows student to become a tutor as well
-     * @throws ParseException 
-     */
-    public void becomeTutor() throws ParseException {
-        double pr = 0;
-        if (hourlyRate != null) {
-            pr = Double.parseDouble(hourlyRate);
-        }
-        joinedDateAsTutor = getCurrentDate();
-        tut4youapp.becomeTutor(pr, joinedDateAsTutor, defaultZip, zipCode);
+    public void reload(User updatedUser) {
+        this.user = updatedUser;
     }
+
     
 
 }

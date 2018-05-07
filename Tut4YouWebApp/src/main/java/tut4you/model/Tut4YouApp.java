@@ -1193,19 +1193,22 @@ public class Tut4YouApp {
     }
     /**
      * Allows student to become a tutor after already registering as a student
+     * @param clone
      * @param hourlyRate
      * @param dateJoinedAsTutor
      * @param defaultZip
      * @param zipCode 
+     * @return User 
      */
     @RolesAllowed("tut4youapp.student")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void becomeTutor(double hourlyRate, Date dateJoinedAsTutor, String defaultZip, ZipCode zipCode) {
+    public User becomeTutor(User clone, double hourlyRate, Date dateJoinedAsTutor, String defaultZip, ZipCode zipCode) {
         UserBean userBean = new UserBean();
         String currentUserEmail = userBean.getEmailFromSession();
         
-        User clone = em.find(User.class, currentUserEmail);
+        clone = em.find(User.class, currentUserEmail);
         System.out.print("CLONE: " + clone);
+        clone.setGroups(null);
         em.remove(clone);
         em.flush();
 
@@ -1230,5 +1233,7 @@ public class Tut4YouApp {
         em.persist(tutor);
         em.persist(zipCode);
         em.flush();
+        clone = (User) tutor;
+        return clone;
     }
 }

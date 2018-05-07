@@ -1116,6 +1116,20 @@ public class Tut4YouApp {
         FacesContext.getCurrentInstance().addMessage(null, message);
 
     }
+    
+    @PermitAll
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void changePassword(String newPassword) {
+        UserBean userBean = new UserBean();
+        String currentUserEmail = userBean.getEmailFromSession();
+        User user = findUser(currentUserEmail);
+        if (user != null){
+            user.setPassword(newPassword);
+            em.merge(user);
+            em.flush();  
+        }
+        
+    }
 
     /**
      * update current zip code of tutor
@@ -1230,6 +1244,47 @@ public class Tut4YouApp {
     public void saveMessage(Message message
     ) {
         em.persist(message);
+        em.flush();
+    }
+    /**
+     * Allows student to become a tutor after already registering as a student
+     * @param hourlyRate
+     * @param dateJoinedAsTutor
+     * @param defaultZip
+     * @param zipCode 
+     */
+    @RolesAllowed("tut4youapp.student")
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void becomeTutor(double hourlyRate, Date dateJoinedAsTutor, String defaultZip, ZipCode zipCode) {
+        UserBean userBean = new UserBean();
+        String currentUserEmail = userBean.getEmailFromSession();
+        
+        User clone = em.find(User.class, currentUserEmail);
+        System.out.print("CLONE: " + clone);
+        clone.setGroups(null);
+        em.remove(clone);
+        em.flush();
+
+        Group group = em.find(Group.class, "tut4youapp.student");
+        if (group == null) {
+            group = new Group("tut4youapp.student");
+        }
+        
+        Tutor tutor = new Tutor(clone);
+        
+        tutor.addGroup(group); //Add user a student role
+        group.addTutor(tutor);
+        group = em.find(Group.class, "tut4youapp.tutor");
+        tutor.addGroup(group); //Add user a tutor role
+        group.addTutor(tutor);
+            
+        tutor.setDateJoinedAsTutor(dateJoinedAsTutor);
+        tutor.setHourlyRate(hourlyRate);
+        tutor.setDefaultZip(defaultZip);
+        tutor.setZipCode(zipCode);
+        zipCode.addTutor(tutor);
+        em.persist(tutor);
+        em.persist(zipCode);
         em.flush();
     }
 }

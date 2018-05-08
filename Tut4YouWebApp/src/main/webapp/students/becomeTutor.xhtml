@@ -1,0 +1,88 @@
+<ui:composition template="/WEB-INF/templates/layout.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:p="http://primefaces.org/ui">
+    <!--
+        Licensed under the Academic Free License (AFL 3.0).
+        http://opensource.org/licenses/AFL-3.0
+
+        This code has been developed by a group of CSULB students working on their 
+        Computer Science senior project called Tutors4You.
+
+        Tutors4You is a web application that students can utilize to find a tutor and
+        ask them to meet at any location of their choosing. Students that struggle to understand 
+        the courses they are taking would benefit from this peer to peer tutoring service.
+
+        2017 Amanda Pan <daikiraidemodaisuki@gmail.com>
+        2017 Andrew Kaichi <ahkaichi@gmail.com>
+        2017 Keith Tran <keithtran25@gmail.com>
+        2017 Syed Haider <shayder426@gmail.com>
+    -->
+    <!-- @author Amanda Pan <daikiraidemodaisuki@gmail.com> 
+         @author Andrew Kaichi <ahkaichi@gmail.com> -->
+    <ui:define name="title">Registration</ui:define>
+    <ui:define name="content">
+        <b:panel title="Become A Tutor" collapsible="false" look="info">
+            <h:form id="becomeTutor">
+                <!-- Price Rate -->
+                <b:row>
+                    <b:column medium-screen="2">
+                        <h:outputLabel value="Hourly Rate"/>
+                    </b:column>
+                    <b:column medium-screen="4">
+                        <b:inputText id="HourlyRate" placeholder="Enter Hourly Rate (0.00 - 99.99)" required="true" requiredMessage="required" value="#{becomeTutorBean.hourlyRate}" validator="#{basicValidator.validateHourlyRate}">
+                            <b:message for="HourlyRate"/>
+                        </b:inputText>
+                    </b:column>
+                </b:row>
+                <!-- Zipcode -->
+                <b:row>
+                    <b:column medium-screen="2">
+                        <h:outputLabel value="Default Zip Code"/>
+                    </b:column>
+                    <b:column medium-screen="4">
+                        <b:inputText id="zip" placeholder="Enter Default Zip Code Location" required="true" requiredMessage="required" value="#{becomeTutorBean.defaultZip}" validator="#{basicValidator.validateZipcode}">
+                            <b:message for="zip"/>
+                        </b:inputText>
+                    </b:column>
+                </b:row>
+                <!-- Max Radius -->
+                <b:row>
+                    <b:column medium-screen="2">
+                        <h:outputLabel value="Max Radius"/>
+                    </b:column>
+                    <b:column medium-screen="4">
+                        <b:selectOneMenu id="maxRadius" value="#{becomeTutorBean.zipCode.maxRadius}" required="true" requiredMessage="required">
+                            <f:selectItem itemLabel="Select max radius..." noSelectionOption="true"/>
+                            <f:selectItem itemLabel="1 mile" itemValue="1" />
+                            <f:selectItem itemLabel="3 miles" itemValue="3" /> 
+                            <f:selectItem itemLabel="5 miles" itemValue="5" />
+                            <f:selectItem itemLabel="10 miles" itemValue="10" /> 
+                            <f:selectItem itemLabel="15 miles" itemValue="15" />
+                            <f:selectItem itemLabel="30 miles" itemValue="30" /> 
+                            <f:convertNumber type="number"/>
+                        </b:selectOneMenu>
+                    </b:column>
+                </b:row>
+                <p:growl id="startGrowl" showDetail="true" sticky="true" autoUpdate="false" /> 
+                <!-- Registers User -->
+                <b:row>
+                    <b:column span="2" offset="2">
+                        <b:commandButton value="Become Tutor" look="primary" style="width:100%" action="#{becomeTutorBean.becomeTutor()}"
+                                         actionListener="#{becomeTutorBean.showGrowlMessage()}">
+                        </b:commandButton>
+                    </b:column>
+                    <b:column span="2">
+                        <b:button value="Cancel" look="danger" style="width:100%" href="/Tut4YouWebApp/index.xhtml"/>
+                    </b:column>
+                </b:row>
+                
+            </h:form>
+
+        </b:panel>
+        <ui:debug hotkey='x'/>
+    </ui:define>
+</ui:composition>

@@ -17,12 +17,19 @@
 package tut4you.controller;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.servlet.ServletException;
@@ -49,11 +56,20 @@ public class UserBean implements Serializable {
     private Tut4YouApp tut4youapp;
 
     private User user;
+    private String oldPassword;
+    private String newPassword;
     boolean doNotDisturb;
     int tabIndex;
     boolean condition;
+    //boolean isTutor;
     private String currentZip;
+    private String hourlyRate;
 
+    private ZipCode zipCode;
+
+    private String defaultZip;
+    private int maxRadius;
+    private Date joinedDateAsTutor;
     /**
      * Creates a new instance of UserIdentity
      */
@@ -61,7 +77,8 @@ public class UserBean implements Serializable {
     public void createUserBean() {
         user = null;
         condition = true;
-        
+        zipCode = new ZipCode();
+        //isTutor = false;
     }
 
     /**
@@ -69,6 +86,44 @@ public class UserBean implements Serializable {
      */
     @PreDestroy
     public void destroyUserBean() {
+    }
+    public ZipCode getZipCode() {
+        return zipCode;
+    }
+
+    public void setZipCode(ZipCode zipCode) {
+        this.zipCode = zipCode;
+    }
+    public String getHourlyRate() {
+        return hourlyRate;
+    }
+
+    public void setHourlyRate(String hourlyRate) {
+        this.hourlyRate = hourlyRate;
+    }
+
+    public String getDefaultZip() {
+        return defaultZip;
+    }
+
+    public void setDefaultZip(String defaultZip) {
+        this.defaultZip = defaultZip;
+    }
+
+    public int getMaxRadius() {
+        return maxRadius;
+    }
+
+    public void setMaxRadius(int maxRadius) {
+        this.maxRadius = maxRadius;
+    }
+
+    public Date getJoinedDateAsTutor() {
+        return joinedDateAsTutor;
+    }
+
+    public void setJoinedDateAsTutor(Date joinedDateAsTutor) {
+        this.joinedDateAsTutor = joinedDateAsTutor;
     }
 
     /**
@@ -123,7 +178,38 @@ public class UserBean implements Serializable {
     public void setUser(User user) {
         this.user = user;
     }
+        /**
+     * Gets the field of the oldPassword
+     * @return the field of the old Password
+     */
+    public String getOldPassword() {
+        return oldPassword;
+    }
 
+    /**
+     * Sets the value in the old password to check if password match
+     * @param oldPassword the password matching the typed password
+     */
+    public void setOldPassword(String oldPassword) {
+        this.oldPassword = oldPassword;
+    }
+    
+    /**
+     * Gets the field of the new Password
+     * @return the field of the new Password
+     */
+    public String getNewPassword() {
+        return newPassword;
+    }
+
+    /**
+     * Sets the value of the new passcode
+     * @param newPassword 
+     */
+    public void setNewPassword(String newPassword) {
+        this.newPassword = newPassword;
+    }
+    
     /**
      * Gets the state of doNotDisturb is on or off
      *
@@ -204,6 +290,7 @@ public class UserBean implements Serializable {
             HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
             isTutor = request.isUserInRole("tut4youapp.tutor");
         }
+        System.out.println("ISTUTOR: " + isTutor);
         return isTutor;
     }
 
@@ -270,5 +357,46 @@ public class UserBean implements Serializable {
         tut4youapp.updateUser(user);
         return "success";
     }
+    
+    /**
+     * https://stackoverflow.com/questions/33098603/convert-localtime-java-8-to-date
+     * gets the current date which is used for date joined attribute in tutor
+     * @return date joined
+     * @throws ParseException 
+     */
+    public Date getCurrentDate() throws ParseException {
+        LocalTime d = LocalTime.now();
+        Instant instant = d.atDate(LocalDate.now()).atZone(ZoneId.systemDefault()).toInstant();
+        Date time = Date.from(instant);
+        return time;
+    }
+
+    
+    /**
+     * confirms if the user entered the correct password and if so allows them to change their password
+     * @param user
+     * @param oldPassword
+     * @param newPassword
+     * @return 
+     */
+    public String changePassword(String oldPassword, String newPassword) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        String confirmPassword = tut4you.controller.HashPassword.getSHA512Digest(oldPassword);
+        String result;
+        
+        String currentPassword = user.getPassword();
+        
+        if(confirmPassword.equalsIgnoreCase(currentPassword)) {
+            tut4youapp.changePassword(tut4you.controller.HashPassword.getSHA512Digest(newPassword));
+            context.addMessage(null, new FacesMessage("Successful",  "Password successfully changed") );
+            result = "successful";
+        }
+        else {
+            context.addMessage(null, new FacesMessage("Failed",  "Password entered does not match your current password") );
+            result = "failed";
+        }
+    return result;
+    }
+
 
 }

@@ -73,12 +73,14 @@ public class RequestBean implements Serializable {
     private List<Request> acceptedList = new ArrayList(); //list of accepted requests
     private List<Request> completedList = new ArrayList(); //list of completed requests
 
-
     private List<Tutor> tutorList; //list of available tutors
     private List<Tutor> temp = new ArrayList();
     private List<String> zipCodesByRadiusList = new ArrayList();
     private Tutor tutor; //the tutor who accepts the request
     private User student;
+    private PayPal payPal;
+
+    private Session session;
 
     /**
      * RequestBean encapsulates all the functions/services involved in making a
@@ -198,8 +200,7 @@ public class RequestBean implements Serializable {
     public void setAcceptedList(List<Request> acceptedList) {
         this.acceptedList = acceptedList;
     }
-    
-    
+
     public List<Request> getCompletedList() {
         completedList = tut4youApp.getCompletedRequests();
         return completedList;
@@ -208,7 +209,6 @@ public class RequestBean implements Serializable {
     public void setCompletedList(List<Request> completedList) {
         this.completedList = completedList;
     }
-    
 
     /**
      * gets the declined request
@@ -543,5 +543,27 @@ public class RequestBean implements Serializable {
         return new String[]{
             Arrays.toString(zipCodeAPI.getDataList())
         };
+    }
+
+    public Session getSession() {
+        return session;
+    }
+
+    public void setSession(Session session) {
+        this.session = session;
+    }
+    
+    
+    public PayPal getPayPal() {
+        return payPal;
+    }
+
+    public void setPayPal(PayPal payPal) {
+        this.payPal = payPal;
+    }
+
+    public String generatePayKey() {
+        payPal = new PayPal();
+        return payPal.generatePayKey();
     }
 }

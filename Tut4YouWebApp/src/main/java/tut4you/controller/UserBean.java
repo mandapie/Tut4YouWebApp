@@ -62,10 +62,9 @@ public class UserBean implements Serializable {
     int tabIndex;
     boolean condition;
     private String currentZip;
-    private String hourlyRate;
-
+    private double hourlyRate;
+    private String hRate;
     private ZipCode zipCode;
-
     private String defaultZip;
     private int maxRadius;
     private Date joinedDateAsTutor;
@@ -77,7 +76,6 @@ public class UserBean implements Serializable {
         user = null;
         condition = true;
         zipCode = new ZipCode();
-        //isTutor = false;
     }
 
     /**
@@ -93,12 +91,23 @@ public class UserBean implements Serializable {
     public void setZipCode(ZipCode zipCode) {
         this.zipCode = zipCode;
     }
-    public String getHourlyRate() {
+    
+    public double getHourlyRate() {
+        hourlyRate = tut4youapp.getHourlyRate();
         return hourlyRate;
     }
 
-    public void setHourlyRate(String hourlyRate) {
+    public void setHourlyRate(double hourlyRate) {
         this.hourlyRate = hourlyRate;
+    }
+    
+    public String gethRate() {
+        hRate = Double.toString(hourlyRate);
+        return hRate;
+    }
+
+    public void sethRate(String hRate) {
+        this.hRate = hRate;
     }
 
     public String getDefaultZip() {
@@ -300,12 +309,11 @@ public class UserBean implements Serializable {
      */
     public String logout() {
         String result = "failure";
-
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
         try {
             if (isIsTutor()) {
-                currentZip = null;
+//                currentZip = "";
                 tut4youapp.updateCurrentZip(currentZip);
             }
             request.logout();
@@ -351,9 +359,14 @@ public class UserBean implements Serializable {
      * @param user User or Tutor object
      * @return result
      */
-    public String updateUser(User user) {
-        tut4youapp.updateUser(user);
-        return "success";
+    public String updateUser() {
+        String result = "success";
+        double hr = 0;
+        if (hRate != null) {
+            hr = Double.parseDouble(hRate);
+        }
+        tut4youapp.updateUser(user, hr);
+        return result;
     }
     
     /**

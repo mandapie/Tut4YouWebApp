@@ -1128,7 +1128,7 @@ public class Tut4YouApp {
     public Double getHourlyRate() {
         UserBean userBean = new UserBean();
         String currentUserEmail = userBean.getEmailFromSession();
-        TypedQuery<Double> Query = em.createNamedQuery(Tutor.GET_HOURLY_RATE, Double.class);
+        TypedQuery<Double> Query = em.createNamedQuery(Tutor.FIND_HOURLY_RATE_BY_EMAIL, Double.class);
         Query.setParameter("email", currentUserEmail);
         return Query.getSingleResult();
     }

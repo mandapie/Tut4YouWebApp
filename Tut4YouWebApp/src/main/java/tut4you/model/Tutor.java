@@ -132,7 +132,7 @@ public class Tutor extends User implements Serializable {
     /**
      * One tutor can view many ratings
      */
-    @OneToMany(mappedBy = "tutorsList", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "tutor", cascade = CascadeType.ALL)
     private Collection<Rating> ratings;
 
     /**
@@ -221,11 +221,11 @@ public class Tutor extends User implements Serializable {
         this.overallRating = overallRating;
     }
 
-    public Collection<Rating> getRatings() {
+    public Collection<Rating> getTutorRatings() {
         return ratings;
     }
 
-    public void setRatings(Collection<Rating> ratings) {
+    public void setTutorRatings(Collection<Rating> ratings) {
         this.ratings = ratings;
     }
     

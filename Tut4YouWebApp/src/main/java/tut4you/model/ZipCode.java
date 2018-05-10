@@ -40,7 +40,9 @@ import javax.persistence.Table;
 @Entity
 @NamedQueries({
     @NamedQuery(name = ZipCode.FIND_LOCATIONS, query = "SELECT t from ZipCode t"),
-    @NamedQuery(name = ZipCode.FIND_ZIP_BY_ZIP_MAXRADIUS, query = "SELECT t from ZipCode t WHERE t.currentZipCode = :zipCode AND t.maxRadius = :maxRadius")
+    @NamedQuery(name = ZipCode.FIND_ZIP_BY_ZIP_MAXRADIUS, query = "SELECT t from ZipCode t WHERE t.currentZipCode = :zipCode AND t.maxRadius = :maxRadius"),
+    
+        
 })
 public class ZipCode implements Serializable {
     /**

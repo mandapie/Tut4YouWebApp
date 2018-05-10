@@ -23,31 +23,38 @@
         2017 Syed Haider <shayder426@gmail.com>
     -->
     <!-- @author Andrew Kaichi <ahkaichi@gmail.com> -->
+    <f:metadata>
+        <f:viewParam name="username" value="#{moderatorBean.username}"/>
+        <f:event type="preRenderView" listener="#{moderatorBean.showUsername(moderatorBean.username)}">
+        </f:event>
+    </f:metadata>
     <ui:define name="title">Apply To Become a Moderator</ui:define>
     <ui:define name="content">
-        <h1>Add a Transcript</h1>
-        <b:panel title="Add your resume as a PDF file" collapsible="false" look="info">
-            <h:form id="transcript" enctype="multipart/form-data">
-                <b:row>
-                    <b:column>
-                        <h:outputLabel value="Reason for Applying"/>
-                        <h:inputText id="reason" required="true" requiredMessage="required" value="#{moderatorBean.reason}"/>
-                    </b:column>
-                    <b:column>
-                        <h:outputLabel for="uploadTranscript">
-                            Upload Your Resume
-                        </h:outputLabel>
-                        <p:fileUpload value="#{moderatorBean.file}"
-                                      mode="simple"
-                                      allowTypes="/(\.|\/)(gif|jpe?g|pdf)$/"
-                                      fileLimit="1"
-                                      update="uploadTranscript"/>
-                        <p:growl id="uploadTranscript" showDetail="true" />
-                        <p:commandButton value="Upload" action="#{moderatorBean.uploadTranscript}" ajax="false" />
-                    </b:column>
-                </b:row>
-            </h:form>
-        </b:panel>
+        <h1>Review Application</h1>
+        <h:form>
+            <b:row>
+                <b:column>
+                    <h:outputLabel value="Reason "/>
+                    <h:outputText value="#{moderatorBean.moderatorApplication.reason}"/>
+                </b:column>
+                <b:column>
+                    <h:outputLabel value="Resume "/>
+                    <h:outputText value="#{moderatorBean.moderatorApplication.resumeFilePath}"/>
+                </b:column>
+            </b:row>
+
+            <b:row>
+                <b:column>
+                    <b:commandButton value="Accept" look="primary" action="#{moderatorBean.acceptModeratorApplication(moderatorBean.moderatorApplication)}" />
+                </b:column>
+                <b:column>
+                    <b:commandButton value="Deny" look="danger" action="#{moderatorBean.declineModeratorApplication(moderatorApplication)}"/>
+                </b:column>
+
+
+            </b:row>
+        </h:form>
+
         <ui:debug hotkey='x'/>
     </ui:define>
 </ui:composition>

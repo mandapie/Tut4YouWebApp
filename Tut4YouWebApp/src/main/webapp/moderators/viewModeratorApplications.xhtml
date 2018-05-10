@@ -25,29 +25,15 @@
     <!-- @author Andrew Kaichi <ahkaichi@gmail.com> -->
     <ui:define name="title">Apply To Become a Moderator</ui:define>
     <ui:define name="content">
-        <h1>Add a Transcript</h1>
-        <b:panel title="Add your resume as a PDF file" collapsible="false" look="info">
-            <h:form id="transcript" enctype="multipart/form-data">
-                <b:row>
-                    <b:column>
-                        <h:outputLabel value="Reason for Applying"/>
-                        <h:inputText id="reason" required="true" requiredMessage="required" value="#{moderatorBean.reason}"/>
-                    </b:column>
-                    <b:column>
-                        <h:outputLabel for="uploadTranscript">
-                            Upload Your Resume
-                        </h:outputLabel>
-                        <p:fileUpload value="#{moderatorBean.file}"
-                                      mode="simple"
-                                      allowTypes="/(\.|\/)(gif|jpe?g|pdf)$/"
-                                      fileLimit="1"
-                                      update="uploadTranscript"/>
-                        <p:growl id="uploadTranscript" showDetail="true" />
-                        <p:commandButton value="Upload" action="#{moderatorBean.uploadTranscript}" ajax="false" />
-                    </b:column>
-                </b:row>
-            </h:form>
-        </b:panel>
+        <h1>View Moderator Applications</h1>
+        <b:dataTable value="#{moderatorBean.moderatorApplicationList}" var="moderatorApplication" id="completedTable">m
+                            <b:dataTableColumn>
+                                <f:facet name="header">User</f:facet>
+                                <h:link value="#{moderatorApplication.user.firstName} #{moderatorApplication.user.lastName}" outcome="moderatorApplication" includeViewParams="true">
+                                    <f:param name="username" value="#{moderatorApplication.user.username}" />
+                                </h:link>                      
+                            </b:dataTableColumn>
+                        </b:dataTable>
         <ui:debug hotkey='x'/>
     </ui:define>
 </ui:composition>

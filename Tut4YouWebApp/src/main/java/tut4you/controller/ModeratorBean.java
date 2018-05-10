@@ -35,18 +35,21 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.ejb.EJB;
-import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import static org.omnifaces.util.Faces.getServletContext;
 import org.primefaces.model.UploadedFile;
-import tut4you.model.Moderator;
+import tut4you.model.ModeratorApplication;
 import tut4you.model.Tut4YouApp;
 import tut4you.model.User;
 
@@ -56,27 +59,57 @@ import tut4you.model.User;
  * @author Andrew Kaichi <ahkaichi@gmail.com>
  */
 @Named
-@RequestScoped
+//@RequestScoped
+@ViewScoped
 public class ModeratorBean implements Serializable {
     private static final Logger LOGGER = Logger.getLogger("TranscriptBean");
     
     private UserBean userbean = new UserBean();
     @EJB
     private Tut4YouApp tut4youApp;
+
     private UploadedFile file;
-    private Moderator moderator;
-    private User user;
-    public Moderator getModerator() {
-        return moderator;
+    private String reason;
+    private ModeratorApplication moderatorApplication;
+    private List<ModeratorApplication> moderatorApplicationList = new ArrayList();
+    
+    @ManagedProperty("#{param.username}")
+    private String username;
+
+    public String getUsername() {
+        return username;
     }
 
-    public void setModerator(Moderator moderator) {
-        this.moderator = moderator;
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    public ModeratorApplication getModeratorApplication() {
+        return moderatorApplication;
+    }
+
+    public void setModeratorApplication(ModeratorApplication moderatorApplication) {
+        this.moderatorApplication = moderatorApplication;
+    }
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
+    private User user;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
     
+  
     @PostConstruct
     public void createModeratorBean() {
-        moderator = new Moderator();
     }
     
     /**
@@ -100,6 +133,40 @@ public class ModeratorBean implements Serializable {
         return file;
     }
     
+    /**
+     * Gets a list of the moderator Applications in the EJB
+     * @return a list of subjects
+     */
+    public List<ModeratorApplication> getModeratorApplicationList() {
+        if (moderatorApplicationList.isEmpty()) {
+            moderatorApplicationList = tut4youApp.getModeratorApplications();
+        }
+        return moderatorApplicationList;
+    }
+
+    /**
+     * Sets the moderatorApplicationList
+     * @param moderatorApplicationList
+     */
+    public void setModeratorApplicationList(List<ModeratorApplication> moderatorApplicationList) {
+        this.moderatorApplicationList = moderatorApplicationList;
+    }
+    public void showUsername(String username) {
+        moderatorApplication  = findModeratorApplication(username);
+        user = tut4youApp.findUser(moderatorApplication.getUser().getUsername());
+    }
+    public ModeratorApplication findModeratorApplication(String username)
+    {
+        return tut4youApp.findModeratorApplication(username);
+    }
+    public void acceptModeratorApplication(ModeratorApplication moderatorApplication) {
+        //System.out.println("moderatorApplication: " + moderatorApplication);
+        tut4youApp.acceptModeratorApplication(moderatorApplication);
+    }
+
+    public void declineModeratorApplication(ModeratorApplication moderatorApplication) {
+        tut4youApp.declineModeratorApplication(moderatorApplication);
+    }
     public void uploadTranscript() throws IOException {
         Properties prop = new Properties();
         InputStream propstream = new FileInputStream(getServletContext().getRealPath("WEB-INF/s3.properties"));
@@ -121,7 +188,8 @@ public class ModeratorBean implements Serializable {
             String userName = userbean.getEmailFromSession();
             user = tut4youApp.findUser(userName);
             String transcriptName = user.getUsername();
-            String keyName = transcriptName.concat(".pdf");
+            String filePath = "resume/";
+            String keyName = filePath.concat(transcriptName.concat(".pdf"));
             
             try (S3Object s3Object = new S3Object()) {
                 ObjectMetadata omd = new ObjectMetadata();
@@ -135,7 +203,7 @@ public class ModeratorBean implements Serializable {
                 FacesContext.getCurrentInstance().addMessage(null, message);
                 URL url = s3.getUrl(bucketName, keyName);
                 String filepath = url.toString();
-                tut4youApp.addResumeFileLocation(filepath, moderator.getReason());
+                tut4youApp.addResumeFileLocation(filepath, reason);
                 
             }
             System.out.println("Uploaded successfully!");

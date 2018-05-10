@@ -47,7 +47,9 @@ import javax.persistence.TemporalType;
 @NamedQueries({
     @NamedQuery(name = Request.FIND_REQUEST_BY_EMAIL, query = "SELECT r from Request r JOIN r.student s WHERE s.email = :student_email AND r.status = :status"),
     @NamedQuery(name = Request.FIND_REQUEST_BY_TUTOR_EMAIL, query = "SELECT r from Request r JOIN r.tutor s WHERE s.email = :tutor_email AND r.status = :status"),
-    @NamedQuery(name = Request.FIND_REQUESTS_BY_TUTOR, query = "SELECT r FROM Request r JOIN r.availableTutors t WHERE t.email = :email")
+    @NamedQuery(name = Request.FIND_REQUESTS_BY_TUTOR, query = "SELECT r FROM Request r JOIN r.availableTutors t WHERE t.email = :email"),
+    @NamedQuery(name = Request.FIND_REQUESTS_BY_USER, query = "SELECT r FROM Request r  JOIN r.student s WHERE s.email = :email"),
+    
 })
 @Entity
 public class Request implements Serializable {
@@ -74,10 +76,14 @@ public class Request implements Serializable {
      * JPQL Query to find requests from available/selected tutors
      */
     public static final String FIND_REQUESTS_BY_TUTOR = "Request.findRequestsByTutor";
-       /**
+    /**
      * JPQL Query to find requests from available/selected tutors
      */
     public static final String FIND_REQUEST_BY_TUTOR_EMAIL = "Request.findRequestsByTutorEmail";
+    /**
+     * JPQL Query to find requests made by a user
+     */
+    public static final String FIND_REQUESTS_BY_USER = "Request.findRequestsByUser";
 
 
     /**

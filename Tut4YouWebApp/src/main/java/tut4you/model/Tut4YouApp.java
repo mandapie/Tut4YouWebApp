@@ -37,6 +37,7 @@ import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
 import tut4you.exception.*;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.concurrent.TimeUnit;
 import javax.faces.application.FacesMessage;
 import tut4you.controller.UserBean;
@@ -68,6 +69,18 @@ public class Tut4YouApp {
     public List<Subject> getSubjects() {
         TypedQuery<Subject> subjectQuery = em.createNamedQuery(Subject.FIND_ALL_SUBJECTS, Subject.class);
         return subjectQuery.getResultList();
+    }
+    /**
+     * Query all subjects from the database
+     *
+     * @return List of subjects
+     */
+    @RolesAllowed("tut4youapp.moderator")
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public List<ModeratorApplication> getModeratorApplications() {
+        TypedQuery<ModeratorApplication> query = em.createNamedQuery(ModeratorApplication.FIND_ALL_MODERATOR_APPLICATIONS, ModeratorApplication.class);
+        query.setParameter("applicationStatus", ModeratorApplication.ApplicationStatus.PENDING);
+        return query.getResultList();
     }
 
     /**
@@ -690,6 +703,22 @@ public class Tut4YouApp {
     }
 
     /**
+     * Gets a moderatorApplication by finding the email in the entity.
+     *
+     * @param username
+     * @return moderator application
+     * @Keith <keithtran25@gmail.com>
+     */
+    @PermitAll
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public ModeratorApplication findModeratorApplication(String username) {
+        TypedQuery<ModeratorApplication> query = em.createNamedQuery(ModeratorApplication.FIND_MODERATOR_APPLICATION_BY_UNAME, ModeratorApplication.class);
+        query.setParameter("username", username);
+        return query.getSingleResult();
+    }            
+    
+
+    /**
      * Converts student to be a tutor. The student will be added a tutor role.
      *
      * @param user
@@ -1050,6 +1079,7 @@ public class Tut4YouApp {
         em.merge(tutor);
         em.flush();
     }
+    
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void addResumeFileLocation(String resumeFilePath, String reason
@@ -1058,38 +1088,77 @@ public class Tut4YouApp {
         String currentUserEmail = userBean.getEmailFromSession();
         //User user = findUser(currentUserEmail);
         Tutor tutor = findTutor(currentUserEmail);
+        ModeratorApplication moderatorApplication = new ModeratorApplication(resumeFilePath, reason);
         if (tutor == null) {
             User student = findUser(currentUserEmail);
-            student = (User) student;
-            Moderator moderator= new Moderator(student);
-            moderator.setResumeFilePath(resumeFilePath);
-            moderator.setReason(reason);
-            
-            User clone = em.find(User.class, currentUserEmail);
-            System.out.print("CLONE: " + clone);
-            em.detach(clone);
-            //clone.setEmail(null);
-            //em.persist(clone);   
-            //em.persist(moderator);
+            moderatorApplication.setUser(student);
+            moderatorApplication.setApplicationStatus(ModeratorApplication.ApplicationStatus.PENDING);
+            em.persist(moderatorApplication);
         }
         else {
-            User student = findUser(currentUserEmail);
-            student = (User) student;
-            User clone = em.find(User.class, currentUserEmail);
-            System.out.print("CLONE: " + clone);
-            em.remove(clone);
-            em.flush();
-            //clone.setEmail("jimmy@gmail.com");
-            
-            Moderator moderator= new Moderator(clone);
-            moderator.setResumeFilePath(resumeFilePath);
-            moderator.setReason(reason);
-            
-            //clone.setEmail(null);
-            //em.persist(clone);   
-            em.persist(moderator);
-            em.flush();
+            moderatorApplication.setUser(tutor);
+            moderatorApplication.setApplicationStatus(ModeratorApplication.ApplicationStatus.PENDING);
+            em.persist(moderatorApplication);
+        } 
+        em.flush();
+        Group group = em.find(Group.class, "tut4youapp.moderator");
+        List<String> userEmails = getUserEmails();
+        
+        for(int i = 0; i < userEmails.size(); i++) {
+            User user = em.find(User.class, userEmails.get(i));
+            if(user.getGroups().contains(group)) {
+                user.addModeratorApplication(moderatorApplication);
+                em.merge(user);
+                em.flush();
+            }
+        
         }
+    }
+    /**
+     * Decline the moderator application and do not set the applicant into a moderator
+     * @param moderatorApplication
+     * @param moderator 
+     */
+    @RolesAllowed("tut4youapp.moderator")
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void declineModeratorApplication(ModeratorApplication moderatorApplication) {
+        UserBean userBean = new UserBean();
+        String currentUserEmail = userBean.getEmailFromSession();
+        User moderator = findUser(currentUserEmail);
+        moderatorApplication.setModerator(moderator);
+        moderatorApplication.setApplicationStatus(ModeratorApplication.ApplicationStatus.DECLINED);
+        em.merge(moderatorApplication);
+        em.flush();
+
+    }
+    /**
+     * Accept the moderator application and turn the applicant into a moderator
+     * @param moderatorApplication 
+     */
+    @RolesAllowed("tut4youapp.moderator")
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void acceptModeratorApplication(ModeratorApplication moderatorApplication) { 
+        UserBean userBean = new UserBean();
+        String currentUserEmail = userBean.getEmailFromSession();
+        User moderator = findUser(currentUserEmail);
+        User user = em.find(User.class, moderatorApplication.getUser().getEmail());
+        ModeratorApplication moderatorApplicationClone = em.find(ModeratorApplication.class, moderatorApplication.getId());
+
+        Group moderatorGroup = em.find(Group.class, "tut4youapp.moderator");
+
+        moderatorApplicationClone.setModerator(moderator);
+        moderator.addModeratorApplication(moderatorApplicationClone);
+        moderatorApplicationClone.setApplicationStatus(ModeratorApplication.ApplicationStatus.ACCEPTED);
+
+        moderatorApplicationClone.setUser(user);
+        user.setModeratorApplication(moderatorApplicationClone);
+
+        user.addGroup(moderatorGroup);
+        moderatorGroup.addStudent(user);
+
+        em.merge(moderatorApplicationClone);
+        em.merge(user);
+
     }
 
     @PermitAll
@@ -1262,6 +1331,13 @@ public class Tut4YouApp {
         User clone = em.find(User.class, currentUserEmail);
         System.out.print("CLONE: " + clone);
         clone.setGroups(null);
+        TypedQuery<Request> requestQuery = em.createNamedQuery(Request.FIND_REQUESTS_BY_USER, Request.class);
+        requestQuery.setParameter("email", clone.getEmail());
+        clone.setRequests(null);
+        List<Request> requestsClone = requestQuery.getResultList();
+//        for(int i = 0; i < requestsClone.size(); i++) {
+//            em.remove(requestsClone.get(i));
+//        }
         em.remove(clone);
         em.flush();
 
@@ -1283,6 +1359,13 @@ public class Tut4YouApp {
         tutor.setDefaultZip(defaultZip);
         tutor.setZipCode(zipCode);
         zipCode.addTutor(tutor);
+        
+        tutor.setRequests(requestsClone);
+//        for(int i = 0; i < requestsClone.size(); i++) {
+//            requestsClone.get(i).setStudent(tutor);
+//            tutor.addRequest(requestsClone.get(i));
+//            em.persist(requestsClone.get(i));
+//        }
         em.persist(tutor);
         em.persist(zipCode);
         em.flush();

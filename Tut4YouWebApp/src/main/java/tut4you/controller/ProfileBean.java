@@ -84,7 +84,6 @@ public class ProfileBean implements Serializable {
         Tutor tutor = findTutorEmail(username);
         user = tut4youapp.findUser(tutor.getEmail());
     }
-    
     public Tutor findTutorEmail(String username)
     {
         return tut4youapp.findTutorEmail(username);

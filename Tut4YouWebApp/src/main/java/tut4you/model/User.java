@@ -29,9 +29,11 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 /**
@@ -98,7 +100,21 @@ public class User implements Serializable {
      */
     @ManyToMany(mappedBy = "students", cascade = CascadeType.ALL)
     private Collection<Group> groups;
+    
+    @OneToMany(mappedBy = "moderator", cascade = CascadeType.ALL)
+    private Collection<ModeratorApplication> moderatorApplications;
+    
+    @OneToOne
+    private ModeratorApplication moderatorApplication;
 
+    public ModeratorApplication getModeratorApplication() {
+        return moderatorApplication;
+    }
+
+    public void setModeratorApplication(ModeratorApplication moderatorApplication) {
+        this.moderatorApplication = moderatorApplication;
+    }
+    
     /**
      * User constructor
      */
@@ -143,6 +159,20 @@ public class User implements Serializable {
         this.university = university;
         this.securityQuestion = securityQuestion;
         this.securityAnswer = securityAnswer;
+    }
+    public Collection<ModeratorApplication> getModeratorApplications() {
+        return moderatorApplications;
+    }
+
+    public void setModeratorApplications(Collection<ModeratorApplication> moderatorApplications) {
+        this.moderatorApplications = moderatorApplications;
+    }
+    
+    public void addModeratorApplication(ModeratorApplication moderatorApplication) {
+        if (this.moderatorApplications == null) {
+            this.moderatorApplications = new HashSet();
+        }
+        this.moderatorApplications.add(moderatorApplication);
     }
 
     /**

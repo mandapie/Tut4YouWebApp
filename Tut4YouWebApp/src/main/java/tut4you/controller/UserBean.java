@@ -61,12 +61,10 @@ public class UserBean implements Serializable {
     boolean doNotDisturb;
     int tabIndex;
     boolean condition;
-    //boolean isTutor;
     private String currentZip;
-    private String hourlyRate;
-
+    private double hourlyRate; // need double type for <f:convertNumber> tag to work in jsf page
+    private String hRate; // need a String type for regex validation to work
     private ZipCode zipCode;
-
     private String defaultZip;
     private int maxRadius;
     private Date joinedDateAsTutor;
@@ -78,7 +76,6 @@ public class UserBean implements Serializable {
         user = null;
         condition = true;
         zipCode = new ZipCode();
-        //isTutor = false;
     }
 
     /**
@@ -94,12 +91,23 @@ public class UserBean implements Serializable {
     public void setZipCode(ZipCode zipCode) {
         this.zipCode = zipCode;
     }
-    public String getHourlyRate() {
+    
+    public double getHourlyRate() {
+        hourlyRate = tut4youapp.getHourlyRate();
         return hourlyRate;
     }
 
-    public void setHourlyRate(String hourlyRate) {
+    public void setHourlyRate(double hourlyRate) {
         this.hourlyRate = hourlyRate;
+    }
+    
+    public String gethRate() {
+        hRate = Double.toString(hourlyRate);
+        return hRate;
+    }
+
+    public void sethRate(String hRate) {
+        this.hRate = hRate;
     }
 
     public String getDefaultZip() {
@@ -290,7 +298,6 @@ public class UserBean implements Serializable {
             HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
             isTutor = request.isUserInRole("tut4youapp.tutor");
         }
-        System.out.println("ISTUTOR: " + isTutor);
         return isTutor;
     }
 
@@ -302,7 +309,6 @@ public class UserBean implements Serializable {
      */
     public String logout() {
         String result = "failure";
-
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
         try {
@@ -354,8 +360,13 @@ public class UserBean implements Serializable {
      * @return result
      */
     public String updateUser(User user) {
-        tut4youapp.updateUser(user);
-        return "success";
+        String result = "updateProfile";
+        double hr = 0;
+        if (hRate != null) {
+            hr = Double.parseDouble(hRate);
+        }
+        tut4youapp.updateUser(user, hr);
+        return result;
     }
     
     /**

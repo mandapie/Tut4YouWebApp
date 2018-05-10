@@ -6,14 +6,12 @@
 package tut4you.controller;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.enterprise.context.SessionScoped;
-import javax.enterprise.context.RequestScoped;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.component.UIComponent;
-
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -35,15 +33,12 @@ public class ProfileBean implements Serializable {
 
     @Inject
     private UserBean userBean;
-
-    private User user;
-
+    
     @ManagedProperty("#{param.username}")
     private String username;
-    
+    private User user;
+    private String dateJoinedAsTutor;
     private boolean userRated;
-
-
 
     /**
      * Creates a new instance of ProfileBean
@@ -70,6 +65,16 @@ public class ProfileBean implements Serializable {
     
         public boolean isUserRated() {
         return userRated;
+    }
+        
+    public String getDateJoinedAsTutor() {
+        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy");
+        dateJoinedAsTutor = sdf.format(tut4youapp.getDateJoinedAsTutor());
+        return dateJoinedAsTutor;
+    }
+
+    public void setDateJoinedAsTutor(String dateJoinedAsTutor) {
+        this.dateJoinedAsTutor = dateJoinedAsTutor;
     }
 
     public void setUserRated(boolean userRated) {

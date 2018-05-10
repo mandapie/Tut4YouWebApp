@@ -313,7 +313,7 @@ public class UserBean implements Serializable {
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
         try {
             if (isIsTutor()) {
-//                currentZip = "";
+                currentZip = null;
                 tut4youapp.updateCurrentZip(currentZip);
             }
             request.logout();

@@ -152,7 +152,6 @@ public class Rating implements Serializable {
      */
     public void setDateRated(Date dateRated) {
         this.dateRated = dateRated;
-
     }
 
     /**

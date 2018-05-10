@@ -1123,12 +1123,22 @@ public class Tut4YouApp {
         return Query.getResultList();
     }
     
-    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     @PermitAll
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public Double getHourlyRate() {
         UserBean userBean = new UserBean();
         String currentUserEmail = userBean.getEmailFromSession();
         TypedQuery<Double> Query = em.createNamedQuery(Tutor.FIND_HOURLY_RATE_BY_EMAIL, Double.class);
+        Query.setParameter("email", currentUserEmail);
+        return Query.getSingleResult();
+    }
+    
+    @PermitAll
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public Date getDateJoinedAsTutor() {
+        UserBean userBean = new UserBean();
+        String currentUserEmail = userBean.getEmailFromSession();
+        TypedQuery<Date> Query = em.createNamedQuery(Tutor.FIND_DATE_JOINED_BY_EMAIL, Date.class);
         Query.setParameter("email", currentUserEmail);
         return Query.getSingleResult();
     }

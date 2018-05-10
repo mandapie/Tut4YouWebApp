@@ -30,6 +30,8 @@ INSERT INTO Users(email,user_type,firstName,lastName,password,phoneNumber,userna
 INSERT INTO Users(email,user_type,firstName,lastName,password,phoneNumber,username,university,hourlyRate) VALUES ('carmen@gmail.com','Tutor','Carmen','Dangos','290295170CF0721418A3FD7C77081CF3D5312DC9D5AD7D2A7C123E177BB1CF051B4D20491EC3CA6202E42088B556E6314D924FFB41C1D886AD62815EE1E5723C','7141111111','cDang','UCR',14.00)
 INSERT INTO Users(email,user_type,firstName,lastName,password,phoneNumber,username,university) VALUES ('daniel@gmail.com','Student','Daniel','Louie','F68A41E098CF7ECB8924645BFE335941BEB068E7BEBAF0BBA26549C0693560DF08CACE69DEBBC59F6D2E30A328570DC331C1EC2F998A43CD0340B08065D4318A','7143254654','dLouie','CSUF')
 INSERT INTO Users(email,user_type,firstName,lastName,password,phoneNumber,username,university,securityQuestion,securityAnswer) VALUES ('evan@gmail.com','Student','Evan','Chen','B30314C311F4ADF562B16BD400113EA39C6E08934600E2C5707195B5CCE66740402C18CB3F1A534C7C576C1F1E2F8A4914EBCD7894C99D23AA5A03C2F69EBA59','7146579513','eChen','CSUF','What was your childhood nickname?','evan')
+INSERT INTO Users(email,user_type,firstName,lastName,password,phoneNumber,username,university,securityQuestion,securityAnswer) VALUES ('samtesting1@gmail.com','Student','Sam','Chen','B30314C311F4ADF562B16BD400113EA39C6E08934600E2C5707195B5CCE66740402C18CB3F1A534C7C576C1F1E2F8A4914EBCD7894C99D23AA5A03C2F69EBA59','6266579513','sChen','USC','What was your childhood nickname?','sam')
+INSERT INTO Users(email,user_type,firstName,lastName,password,phoneNumber,username,university,hourlyRate,defaultZip,ZipCode_ID,securityQuestion,securityAnswer) VALUES ('briantesting1@gmail.com','Tutor','Brian','Chen','B30314C311F4ADF562B16BD400113EA39C6E08934600E2C5707195B5CCE66740402C18CB3F1A534C7C576C1F1E2F8A4914EBCD7894C99D23AA5A03C2F69EBA59','7146579513','bChen','CSULB',15.00,'92704',1,'What was your childhood nickname?','brian')
 
 INSERT INTO Groups_users(email,groupName) VALUES ('amanda@gmail.com','tut4youapp.moderator')
 INSERT INTO Groups_users(email,groupName) VALUES ('andrew@gmail.com','tut4youapp.moderator')
@@ -42,6 +44,8 @@ INSERT INTO Groups_users(email,groupName) VALUES ('keith@gmail.com','tut4youapp.
 INSERT INTO Groups_users(email,groupName) VALUES ('syed@gmail.com','tut4youapp.tutor')
 INSERT INTO Groups_users(email,groupName) VALUES ('brenda@gmail.com','tut4youapp.tutor')
 INSERT INTO Groups_users(email,groupName) VALUES ('carmen@gmail.com','tut4youapp.tutor')
+INSERT INTO Groups_users(email,groupName) VALUES ('briantesting1@gmail.com','tut4youapp.tutor')
+
 
 INSERT INTO Groups_users(email,groupName) VALUES ('amanda@gmail.com','tut4youapp.student')
 INSERT INTO Groups_users(email,groupName) VALUES ('andrew@gmail.com','tut4youapp.student')
@@ -51,8 +55,12 @@ INSERT INTO Groups_users(email,groupName) VALUES ('brenda@gmail.com','tut4youapp
 INSERT INTO Groups_users(email,groupName) VALUES ('carmen@gmail.com','tut4youapp.student')
 INSERT INTO Groups_users(email,groupName) VALUES ('daniel@gmail.com','tut4youapp.student')
 INSERT INTO Groups_users(email,groupName) VALUES ('evan@gmail.com','tut4youapp.student')
+INSERT INTO Groups_users(email,groupName) VALUES ('samtesting1@gmail.com','tut4youapp.student')
+INSERT INTO Groups_users(email,groupName) VALUES ('briantesting1@gmail.com','tut4youapp.student')
 
 INSERT INTO Courses_tutors(email,courseName) VALUES ('amanda@gmail.com','General Biology I')
+INSERT INTO Courses_tutors(email,courseName) VALUES ('briantesting1@gmail.com','General Biology I')
+
 INSERT INTO Courses_tutors(email,courseName) VALUES ('amanda@gmail.com','General Biology II')
 INSERT INTO Courses_tutors(email,courseName) VALUES ('amanda@gmail.com','Introduction to Human Disease')
 INSERT INTO Courses_tutors(email,courseName) VALUES ('andrew@gmail.com','General Biology I')
@@ -77,6 +85,8 @@ INSERT INTO Request(student_email,tutor_email,course_courseName,description,stat
 INSERT INTO Request(student_email,tutor_email,course_courseName,description,status) VALUES ('daniel@gmail.com','amanda@gmail.com','General Biology I','Photosynthesis process',1)
 INSERT INTO Request(student_email,tutor_email,course_courseName,description,status) VALUES ('daniel@gmail.com','amanda@gmail.com','General Biology I','Photosynthesis process',4)
 INSERT INTO Request(student_email,tutor_email,course_courseName,description,status) VALUES ('daniel@gmail.com','amanda@gmail.com','General Biology I','Photosynthesis process',4)
+INSERT INTO Request(student_email,tutor_email,course_courseName,description,status) VALUES ('samtesting1@gmail.com','briantesting1@gmail.com','General Biology I','Photosynthesis process',4)
+INSERT INTO Request(student_email,tutor_email,course_courseName,description,status) VALUES ('samtesting1@gmail.com','briantesting1@gmail.com','General Biology II','Photosynthesis process',1)
 
 
 INSERT INTO Availability(DAYOFWEEK, ENDTIME, STARTTIME, TUTOR_EMAIL) VALUES ('Monday', '03:59:00', '02:00:00', 'amanda@gmail.com')

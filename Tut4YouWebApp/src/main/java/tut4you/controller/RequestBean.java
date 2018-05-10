@@ -78,9 +78,9 @@ public class RequestBean implements Serializable {
     private List<String> zipCodesByRadiusList = new ArrayList();
     private Tutor tutor; //the tutor who accepts the request
     private User student;
-    private PayPal payPal = new PayPal();
-;
+    private Date dayOfWeek;
 
+    private double hourlyRate;
     private Session session;
 
     /**
@@ -554,26 +554,22 @@ public class RequestBean implements Serializable {
         this.session = session;
     }
     
-    
-    public PayPal getPayPal() {
-        return payPal;
+        public Date getDayOfWeek() {
+        return dayOfWeek;
     }
 
-    public void setPayPal(PayPal payPal) {
-        this.payPal = payPal;
-    }
-    
-    public String generatePayKey()
-    {
-        return payPal.generatePayKey();
+    public void setDayOfWeek(Date dayOfWeek) {
+        this.dayOfWeek = dayOfWeek;
     }
 
-    /*public String generatePayKey(String email, double hourlyRate, double elapsedTimeOfSession) {
-        return payPal.generatePayKey(email,hourlyRate,elapsedTimeOfSession);
-    }*/
-    
-    public void getPayments()
-    {
-        payPal.getPayments();
+    public double getHourlyRate() {
+        return hourlyRate;
     }
+
+    public void setHourlyRate(double hourlyRate) {
+        this.hourlyRate = hourlyRate;
+    }
+
+
+
 }

@@ -16,8 +16,26 @@
  */
 package tut4you.model;
 
+import com.paypal.exception.ClientActionRequiredException;
+import com.paypal.exception.HttpErrorException;
+import com.paypal.exception.InvalidCredentialException;
+import com.paypal.exception.InvalidResponseDataException;
+import com.paypal.exception.MissingCredentialException;
+import com.paypal.exception.SSLConfigurationException;
+import com.paypal.sdk.exceptions.OAuthException;
+import com.paypal.svcs.services.AdaptivePaymentsService;
+import com.paypal.svcs.types.ap.PayRequest;
+import com.paypal.svcs.types.ap.PayResponse;
+import com.paypal.svcs.types.ap.Receiver;
+import com.paypal.svcs.types.ap.ReceiverList;
+import com.paypal.svcs.types.common.RequestEnvelope;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
@@ -37,8 +55,17 @@ import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
 import tut4you.exception.*;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 import javax.faces.application.FacesMessage;
+import javax.faces.context.ExternalContext;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+import static org.omnifaces.util.Faces.getServletContext;
 import tut4you.controller.UserBean;
 
 /**
@@ -806,7 +833,6 @@ public class Tut4YouApp {
     @RolesAllowed("tut4youapp.student")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void deleteRating(Rating rating) {
-        System.out.println("WHY DOEL " + rating);
         UserBean userBean = new UserBean();
         String currentUserEmail = userBean.getEmailFromSession();
         Rating toBeDeleted = em.find(Rating.class,
@@ -899,10 +925,9 @@ public class Tut4YouApp {
         return list;
     }
 
+    
       /**
-     * Sets a tutor to the request when a tutor completes the request. IN
-     * PROGRESS
-     *
+     * Sets a tutor to the request when a tutor completes the request.     *
      * @param r request that is being partaken
      * @param sessionTimer
      * @param s
@@ -913,6 +938,7 @@ public class Tut4YouApp {
         Request request = em.find(Request.class,
                 r.getId());
         Date startTime = new Date();
+        System.out.println(startTime);
         sessionTimer.setStartSessionTime(startTime);
         request.setSession(sessionTimer);
         sessionTimer.setRequest(request);
@@ -933,27 +959,21 @@ public class Tut4YouApp {
     public String setRequestToComplete(Request r, Session sessionTimer) {
         Date endTime = new Date();
         //Session session = em.find(Session.class, sessionTimer.getId());
-        System.out.println(sessionTimer);
         sessionTimer.setEndSessionTime(endTime);
         UserBean userBean = new UserBean();
         String currentUserEmail = userBean.getEmailFromSession();
         double elapsedTime = endTime.getTime() - sessionTimer.getStartSessionTime().getTime();
-        System.out.println("endTime: " + endTime.getTime());
-        System.out.println("startTime: " + sessionTimer.getStartSessionTime().getTime());
-        System.out.println("ElapsedTime " + elapsedTime);
         double minutes = (elapsedTime / 1000) / 60;
         double hours = minutes / 60;
         sessionTimer.setElapsedTimeOfSession(hours);
         em.merge(sessionTimer);
-        
-        
-        
+
         Tutor tutor = findTutor(currentUserEmail);
         Request request = em.find(Request.class, r.getId());
         request.setStatus(Request.Status.COMPLETED);
         request.setTutor(tutor);
         em.merge(request);
-        
+
         em.flush();
         return "sessionCompleted";
     }
@@ -965,8 +985,9 @@ public class Tut4YouApp {
         String securityAnswer = user.getSecurityAnswer();
         boolean val = securityAnswer.equals(answer);
         return val;
-}
-      /**
+    }
+
+    /**
      * Updates the average rating of the tutor
      *
      * @author Syed Haider <shayder426@gmail.com>
@@ -989,39 +1010,7 @@ public class Tut4YouApp {
         em.merge(tutor);
     }
 
-    @PermitAll
-    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-    public int sortByDayOfWeek(Object o1, Object o2
-    ) {
-        List<String> dates = Arrays.asList(new String[]{
-            "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
-        });
-        Comparator<String> dateComparator = new Comparator<String>() {
-            @Override
-            public int compare(String s1, String s2) {
-                int value;
-                try {
-                    SimpleDateFormat format = new SimpleDateFormat("EEE");
-                    Date d1 = format.parse(s1);
-                    Date d2 = format.parse(s2);
-                    if (d1.equals(d2)) {
-                        value = s1.substring(s1.indexOf(" ") + 1).compareTo(s2.substring(s2.indexOf(" ") + 1));
-                    } else {
-                        Calendar cal1 = Calendar.getInstance();
-                        Calendar cal2 = Calendar.getInstance();
-                        cal1.setTime(d1);
-                        cal2.setTime(d2);
-                        value = cal1.get(Calendar.DAY_OF_WEEK) - cal2.get(Calendar.DAY_OF_WEEK);
-                    }
-                    return value;
-                } catch (ParseException pe) {
-                    throw new RuntimeException(pe);
-                }
-            }
-        };
-        Collections.sort(dates, dateComparator);
-        return 0;
-    }
+
 
     /**
      * Checks to see if user inputted email and email in database are equivalent
@@ -1075,19 +1064,19 @@ public class Tut4YouApp {
         FacesContext.getCurrentInstance().addMessage(null, message);
 
     }
-    
+
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void changePassword(String newPassword) {
         UserBean userBean = new UserBean();
         String currentUserEmail = userBean.getEmailFromSession();
         User user = findUser(currentUserEmail);
-        if (user != null){
+        if (user != null) {
             user.setPassword(newPassword);
             em.merge(user);
-            em.flush();  
+            em.flush();
         }
-        
+
     }
 
     /**
@@ -1138,7 +1127,7 @@ public class Tut4YouApp {
         );
         return Query.getResultList();
     }
-  
+
     /**
      * Adds ZipCode to DB if it is not already in DB but first checks if it is
      * in the DB
@@ -1152,19 +1141,19 @@ public class Tut4YouApp {
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public ZipCode addZipCode(ZipCode zipCode
     ) {
-        
+
         TypedQuery<ZipCode> Query = em.createNamedQuery(ZipCode.FIND_ZIP_BY_ZIP_MAXRADIUS, ZipCode.class);
         Query.setParameter("zipCode", zipCode.getCurrentZipCode());
         Query.setParameter("maxRadius", zipCode.getMaxRadius());
         if (Query.getResultList().isEmpty()) {
             em.persist(zipCode);
             em.flush();
-        }
-        else {
+        } else {
             zipCode = Query.getSingleResult();
         }
         return zipCode;
     }
+
     /**
      * Add ZipCodeByRadius if it does not belong to zip code location
      *
@@ -1182,11 +1171,10 @@ public class Tut4YouApp {
             zipCodeByRadius.addZipCode(zipCode);
             em.persist(zipCodeByRadius);
             em.flush();
-        }
-        else {
+        } else {
             zipCodeByRadiusTemp.addZipCode(zipCode);
-            zipCode.addZipCodeByRadius(zipCodeByRadiusTemp);      
-            em.merge(zipCode); 
+            zipCode.addZipCodeByRadius(zipCodeByRadiusTemp);
+            em.merge(zipCode);
 
         }
         return zipCodeByRadius;
@@ -1205,19 +1193,21 @@ public class Tut4YouApp {
         em.persist(message);
         em.flush();
     }
+
     /**
      * Allows student to become a tutor after already registering as a student
+     *
      * @param hourlyRate
      * @param dateJoinedAsTutor
      * @param defaultZip
-     * @param zipCode 
+     * @param zipCode
      */
     @RolesAllowed("tut4youapp.student")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void becomeTutor(double hourlyRate, Date dateJoinedAsTutor, String defaultZip, ZipCode zipCode) {
         UserBean userBean = new UserBean();
         String currentUserEmail = userBean.getEmailFromSession();
-        
+
         User clone = em.find(User.class, currentUserEmail);
         System.out.print("CLONE: " + clone);
         clone.setGroups(null);
@@ -1228,15 +1218,15 @@ public class Tut4YouApp {
         if (group == null) {
             group = new Group("tut4youapp.student");
         }
-        
+
         Tutor tutor = new Tutor(clone);
-        
+
         tutor.addGroup(group); //Add user a student role
         group.addTutor(tutor);
         group = em.find(Group.class, "tut4youapp.tutor");
         tutor.addGroup(group); //Add user a tutor role
         group.addTutor(tutor);
-            
+
         tutor.setDateJoinedAsTutor(dateJoinedAsTutor);
         tutor.setHourlyRate(hourlyRate);
         tutor.setDefaultZip(defaultZip);
@@ -1246,4 +1236,5 @@ public class Tut4YouApp {
         em.persist(zipCode);
         em.flush();
     }
+
 }

@@ -15,13 +15,14 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
 
 /**
  * The Session Timer will keep track of the length of each tutoring session
  * @author Syed Haider <shayder426@gmail.com>
  */
 @Entity
-@Table(name="Session")
+@Table(name="Sessions")
 public class Session implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -33,7 +34,14 @@ public class Session implements Serializable {
     @OneToOne
     @JoinColumn(nullable = false)
     private Request request;
+    
+
+
+ 
+    
+    @Temporal(javax.persistence.TemporalType.DATE)
     private Date startSessionTime;
+    @Temporal(javax.persistence.TemporalType.DATE)
     private Date endSessionTime;
     private double elapsedTimeOfSession;
 
@@ -136,7 +144,7 @@ public class Session implements Serializable {
     public void setElapsedTimeOfSession(double elapsedTimeOfSession) {
         this.elapsedTimeOfSession = elapsedTimeOfSession;
     }
-
+    
     @Override
     public int hashCode() {
         int hash = 0;

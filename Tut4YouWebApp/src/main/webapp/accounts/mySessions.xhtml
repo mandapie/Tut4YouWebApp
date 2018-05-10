@@ -26,6 +26,13 @@
     -->
     <!-- @author Amanda Pan <daikiraidemodaisuki@gmail.com> -->
     <ui:define name="title">Sessions</ui:define>
+    <script src="https://www.paypalobjects.com/js/external/apdg.js" type="text/javascript"></script>
+    <script type="text/javascript" charset="utf-8">
+        var dgFlowMini = new PAYPAL.apps.DGFlowMini({trigger: 'submitBtn'});
+    </script>
+    <style class="paypalButton">
+
+    </style>
     <ui:define name="content">
         <b:container fluid="true">
             <h:panelGrid columns="1" style="text-align:center; margin-left: 34%">
@@ -83,10 +90,13 @@
                                     <f:facet name="header">Length of Session</f:facet>
                                     <h:outputText value="#{req.session.elapsedTimeOfSession}"/>
                                 </b:dataTableColumn>
-                                <b:dataTableColumn>
-                                    <f:facet name="header">Pay Now!</f:facet>
-                                    <h:outputText value="#{req.session.elapsedTimeOfSession}"/>
-                                </b:dataTableColumn>
+                                <c:if test="#{!userBean.isTutor}">
+                                    <b:dataTableColumn>
+                                        <f:facet name="header">Pay Now!</f:facet>
+                                        <b:commandButton value="Pay Tutor" look="primary" action="#{paymentBean.payForTutoringSession(req.tutor.email,req.tutor.hourlyRate,req.session)}" />
+                                    </b:dataTableColumn>
+                                </c:if>
+
                             </b:dataTable>  
                         </b:panel>
                     </b:row>

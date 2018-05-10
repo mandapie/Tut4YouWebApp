@@ -95,6 +95,10 @@
             <to-view-id>/accounts/tutorProfile.xhtml</to-view-id>
         </navigation-case>
         <navigation-case>
+            <from-outcome>payment</from-outcome>
+            <to-view-id>https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_ap-payment&amp;paykey</to-view-id>
+        </navigation-case>
+        <navigation-case>
             <from-action>#{userBean.updateUser(userBean.user)}</from-action>
             <from-outcome>success</from-outcome>
             <to-view-id>/accounts/profile.xhtml</to-view-id>

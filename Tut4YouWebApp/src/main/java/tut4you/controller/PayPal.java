@@ -1,4 +1,3 @@
-
 package tut4you.controller;
 
 import com.paypal.exception.ClientActionRequiredException;
@@ -38,7 +37,6 @@ import static org.omnifaces.util.Faces.getServletContext;
  */
 public class PayPal {
 
-
     public String generatePayKey() {
         PayResponse payResponse;
         try {
@@ -49,10 +47,12 @@ public class PayPal {
             /**
              * FIXME: This needs to take in hourly rate * elapsed time
              */
+            //rec.setAmount(hourlyRate * elapsedTimeOfSession);
             rec.setAmount(2.0);
             /**
              * FIXME: This needs to take in the tutor's email
              */
+            //rec.setEmail(email);
             rec.setEmail("shayder426test1@gmail.com");
             receiver.add(rec);
             String actionType = "Pay";
@@ -106,4 +106,48 @@ public class PayPal {
         }
         return "success";
     }
+
+    public void getPayments() {
+        OkHttpClient client = new OkHttpClient();
+//"payKey=AP-39X27479A5096814N&requestEnvelope.errorLanguage=en_US"
+        MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
+        String payKey = "AP-85190631AT676160W";
+        String json = "payKey=" + payKey + "&requestEnvelope.errorLanguage=en_US";
+        RequestBody body = RequestBody.create(mediaType, json);
+        Request request = new Request.Builder()
+                .url("https://svcs.sandbox.paypal.com/AdaptivePayments/PaymentDetails")
+                .post(body)
+                .addHeader("X-PAYPAL-SECURITY-USERID", "shayder426-facilitator_api1.gmail.com")
+                .addHeader("X-PAYPAL-SECURITY-PASSWORD", "KY5V6AAWCEFSKE5R")
+                .addHeader("X-PAYPAL-SECURITY-SIGNATURE", "Aea3S-zQp8Wqw4vgMOI6c015u53PAox42t7UAN9wZg.1Y7bs3AEWi7rK")
+                .addHeader("X-PAYPAL-REQUEST-DATA-FORMAT", "NV")
+                .addHeader("X-PAYPAL-RESPONSE-DATA-FORMAT", "NV")
+                .addHeader("X-PAYPAL-APPLICATION-ID", "APP-80W284485P519543T")
+                .addHeader("Cache-Control", "no-cache")
+                .addHeader("Postman-Token", "d8ea77a8-d3cd-486b-ba13-093a7f30eeb6")
+                .addHeader("Content-Type", "application/x-www-form-urlencoded")
+                .build();
+
+        try {
+            Response response = client.newCall(request).execute();
+            System.out.println(response.body().string());
+            Map<String, String> mapString = convert(response.body().string());
+            for (Map.Entry<String, String> entry : mapString.entrySet()) {
+                System.out.print("Where are my slashesl");
+                System.out.println(entry.getKey() + " / " + entry.getValue());
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(PayPal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public static Map<String, String> convert(String str) {
+        String[] tokens = str.split(" |=");
+        Map<String, String> map = new HashMap<>();
+        for (int i = 0; i < tokens.length - 1;) {
+            map.put(tokens[i++], tokens[i++]);
+        }
+        return map;
+    }
+
 }

@@ -78,7 +78,8 @@ public class RequestBean implements Serializable {
     private List<String> zipCodesByRadiusList = new ArrayList();
     private Tutor tutor; //the tutor who accepts the request
     private User student;
-    private PayPal payPal;
+    private PayPal payPal = new PayPal();
+;
 
     private Session session;
 
@@ -561,9 +562,18 @@ public class RequestBean implements Serializable {
     public void setPayPal(PayPal payPal) {
         this.payPal = payPal;
     }
-
-    public String generatePayKey() {
-        payPal = new PayPal();
+    
+    public String generatePayKey()
+    {
         return payPal.generatePayKey();
+    }
+
+    /*public String generatePayKey(String email, double hourlyRate, double elapsedTimeOfSession) {
+        return payPal.generatePayKey(email,hourlyRate,elapsedTimeOfSession);
+    }*/
+    
+    public void getPayments()
+    {
+        payPal.getPayments();
     }
 }

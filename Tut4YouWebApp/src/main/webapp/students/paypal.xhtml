@@ -21,7 +21,7 @@
         2017 Keith Tran <keithtran25@gmail.com>
         2017 Syed Haider <shayder426@gmail.com>
     -->
-    <!-- @author Amanda Pan <daikiraidemodaisuki@gmail.com> -->
+    <!-- @Syed Haider <shayder426@gmail.com> -->
     <ui:define name="title">Payment</ui:define>
     <ui:define name="content">
 
@@ -34,6 +34,9 @@
                 <input id="type" type="hidden" name="expType" value="mini"/>
                 <input id="paykey" type="hidden" name="paykey" value="#{requestBean.generatePayKey()}"/>
             </form>
+            <b:form>
+            <b:commandButton value="sam" action="#{requestBean.getPayments()}"/>
+            </b:form>
             <script type="text/javascript" charset="utf-8">
                 var dgFlowMini = new PAYPAL.apps.DGFlowMini({trigger: 'submitBtn'});
             </script>

@@ -93,7 +93,7 @@
                         <b:selectOneMenu id="sq" value="#{userBean.user.securityQuestion}" required="true" requiredMessage="required">
                             <f:selectItem itemLabel="Select a security question..." itemValue="" noSelectionOption="true"/>
                             <f:selectItem itemValue="What was your childhood nickname?"/>
-                            <f:selectItem itemValue="In what city or town did your parents meet?"/> 
+                            <f:selectItem itemValue="In what city or town did your parents meet?"/>
                             <f:selectItem itemValue="What is your favorite music?"/>
                             <f:selectItem itemValue="What was the last name of your third grade teacher?"/> 
                             <f:selectItem itemValue="In what town was your first job?"/>
@@ -132,29 +132,11 @@
                                 <b:message for="ezip"/>
                             </b:inputText>
                         </b:column>
-                    </b:row> 
-                    <b:row>
-                        <b:column medium-screen="2">
-                            <h:outputLabel value="Max Radius"/>
-                        </b:column>
-                        <b:column medium-screen="4">
-                            <b:selectOneMenu class="form-control" id="maxRadius" value="#{userBean.user.zipCode.maxRadius}" required="true">
-                                <f:selectItem itemValue="#{userBean.user.zipCode.maxRadius}" />
-                                <f:selectItem itemLabel="1 mile" itemValue="1" />
-                                <f:selectItem itemLabel="3 miles" itemValue="3" /> 
-                                <f:selectItem itemLabel="5 miles" itemValue="5" />
-                                <f:selectItem itemLabel="10 miles" itemValue="10" /> 
-                                <f:selectItem itemLabel="15 miles" itemValue="15" />
-                                <f:selectItem itemLabel="30 miles" itemValue="30" /> 
-                                <f:convertNumber type="number"/>
-                            </b:selectOneMenu>
-                        </b:column>
-                    </b:row> 
-                    <!-- Need o show max radius -->
+                    </b:row>
                 </c:if>
                 <b:row>
                     <b:column span="2" offset="2">
-                        <b:commandButton value="Edit" look="primary" style="width:100%" action="#{userBean.updateUser}"/>
+                        <b:commandButton value="Edit" look="primary" style="width:100%" action="#{userBean.updateUser(userBean.user)}"/>
                     </b:column>
                     <b:column span="2">
                         <b:button value="Cancel" look="danger" style="width:100%" href="/Tut4YouWebApp/accounts/profile.xhtml"/>

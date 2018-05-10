@@ -28,9 +28,6 @@
         <h1>Personal Information</h1>
         <b:row>
             <b:button look="primary" value="Edit Profile" href="/Tut4YouWebApp/accounts/editProfile.xhtml" style="float:right;"/>
-            <c:if test="#{!(userBean.isTutor)}">
-                <b:button value="Become Tutor" href="/Tut4YouWebApp/students/becomeTutor.xhtml"/>
-            </c:if>
         </b:row>
         <b:row>
             <b:panel>
@@ -96,7 +93,6 @@
                                 <h:outputText value="#{userBean.user.defaultZip}" style="padding:0 2px;font-size:20px"/>
                             </b:column>
                         </b:row>
-                        <!-- need to show max radius -->
                         <b:row>
                             <b:column medium-screen="5">
                                 <h:outputLabel value="Avg Rating" style="padding:0 2px;font-size:20px"/>

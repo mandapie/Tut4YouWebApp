@@ -1070,7 +1070,7 @@ public class Tut4YouApp {
             em.merge(updateUser);
         }
         else {
-            tutor = new Tutor(updateUser);
+            tutor = (Tutor) updateUser;
             tutor.setHourlyRate(hr);
             em.merge(tutor);
         }

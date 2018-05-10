@@ -62,8 +62,8 @@ public class UserBean implements Serializable {
     int tabIndex;
     boolean condition;
     private String currentZip;
-    private double hourlyRate;
-    private String hRate;
+    private double hourlyRate; // need double type for <f:convertNumber> tag to work in jsf page
+    private String hRate; // need a String type for regex validation to work
     private ZipCode zipCode;
     private String defaultZip;
     private int maxRadius;
@@ -359,8 +359,8 @@ public class UserBean implements Serializable {
      * @param user User or Tutor object
      * @return result
      */
-    public String updateUser() {
-        String result = "success";
+    public String updateUser(User user) {
+        String result = "updateProfile";
         double hr = 0;
         if (hRate != null) {
             hr = Double.parseDouble(hRate);

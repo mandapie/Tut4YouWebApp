@@ -44,7 +44,7 @@ import java.util.Date;
  * available. Only a Tutor can add an availability.
  *
  * @author Andrew Kaichi <ahkaichi@gmail.com>
- * @author Keith Tran <keithtran25@gmail.com>
+ * @author Keith Tran <keithtran25@gmail.com> 
  * @author Syed Haider <shayder426@gmail.com>
  */
 @Table(name="Availability")

@@ -29,10 +29,7 @@
         <h:outputStylesheet name="/css/style.css" library="css" />
     </h:head>    
     <ui:define name="content">
-
-
         <h:form id="securityId">
-            
             <p:dialog  widgetVar="dlg3" header="#{sessionBean.student.firstName}" visible="#{!sessionBean.checkAnswer}" closable="false" modal="true">  
                 <h:outputText value="#{sessionBean.securityQuestion}">
                 </h:outputText>
@@ -41,8 +38,6 @@
                 <p:commandButton value="Submit" action="#{sessionBean.checkAnswer(sessionBean.securityAnswer)}" oncomplete="if (#{sessionBean.checkAnswer}) PF('dlg3').hide();" ajax="false" update="securityId">
                 </p:commandButton>
             </p:dialog>
-
-
             <h:panelGrid columns="1" style="text-align:center; margin-left: 28%">
                 <h1 style="font-weight:bold">Tutoring Session</h1>
                 <p:separator />                
@@ -52,9 +47,7 @@
                 <p:separator />            
             </h:panelGrid>
         </h:form>
-        
         <p:growl id="startGrowl" showDetail="true" sticky="true" autoUpdate="false" /> 
-        
         <h:form id="form1">
             <h:panelGrid columns="1" style="text-align:center; margin-left: 38%; margin-top: 7%">
                 <p:commandButton widgetVar="startButton"
@@ -78,12 +71,8 @@
                                  action="#{sessionBean.endTutorSession}"
                                  style="width:100%;height:200%;font-size:40px"
                                  />
-
             </h:panelGrid>
-
-
         </h:form>
-
         <ui:debug hotkey='x'/>
     </ui:define>
 </ui:composition>

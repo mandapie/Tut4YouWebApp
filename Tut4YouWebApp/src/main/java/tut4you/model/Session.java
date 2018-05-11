@@ -47,10 +47,8 @@ public class Session implements Serializable {
     public Session() {
     }
 
-
     /**
      * SessionTimer overloaded constructor
-     *
      * @param startSessionTime starting millisecond of the session (typically 0:00)
      * @param endSessionTime ending millisecond of the session 
      * @param elapsedTimeOfSession total milliSeconds of the sessions

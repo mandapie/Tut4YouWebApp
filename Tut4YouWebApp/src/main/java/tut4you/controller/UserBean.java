@@ -55,19 +55,17 @@ public class UserBean implements Serializable {
     @EJB
     private Tut4YouApp tut4youapp;
 
+    private String email;
+    private String pass; // loggin password
     private User user;
     private String oldPassword;
     private String newPassword;
-    boolean doNotDisturb;
     int tabIndex;
     boolean condition;
-    private String currentZip;
     private double hourlyRate; // need double type for <f:convertNumber> tag to work in jsf page
     private String hRate; // need a String type for regex validation to work
-    private ZipCode zipCode;
-    private String defaultZip;
-    private int maxRadius;
-    private Date joinedDateAsTutor;
+    private String currentZip;
+
     /**
      * Creates a new instance of UserIdentity
      */
@@ -75,7 +73,6 @@ public class UserBean implements Serializable {
     public void createUserBean() {
         user = null;
         condition = true;
-        zipCode = new ZipCode();
     }
 
     /**
@@ -84,14 +81,7 @@ public class UserBean implements Serializable {
     @PreDestroy
     public void destroyUserBean() {
     }
-    public ZipCode getZipCode() {
-        return zipCode;
-    }
 
-    public void setZipCode(ZipCode zipCode) {
-        this.zipCode = zipCode;
-    }
-    
     public double getHourlyRate() {
         hourlyRate = tut4youapp.getHourlyRate();
         return hourlyRate;
@@ -100,7 +90,7 @@ public class UserBean implements Serializable {
     public void setHourlyRate(double hourlyRate) {
         this.hourlyRate = hourlyRate;
     }
-    
+
     public String gethRate() {
         hRate = Double.toString(hourlyRate);
         return hRate;
@@ -110,45 +100,28 @@ public class UserBean implements Serializable {
         this.hRate = hRate;
     }
 
-    public String getDefaultZip() {
-        return defaultZip;
-    }
-
-    public void setDefaultZip(String defaultZip) {
-        this.defaultZip = defaultZip;
-    }
-
-    public int getMaxRadius() {
-        return maxRadius;
-    }
-
-    public void setMaxRadius(int maxRadius) {
-        this.maxRadius = maxRadius;
-    }
-
-    public Date getJoinedDateAsTutor() {
-        return joinedDateAsTutor;
-    }
-
-    public void setJoinedDateAsTutor(Date joinedDateAsTutor) {
-        this.joinedDateAsTutor = joinedDateAsTutor;
-    }
-
-    /**
-     * get current zip
-     *
-     * @return currentZip
-     */
     public String getCurrentZip() {
         return currentZip;
     }
-    /**
-     * set current zip
-     *
-     * @param currentZip
-     */
+
     public void setCurrentZip(String currentZip) {
         this.currentZip = currentZip;
+    }
+    
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPass() {
+        return pass;
+    }
+
+    public void setPass(String pass) {
+        this.pass = pass;
     }
 
     /**
@@ -186,8 +159,10 @@ public class UserBean implements Serializable {
     public void setUser(User user) {
         this.user = user;
     }
-        /**
+
+    /**
      * Gets the field of the oldPassword
+     *
      * @return the field of the old Password
      */
     public String getOldPassword() {
@@ -196,14 +171,16 @@ public class UserBean implements Serializable {
 
     /**
      * Sets the value in the old password to check if password match
+     *
      * @param oldPassword the password matching the typed password
      */
     public void setOldPassword(String oldPassword) {
         this.oldPassword = oldPassword;
     }
-    
+
     /**
      * Gets the field of the new Password
+     *
      * @return the field of the new Password
      */
     public String getNewPassword() {
@@ -211,29 +188,12 @@ public class UserBean implements Serializable {
     }
 
     /**
-     * Sets the value of the new passcode
-     * @param newPassword 
+     * Sets the value of the new password
+     *
+     * @param newPassword
      */
     public void setNewPassword(String newPassword) {
         this.newPassword = newPassword;
-    }
-    
-    /**
-     * Gets the state of doNotDisturb is on or off
-     *
-     * @return true/false
-     */
-    public boolean isDoNotDisturb() {
-        return doNotDisturb;
-    }
-
-    /**
-     * Sets the state of doNotDisturb
-     *
-     * @param doNotDisturb
-     */
-    public void setDoNotDisturb(boolean doNotDisturb) {
-        this.doNotDisturb = doNotDisturb;
     }
 
     /**
@@ -255,12 +215,12 @@ public class UserBean implements Serializable {
     }
 
     /**
-     * Called the EJG to update the state of doNotDisturb
+     * Called the EJB to switch the state of doNotDisturb
      *
      * @param d
      */
     public void switchDoNotDisturb(Boolean d) {
-        tut4youapp.switchDoNotDisturb(doNotDisturb);
+        tut4youapp.switchDoNotDisturb(d);
     }
 
     /**
@@ -302,6 +262,23 @@ public class UserBean implements Serializable {
     }
 
     /**
+     * login method to check user is a registered user who is
+     * @return result
+     */
+    public String login() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+        try {
+            //this is where you check the user before you log them in
+            request.login(email, pass); //log user in
+        } catch (ServletException e) {
+            context.addMessage(null, new FacesMessage("Login failed."));
+            return "failure";
+        }
+        return "success";
+    }
+
+    /**
      * Logout the student and invalidate the session
      *
      * @return success if student is logged out and session invalidated, failure
@@ -313,8 +290,7 @@ public class UserBean implements Serializable {
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
         try {
             if (isIsTutor()) {
-                currentZip = null;
-                tut4youapp.updateCurrentZip(currentZip);
+                tut4youapp.updateCurrentZip(null);
             }
             request.logout();
             user = null;
@@ -346,16 +322,19 @@ public class UserBean implements Serializable {
 
     /**
      * updates current zip
+     *
+     * @param zip
      */
     public void updateCurrentZip() {
         Tutor tutor = tut4youapp.updateCurrentZip(currentZip);
-        if (tutor.getZipCode().getCurrentZipCode()!= null) {
+        if (tutor.getCurrentZip() != null) {
             condition = false;
         }
     }
 
     /**
      * Updates a User's information
+     *
      * @param user User or Tutor object
      * @return result
      */
@@ -368,12 +347,13 @@ public class UserBean implements Serializable {
         tut4youapp.updateUser(user, hr);
         return result;
     }
-    
+
     /**
      * https://stackoverflow.com/questions/33098603/convert-localtime-java-8-to-date
      * gets the current date which is used for date joined attribute in tutor
+     *
      * @return date joined
-     * @throws ParseException 
+     * @throws ParseException
      */
     public Date getCurrentDate() throws ParseException {
         LocalTime d = LocalTime.now();
@@ -382,32 +362,29 @@ public class UserBean implements Serializable {
         return time;
     }
 
-    
     /**
-     * confirms if the user entered the correct password and if so allows them to change their password
-     * @param user
+     * confirms if the user entered the correct password and if so allows them
+     * to change their password
+     *
      * @param oldPassword
      * @param newPassword
-     * @return 
+     * @return
      */
     public String changePassword(String oldPassword, String newPassword) {
         FacesContext context = FacesContext.getCurrentInstance();
         String confirmPassword = tut4you.controller.HashPassword.getSHA512Digest(oldPassword);
         String result;
-        
+
         String currentPassword = user.getPassword();
-        
-        if(confirmPassword.equalsIgnoreCase(currentPassword)) {
+
+        if (confirmPassword.equalsIgnoreCase(currentPassword)) {
             tut4youapp.changePassword(tut4you.controller.HashPassword.getSHA512Digest(newPassword));
-            context.addMessage(null, new FacesMessage("Successful",  "Password successfully changed") );
-            result = "successful";
+            context.addMessage(null, new FacesMessage("Successful", "Password successfully changed"));
+            result = "updateProfile";
+        } else {
+            context.addMessage(null, new FacesMessage("Failed", "Password entered does not match your current password"));
+            result = "failure";
         }
-        else {
-            context.addMessage(null, new FacesMessage("Failed",  "Password entered does not match your current password") );
-            result = "failed";
-        }
-    return result;
+        return result;
     }
-
-
 }

@@ -69,7 +69,7 @@
                         <h:outputLabel value="Phone Number"/>
                     </b:column>
                     <b:column medium-screen="4">
-                        <b:inputText id="epn" placeholder="Enter Phone Number" required="true" requiredMessage="required" value="#{userBean.user.phoneNumber}">
+                        <b:inputText id="epn" placeholder="Enter Phone Number" required="true" requiredMessage="required" value="#{userBean.user.phoneNumber}" validator="#{basicValidator.validatePhoneNumber}">
                             <b:message for="epn"/>
                         </b:inputText>
                     </b:column>

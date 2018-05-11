@@ -61,7 +61,6 @@ public class RegistrationBean implements Serializable {
     private String defaultZip;
     private int maxRadius;
     private Date joinedDateAsTutor;
-    private ZipCode zipCode;
 
     public Tut4YouApp getTut4youApp() {
         return tut4youApp;
@@ -77,7 +76,6 @@ public class RegistrationBean implements Serializable {
     @PostConstruct
     public void  createRegistrationBean() {
         newUser = new User();
-        zipCode = new ZipCode();
     }
     
     /** 
@@ -86,29 +84,6 @@ public class RegistrationBean implements Serializable {
     @PreDestroy
     public void destroyRegistrationBean() {
         
-    }
-    
-    public ZipCode getZipCode() {
-        return zipCode;
-    }
-    
-    public void setZipCode(ZipCode zipCode) {
-        this.zipCode = zipCode;
-    }
-    /**
-     * get max radius
-     * @return maxRadius
-     */
-    public int getMaxRadius() {
-        return maxRadius;
-    }
-    
-    /**
-     * set max radius
-     * @param maxRadius 
-     */
-    public void setMaxRadius(int maxRadius) {
-        this.maxRadius = maxRadius;
     }
 
     /**
@@ -126,7 +101,6 @@ public class RegistrationBean implements Serializable {
     public void setNewUser(User newUser) {
         this.newUser = newUser;
     }
-
 
     /**
      * Gets the field of the confirm Password
@@ -225,8 +199,7 @@ public class RegistrationBean implements Serializable {
     public String createUser() {
         String result = "failure";
         try {
-            // get reCAPTCHA request param
-            String gRecaptchaResponse = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("g-recaptcha-response");
+            String gRecaptchaResponse = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("g-recaptcha-response"); //get reCAPTCHA request param
             boolean verify = VerifyRecaptcha.verify(gRecaptchaResponse);
             if (verify) {
                 if (newUser.isInformationValid(confirmPassword)) {
@@ -237,7 +210,7 @@ public class RegistrationBean implements Serializable {
                             hr = Double.parseDouble(hourlyRate);
                         }
                         joinedDateAsTutor = getCurrentDate();
-                        tut4youApp.registerUser(newUser, userType, hr, defaultZip, zipCode, joinedDateAsTutor);
+                        tut4youApp.registerUser(newUser, userType, hr, defaultZip, joinedDateAsTutor);
                         result = "success";
                     }
                     catch (UserExistsException see) {

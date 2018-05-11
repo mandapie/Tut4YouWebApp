@@ -1248,7 +1248,7 @@ public class Tut4YouApp {
         );
         return Query.getResultList();
     }
-  
+
     /**
      * Adds ZipCode to DB if it is not already in DB but first checks if it is
      * in the DB
@@ -1335,9 +1335,7 @@ public class Tut4YouApp {
         requestQuery.setParameter("email", clone.getEmail());
         clone.setRequests(null);
         List<Request> requestsClone = requestQuery.getResultList();
-//        for(int i = 0; i < requestsClone.size(); i++) {
-//            em.remove(requestsClone.get(i));
-//        }
+
         em.remove(clone);
         em.flush();
 
@@ -1361,13 +1359,24 @@ public class Tut4YouApp {
         zipCode.addTutor(tutor);
         
         tutor.setRequests(requestsClone);
-//        for(int i = 0; i < requestsClone.size(); i++) {
-//            requestsClone.get(i).setStudent(tutor);
-//            tutor.addRequest(requestsClone.get(i));
-//            em.persist(requestsClone.get(i));
-//        }
+
         em.persist(tutor);
         em.persist(zipCode);
         em.flush();
+    }
+    
+    @RolesAllowed("tut4youapp.student")
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void createNewComplaint(User reportedUser, Complaint complaint) {
+        UserBean userBean = new UserBean();
+        String currentUserEmail = userBean.getEmailFromSession();
+        
+        User user = em.find(User.class, currentUserEmail);
+        
+        complaint.setUser(user);
+        complaint.setReportedUser(reportedUser);
+        em.persist(complaint);
+        em.flush();
+        
     }
 }

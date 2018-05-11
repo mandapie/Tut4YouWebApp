@@ -38,6 +38,12 @@
                         <f:param name="username" value="#{tutor.username}" />
                     </b:button>
                 </b:dataTableColumn>
+                <b:dataTableColumn>
+                    <f:facet name="header">Complaint</f:facet>
+                    <b:button value="Submit a Complaint" outcome="submitComplaint">
+                        <f:param name="username" value="#{tutor.username}" />
+                    </b:button>
+                </b:dataTableColumn>
             </b:dataTable>
         </b:form>
         <ui:debug hotkey='x'/>

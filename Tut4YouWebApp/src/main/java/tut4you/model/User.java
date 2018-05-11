@@ -106,7 +106,12 @@ public class User implements Serializable {
     
     @OneToOne
     private ModeratorApplication moderatorApplication;
+    
+    @ManyToMany(mappedBy = "moderators", cascade = CascadeType.ALL)
+    private Collection<FlaggedUser> moderatorFlaggingUser;
 
+    @OneToOne 
+    private FlaggedUser flaggedUser;
     public ModeratorApplication getModeratorApplication() {
         return moderatorApplication;
     }
@@ -160,6 +165,21 @@ public class User implements Serializable {
         this.securityQuestion = securityQuestion;
         this.securityAnswer = securityAnswer;
     }
+    
+    public Collection<FlaggedUser> getModeratorFlaggingUser() {
+        return moderatorFlaggingUser;
+    }
+
+    public void setModeratorFlaggingUser(Collection<FlaggedUser> moderatorFlaggingUser) {
+        this.moderatorFlaggingUser = moderatorFlaggingUser;
+    }
+    public void addModeratorFlaggingUser(FlaggedUser moderatorFlaggingUser) {
+        if (this.moderatorFlaggingUser == null) {
+            this.moderatorFlaggingUser = new HashSet();
+        }
+        this.moderatorFlaggingUser.add(moderatorFlaggingUser);
+    }
+    
     public Collection<ModeratorApplication> getModeratorApplications() {
         return moderatorApplications;
     }
@@ -174,7 +194,21 @@ public class User implements Serializable {
         }
         this.moderatorApplications.add(moderatorApplication);
     }
-
+    
+    /**
+     * get the flagged user
+     * @return flaggedUser
+     */
+    public FlaggedUser getFlaggedUser() {
+        return flaggedUser;
+    }
+    /**
+     * set the flagged user
+     * @param flaggedUser 
+     */
+    public void setFlaggedUser(FlaggedUser flaggedUser) {
+        this.flaggedUser = flaggedUser;
+    }
     /**
      * Gets the email of a user
      * @return the email

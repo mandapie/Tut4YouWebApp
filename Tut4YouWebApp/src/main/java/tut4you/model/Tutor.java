@@ -54,12 +54,13 @@ import javax.persistence.TemporalType;
     @NamedQuery(name = Tutor.FIND_TUTORS_BY_COURSE, query = "SELECT COUNT(t) FROM Tutor t JOIN t.courses c WHERE c.courseName = :coursename"),
     @NamedQuery(name = Tutor.FIND_TUTORS, query = "SELECT t FROM Tutor t"),
         @NamedQuery(name = Tutor.FIND_TUTOR_BY_USERNAME, query = "SELECT t FROM Tutor t WHERE t.username = :username"),
+   
 
 })
 public class Tutor extends User implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     /**
      * JPQL Query to obtain a list of tutors who taught a specific course and is available using default zip code
      */

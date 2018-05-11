@@ -45,6 +45,7 @@
                     <b:inputText id="currentZip" placeholder="press enter to submit"  requiredMessage="required" value="#{userBean.currentZip}">
                         <b:message for="currentZip"/>
                     </b:inputText>
+                    <b:commandButton value="Update" look="primary" action="#{userBean.updateCurrentZip}"/>
                     <b:commandButton value="Do Not Update" look="danger" action="#{userBean.setCondition(false)}"/>
                 </p:dialog>
             </b:form>

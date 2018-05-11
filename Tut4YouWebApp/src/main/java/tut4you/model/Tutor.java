@@ -94,24 +94,8 @@ public class Tutor extends User implements Serializable {
     private String transcriptFilePath;
     private int overallRating;
     private String defaultZip;
-    @ManyToOne
-    private ZipCode zipCode;
+    private String currentZip;
     
-    /**
-     * get ZipCode
-     * @return ZipCode
-     */
-    public ZipCode getZipCode() {
-        return zipCode;
-    }
-    /**
-     * set ZipCode
-     * @param zipCode 
-     */
-    public void setZipCode(ZipCode zipCode) {
-        this.zipCode = zipCode;
-    }
-//    
     /**
      * A Tutor can tutor multiple Courses and a Course can be tutored by
      * multiple Tutors.
@@ -144,8 +128,8 @@ public class Tutor extends User implements Serializable {
         hourlyRate = 0.00;
         overallRating = 0;
         doNotDisturb = false;
-        this.zipCode = new ZipCode();
-        //currentZip = null;
+        currentZip = null;
+        numOfPeopleTutored = 0;
     }
 
     /**
@@ -165,8 +149,9 @@ public class Tutor extends User implements Serializable {
      * @param transcriptFileLocation
      * @param overallRating
      * @param defaultZip
+     * @param currentZip
      */
-    public Tutor(Date dateJoined, int numPeopleTutored, double priceRate, boolean doNotDisturb, String transcriptFileLocation, int overallRating, String defaultZip) {
+    public Tutor(Date dateJoined, int numPeopleTutored, double priceRate, boolean doNotDisturb, String transcriptFileLocation, int overallRating, String defaultZip, String currentZip) {
         this.dateJoinedAsTutor = dateJoined;
         this.numOfPeopleTutored = numPeopleTutored;
         this.hourlyRate = priceRate;
@@ -174,6 +159,7 @@ public class Tutor extends User implements Serializable {
         this.transcriptFilePath = transcriptFileLocation;
         this.overallRating = overallRating;
         this.defaultZip = defaultZip;
+        this.currentZip = currentZip;
     }
     
     /**
@@ -194,9 +180,10 @@ public class Tutor extends User implements Serializable {
      * @param priceRate
      * @param doNotDisturb
      * @param defaultZip
+     * @param currentZip
      * @param transcriptFileLocation
      */
-    public Tutor(String email, String firstName, String lastName, String userName, String phoneNumber, String password, String university, String securityQuestion, String securityAnswer, int overallRating, Date dateJoined, int numPeopleTutored, double priceRate, boolean doNotDisturb, String defaultZip, String transcriptFileLocation) {
+    public Tutor(String email, String firstName, String lastName, String userName, String phoneNumber, String password, String university, String securityQuestion, String securityAnswer, int overallRating, Date dateJoined, int numPeopleTutored, double priceRate, boolean doNotDisturb, String defaultZip, String currentZip, String transcriptFileLocation) {
         super(email, firstName, lastName, userName, phoneNumber, password, university, securityQuestion, securityAnswer);
         this.dateJoinedAsTutor = dateJoined;
         this.numOfPeopleTutored = numPeopleTutored;
@@ -205,8 +192,17 @@ public class Tutor extends User implements Serializable {
         this.overallRating = overallRating;
         this.transcriptFilePath = transcriptFileLocation;
         this.defaultZip = defaultZip;
+        this.currentZip = currentZip;
     }
 
+    public String getCurrentZip() {
+        return currentZip;
+    }
+
+    public void setCurrentZip(String currentZip) {
+        this.currentZip = currentZip;
+    }
+    
     public int getNumOfPeopleTutored() {
         return numOfPeopleTutored;
     }
@@ -223,10 +219,12 @@ public class Tutor extends User implements Serializable {
         this.overallRating = overallRating;
     }
 
+    @Override
     public Collection<Rating> getRatings() {
         return ratings;
     }
 
+    @Override
     public void setRatings(Collection<Rating> ratings) {
         this.ratings = ratings;
     }

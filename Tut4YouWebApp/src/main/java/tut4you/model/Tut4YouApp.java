@@ -706,18 +706,15 @@ public class Tut4YouApp {
      * @param userType
      * @param priceRate
      * @param defaultZip
-     * @param zipCode
      * @param joinedDateAsTutor
      * @throws tut4you.exception.UserExistsException
-     * @throws java.text.ParseException
      */
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void registerUser(User user, String userType, double priceRate, String defaultZip, ZipCode zipCode, Date joinedDateAsTutor) throws UserExistsException, ParseException {
+    public void registerUser(User user, String userType, double priceRate, String defaultZip, Date joinedDateAsTutor) throws UserExistsException {
         if (null == em.find(User.class,
                 user.getEmail())) {
-            Group group = em.find(Group.class,
-                    "tut4youapp.student");
+            Group group = em.find(Group.class, "tut4youapp.student");
             User newStudent = new User(user);
             if (group == null) {
                 group = new Group("tut4youapp.student");
@@ -726,22 +723,17 @@ public class Tut4YouApp {
                 newStudent.addGroup(group);
                 group.addStudent(newStudent);
                 em.persist(newStudent);
-            } else {
+            }
+            else {
                 Tutor newTutor = new Tutor(user);
                 newTutor.setDateJoinedAsTutor(joinedDateAsTutor);
                 newTutor.setHourlyRate(priceRate);
-                newTutor.setZipCode(zipCode);
-                zipCode.addTutor(newTutor);
-
                 newTutor.setDefaultZip(defaultZip);
                 newTutor.addGroup(group); //Add user a student role
                 group.addTutor(newTutor);
-                group
-                        = em.find(Group.class,
-                                "tut4youapp.tutor");
+                group = em.find(Group.class, "tut4youapp.tutor");
                 newTutor.addGroup(group); //Add user a tutor role
                 group.addTutor(newTutor);
-                em.persist(zipCode);
                 em.persist(newTutor);
 
             }
@@ -1104,7 +1096,7 @@ public class Tut4YouApp {
         UserBean userBean = new UserBean();
         String currentUserEmail = userBean.getEmailFromSession();
         Tutor tutor = findTutor(currentUserEmail);
-        tutor.getZipCode().setCurrentZipCode(currentZip);
+        tutor.setCurrentZip(currentZip);
         em.merge(tutor);
         em.flush();
         return tutor;
@@ -1226,36 +1218,28 @@ public class Tut4YouApp {
      */
     @RolesAllowed("tut4youapp.student")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void becomeTutor(double hourlyRate, Date dateJoinedAsTutor, String defaultZip, ZipCode zipCode) {
+    public void becomeTutor(double hourlyRate, Date dateJoinedAsTutor, String defaultZip) {
         UserBean userBean = new UserBean();
         String currentUserEmail = userBean.getEmailFromSession();
-
         User clone = em.find(User.class, currentUserEmail);
         System.out.print("CLONE: " + clone);
         clone.setGroups(null);
         em.remove(clone);
         em.flush();
-
         Group group = em.find(Group.class, "tut4youapp.student");
         if (group == null) {
             group = new Group("tut4youapp.student");
         }
-
         Tutor tutor = new Tutor(clone);
-
         tutor.addGroup(group); //Add user a student role
         group.addTutor(tutor);
         group = em.find(Group.class, "tut4youapp.tutor");
         tutor.addGroup(group); //Add user a tutor role
         group.addTutor(tutor);
-
         tutor.setDateJoinedAsTutor(dateJoinedAsTutor);
         tutor.setHourlyRate(hourlyRate);
         tutor.setDefaultZip(defaultZip);
-        tutor.setZipCode(zipCode);
-        zipCode.addTutor(tutor);
         em.persist(tutor);
-        em.persist(zipCode);
         em.flush();
     }
 }

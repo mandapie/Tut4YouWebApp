@@ -28,20 +28,15 @@ import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.ejb.EJB;
-import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import tut4you.model.*;
 
 /**
  * UserBean checks if a user is authenticated.
- *
  * @author Alvaro Monge <alvaro.monge@csulb.edu>
  * Modified by Amanda Pan <daikiraidemodaisuki@gmail.com>
  * Modified by Andrew Kaichi <ahkaichi@gmail.com>
@@ -59,32 +54,22 @@ public class BecomeTutorBean implements Serializable {
     @Inject UserBean userBean;
     private String currentZip;
     private String hourlyRate;
-    private ZipCode zipCode;
-
     private String defaultZip;
-    private int maxRadius;
     private Date joinedDateAsTutor;
     /**
      * Creates a new instance of UserIdentity
      */
     @PostConstruct
-    public void createUserBean() {
-        zipCode = new ZipCode();
+    public void createBecomeTutorBean() {
     }
 
     /**
      * Destroys a new instance of UserIdentity
      */
     @PreDestroy
-    public void destroyUserBean() {
+    public void destroyBecomeTutorBean() {
     }
-    public ZipCode getZipCode() {
-        return zipCode;
-    }
-
-    public void setZipCode(ZipCode zipCode) {
-        this.zipCode = zipCode;
-    }
+    
     public String getHourlyRate() {
         return hourlyRate;
     }
@@ -99,14 +84,6 @@ public class BecomeTutorBean implements Serializable {
 
     public void setDefaultZip(String defaultZip) {
         this.defaultZip = defaultZip;
-    }
-
-    public int getMaxRadius() {
-        return maxRadius;
-    }
-
-    public void setMaxRadius(int maxRadius) {
-        this.maxRadius = maxRadius;
     }
 
     public Date getJoinedDateAsTutor() {
@@ -156,7 +133,7 @@ public class BecomeTutorBean implements Serializable {
             pr = Double.parseDouble(hourlyRate);
         }
         joinedDateAsTutor = getCurrentDate();
-        tut4youapp.becomeTutor(pr, joinedDateAsTutor, defaultZip, zipCode);
+        tut4youapp.becomeTutor(pr, joinedDateAsTutor, defaultZip);
     }
     public void showGrowlMessage() {
         FacesContext context = FacesContext.getCurrentInstance();

@@ -37,15 +37,12 @@
         <c:if test="#{userBean.isTutor}">
             <c:if test="#{userBean.condition}">#{userBean.updateCurrentZip()}</c:if>
             <b:form>
-                <p:dialog header="Update Current Zip Code" widgetVar="myDialog" minHeight="40" visible="true" rendered="#{userBean.condition}" closable="false" modal="true">
-                    <h:outputText value="Default: " />
-                    <h:outputText value="#{userBean.user.defaultZip} " />
-                    <br/>
-                    <h:outputText value=" Click 'Do Not Update' if you are currently at Default Zip location" />
-                    <b:inputText id="currentZip" placeholder="press enter to submit" requiredMessage="required" value="#{userBean.currentZip}">
+                <p:dialog header="Where are you?" widgetVar="myDialog" minHeight="40" width="50" visible="true" rendered="#{userBean.condition}" closable="false" modal="true">
+                    <h:outputText value="Enter your current zip code or click 'Do Not Update' if you are currently at your default zipcode (#{userBean.user.defaultZip})" />
+                    <b:inputText id="currentZip" placeholder="press enter to submit" requiredMessage="required" value="#{userBean.user.currentZip}" validator="#{basicValidator.validateZipcode}">
                         <b:message for="currentZip"/>
                     </b:inputText>
-                    <b:commandButton value="Update" look="primary" action="#{userBean.updateCurrentZip}"/>
+                    <b:commandButton value="Update" look="primary" action="#{userBean.updateCurrentZip(userBean.user.currentZip)}"/>
                     <span/>
                     <b:commandButton value="Do Not Update" look="danger" action="#{userBean.setCondition(false)}"/>
                 </p:dialog>
@@ -79,9 +76,13 @@
                     <c:if test="#{userBean.isTutor}">
                         <b:tab title="Notifications">
                             <!--NOT WORKING PROPERLY--> 
-<!--                                    <c:when test="#{notifyBean.hasNotif}">
-                                <f:facet name="anchor"><b:badge value="#{notifyBean.numofNotif}"/></f:facet>
-                            </c:when>-->
+<!--                            <c:if test="#{notifyBean.hasNotif}">
+                                <f:facet name="anchor">
+                                    <b:badge value="#{notifyBean.numofNotif}">
+                                        <f:ajax listener="#{notifyBean.numofNotif}"/>
+                                    </b:badge>
+                                </f:facet>
+                            </c:if>-->
                             <br/> <!-- for better spacing -->
                             <div style="max-height:400px;overflow:auto;margin-bottom:15px;">
                                 <ui:repeat value="#{notifyBean.pendingRequestList}" var="req">
@@ -186,7 +187,6 @@
             <b:row>
                 <b:listLinks>
                     <c:if test="#{userBean.isTutor}">
-                        <b:navLink value="Add Availability" href="/Tut4YouWebApp/tutors/availability.xhtml"/>
                         <b:navLink value="Session Timer" href="/Tut4YouWebApp/tutors/sessionTimer.xhtml"/>
                         <b:navLink value="Add Transcript" href="/Tut4YouWebApp/tutors/uploadTranscript.xhtml"/>
                     </c:if>

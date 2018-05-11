@@ -58,16 +58,11 @@ public class UserBean implements Serializable {
     private User user;
     private String oldPassword;
     private String newPassword;
-    boolean doNotDisturb;
     int tabIndex;
     boolean condition;
-    private String currentZip;
     private double hourlyRate; // need double type for <f:convertNumber> tag to work in jsf page
     private String hRate; // need a String type for regex validation to work
-    private ZipCode zipCode;
-    private String defaultZip;
-    private int maxRadius;
-    private Date joinedDateAsTutor;
+    
     /**
      * Creates a new instance of UserIdentity
      */
@@ -75,7 +70,6 @@ public class UserBean implements Serializable {
     public void createUserBean() {
         user = null;
         condition = true;
-        zipCode = new ZipCode();
     }
 
     /**
@@ -83,13 +77,6 @@ public class UserBean implements Serializable {
      */
     @PreDestroy
     public void destroyUserBean() {
-    }
-    public ZipCode getZipCode() {
-        return zipCode;
-    }
-
-    public void setZipCode(ZipCode zipCode) {
-        this.zipCode = zipCode;
     }
     
     public double getHourlyRate() {
@@ -110,50 +97,8 @@ public class UserBean implements Serializable {
         this.hRate = hRate;
     }
 
-    public String getDefaultZip() {
-        return defaultZip;
-    }
-
-    public void setDefaultZip(String defaultZip) {
-        this.defaultZip = defaultZip;
-    }
-
-    public int getMaxRadius() {
-        return maxRadius;
-    }
-
-    public void setMaxRadius(int maxRadius) {
-        this.maxRadius = maxRadius;
-    }
-
-    public Date getJoinedDateAsTutor() {
-        return joinedDateAsTutor;
-    }
-
-    public void setJoinedDateAsTutor(Date joinedDateAsTutor) {
-        this.joinedDateAsTutor = joinedDateAsTutor;
-    }
-
-    /**
-     * get current zip
-     *
-     * @return currentZip
-     */
-    public String getCurrentZip() {
-        return currentZip;
-    }
-    /**
-     * set current zip
-     *
-     * @param currentZip
-     */
-    public void setCurrentZip(String currentZip) {
-        this.currentZip = currentZip;
-    }
-
     /**
      * get boolean condition
-     *
      * @return condition
      */
     public boolean isCondition() {
@@ -162,7 +107,6 @@ public class UserBean implements Serializable {
 
     /**
      * set boolean condition
-     *
      * @param condition
      */
     public void setCondition(boolean condition) {
@@ -171,7 +115,6 @@ public class UserBean implements Serializable {
 
     /**
      * Gets the Tutor object
-     *
      * @return
      */
     public User getUser() {
@@ -180,13 +123,13 @@ public class UserBean implements Serializable {
 
     /**
      * Sets the User object
-     *
      * @param user
      */
     public void setUser(User user) {
         this.user = user;
     }
-        /**
+    
+    /**
      * Gets the field of the oldPassword
      * @return the field of the old Password
      */
@@ -211,7 +154,7 @@ public class UserBean implements Serializable {
     }
 
     /**
-     * Sets the value of the new passcode
+     * Sets the value of the new password
      * @param newPassword 
      */
     public void setNewPassword(String newPassword) {
@@ -219,26 +162,7 @@ public class UserBean implements Serializable {
     }
     
     /**
-     * Gets the state of doNotDisturb is on or off
-     *
-     * @return true/false
-     */
-    public boolean isDoNotDisturb() {
-        return doNotDisturb;
-    }
-
-    /**
-     * Sets the state of doNotDisturb
-     *
-     * @param doNotDisturb
-     */
-    public void setDoNotDisturb(boolean doNotDisturb) {
-        this.doNotDisturb = doNotDisturb;
-    }
-
-    /**
      * Gets the index of the tab
-     *
      * @return tabIndex
      */
     public int getTabIndex() {
@@ -247,7 +171,6 @@ public class UserBean implements Serializable {
 
     /**
      * Sets the index of the tab
-     *
      * @param tabIndex
      */
     public void setTabIndex(int tabIndex) {
@@ -255,18 +178,16 @@ public class UserBean implements Serializable {
     }
 
     /**
-     * Called the EJG to update the state of doNotDisturb
-     *
+     * Called the EJB to switch the state of doNotDisturb
      * @param d
      */
     public void switchDoNotDisturb(Boolean d) {
-        tut4youapp.switchDoNotDisturb(doNotDisturb);
+        tut4youapp.switchDoNotDisturb(d);
     }
 
     /**
      * Determine if the user is authenticated and if so, make sure the session
      * scope includes the User object for the authenticated user
-     *
      * @return true if the user making a request is authenticated, false
      * otherwise.
      */
@@ -288,7 +209,6 @@ public class UserBean implements Serializable {
 
     /**
      * Determine if current authenticated user has the role of tutor
-     *
      * @return true if user has role of tutor, false otherwise.
      */
     public boolean isIsTutor() {
@@ -303,7 +223,6 @@ public class UserBean implements Serializable {
 
     /**
      * Logout the student and invalidate the session
-     *
      * @return success if student is logged out and session invalidated, failure
      * otherwise.
      */
@@ -313,8 +232,7 @@ public class UserBean implements Serializable {
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
         try {
             if (isIsTutor()) {
-                currentZip = null;
-                tut4youapp.updateCurrentZip(currentZip);
+                tut4youapp.updateCurrentZip(null);
             }
             request.logout();
             user = null;
@@ -346,10 +264,11 @@ public class UserBean implements Serializable {
 
     /**
      * updates current zip
+     * @param zip
      */
-    public void updateCurrentZip() {
-        Tutor tutor = tut4youapp.updateCurrentZip(currentZip);
-        if (tutor.getZipCode().getCurrentZipCode()!= null) {
+    public void updateCurrentZip(String zip) {
+        Tutor tutor = tut4youapp.updateCurrentZip(zip);
+        if (tutor.getCurrentZip() != null) {
             condition = false;
         }
     }
@@ -385,7 +304,6 @@ public class UserBean implements Serializable {
     
     /**
      * confirms if the user entered the correct password and if so allows them to change their password
-     * @param user
      * @param oldPassword
      * @param newPassword
      * @return 
@@ -399,15 +317,13 @@ public class UserBean implements Serializable {
         
         if(confirmPassword.equalsIgnoreCase(currentPassword)) {
             tut4youapp.changePassword(tut4you.controller.HashPassword.getSHA512Digest(newPassword));
-            context.addMessage(null, new FacesMessage("Successful",  "Password successfully changed") );
-            result = "successful";
+            context.addMessage(null, new FacesMessage("Successful", "Password successfully changed") );
+            result = "updateProfile";
         }
         else {
             context.addMessage(null, new FacesMessage("Failed",  "Password entered does not match your current password") );
-            result = "failed";
+            result = "failure";
         }
-    return result;
+        return result;
     }
-
-
 }

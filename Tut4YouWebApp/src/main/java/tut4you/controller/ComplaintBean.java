@@ -17,6 +17,8 @@
 package tut4you.controller;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.ejb.EJB;
@@ -47,7 +49,19 @@ public class ComplaintBean implements Serializable {
     @ManagedProperty("#{param.username}")
     private String username;
     private Complaint complaint;
+    private List<Complaint> complaintList = new ArrayList();
 
+    public List<Complaint> getComplaintList() {
+        if (complaintList.isEmpty()) {
+            complaintList = tut4youApp.getComplaints();
+        }
+        return complaintList;
+    }
+
+    public void setComplaintList(List<Complaint> complaintList) {
+        this.complaintList = complaintList;
+    }
+    
     public User getUser() {
         return user;
     }
@@ -69,6 +83,7 @@ public class ComplaintBean implements Serializable {
     @PostConstruct
     public void createComplaintBean() {
         complaint = new Complaint();
+        complaint.setIsReviewed(false);
     }
     
     /**

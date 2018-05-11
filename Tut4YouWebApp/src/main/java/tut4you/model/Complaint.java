@@ -12,6 +12,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 /**
@@ -20,7 +22,15 @@ import javax.persistence.Table;
  */
 @Table(name = "Complaint")
 @Entity
+@NamedQueries({
+    @NamedQuery(name = Complaint.FIND_UNRESOLVED_COMPLAINTS, query = "SELECT c FROM Complaint c WHERE c.isReviewed = :isReviewed")
+})
 public class Complaint implements Serializable {
+    
+    /**
+     * JPQL Query to find complaints that have not been reviewed yet
+     */
+    public static final String FIND_UNRESOLVED_COMPLAINTS = "Availability.findUnresolvedComplaints";
 
     private static final long serialVersionUID = 1L;
     
@@ -33,11 +43,21 @@ public class Complaint implements Serializable {
     
     private String details;
     
+    private boolean isReviewed;
+    
     @ManyToOne
     private User reportedUser;
     
     @ManyToOne
     private User user;
+    
+    public boolean isIsReviewed() {
+        return isReviewed;
+    }
+
+    public void setIsReviewed(boolean isReviewed) {
+        this.isReviewed = isReviewed;
+    }
 
     public User getReportedUser() {
         return reportedUser;

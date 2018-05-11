@@ -69,15 +69,26 @@ public class Tut4YouApp {
         return subjectQuery.getResultList();
     }
     /**
-     * Query all subjects from the database
+     * Query all moderator Applications from the database
      *
-     * @return List of subjects
+     * @return List of moderator applications
      */
     @RolesAllowed("tut4youapp.moderator")
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public List<ModeratorApplication> getModeratorApplications() {
         TypedQuery<ModeratorApplication> query = em.createNamedQuery(ModeratorApplication.FIND_ALL_MODERATOR_APPLICATIONS, ModeratorApplication.class);
         query.setParameter("applicationStatus", ModeratorApplication.ApplicationStatus.PENDING);
+        return query.getResultList();
+    }
+    /**
+     * Query all complaints from the database
+     * @return 
+     */
+    @RolesAllowed("tut4youapp.moderator")
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public List<Complaint> getComplaints() {
+        TypedQuery<Complaint> query = em.createNamedQuery(Complaint.FIND_UNRESOLVED_COMPLAINTS, Complaint.class);
+        query.setParameter("isReviewed", false);
         return query.getResultList();
     }
 

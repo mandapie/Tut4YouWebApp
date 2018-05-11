@@ -21,7 +21,7 @@ import javax.persistence.Table;
  * @author Syed Haider <shayder426@gmail.com>
  */
 @Entity
-@Table(name="Session")
+@Table(name="Sessions")
 public class Session implements Serializable {
 
     private static final long serialVersionUID = 1L;

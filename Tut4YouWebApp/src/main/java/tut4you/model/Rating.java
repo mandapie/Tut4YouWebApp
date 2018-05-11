@@ -35,7 +35,6 @@ import javax.persistence.Table;
  * Each tutor can receive ratings after tutoring sessions
  * @author Syed Haider <shayder426@gmail.com>
  */
-
 @NamedQueries({
     @NamedQuery(name = Rating.FIND_RATING_BY_EMAIL, query = "SELECT r from Rating r"),
     @NamedQuery(name = Rating.FIND_RATING_BY_TUTOR, query = "SELECT r FROM Rating r JOIN r.tutor s WHERE s.email = :email"),
@@ -159,7 +158,6 @@ public class Rating implements Serializable {
      */
     public void setDateRated(Date dateRated) {
         this.dateRated = dateRated;
-
     }
 
     /**

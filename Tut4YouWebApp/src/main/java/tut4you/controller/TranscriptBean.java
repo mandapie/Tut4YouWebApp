@@ -163,28 +163,30 @@ public class TranscriptBean implements Serializable {
             String userName = userbean.getEmailFromSession();
             tutor = tut4youApp.findTutor(userName);
             String keyName = tutor.getTranscriptFilePath();
-            String transcriptName = tutor.getUsername();
-            //String filePath = "transcript/"; 
-            //String keyName =  filePath.concat(transcriptName.concat(".pdf"));
-  
-            S3Object s3Object = s3.getObject(new GetObjectRequest(bucketName, keyName));
-            S3ObjectInputStream stream = s3Object.getObjectContent();
-            //String home = System.getProperty("user.home").concat("/");
-            //String file = home.concat(transcriptName.concat(".pdf"));
-            //Path path = Paths.get(file);
-            //FileUtils.copyInputStreamToFile(stream, path.toFile());
-            String home = System.getProperty("user.home");
-            Path path = Paths.get(home);
-            File file = new File(home, transcriptName.concat(".pdf"));
-            int i = 1;
-            while(file.exists() == true){ //if file exists at that location increment the file name by 1 
-                file = new File(home, transcriptName.concat("(" + i + ").pdf"));
-                i++;
+            if (keyName == null){
+                FacesMessage message = new FacesMessage("No transcript uploaded yet! Please upload a transcript.");
+                FacesContext.getCurrentInstance().addMessage(null, message); 
             }
-            FileUtils.copyInputStreamToFile(stream, file); 
-            FacesMessage message = new FacesMessage("Succesfully downloaded file to: " + path + "/" + file);
-            FacesContext.getCurrentInstance().addMessage(null, message);           
-            stream.close();
+            else {
+                String transcriptName = tutor.getUsername();
+
+                S3Object s3Object = s3.getObject(new GetObjectRequest(bucketName, keyName));
+                S3ObjectInputStream stream = s3Object.getObjectContent();
+
+                String home = System.getProperty("user.home");
+                Path path = Paths.get(home);
+                File file = new File(home, transcriptName.concat(".pdf"));
+                int i = 1;
+                while (file.exists() == true) { //if file exists at that location increment the file name by 1 
+                    file = new File(home, transcriptName.concat("(" + i + ").pdf"));
+                    i++;
+                }
+                FileUtils.copyInputStreamToFile(stream, file);
+                FacesMessage message = new FacesMessage("Succesfully downloaded file to: " + path + "/" + file);
+                FacesContext.getCurrentInstance().addMessage(null, message);
+                stream.close();
+            }
+            
 
             
                 

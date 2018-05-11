@@ -49,6 +49,7 @@ public class SessionBean implements Serializable {
     private String securityAnswer;
     private String securityQuestion;
     private User student;
+    private SessionBean sessionBean;
     private boolean checkStartButtonState = false;
     private boolean checkEndButtonState = true;
 
@@ -68,6 +69,17 @@ public class SessionBean implements Serializable {
         this.checkEndButtonState = checkEndButtonState;
     }
 
+    public SessionBean() {
+        sessionTimer = new Session();
+    }
+
+    public SessionBean getSessionBean() {
+        return sessionBean;
+    }
+
+    public void setSessionBean(SessionBean sessionBean) {
+        this.sessionBean = sessionBean;
+    }
 
     public User getStudent() {
         return student;

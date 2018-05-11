@@ -82,6 +82,42 @@ public class RequestBean implements Serializable {
 
     private double hourlyRate;
     private Session session;
+    private long id;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public Date getStartSessionTime() {
+        return startSessionTime;
+    }
+
+    public void setStartSessionTime(Date startSessionTime) {
+        this.startSessionTime = startSessionTime;
+    }
+
+    public Date getEndSessionTime() {
+        return endSessionTime;
+    }
+
+    public void setEndSessionTime(Date endSessionTime) {
+        this.endSessionTime = endSessionTime;
+    }
+
+    public double getElapsedTimeOfSession() {
+        return elapsedTimeOfSession;
+    }
+
+    public void setElapsedTimeOfSession(double elapsedTimeOfSession) {
+        this.elapsedTimeOfSession = elapsedTimeOfSession;
+    }
+    private Date startSessionTime;
+    private Date endSessionTime;
+    private double elapsedTimeOfSession;
 
     /**
      * RequestBean encapsulates all the functions/services involved in making a
@@ -438,8 +474,7 @@ public class RequestBean implements Serializable {
         String result = "failure";
         if (time.equals("Later")) {
             request.setCurrentTime(getLaterTime());
-        }
-        else {
+        } else {
             request.setCurrentTime(getCurrentTime());
         }
         request.setDayOfWeek(getCurrentDayOfWeek());
@@ -485,7 +520,7 @@ public class RequestBean implements Serializable {
      * Sets a tutor to the request if tutor accepts
      *
      * @param r
-     * @return 
+     * @return
      */
     public String setTutorToRequest(Request r) {
         tut4youApp.setTutorToRequest(r);
@@ -550,8 +585,8 @@ public class RequestBean implements Serializable {
     public void setSession(Session session) {
         this.session = session;
     }
-    
-        public Date getDayOfWeek() {
+
+    public Date getDayOfWeek() {
         return dayOfWeek;
     }
 
@@ -566,7 +601,5 @@ public class RequestBean implements Serializable {
     public void setHourlyRate(double hourlyRate) {
         this.hourlyRate = hourlyRate;
     }
-
-
 
 }

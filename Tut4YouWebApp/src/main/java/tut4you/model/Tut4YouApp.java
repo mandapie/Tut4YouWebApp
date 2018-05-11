@@ -16,6 +16,22 @@
  */
 package tut4you.model;
 
+import com.paypal.exception.ClientActionRequiredException;
+import com.paypal.exception.HttpErrorException;
+import com.paypal.exception.InvalidCredentialException;
+import com.paypal.exception.InvalidResponseDataException;
+import com.paypal.exception.MissingCredentialException;
+import com.paypal.exception.SSLConfigurationException;
+import com.paypal.sdk.exceptions.OAuthException;
+import com.paypal.svcs.services.AdaptivePaymentsService;
+import com.paypal.svcs.types.ap.PayRequest;
+import com.paypal.svcs.types.ap.PayResponse;
+import com.paypal.svcs.types.ap.Receiver;
+import com.paypal.svcs.types.ap.ReceiverList;
+import com.paypal.svcs.types.common.RequestEnvelope;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -37,6 +53,15 @@ import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
 import tut4you.exception.*;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+import static org.omnifaces.util.Faces.getServletContext;
+import tut4you.controller.PaymentBean;
 import tut4you.controller.UserBean;
 
 /**
@@ -922,12 +947,13 @@ public class Tut4YouApp {
     public Session startSessionTime(Request r, Session sessionTimer) {
         Request request = em.find(Request.class,
                 r.getId());
+        System.out.println(request.toString());
         Date startTime = new Date();
         sessionTimer.setStartSessionTime(startTime);
         request.setSession(sessionTimer);
         sessionTimer.setRequest(request);
         em.persist(sessionTimer);
-        em.merge(r);
+        em.merge(request);
         em.flush();
         return sessionTimer;
     }
@@ -1068,8 +1094,7 @@ public class Tut4YouApp {
         Tutor tutor = findTutor(currentUserEmail);
         if (tutor == null) {
             em.merge(updateUser);
-        }
-        else {
+        } else {
             tutor = (Tutor) updateUser;
             tutor.setHourlyRate(hr);
             em.merge(tutor);
@@ -1122,7 +1147,7 @@ public class Tut4YouApp {
         TypedQuery<String> Query = em.createNamedQuery(User.FIND_USER_EMAILS, String.class);
         return Query.getResultList();
     }
-    
+
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public Double getHourlyRate() {
@@ -1132,7 +1157,7 @@ public class Tut4YouApp {
         Query.setParameter("email", currentUserEmail);
         return Query.getSingleResult();
     }
-    
+
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public Date getDateJoinedAsTutor() {
@@ -1258,4 +1283,159 @@ public class Tut4YouApp {
         em.persist(zipCode);
         em.flush();
     }
+
+    @PermitAll
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public String payForTutoringSession(String email, double hourlyRate) {
+        PayRequest payRequest = new PayRequest();
+        try {
+            RequestEnvelope env = new RequestEnvelope();
+            env.setErrorLanguage("en_US");
+            List<Receiver> receiver = new ArrayList<>();
+            Receiver rec = new Receiver();
+            /**
+             * FIXME: This needs to take in hourly rate * elapsed time
+             */
+            //rec.setAmount(hourlyRate * elapsedTimeOfSession);
+            rec.setAmount(hourlyRate);
+            rec.setEmail(email);
+            receiver.add(rec);
+            String actionType = "Pay";
+            String returnUrl = "http://localhost:8080/Tut4YouWebApp/accounts/index.xhtml";
+            String cancelUrl = "http://localhost:8080/Tut4YouWebApp/accounts/index.xhtml";
+            String currencyCode = "USD";
+            ReceiverList receiverlst = new ReceiverList(receiver);
+            payRequest.setReceiverList(receiverlst);
+            payRequest.setRequestEnvelope(env);
+            payRequest.setActionType("PAY");
+            payRequest.setCancelUrl(cancelUrl);
+            payRequest.setReturnUrl(returnUrl);
+            payRequest.setCurrencyCode(currencyCode);
+            //Creating the configuration map
+            Properties prop = new Properties();
+            InputStream propstream = new FileInputStream(getServletContext().getRealPath("WEB-INF/sdk_config.properties"));
+            prop.load(propstream);
+            Map<String, String> customConfigurationMap = new HashMap<>();
+            customConfigurationMap.put("mode", "sandbox"); // Load the map with all mandatory parameters
+            customConfigurationMap.put("acct1.UserName", prop.getProperty("acct1.UserName"));
+            customConfigurationMap.put("acct1.Password", prop.getProperty("acct1.Password"));
+            customConfigurationMap.put("acct1.Signature", prop.getProperty("acct1.Signature"));
+            customConfigurationMap.put("acct1.AppId", prop.getProperty("acct1.AppId"));
+            //Creating service wrapper object
+            PayResponse payResponse;
+
+            AdaptivePaymentsService adaptivePaymentsService = new AdaptivePaymentsService(customConfigurationMap);
+            payResponse = adaptivePaymentsService.pay(payRequest, prop.getProperty("acct1.Username"));
+            String payKey = payResponse.getPayKey();
+
+            return payKey;
+        } catch (IOException ex) {
+            Logger.getLogger(Tut4YouApp.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InvalidCredentialException ex) {
+            Logger.getLogger(PaymentBean.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (HttpErrorException ex) {
+            Logger.getLogger(PaymentBean.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InvalidResponseDataException ex) {
+            Logger.getLogger(PaymentBean.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClientActionRequiredException ex) {
+            Logger.getLogger(PaymentBean.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (MissingCredentialException ex) {
+            Logger.getLogger(PaymentBean.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(PaymentBean.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (OAuthException ex) {
+            Logger.getLogger(PaymentBean.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SSLConfigurationException ex) {
+            Logger.getLogger(PaymentBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return "";
+    }
+
+    @PermitAll
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public Payment createPayment(String payKey, Session session) {
+        Session sessionTimer = em.find(Session.class, session.getId());
+        Payment payment = new Payment();
+        Map<String, String> map = getPayments(payKey);
+        payment.setTransactionId(map.get("paymentInfoList.paymentInfo(0).transactionId"));
+        payment.setPayKey(payKey);
+        payment.setPaymentStatus(map.get("status"));
+        payment.setTimeOfTransaction(map.get("responseEnvelope.timestamp"));
+        payment.setTransactionAmount(Double.parseDouble(map.get("paymentInfoList.paymentInfo(0).receiver.amount")));
+        // sessionTimer.setPayment(payment);
+        payment.setSession(sessionTimer);
+        em.persist(payment);
+        em.merge(sessionTimer);
+        em.flush();
+        return payment;
+    }
+
+    @PermitAll
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public Map<String, String> getPayments(String payKey) {
+        OkHttpClient client = new OkHttpClient();
+        Map<String, String> map = null;
+        MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
+        String json = "payKey=" + payKey + "&requestEnvelope.errorLanguage=en_US";
+        RequestBody body = RequestBody.create(mediaType, json);
+        okhttp3.Request request = new okhttp3.Request.Builder()
+                .url("https://svcs.sandbox.paypal.com/AdaptivePayments/PaymentDetails")
+                .post(body)
+                .addHeader("X-PAYPAL-SECURITY-USERID", "shayder426-facilitator_api1.gmail.com")
+                .addHeader("X-PAYPAL-SECURITY-PASSWORD", "KY5V6AAWCEFSKE5R")
+                .addHeader("X-PAYPAL-SECURITY-SIGNATURE", "Aea3S-zQp8Wqw4vgMOI6c015u53PAox42t7UAN9wZg.1Y7bs3AEWi7rK")
+                .addHeader("X-PAYPAL-REQUEST-DATA-FORMAT", "NV")
+                .addHeader("X-PAYPAL-RESPONSE-DATA-FORMAT", "NV")
+                .addHeader("X-PAYPAL-APPLICATION-ID", "APP-80W284485P519543T")
+                .addHeader("Cache-Control", "no-cache")
+                .addHeader("Postman-Token", "d8ea77a8-d3cd-486b-ba13-093a7f30eeb6")
+                .addHeader("Content-Type", "application/x-www-form-urlencoded")
+                .build();
+        try {
+            Response response = client.newCall(request).execute();
+            map = getPaymentDetails(response.body().string());
+
+        } catch (IOException ex) {
+            Logger.getLogger(PaymentBean.class.getName()).log(Level.SEVERE, null, ex);
+
+        }
+        return map;
+
+    }
+
+    @PermitAll
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public static Map<String, String> getPaymentDetails(String str) {
+        String[] tokens = str.split("&|=");
+        Map<String, String> map = new HashMap<>();
+        for (int i = 0; i < tokens.length - 1;) {
+            map.put(tokens[i++], tokens[i++]);
+        }
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            if (entry.getKey().equals("responseEnvelope.timestamp")) {
+                String result = entry.getValue();
+                result = result.substring(0, 10);
+                map.put(entry.getKey(), result);
+            }
+        }
+        return map;
+    }
+
+    /*@PermitAll
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public List<Payment> getPaymentList()
+    {
+        UserBean userBean = new UserBean();
+        String currentUserEmail = userBean.getEmailFromSession();
+        String email;
+        if (currentUserEmail == null) {
+            return null;
+        } else {
+            User user = findUser(currentUserEmail);
+            email = user.getEmail();
+            TypedQuery<Payment> paymentQuery = em.createNamedQuery(Payment.FIND_PAYMENTS_BY_EMAIL, Payment.class);
+            paymentQuery.setParameter("email", email);
+            return paymentQuery.getResultList();
+        }
+    }*/
 }

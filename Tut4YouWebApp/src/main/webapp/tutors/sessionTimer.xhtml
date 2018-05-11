@@ -57,6 +57,7 @@
                                  update="form1 startGrowl"
                                  value="Start Session"
                                  action="#{sessionBean.startTutorSession}"
+                                 actionListener="#{sessionBean.showGrowlStartMessage}"
                                  style="width:100%;height:200%;font-size:40px"/>
 
             </h:panelGrid>

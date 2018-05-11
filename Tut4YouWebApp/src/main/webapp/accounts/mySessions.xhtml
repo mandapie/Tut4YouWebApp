@@ -88,7 +88,11 @@
                                 </b:dataTableColumn>
                                 <b:dataTableColumn>
                                     <f:facet name="header">Length of Session</f:facet>
-                                    <h:outputText value="#{req.session.elapsedTimeOfSession}"/>
+                                    <h:outputText value="#{req.lengthOfSession}"/>
+                                </b:dataTableColumn>
+                                 <b:dataTableColumn>
+                                    <f:facet name="header">Session Id</f:facet>
+                                    <h:outputText value="#{req.session.id}"/>
                                 </b:dataTableColumn>
                                 <c:if test="#{!userBean.isTutor}">
                                     <b:dataTableColumn>

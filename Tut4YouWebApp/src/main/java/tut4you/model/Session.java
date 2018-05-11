@@ -13,9 +13,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
 
 /**
  * The Session Timer will keep track of the length of each tutoring session
@@ -31,17 +31,22 @@ public class Session implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, unique = true)
     private Long id;
+    
     @OneToOne
-    @JoinColumn(nullable = false)
+    @MapsId
     private Request request;
     
+    @OneToOne
+    private Payment payment;
 
+    public Payment getPayment() {
+        return payment;
+    }
 
- 
-    
-    @Temporal(javax.persistence.TemporalType.DATE)
+    public void setPayment(Payment payment) {
+        this.payment = payment;
+    }
     private Date startSessionTime;
-    @Temporal(javax.persistence.TemporalType.DATE)
     private Date endSessionTime;
     private double elapsedTimeOfSession;
 
@@ -144,7 +149,7 @@ public class Session implements Serializable {
     public void setElapsedTimeOfSession(double elapsedTimeOfSession) {
         this.elapsedTimeOfSession = elapsedTimeOfSession;
     }
-    
+
     @Override
     public int hashCode() {
         int hash = 0;

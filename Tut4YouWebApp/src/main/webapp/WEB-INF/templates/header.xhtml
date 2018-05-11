@@ -45,7 +45,7 @@
                                 <f:param name="username" value="#{userBean.user.username}" />
                             </b:navLink>
                         </c:if>
-                        <b:navLink></b:navLink>
+                        <b:navLink value="My Sessions" href="/Tut4YouWebApp/accounts/mySessions.xhtml"/>
                         <c:if test="#{!(userBean.isTutor)}">
                             <b:navLink value="Become Tutor" outcome="/students/becomeTutor.xhtml"/>
                         </c:if>

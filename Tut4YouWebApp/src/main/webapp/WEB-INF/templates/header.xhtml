@@ -42,6 +42,7 @@
                                 <f:param name="username" value="#{userBean.user.username}" />
                             </b:navLink>
                             <b:navLink value="My Transcript" outcome="/tutors/uploadTranscript.xhtml"></b:navLink>
+
                         </c:if>
                         <b:navLink></b:navLink>
                         <c:if test="#{!(userBean.isTutor)}">

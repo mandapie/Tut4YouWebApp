@@ -18,6 +18,7 @@ package tut4you.model;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
@@ -30,15 +31,12 @@ import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
-import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
 import tut4you.exception.*;
 import java.util.Arrays;
-import java.util.concurrent.TimeUnit;
-import javax.faces.application.FacesMessage;
 import tut4you.controller.UserBean;
 
 /**
@@ -271,20 +269,32 @@ public class Tut4YouApp {
      * @param doNotDisturb
      * @param zipCode
      * @return the number of tutors that tutors the course
-     * @author Andrew Kaichi <ahkaichi@gmail.com> Keith Tran
-     * <keithtran25@gmail.com>
+     * @author Andrew Kaichi <ahkaichi@gmail.com>
+     * Keith Tran <keithtran25@gmail.com>
      */
     @RolesAllowed("tut4youapp.student")
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public List<Tutor> getTutorsFromCourse(String course, String dayOfWeek, java.util.Date time, Boolean doNotDisturb, String zipCode) {
-        TypedQuery<Tutor> courseTutorQuery = em.createNamedQuery(Tutor.FIND_TUTORS_BY_COURSE_DAY_TIME_DZIP, Tutor.class
-        );
-        courseTutorQuery.setParameter("coursename", course);
-        courseTutorQuery.setParameter("dayofweek", dayOfWeek);
-        courseTutorQuery.setParameter("requestTime", time, TemporalType.TIME);
-        courseTutorQuery.setParameter("doNotDisturb", false);
-        courseTutorQuery.setParameter("zipCode", zipCode);
-        return courseTutorQuery.getResultList();
+        TypedQuery<Tutor> courseTutorQueryD = em.createNamedQuery(Tutor.FIND_TUTORS_BY_COURSE_DAY_TIME_DZIP, Tutor.class);
+        courseTutorQueryD.setParameter("coursename", course);
+        courseTutorQueryD.setParameter("dayofweek", dayOfWeek);
+        courseTutorQueryD.setParameter("requestTime", time, TemporalType.TIME);
+        courseTutorQueryD.setParameter("doNotDisturb", false);
+        courseTutorQueryD.setParameter("zipCode", zipCode);
+        TypedQuery<Tutor> courseTutorQueryC = em.createNamedQuery(Tutor.FIND_TUTORS_BY_COURSE_DAY_TIME_CZIP, Tutor.class);
+        courseTutorQueryC.setParameter("coursename", course);
+        courseTutorQueryC.setParameter("dayofweek", dayOfWeek);
+        courseTutorQueryC.setParameter("requestTime", time, TemporalType.TIME);
+        courseTutorQueryC.setParameter("doNotDisturb", false);
+        courseTutorQueryC.setParameter("zipCode", zipCode);
+        List<Tutor> allAvailableTutors = new ArrayList<Tutor>();
+        allAvailableTutors.addAll(courseTutorQueryD.getResultList());
+        for (Tutor x : courseTutorQueryC.getResultList()) {
+            if (!allAvailableTutors.contains(x)) {
+                allAvailableTutors.add(x);
+            }
+        }
+        return allAvailableTutors;
     }
 
     /**
@@ -899,7 +909,7 @@ public class Tut4YouApp {
         return list;
     }
 
-      /**
+    /**
      * Sets a tutor to the request when a tutor completes the request. IN
      * PROGRESS
      *
@@ -945,15 +955,13 @@ public class Tut4YouApp {
         double hours = minutes / 60;
         sessionTimer.setElapsedTimeOfSession(hours);
         em.merge(sessionTimer);
-        
-        
-        
+
         Tutor tutor = findTutor(currentUserEmail);
         Request request = em.find(Request.class, r.getId());
         request.setStatus(Request.Status.COMPLETED);
         request.setTutor(tutor);
         em.merge(request);
-        
+
         em.flush();
         return "sessionCompleted";
     }
@@ -965,8 +973,9 @@ public class Tut4YouApp {
         String securityAnswer = user.getSecurityAnswer();
         boolean val = securityAnswer.equals(answer);
         return val;
-}
-      /**
+    }
+
+    /**
      * Updates the average rating of the tutor
      *
      * @author Syed Haider <shayder426@gmail.com>
@@ -1053,41 +1062,33 @@ public class Tut4YouApp {
 
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void updateUser(User updateUser
-    ) {
+    public void updateUser(User updateUser, double hr) {
         UserBean userBean = new UserBean();
         String currentUserEmail = userBean.getEmailFromSession();
         Tutor tutor = findTutor(currentUserEmail);
         if (tutor == null) {
-            User student;
-            student = (User) updateUser;
-            em.merge(student);
-            em.flush();
-        } else {
-            User student;
-            student = (User) updateUser;
-            tutor = (Tutor) updateUser;
-            em.merge(student);
-            em.merge(tutor);
-            em.flush();
+            em.merge(updateUser);
         }
-        FacesMessage message = new FacesMessage("Successfully Updated Profile");
-        FacesContext.getCurrentInstance().addMessage(null, message);
-
+        else {
+            tutor = (Tutor) updateUser;
+            tutor.setHourlyRate(hr);
+            em.merge(tutor);
+        }
+        em.flush();
     }
-    
+
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void changePassword(String newPassword) {
         UserBean userBean = new UserBean();
         String currentUserEmail = userBean.getEmailFromSession();
         User user = findUser(currentUserEmail);
-        if (user != null){
+        if (user != null) {
             user.setPassword(newPassword);
             em.merge(user);
-            em.flush();  
+            em.flush();
         }
-        
+
     }
 
     /**
@@ -1099,13 +1100,11 @@ public class Tut4YouApp {
      */
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     @RolesAllowed("tut4youapp.tutor")
-    public Tutor updateCurrentZip(String currentZip
-    ) {
+    public Tutor updateCurrentZip(String currentZip) {
         UserBean userBean = new UserBean();
         String currentUserEmail = userBean.getEmailFromSession();
         Tutor tutor = findTutor(currentUserEmail);
         tutor.getZipCode().setCurrentZipCode(currentZip);
-        //tutor.setCurrentZip(currentZip);
         em.merge(tutor);
         em.flush();
         return tutor;
@@ -1120,9 +1119,28 @@ public class Tut4YouApp {
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     @PermitAll
     public List<String> getUserEmails() {
-        TypedQuery<String> Query = em.createNamedQuery(User.FIND_USER_EMAILS, String.class
-        );
+        TypedQuery<String> Query = em.createNamedQuery(User.FIND_USER_EMAILS, String.class);
         return Query.getResultList();
+    }
+    
+    @PermitAll
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public Double getHourlyRate() {
+        UserBean userBean = new UserBean();
+        String currentUserEmail = userBean.getEmailFromSession();
+        TypedQuery<Double> Query = em.createNamedQuery(Tutor.FIND_HOURLY_RATE_BY_EMAIL, Double.class);
+        Query.setParameter("email", currentUserEmail);
+        return Query.getSingleResult();
+    }
+    
+    @PermitAll
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public Date getDateJoinedAsTutor() {
+        UserBean userBean = new UserBean();
+        String currentUserEmail = userBean.getEmailFromSession();
+        TypedQuery<Date> Query = em.createNamedQuery(Tutor.FIND_DATE_JOINED_BY_EMAIL, Date.class);
+        Query.setParameter("email", currentUserEmail);
+        return Query.getSingleResult();
     }
 
     /**
@@ -1134,11 +1152,10 @@ public class Tut4YouApp {
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     @PermitAll
     public List<String> getUserUserNames() {
-        TypedQuery<String> Query = em.createNamedQuery(User.FIND_USER_USERNAMES, String.class
-        );
+        TypedQuery<String> Query = em.createNamedQuery(User.FIND_USER_USERNAMES, String.class);
         return Query.getResultList();
     }
-  
+
     /**
      * Adds ZipCode to DB if it is not already in DB but first checks if it is
      * in the DB
@@ -1150,21 +1167,19 @@ public class Tut4YouApp {
      */
     @RolesAllowed("tut4youapp.student")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public ZipCode addZipCode(ZipCode zipCode
-    ) {
-        
+    public ZipCode addZipCode(ZipCode zipCode) {
         TypedQuery<ZipCode> Query = em.createNamedQuery(ZipCode.FIND_ZIP_BY_ZIP_MAXRADIUS, ZipCode.class);
         Query.setParameter("zipCode", zipCode.getCurrentZipCode());
         Query.setParameter("maxRadius", zipCode.getMaxRadius());
         if (Query.getResultList().isEmpty()) {
             em.persist(zipCode);
             em.flush();
-        }
-        else {
+        } else {
             zipCode = Query.getSingleResult();
         }
         return zipCode;
     }
+
     /**
      * Add ZipCodeByRadius if it does not belong to zip code location
      *
@@ -1174,23 +1189,19 @@ public class Tut4YouApp {
      */
     @RolesAllowed("tut4youapp.student")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public ZipCodeByRadius addZipCodeByRadius(ZipCode zipCode, ZipCodeByRadius zipCodeByRadius
-    ) {
+    public ZipCodeByRadius addZipCodeByRadius(ZipCode zipCode, ZipCodeByRadius zipCodeByRadius) {
         ZipCodeByRadius zipCodeByRadiusTemp = em.find(ZipCodeByRadius.class, zipCodeByRadius.getZipCodeByRadius());
         if (zipCodeByRadiusTemp == null) {
             zipCode.addZipCodeByRadius(zipCodeByRadius);
             zipCodeByRadius.addZipCode(zipCode);
             em.persist(zipCodeByRadius);
             em.flush();
-        }
-        else {
+        } else {
             zipCodeByRadiusTemp.addZipCode(zipCode);
-            zipCode.addZipCodeByRadius(zipCodeByRadiusTemp);      
-            em.merge(zipCode); 
-
+            zipCode.addZipCodeByRadius(zipCodeByRadiusTemp);
+            em.merge(zipCode);
         }
         return zipCodeByRadius;
-
     }
 
     /**
@@ -1200,24 +1211,25 @@ public class Tut4YouApp {
      */
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void saveMessage(Message message
-    ) {
+    public void saveMessage(Message message) {
         em.persist(message);
         em.flush();
     }
+
     /**
      * Allows student to become a tutor after already registering as a student
+     *
      * @param hourlyRate
      * @param dateJoinedAsTutor
      * @param defaultZip
-     * @param zipCode 
+     * @param zipCode
      */
     @RolesAllowed("tut4youapp.student")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void becomeTutor(double hourlyRate, Date dateJoinedAsTutor, String defaultZip, ZipCode zipCode) {
         UserBean userBean = new UserBean();
         String currentUserEmail = userBean.getEmailFromSession();
-        
+
         User clone = em.find(User.class, currentUserEmail);
         System.out.print("CLONE: " + clone);
         clone.setGroups(null);
@@ -1228,15 +1240,15 @@ public class Tut4YouApp {
         if (group == null) {
             group = new Group("tut4youapp.student");
         }
-        
+
         Tutor tutor = new Tutor(clone);
-        
+
         tutor.addGroup(group); //Add user a student role
         group.addTutor(tutor);
         group = em.find(Group.class, "tut4youapp.tutor");
         tutor.addGroup(group); //Add user a tutor role
         group.addTutor(tutor);
-            
+
         tutor.setDateJoinedAsTutor(dateJoinedAsTutor);
         tutor.setHourlyRate(hourlyRate);
         tutor.setDefaultZip(defaultZip);

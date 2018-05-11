@@ -34,11 +34,10 @@
         <b:panel title="Write a Review" collapsible="false" look="info">
             <b:form id="ratingForm">
                 <h:outputLabel value="Choose 1-5 stars!"/>
-                
                 <p:rating id="rating" value="#{ratingBean.rating.ratingValue}" required="true" cancel="true" validator="#{basicValidator.validateRating}">
                     <p:message for="rating"/>
                 </p:rating>
-                <br></br>
+                <br/>
                 <p:inputTextarea required="true" label="Description/Topic: (300 characters max)" 
                                  placeholder="Enter a short description..." 
                                  value="#{ratingBean.rating.description}" 
@@ -52,7 +51,6 @@
                 </b:row>
             </b:form>
         </b:panel>
-
         <ui:debug hotkey='x' />
     </ui:define>
 </ui:composition>

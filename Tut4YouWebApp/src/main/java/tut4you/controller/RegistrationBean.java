@@ -232,12 +232,12 @@ public class RegistrationBean implements Serializable {
                 if (newUser.isInformationValid(confirmPassword)) {
                     newUser.setPassword(tut4you.controller.HashPassword.getSHA512Digest(newUser.getPassword()));
                     try {
-                        double pr = 0;
+                        double hr = 0;
                         if (hourlyRate != null) {
-                            pr = Double.parseDouble(hourlyRate);
+                            hr = Double.parseDouble(hourlyRate);
                         }
                         joinedDateAsTutor = getCurrentDate();
-                        tut4youApp.registerUser(newUser, userType, pr, defaultZip, zipCode, joinedDateAsTutor);
+                        tut4youApp.registerUser(newUser, userType, hr, defaultZip, zipCode, joinedDateAsTutor);
                         result = "success";
                     }
                     catch (UserExistsException see) {

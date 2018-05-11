@@ -1302,7 +1302,7 @@ public class Tut4YouApp {
             receiver.add(rec);
             String actionType = "Pay";
             String returnUrl = "http://localhost:8080/Tut4YouWebApp/accounts/index.xhtml";
-            String cancelUrl = "http://localhost:8080/Tut4YouWebApp/accounts/index.xhtml";
+            String cancelUrl = "http://localhost:8080/Tut4YouWebApp/accounts/myPayments.xhtml";
             String currencyCode = "USD";
             ReceiverList receiverlst = new ReceiverList(receiver);
             payRequest.setReceiverList(receiverlst);
@@ -1356,13 +1356,14 @@ public class Tut4YouApp {
     public Payment createPayment(String payKey, Session session) {
         Session sessionTimer = em.find(Session.class, session.getId());
         Payment payment = new Payment();
-        Map<String, String> map = getPayments(payKey);
-        payment.setTransactionId(map.get("paymentInfoList.paymentInfo(0).transactionId"));
+        //Map<String, String> map = getPayments(payKey);
         payment.setPayKey(payKey);
+
+        /*  payment.setTransactionId(map.get("paymentInfoList.paymentInfo(0).transactionId"));
         payment.setPaymentStatus(map.get("status"));
         payment.setTimeOfTransaction(map.get("responseEnvelope.timestamp"));
         payment.setTransactionAmount(Double.parseDouble(map.get("paymentInfoList.paymentInfo(0).receiver.amount")));
-        // sessionTimer.setPayment(payment);
+         */ sessionTimer.setPayment(payment);
         payment.setSession(sessionTimer);
         em.persist(payment);
         em.merge(sessionTimer);
@@ -1373,17 +1374,20 @@ public class Tut4YouApp {
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public Map<String, String> getPayments(String payKey) {
+        System.out.println("GETPAYMENTS: " + payKey);
+                
+        System.out.println("I'm HERE");
         OkHttpClient client = new OkHttpClient();
-        Map<String, String> map = null;
+        Map<String, String> map = new HashMap<>();
         MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
         String json = "payKey=" + payKey + "&requestEnvelope.errorLanguage=en_US";
         RequestBody body = RequestBody.create(mediaType, json);
         okhttp3.Request request = new okhttp3.Request.Builder()
                 .url("https://svcs.sandbox.paypal.com/AdaptivePayments/PaymentDetails")
                 .post(body)
-                .addHeader("X-PAYPAL-SECURITY-USERID", "shayder426-facilitator_api1.gmail.com")
-                .addHeader("X-PAYPAL-SECURITY-PASSWORD", "KY5V6AAWCEFSKE5R")
-                .addHeader("X-PAYPAL-SECURITY-SIGNATURE", "Aea3S-zQp8Wqw4vgMOI6c015u53PAox42t7UAN9wZg.1Y7bs3AEWi7rK")
+                .addHeader("X-PAYPAL-SECURITY-USERID", "shayder426buyer_api1.gmail.com")
+                .addHeader("X-PAYPAL-SECURITY-PASSWORD", "8WBUVXL2HGWPFT6C")
+                .addHeader("X-PAYPAL-SECURITY-SIGNATURE", "AR6P4zSMdK8xkhzWMvTgEQtF6rBEAonj3DVtstGOz7bYKo06Qnm18F0V")
                 .addHeader("X-PAYPAL-REQUEST-DATA-FORMAT", "NV")
                 .addHeader("X-PAYPAL-RESPONSE-DATA-FORMAT", "NV")
                 .addHeader("X-PAYPAL-APPLICATION-ID", "APP-80W284485P519543T")
@@ -1393,7 +1397,21 @@ public class Tut4YouApp {
                 .build();
         try {
             Response response = client.newCall(request).execute();
-            map = getPaymentDetails(response.body().string());
+            String value = response.body().string();
+            String[] tokens = value.split("&|=");
+
+            for (int i = 0; i < tokens.length - 1;) {
+                map.put(tokens[i++], tokens[i++]);
+            }
+            for (Map.Entry<String, String> entry : map.entrySet()) {
+                if (entry.getKey().equals("responseEnvelope.timestamp")) {
+                    String result = entry.getValue();
+                    result = result.substring(0, 10);
+                    map.put(entry.getKey(), result);
+                }
+                System.out.println(entry.getKey() + " / " + entry.getValue());
+            }
+            return map;
 
         } catch (IOException ex) {
             Logger.getLogger(PaymentBean.class.getName()).log(Level.SEVERE, null, ex);
@@ -1405,26 +1423,7 @@ public class Tut4YouApp {
 
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public static Map<String, String> getPaymentDetails(String str) {
-        String[] tokens = str.split("&|=");
-        Map<String, String> map = new HashMap<>();
-        for (int i = 0; i < tokens.length - 1;) {
-            map.put(tokens[i++], tokens[i++]);
-        }
-        for (Map.Entry<String, String> entry : map.entrySet()) {
-            if (entry.getKey().equals("responseEnvelope.timestamp")) {
-                String result = entry.getValue();
-                result = result.substring(0, 10);
-                map.put(entry.getKey(), result);
-            }
-        }
-        return map;
-    }
-
-    /*@PermitAll
-    @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public List<Payment> getPaymentList()
-    {
+    public List<Payment> createPaymentList() {
         UserBean userBean = new UserBean();
         String currentUserEmail = userBean.getEmailFromSession();
         String email;
@@ -1433,9 +1432,29 @@ public class Tut4YouApp {
         } else {
             User user = findUser(currentUserEmail);
             email = user.getEmail();
+            System.out.println("Did you at least get here");
             TypedQuery<Payment> paymentQuery = em.createNamedQuery(Payment.FIND_PAYMENTS_BY_EMAIL, Payment.class);
-            paymentQuery.setParameter("email", email);
+            // paymentQuery.setParameter("email", email);
             return paymentQuery.getResultList();
         }
-    }*/
+    }
+
+    public List<Payment> getPaymentList() {
+        List<Payment> payKeyList = createPaymentList();
+        System.out.println("Are you here");
+        System.out.println("SIZE: " + payKeyList.size());
+        Map<String, String> map = new HashMap<>();
+        for (int x = 0; x < payKeyList.size(); x++) {
+            map = getPayments(payKeyList.get(x).getPayKey());
+            Payment payment = em.find(Payment.class, payKeyList.get(x).getPayKey());
+            System.out.println("PAYKEY BOI:" + payment.getPayKey());
+            payment.setTransactionAmount(Double.parseDouble(map.get("paymentInfoList.paymentInfo(0).receiver.amount")));
+            payment.setTransactionId(map.get("paymentInfoList.paymentInfo(0).transactionId"));
+            payment.setPaymentStatus(map.get("status"));
+            payment.setTimeOfTransaction(map.get("responseEnvelope.timestamp"));
+            em.merge(payment);
+        }
+        List<Payment> paymentList = createPaymentList();
+        return paymentList;
+    }
 }

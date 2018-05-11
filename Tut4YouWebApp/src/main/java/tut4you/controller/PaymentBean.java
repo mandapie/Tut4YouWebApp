@@ -27,6 +27,7 @@ public class PaymentBean implements Serializable {
     private Payment payment;
     private static final Logger LOGGER = Logger.getLogger("PaymentBean");
     private List<Payment> paymentList = new ArrayList(); //list of available tutors
+    private List<Payment> payKeyList = new ArrayList(); //list of paykeys
 
     @EJB
     private Tut4YouApp tut4youapp;
@@ -45,7 +46,7 @@ public class PaymentBean implements Serializable {
     }
 
     public List<Payment> getPaymentList() {
-        //paymentList = tut4youapp.getPaymentList();
+        paymentList = tut4youapp.getPaymentList();
         return paymentList;
     }
 
@@ -57,7 +58,6 @@ public class PaymentBean implements Serializable {
         String payKey;
         System.out.println(session);
         payKey = tut4youapp.payForTutoringSession(email, hourlyRate);
-        payment = tut4youapp.createPayment(payKey, session);
         ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
         String url = "https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_ap-payment&paykey=" + payKey;
         try {
@@ -65,6 +65,8 @@ public class PaymentBean implements Serializable {
         } catch (IOException ex) {
             Logger.getLogger(PaymentBean.class.getName()).log(Level.SEVERE, null, ex);
         }
+                payment = tut4youapp.createPayment(payKey, session);
+
     }
 
 

@@ -33,7 +33,6 @@ public class Session implements Serializable {
     private Long id;
     
     @OneToOne
-    @MapsId
     private Request request;
     
     @OneToOne

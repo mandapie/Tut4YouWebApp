@@ -36,118 +36,32 @@
     <ui:define name="content">
         <b:container fluid="true">
             <h:panelGrid columns="1" style="text-align:center; margin-left: 34%">
-                <h1 style="font-weight:bold">My Sessions &amp; Reviews </h1>
+                <h1 style="font-weight:bold">My Payments </h1>
                 <p:separator />                       
             </h:panelGrid>
             <b:column>
                 <b:form>
                     <b:row>
-                        <b:panel title="Upcoming Sessions" collapsible="false" look="info">
-                            <b:dataTable value="#{requestBean.acceptedList}" var="req" id="accepetedTable">
-                                <c:if test="#{userBean.isTutor}">
-                                    <b:dataTableColumn>
-                                        <f:facet name="header">Student</f:facet>
-                                        <h:outputText value="#{req.student.firstName} #{req.student.lastName}"/>
-                                    </b:dataTableColumn>
-                                </c:if>
-                                <c:if test="#{!userBean.isTutor}">
-                                    <b:dataTableColumn>
-                                        <f:facet name="header">Tutor</f:facet>
-                                        <h:outputText value="#{req.tutor.firstName} #{req.tutor.lastName}"/>
-                                    </b:dataTableColumn>
-                                </c:if>
+                        <b:panel title="My Payments" collapsible="false" look="info">
+                            <b:dataTable value="#{paymentBean.paymentList}" var="pay" id="payTable">
+                     
                                 <b:dataTableColumn>
-                                    <f:facet name="header">Day Of Week</f:facet>
-                                    <h:outputText value="#{req.dayOfWeek}"/>
+                                    <f:facet name="header">Transaction ID</f:facet>
+                                    <h:outputText value="#{pay.transactionId}"/>
                                 </b:dataTableColumn>
-                                <b:dataTableColumn>
-                                    <f:facet name="header">Estimated Length of Session</f:facet>
-                                    <h:outputText value="#{req.lengthOfSession}"/>
+                                  <b:dataTableColumn>
+                                    <f:facet name="header">Time of Transaction</f:facet>
+                                    <h:outputText value="#{pay.timeOfTransaction}"/>
                                 </b:dataTableColumn>
-                            </b:dataTable>  
-                        </b:panel>
-                    </b:row>
-                    <b:row>
-                        <b:panel title="Previous Sessions" collapsible="false" look="info">
-                            <b:dataTable value="#{requestBean.completedList}" var="req" id="completedTable">
-                                <c:if test="#{userBean.isTutor}">
-                                    <b:dataTableColumn>
-                                        <f:facet name="header">Student</f:facet>
-                                        <h:outputText value="#{req.student.firstName} #{req.student.lastName}"/>
-                                    </b:dataTableColumn>
-                                </c:if>
-                                <c:if test="#{!userBean.isTutor}">
-                                    <b:dataTableColumn>
-                                        <f:facet name="header">Tutor</f:facet>
-                                        <h:outputText value="#{req.tutor.firstName} #{req.tutor.lastName}"/>
-                                    </b:dataTableColumn>
-                                </c:if>
-                                <b:dataTableColumn>
-                                    <f:facet name="header">Day Of Week</f:facet>
-                                    <h:outputText value="#{req.dayOfWeek}"/>
-                                </b:dataTableColumn>
-                                <b:dataTableColumn>
-                                    <f:facet name="header">Length of Session</f:facet>
-                                    <h:outputText value="#{req.session.elapsedTimeOfSession}"/>
-                                </b:dataTableColumn>
-                                 <b:dataTableColumn>
-                                    <f:facet name="header">Session Id</f:facet>
-                                    <h:outputText value="#{req.session.id}"/>
-                                </b:dataTableColumn>
-                                <c:if test="#{!userBean.isTutor}">
-                                    <b:dataTableColumn>
-                                        <f:facet name="header">Pay Now!</f:facet>
-                                        <b:commandButton value="Pay Tutor" look="primary" action="#{paymentBean.payForTutoringSession(req.tutor.email,req.tutor.hourlyRate,req.session)}" />
-                                    </b:dataTableColumn>
-                                </c:if>
-
-                            </b:dataTable>  
+                                  <b:dataTableColumn>
+                                    <f:facet name="header">Amount </f:facet>
+                                    <h:outputText value="#{pay.transactionAmount}"/>
+                                </b:dataTableColumn> 
+                            </b:dataTable>
                         </b:panel>
                     </b:row>
                 </b:form>
-            </b:column>
-            <h:panelGrid columns="1" style="text-align:center; margin-left: 42%">
-                <h1 style="font-weight:bold">My Reviews</h1>
-                <p:separator />                       
-            </h:panelGrid>
-            <b:column>
-                <c:if test="#{userBean.isTutor}">
-                    <p:dataScroller value="#{ratingBean.getRatingList(userBean.user.email)}" var="rating" chunkSize="10">
-                        <div style="border-bottom:solid 1px;">
-                            <b:row>
-                                <b:column tiny-screen="3">
-                                    <h:outputLabel value="#{rating.student.firstName} #{rating.student.lastName}"/>
-                                </b:column>
-                                <b:column tiny-screen="9">
-                                    <b:row>
-                                        <b:column tiny-screen="3">
-                                            <p:rating value="#{rating.ratingValue}" readonly="true"/>
-                                        </b:column>
-                                        <b:column>
-                                            <h:outputText value="#{rating.dateRated}">
-                                                <f:convertDateTime pattern="M-d-yyyy"/>
-                                            </h:outputText>
-                                        </b:column>
-                                    </b:row>
-                                    <b:row>
-                                        <b:column>
-                                            <h:outputText value="#{rating.description}"/>
-                                        </b:column>
-                                    </b:row>
-                                    <b:row style="margin-bottom:5px;">
-                                        <b:column>
-                                            <b:commandLink style="color:#6ba2ff;" value="Edit Rating" action="#{updateRatingBean.goToEditRatingPage(rating)}" rendered="#{profileBean.checkIfUserRated(rating.student.email)}"/>
-                                            <span/>
-                                            <b:commandLink style="color:#6ba2ff;" value="Delete Rating" action="#{ratingBean.deleteRating(rating)}" rendered="#{profileBean.checkIfUserRated(rating.student.email)}"/>
-                                        </b:column>
-                                    </b:row>
-                                </b:column>
-                            </b:row>
-                        </div>
-                        <br/>
-                    </p:dataScroller>
-                </c:if>
-            </b:column>
+            </b:column>  
         </b:container>
         <ui:debug hotkey='x'/>
     </ui:define>

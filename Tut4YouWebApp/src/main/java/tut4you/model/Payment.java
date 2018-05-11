@@ -26,6 +26,9 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "Payment")
+@NamedQueries({
+    @NamedQuery(name = Payment.FIND_PAYMENTS_BY_EMAIL, query = "SELECT p FROM Payment p")
+})
 public class Payment implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -37,6 +40,7 @@ public class Payment implements Serializable {
 
     @Id
     private String payKey;
+    
     private String transactionId;
     private String timeOfTransaction;
     private double transactionAmount;

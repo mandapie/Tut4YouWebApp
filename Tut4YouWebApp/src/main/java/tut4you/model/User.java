@@ -112,10 +112,41 @@ public class User implements Serializable {
 
     @OneToOne 
     private FlaggedUser flaggedUser;
+    
+    @OneToMany(mappedBy = "moderator", cascade = CascadeType.ALL)
+    private Collection<Complaint> moderatorComplaint;
+    
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private Collection<Complaint> userComplaint;
+    
+    @OneToMany(mappedBy = "reportedUser", cascade = CascadeType.ALL)
+    private Collection<Complaint> reportedUserComplaint;
     public ModeratorApplication getModeratorApplication() {
         return moderatorApplication;
     }
+     public Collection<Complaint> getModeratorComplaint() {
+        return moderatorComplaint;
+    }
 
+    public void setModeratorComplaint(Collection<Complaint> moderatorComplaint) {
+        this.moderatorComplaint = moderatorComplaint;
+    }
+
+    public Collection<Complaint> getUserComplaint() {
+        return userComplaint;
+    }
+
+    public void setUserComplaint(Collection<Complaint> userComplaint) {
+        this.userComplaint = userComplaint;
+    }
+
+    public Collection<Complaint> getReportedUserComplaint() {
+        return reportedUserComplaint;
+    }
+
+    public void setReportedUserComplaint(Collection<Complaint> reportedUserComplaint) {
+        this.reportedUserComplaint = reportedUserComplaint;
+    }
     public void setModeratorApplication(ModeratorApplication moderatorApplication) {
         this.moderatorApplication = moderatorApplication;
     }

@@ -56,6 +56,17 @@ public class Complaint implements Serializable {
     @ManyToOne
     private User user;
     
+    @ManyToOne 
+    private User moderator;
+
+    public User getModerator() {
+        return moderator;
+    }
+
+    public void setModerator(User moderator) {
+        this.moderator = moderator;
+    }
+    
     public boolean isIsReviewed() {
         return isReviewed;
     }

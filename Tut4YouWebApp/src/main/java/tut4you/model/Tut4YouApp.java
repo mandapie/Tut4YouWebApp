@@ -1391,7 +1391,6 @@ public class Tut4YouApp {
         complaint.setReportedUser(reportedUser);
         em.persist(complaint);
         em.flush();
-        
     }
     /**
      * Query all complaints from the database
@@ -1403,5 +1402,56 @@ public class Tut4YouApp {
         TypedQuery<Complaint> query = em.createNamedQuery(Complaint.FIND_UNRESOLVED_COMPLAINTS, Complaint.class);
         query.setParameter("isReviewed", false);
         return query.getResultList();
+    }
+    
+    @RolesAllowed("tut4youapp.moderator")
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void closeComplaint(Complaint complaint) {
+        UserBean userBean = new UserBean();
+        String currentUserEmail = userBean.getEmailFromSession();
+        
+        User moderator = em.find(User.class, currentUserEmail);
+        
+        complaint.setModerator(moderator);
+        complaint.setIsReviewed(true);
+        em.merge(complaint);
+        em.flush();
+    }
+    @RolesAllowed("tut4youapp.moderator")
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public FlaggedUser findFlaggedUser(String email) {
+        TypedQuery<FlaggedUser> query = em.createNamedQuery(FlaggedUser.FIND_FLAGGED_USER, FlaggedUser.class);
+        query.setParameter("email", email);
+        
+        FlaggedUser flaggedUser;
+        if(query.getSingleResult() == null) {
+            flaggedUser = new FlaggedUser();
+        }
+        else {
+            flaggedUser = query.getSingleResult();
+        }
+        
+        return flaggedUser;
+    }
+    
+    @RolesAllowed("tut4youapp.moderator")
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void flagUser(User reportedUser) {
+        UserBean userBean = new UserBean();
+        String currentUserEmail = userBean.getEmailFromSession();
+        
+        User moderator = em.find(User.class, currentUserEmail);
+        FlaggedUser flaggedUser = new FlaggedUser();
+        //FlaggedUser flaggedUser = findFlaggedUser(reportedUser.getEmail());
+        //if(flaggedUser == null) {
+         //   flaggedUser = new FlaggedUser();
+        //}
+        
+        flaggedUser.setUser(reportedUser);
+        flaggedUser.addModerator(moderator);
+        flaggedUser.setCount(flaggedUser.getCount() + 1);
+        
+        em.persist(flaggedUser);
+        em.flush();
     }
 }

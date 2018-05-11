@@ -91,6 +91,7 @@ public class ComplaintBean implements Serializable {
     public void createComplaintBean() {
         complaint = new Complaint();
         complaint.setIsReviewed(false);
+        
     }
     
     /**
@@ -110,5 +111,12 @@ public class ComplaintBean implements Serializable {
     }
     public void createNewComplaint() {
         tut4youApp.createNewComplaint(user, complaint);
+    }
+    public void closeComplaint() {
+        tut4youApp.closeComplaint(complaint);
+    }
+    public void flagUser() {
+        tut4youApp.closeComplaint(complaint);
+        tut4youApp.flagUser(complaint.getReportedUser());
     }
 }

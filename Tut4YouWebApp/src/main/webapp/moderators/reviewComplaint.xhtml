@@ -48,10 +48,10 @@
             </b:row>
             <b:row>
                 <b:column>
-                    <b:commandButton value="Suspend User" look="danger" action="#{moderatorBean.acceptModeratorApplication(moderatorBean.moderatorApplication)}" />
+                    <b:commandButton value="Suspend User" look="danger" action="#{complaintBean.flagUser()}" />
                 </b:column>
                 <b:column>
-                    <b:commandButton value="Close Complaint" look="primary" action="#{moderatorBean.declineModeratorApplication(moderatorApplication)}"/>
+                    <b:commandButton value="Close Complaint" look="primary" action="#{complaintBean.closeComplaint()}"/>
                 </b:column>
 
 

@@ -8,12 +8,15 @@ package tut4you.model;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -25,8 +28,19 @@ import javax.persistence.TemporalType;
  */
 @Table(name = "FlaggedUser")
 @Entity
+@NamedQueries({
+    @NamedQuery(name = FlaggedUser.FIND_FLAGGED_USER, query = "SELECT c FROM FlaggedUser c WHERE c.user.email = :email"),
+})
 public class FlaggedUser implements Serializable {
 
+    public FlaggedUser() {
+        this.count = 0;
+    }
+    /**
+     * JPQL Query to Flagged User by User email
+     */
+    public static final String FIND_FLAGGED_USER = "FlaggedUser.findFlaggedUser";
+    
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,7 +62,12 @@ public class FlaggedUser implements Serializable {
     public void setModerators(Collection<User> moderators) {
         this.moderators = moderators;
     }
-
+    public void addModerator(User moderator) {
+        if (this.moderators == null) {
+            this.moderators = new HashSet();
+        }
+        this.moderators.add(moderator);
+    }
     public User getUser() {
         return user;
     }

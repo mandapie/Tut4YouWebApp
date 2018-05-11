@@ -55,6 +55,8 @@ public class UserBean implements Serializable {
     @EJB
     private Tut4YouApp tut4youapp;
 
+    private String email;
+    private String pass; // loggin password
     private User user;
     private String oldPassword;
     private String newPassword;
@@ -79,7 +81,7 @@ public class UserBean implements Serializable {
     @PreDestroy
     public void destroyUserBean() {
     }
-    
+
     public double getHourlyRate() {
         hourlyRate = tut4youapp.getHourlyRate();
         return hourlyRate;
@@ -88,7 +90,7 @@ public class UserBean implements Serializable {
     public void setHourlyRate(double hourlyRate) {
         this.hourlyRate = hourlyRate;
     }
-    
+
     public String gethRate() {
         hRate = Double.toString(hourlyRate);
         return hRate;
@@ -97,7 +99,7 @@ public class UserBean implements Serializable {
     public void sethRate(String hRate) {
         this.hRate = hRate;
     }
-    
+
     public String getCurrentZip() {
         return currentZip;
     }
@@ -105,9 +107,26 @@ public class UserBean implements Serializable {
     public void setCurrentZip(String currentZip) {
         this.currentZip = currentZip;
     }
+    
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPass() {
+        return pass;
+    }
+
+    public void setPass(String pass) {
+        this.pass = pass;
+    }
 
     /**
      * get boolean condition
+     *
      * @return condition
      */
     public boolean isCondition() {
@@ -116,6 +135,7 @@ public class UserBean implements Serializable {
 
     /**
      * set boolean condition
+     *
      * @param condition
      */
     public void setCondition(boolean condition) {
@@ -124,6 +144,7 @@ public class UserBean implements Serializable {
 
     /**
      * Gets the Tutor object
+     *
      * @return
      */
     public User getUser() {
@@ -132,14 +153,16 @@ public class UserBean implements Serializable {
 
     /**
      * Sets the User object
+     *
      * @param user
      */
     public void setUser(User user) {
         this.user = user;
     }
-    
+
     /**
      * Gets the field of the oldPassword
+     *
      * @return the field of the old Password
      */
     public String getOldPassword() {
@@ -148,14 +171,16 @@ public class UserBean implements Serializable {
 
     /**
      * Sets the value in the old password to check if password match
+     *
      * @param oldPassword the password matching the typed password
      */
     public void setOldPassword(String oldPassword) {
         this.oldPassword = oldPassword;
     }
-    
+
     /**
      * Gets the field of the new Password
+     *
      * @return the field of the new Password
      */
     public String getNewPassword() {
@@ -164,14 +189,16 @@ public class UserBean implements Serializable {
 
     /**
      * Sets the value of the new password
-     * @param newPassword 
+     *
+     * @param newPassword
      */
     public void setNewPassword(String newPassword) {
         this.newPassword = newPassword;
     }
-    
+
     /**
      * Gets the index of the tab
+     *
      * @return tabIndex
      */
     public int getTabIndex() {
@@ -180,6 +207,7 @@ public class UserBean implements Serializable {
 
     /**
      * Sets the index of the tab
+     *
      * @param tabIndex
      */
     public void setTabIndex(int tabIndex) {
@@ -188,6 +216,7 @@ public class UserBean implements Serializable {
 
     /**
      * Called the EJB to switch the state of doNotDisturb
+     *
      * @param d
      */
     public void switchDoNotDisturb(Boolean d) {
@@ -197,6 +226,7 @@ public class UserBean implements Serializable {
     /**
      * Determine if the user is authenticated and if so, make sure the session
      * scope includes the User object for the authenticated user
+     *
      * @return true if the user making a request is authenticated, false
      * otherwise.
      */
@@ -218,6 +248,7 @@ public class UserBean implements Serializable {
 
     /**
      * Determine if current authenticated user has the role of tutor
+     *
      * @return true if user has role of tutor, false otherwise.
      */
     public boolean isIsTutor() {
@@ -231,7 +262,25 @@ public class UserBean implements Serializable {
     }
 
     /**
+     * login method to check user is a registered user who is
+     * @return result
+     */
+    public String login() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+        try {
+            //this is where you check the user before you log them in
+            request.login(email, pass); //log user in
+        } catch (ServletException e) {
+            context.addMessage(null, new FacesMessage("Login failed."));
+            return "failure";
+        }
+        return "success";
+    }
+
+    /**
      * Logout the student and invalidate the session
+     *
      * @return success if student is logged out and session invalidated, failure
      * otherwise.
      */
@@ -273,6 +322,7 @@ public class UserBean implements Serializable {
 
     /**
      * updates current zip
+     *
      * @param zip
      */
     public void updateCurrentZip() {
@@ -284,6 +334,7 @@ public class UserBean implements Serializable {
 
     /**
      * Updates a User's information
+     *
      * @param user User or Tutor object
      * @return result
      */
@@ -296,12 +347,13 @@ public class UserBean implements Serializable {
         tut4youapp.updateUser(user, hr);
         return result;
     }
-    
+
     /**
      * https://stackoverflow.com/questions/33098603/convert-localtime-java-8-to-date
      * gets the current date which is used for date joined attribute in tutor
+     *
      * @return date joined
-     * @throws ParseException 
+     * @throws ParseException
      */
     public Date getCurrentDate() throws ParseException {
         LocalTime d = LocalTime.now();
@@ -310,27 +362,27 @@ public class UserBean implements Serializable {
         return time;
     }
 
-    
     /**
-     * confirms if the user entered the correct password and if so allows them to change their password
+     * confirms if the user entered the correct password and if so allows them
+     * to change their password
+     *
      * @param oldPassword
      * @param newPassword
-     * @return 
+     * @return
      */
     public String changePassword(String oldPassword, String newPassword) {
         FacesContext context = FacesContext.getCurrentInstance();
         String confirmPassword = tut4you.controller.HashPassword.getSHA512Digest(oldPassword);
         String result;
-        
+
         String currentPassword = user.getPassword();
-        
-        if(confirmPassword.equalsIgnoreCase(currentPassword)) {
+
+        if (confirmPassword.equalsIgnoreCase(currentPassword)) {
             tut4youapp.changePassword(tut4you.controller.HashPassword.getSHA512Digest(newPassword));
-            context.addMessage(null, new FacesMessage("Successful", "Password successfully changed") );
+            context.addMessage(null, new FacesMessage("Successful", "Password successfully changed"));
             result = "updateProfile";
-        }
-        else {
-            context.addMessage(null, new FacesMessage("Failed",  "Password entered does not match your current password") );
+        } else {
+            context.addMessage(null, new FacesMessage("Failed", "Password entered does not match your current password"));
             result = "failure";
         }
         return result;

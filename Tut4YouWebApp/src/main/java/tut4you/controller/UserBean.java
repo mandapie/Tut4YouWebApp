@@ -62,7 +62,8 @@ public class UserBean implements Serializable {
     boolean condition;
     private double hourlyRate; // need double type for <f:convertNumber> tag to work in jsf page
     private String hRate; // need a String type for regex validation to work
-    
+    private String currentZip;
+
     /**
      * Creates a new instance of UserIdentity
      */
@@ -95,6 +96,14 @@ public class UserBean implements Serializable {
 
     public void sethRate(String hRate) {
         this.hRate = hRate;
+    }
+    
+    public String getCurrentZip() {
+        return currentZip;
+    }
+
+    public void setCurrentZip(String currentZip) {
+        this.currentZip = currentZip;
     }
 
     /**
@@ -266,8 +275,8 @@ public class UserBean implements Serializable {
      * updates current zip
      * @param zip
      */
-    public void updateCurrentZip(String zip) {
-        Tutor tutor = tut4youapp.updateCurrentZip(zip);
+    public void updateCurrentZip() {
+        Tutor tutor = tut4youapp.updateCurrentZip(currentZip);
         if (tutor.getCurrentZip() != null) {
             condition = false;
         }

@@ -15,6 +15,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  * The Session Timer will keep track of the length of each tutoring session
@@ -33,7 +35,9 @@ public class Session implements Serializable {
     @OneToOne
     @JoinColumn(nullable = false)
     private Request request;
+    @Temporal(TemporalType.TIMESTAMP)
     private Date startSessionTime;
+    @Temporal(TemporalType.TIMESTAMP)
     private Date endSessionTime;
     private double elapsedTimeOfSession;
 

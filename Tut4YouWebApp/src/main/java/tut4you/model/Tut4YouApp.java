@@ -709,13 +709,27 @@ public class Tut4YouApp {
      * @return moderator application
      * @Keith <keithtran25@gmail.com>
      */
-    @PermitAll
+    @RolesAllowed("tut4youapp.moderator")
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public ModeratorApplication findModeratorApplication(String username) {
         TypedQuery<ModeratorApplication> query = em.createNamedQuery(ModeratorApplication.FIND_MODERATOR_APPLICATION_BY_UNAME, ModeratorApplication.class);
         query.setParameter("username", username);
         return query.getSingleResult();
-    }            
+    }
+    /**
+     * Gets a complaint by finding the email in the entity.
+     *
+     * @param username
+     * @return moderator application
+     * @Keith <keithtran25@gmail.com>
+     */
+    @RolesAllowed("tut4youapp.moderator")
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public Complaint findComplaint(int id) {
+        TypedQuery<Complaint> query = em.createNamedQuery(Complaint.FIND_COMPLAINT_BY_ID, Complaint.class);
+        query.setParameter("id", id);
+        return query.getSingleResult();
+    }   
     
 
     /**
@@ -1378,5 +1392,16 @@ public class Tut4YouApp {
         em.persist(complaint);
         em.flush();
         
+    }
+    /**
+     * Query all complaints from the database
+     * @return 
+     */
+    @RolesAllowed("tut4youapp.moderator")
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public List<Complaint> getComplaints() {
+        TypedQuery<Complaint> query = em.createNamedQuery(Complaint.FIND_UNRESOLVED_COMPLAINTS, Complaint.class);
+        query.setParameter("isReviewed", false);
+        return query.getResultList();
     }
 }

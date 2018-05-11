@@ -95,6 +95,10 @@
             <to-view-id>/accounts/tutorProfile.xhtml</to-view-id>
         </navigation-case>
         <navigation-case>
+            <from-outcome>reviewComplaint</from-outcome>
+            <to-view-id>/moderators/reviewComplaint.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
             <from-outcome>submitComplaint</from-outcome>
             <to-view-id>/students/submitComplaint.xhtml</to-view-id>
         </navigation-case>

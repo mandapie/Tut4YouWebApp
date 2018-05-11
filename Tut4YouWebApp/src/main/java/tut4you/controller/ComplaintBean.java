@@ -17,6 +17,8 @@
 package tut4you.controller;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.ejb.EJB;
@@ -44,10 +46,29 @@ public class ComplaintBean implements Serializable {
     private Tut4YouApp tut4youApp;
     private User user;
 
-    @ManagedProperty("#{param.username}")
-    private String username;
-    private Complaint complaint;
+    @ManagedProperty("#{param.id}")
+    private int id;
 
+    private Complaint complaint;
+    private List<Complaint> complaintList = new ArrayList();
+
+    public List<Complaint> getComplaintList() {
+        if (complaintList.isEmpty()) {
+            complaintList = tut4youApp.getComplaints();
+        }
+        return complaintList;
+    }
+
+    public void setComplaintList(List<Complaint> complaintList) {
+        this.complaintList = complaintList;
+    }
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
     public User getUser() {
         return user;
     }
@@ -69,6 +90,7 @@ public class ComplaintBean implements Serializable {
     @PostConstruct
     public void createComplaintBean() {
         complaint = new Complaint();
+        complaint.setIsReviewed(false);
     }
     
     /**
@@ -78,21 +100,13 @@ public class ComplaintBean implements Serializable {
     public void destroyComplaintBean() {
     }
     
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
     
-    public void showUsername(String username) {
-        Tutor tutor = findTutorEmail(username);
-        user = tut4youApp.findUser(tutor.getEmail());
+    public void showID(int id) {
+        complaint  = findComplaint(id);
     }
-    public Tutor findTutorEmail(String username)
+    public Complaint findComplaint(int id)
     {
-        return tut4youApp.findTutorEmail(username);
+        return tut4youApp.findComplaint(id);
     }
     public void createNewComplaint() {
         tut4youApp.createNewComplaint(user, complaint);

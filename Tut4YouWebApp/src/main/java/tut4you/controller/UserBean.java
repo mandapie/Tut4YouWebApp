@@ -23,6 +23,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -39,7 +40,6 @@ import tut4you.model.*;
 
 /**
  * UserBean checks if a user is authenticated.
- *
  * @author Alvaro Monge <alvaro.monge@csulb.edu>
  * Modified by Amanda Pan <daikiraidemodaisuki@gmail.com>
  * Modified by Andrew Kaichi <ahkaichi@gmail.com>
@@ -269,11 +269,25 @@ public class UserBean implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
         try {
-            //this is where you check the user before you log them in
-            request.login(email, pass); //log user in
-        } catch (ServletException e) {
-            context.addMessage(null, new FacesMessage("Login failed."));
-            return "failure";
+            // check user credentials
+            List<String> users = tut4youapp.getUserEmails();
+            if(!users.contains(email)) {
+                context.addMessage("login:email", new FacesMessage("This email does not exsist"));
+                return "login";
+            }
+            else {
+                String hashedpass = tut4you.controller.HashPassword.getSHA512Digest(pass);
+                User loginUser = tut4youapp.getUser(email);
+                if (!hashedpass.equals(loginUser.getPassword())) {
+                    context.addMessage("login:pass", new FacesMessage("Incorrect password"));
+                    return "login";
+                }
+                request.login(email, pass); //log user in
+            }
+        }
+        catch (ServletException e) {
+            FacesContext.getCurrentInstance().addMessage("login:error", new FacesMessage("Login Failed"));
+            return "login";
         }
         return "success";
     }
@@ -316,14 +330,11 @@ public class UserBean implements Serializable {
     public String getEmailFromSession() {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-        String email = request.getRemoteUser();
-        return email;
+        return request.getRemoteUser();
     }
 
     /**
      * updates current zip
-     *
-     * @param zip
      */
     public void updateCurrentZip() {
         Tutor tutor = tut4youapp.updateCurrentZip(currentZip);
@@ -334,7 +345,6 @@ public class UserBean implements Serializable {
 
     /**
      * Updates a User's information
-     *
      * @param user User or Tutor object
      * @return result
      */
@@ -351,7 +361,6 @@ public class UserBean implements Serializable {
     /**
      * https://stackoverflow.com/questions/33098603/convert-localtime-java-8-to-date
      * gets the current date which is used for date joined attribute in tutor
-     *
      * @return date joined
      * @throws ParseException
      */
@@ -365,7 +374,6 @@ public class UserBean implements Serializable {
     /**
      * confirms if the user entered the correct password and if so allows them
      * to change their password
-     *
      * @param oldPassword
      * @param newPassword
      * @return

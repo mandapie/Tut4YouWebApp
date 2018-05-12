@@ -2,18 +2,22 @@ package tut4you.controller;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
+import tut4you.exception.AvailabilityExistsException;
 import tut4you.model.Payment;
 import tut4you.model.Session;
 import tut4you.model.Tut4YouApp;
+import tut4you.model.Tutor;
 
 /**
  *
@@ -27,10 +31,20 @@ public class PaymentBean implements Serializable {
     private Payment payment;
     private static final Logger LOGGER = Logger.getLogger("PaymentBean");
     private List<Payment> paymentList = new ArrayList(); //list of available tutors
-    private List<Payment> payKeyList = new ArrayList(); //list of paykeys
+    private boolean status = false;
+    private Tutor tutor;
 
+    public Tutor getTutor() {
+        return tutor;
+    }
+
+    public void setTutor(Tutor tutor) {
+        this.tutor = tutor;
+    }
+
+    
     @EJB
-    private Tut4YouApp tut4youapp;
+    private Tut4YouApp tut4youApp;
 
     private Session session;
 
@@ -46,7 +60,7 @@ public class PaymentBean implements Serializable {
     }
 
     public List<Payment> getPaymentList() {
-        paymentList = tut4youapp.getPaymentList();
+        paymentList = tut4youApp.getPaymentList();
         return paymentList;
     }
 
@@ -54,19 +68,39 @@ public class PaymentBean implements Serializable {
         this.paymentList = paymentList;
     }
 
-    public void payForTutoringSession(String email, double hourlyRate, Session session) {
+    public void payForTutoringSession(Tutor tutor, Session session) {
         String payKey;
-        System.out.println(session);
-        payKey = tut4youapp.payForTutoringSession(email, hourlyRate);
+        String email = tutor.getEmail();
+        double hourlyRate = tutor.getHourlyRate();
+        this.tutor = tutor;
+        payKey = tut4youApp.payForTutoringSession(email, hourlyRate);
         ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
         String url = "https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_ap-payment&paykey=" + payKey;
+        payment = tut4youApp.createPayment(payKey, session, tutor);
         try {
             externalContext.redirect(url);
         } catch (IOException ex) {
             Logger.getLogger(PaymentBean.class.getName()).log(Level.SEVERE, null, ex);
         }
-                payment = tut4youapp.createPayment(payKey, session);
 
+    }
+    
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+    
+    public boolean checkCompletedStatus(String payKey)
+    {
+        System.out.println("PAYKEY:" + payKey);
+        if(payKey != null && !payKey.isEmpty())
+            return !tut4youApp.checkCompletedStatus(payKey);
+        else
+            return true;
     }
 
 

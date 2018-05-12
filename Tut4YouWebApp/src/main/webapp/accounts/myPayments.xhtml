@@ -44,18 +44,20 @@
                     <b:row>
                         <b:panel title="My Payments" collapsible="false" look="info">
                             <b:dataTable value="#{paymentBean.paymentList}" var="pay" id="payTable">
-                     
+
                                 <b:dataTableColumn>
                                     <f:facet name="header">Transaction ID</f:facet>
                                     <h:outputText value="#{pay.transactionId}"/>
                                 </b:dataTableColumn>
-                                  <b:dataTableColumn>
-                                    <f:facet name="header">Time of Transaction</f:facet>
+                                <b:dataTableColumn>
+                                    <f:facet name="header">Date of Transaction</f:facet>
                                     <h:outputText value="#{pay.timeOfTransaction}"/>
                                 </b:dataTableColumn>
-                                  <b:dataTableColumn>
+                                <b:dataTableColumn>
                                     <f:facet name="header">Amount </f:facet>
-                                    <h:outputText value="#{pay.transactionAmount}"/>
+                                    <h:outputText value="#{pay.transactionAmount}">
+                                        <f:convertNumber currencySymbol="$" type="currency" />
+                                    </h:outputText>
                                 </b:dataTableColumn> 
                             </b:dataTable>
                         </b:panel>

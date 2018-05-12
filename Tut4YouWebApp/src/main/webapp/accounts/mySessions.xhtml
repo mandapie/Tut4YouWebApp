@@ -70,37 +70,27 @@
                     <b:row>
                         <b:panel title="Previous Sessions" collapsible="false" look="info">
                             <b:dataTable value="#{requestBean.completedList}" var="req" id="completedTable">
-                                <c:if test="#{userBean.isTutor}">
-                                    <b:dataTableColumn>
-                                        <f:facet name="header">Student</f:facet>
-                                        <h:outputText value="#{req.student.firstName} #{req.student.lastName}"/>
-                                    </b:dataTableColumn>
-                                </c:if>
-                                <c:if test="#{!userBean.isTutor}">
-                                    <b:dataTableColumn>
-                                        <f:facet name="header">Tutor</f:facet>
-                                        <h:outputText value="#{req.tutor.firstName} #{req.tutor.lastName}"/>
-                                    </b:dataTableColumn>
-                                </c:if>
+                                <b:dataTableColumn>
+                                    <f:facet name="header">Student</f:facet>
+                                    <h:outputText value="#{req.student.firstName} #{req.student.lastName}"/>
+                                </b:dataTableColumn>
+                                <b:dataTableColumn>
+                                    <f:facet name="header">Tutor</f:facet>
+                                    <h:outputText value="#{req.tutor.firstName} #{req.tutor.lastName}"/>
+                                </b:dataTableColumn>
                                 <b:dataTableColumn>
                                     <f:facet name="header">Day Of Week</f:facet>
                                     <h:outputText value="#{req.dayOfWeek}"/>
                                 </b:dataTableColumn>
-                                <b:dataTableColumn>
-                                    <f:facet name="header">Length of Session</f:facet>
-                                    <h:outputText value="#{req.lengthOfSession}"/>
-                                </b:dataTableColumn>
-                                 <b:dataTableColumn>
-                                    <f:facet name="header">Session Id</f:facet>
-                                    <h:outputText value="#{req.session.id}"/>
-                                </b:dataTableColumn>
-                                <c:if test="#{!userBean.isTutor}">
-                                    <b:dataTableColumn>
-                                        <f:facet name="header">Pay Now!</f:facet>
-                                        <b:commandButton value="Pay Tutor" look="primary" action="#{paymentBean.payForTutoringSession(req.tutor.email,req.tutor.hourlyRate,req.session)}" />
-                                    </b:dataTableColumn>
-                                </c:if>
 
+                                <b:dataTableColumn>
+                                    <f:facet name="header">Session Length</f:facet>
+                                    <h:outputText value="#{req.session.payment.payKey}"/>
+                                </b:dataTableColumn>
+                                <b:dataTableColumn>
+                                    <f:facet name="header">Pay Now!</f:facet>
+                                    <b:commandButton value="Pay Tutor" look="primary" action="#{paymentBean.payForTutoringSession(req.tutor,req.session)}" rendered="#{!requestBean.checkRequestTutorEmail(req.tutor) and paymentBean.checkCompletedStatus(req.session.payment.payKey)}"/>
+                                </b:dataTableColumn>
                             </b:dataTable>  
                         </b:panel>
                     </b:row>

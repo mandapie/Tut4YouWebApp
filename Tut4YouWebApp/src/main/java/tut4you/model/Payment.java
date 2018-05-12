@@ -14,6 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
@@ -27,20 +28,30 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "Payment")
 @NamedQueries({
-    @NamedQuery(name = Payment.FIND_PAYMENTS_BY_EMAIL, query = "SELECT p FROM Payment p")
+    @NamedQuery(name = Payment.FIND_PAYMENTS_BY_EMAIL, query = "SELECT p FROM Payment p"),
+        @NamedQuery(name = Payment.FIND_PAYMENTS_BY_PAYKEY, query = "SELECT p FROM Payment p WHERE p.payKey = :payKey"),
+
 })
 public class Payment implements Serializable {
 
     private static final long serialVersionUID = 1L;
     public static final String FIND_PAYMENTS_BY_EMAIL = "Payment.findPaymentsByEmail";
+    public static final String FIND_PAYMENTS_BY_PAYKEY = "Payment.findPaymentsByPaykey";
 
     @OneToOne
     @JoinColumn(name = "session_id")
     private Session session;
 
+    /**
+     * Multiple payments can be received by a tutor
+     */
+    @ManyToOne
+    @JoinColumn(name = "tutor", nullable = false)
+    private Tutor tutor;
+
     @Id
     private String payKey;
-    
+
     private String transactionId;
     private String timeOfTransaction;
     private double transactionAmount;
@@ -147,6 +158,14 @@ public class Payment implements Serializable {
 
     public void setPaymentStatus(String paymentStatus) {
         this.paymentStatus = paymentStatus;
+    }
+
+    public Tutor getTutor() {
+        return tutor;
+    }
+
+    public void setTutor(Tutor tutor) {
+        this.tutor = tutor;
     }
 
     @Override

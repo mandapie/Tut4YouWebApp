@@ -82,15 +82,8 @@ public class RequestBean implements Serializable {
 
     private double hourlyRate;
     private Session session;
-    private long id;
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
+    private boolean checkRequestTutorEmail;
 
     public Date getStartSessionTime() {
         return startSessionTime;
@@ -600,6 +593,25 @@ public class RequestBean implements Serializable {
 
     public void setHourlyRate(double hourlyRate) {
         this.hourlyRate = hourlyRate;
+    }
+
+    public boolean isCheckRequestTutorEmail(Tutor t) {
+        this.tutor = t;
+        return tut4youApp.checkRequestTutorEmail(tutor);
+    }
+
+    public boolean checkRequestTutorEmail(Tutor t) {
+        this.tutor = t;
+        System.out.println("String:" + t);
+        if (tutor != null) {
+            return tut4youApp.checkRequestTutorEmail(tutor);
+        } else {
+            return false;
+        }
+    }
+
+    public void setCheckRequestTutorEmail(boolean checkRequestTutorEmail) {
+        this.checkRequestTutorEmail = checkRequestTutorEmail;
     }
 
 }

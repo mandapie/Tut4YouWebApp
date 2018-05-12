@@ -841,7 +841,6 @@ public class Tut4YouApp {
     @RolesAllowed("tut4youapp.student")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void deleteRating(Rating rating) {
-        System.out.println("WHY DOEL " + rating);
         UserBean userBean = new UserBean();
         String currentUserEmail = userBean.getEmailFromSession();
         Rating toBeDeleted = em.find(Rating.class,
@@ -931,6 +930,15 @@ public class Tut4YouApp {
         }
         requestQuery.setParameter("status", Request.Status.COMPLETED);
         list = requestQuery.getResultList();
+
+        if (list.isEmpty()) {
+            user = findUser(currentUserEmail);
+            email = user.getEmail();
+            requestQuery = em.createNamedQuery(Request.FIND_REQUEST_BY_EMAIL, Request.class);
+            requestQuery.setParameter("student_email", email);
+            requestQuery.setParameter("status", Request.Status.COMPLETED);
+            list = requestQuery.getResultList();
+        }
         return list;
     }
 
@@ -947,7 +955,6 @@ public class Tut4YouApp {
     public Session startSessionTime(Request r, Session sessionTimer) {
         Request request = em.find(Request.class,
                 r.getId());
-        System.out.println(request.toString());
         Date startTime = new Date();
         sessionTimer.setStartSessionTime(startTime);
         request.setSession(sessionTimer);
@@ -969,14 +976,10 @@ public class Tut4YouApp {
     public String setRequestToComplete(Request r, Session sessionTimer) {
         Date endTime = new Date();
         //Session session = em.find(Session.class, sessionTimer.getId());
-        System.out.println(sessionTimer);
         sessionTimer.setEndSessionTime(endTime);
         UserBean userBean = new UserBean();
         String currentUserEmail = userBean.getEmailFromSession();
         double elapsedTime = endTime.getTime() - sessionTimer.getStartSessionTime().getTime();
-        System.out.println("endTime: " + endTime.getTime());
-        System.out.println("startTime: " + sessionTimer.getStartSessionTime().getTime());
-        System.out.println("ElapsedTime " + elapsedTime);
         double minutes = (elapsedTime / 1000) / 60;
         double hours = minutes / 60;
         sessionTimer.setElapsedTimeOfSession(hours);
@@ -1298,11 +1301,11 @@ public class Tut4YouApp {
              */
             //rec.setAmount(hourlyRate * elapsedTimeOfSession);
             rec.setAmount(hourlyRate);
-            rec.setEmail(email);
+            rec.setEmail("briantesting1@gmail.com");
             receiver.add(rec);
             String actionType = "Pay";
-            String returnUrl = "http://localhost:8080/Tut4YouWebApp/accounts/index.xhtml";
-            String cancelUrl = "http://localhost:8080/Tut4YouWebApp/accounts/myPayments.xhtml";
+            String returnUrl = "http://localhost:8080/Tut4YouWebApp/accounts/myPayments.xhtml";
+            String cancelUrl = "http://localhost:8080/Tut4YouWebApp/accounts/index.xhtml";
             String currencyCode = "USD";
             ReceiverList receiverlst = new ReceiverList(receiver);
             payRequest.setReceiverList(receiverlst);
@@ -1353,20 +1356,16 @@ public class Tut4YouApp {
 
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public Payment createPayment(String payKey, Session session) {
+    public Payment createPayment(String payKey, Session session, Tutor tutor) {
         Session sessionTimer = em.find(Session.class, session.getId());
         Payment payment = new Payment();
-        //Map<String, String> map = getPayments(payKey);
         payment.setPayKey(payKey);
 
-        /*  payment.setTransactionId(map.get("paymentInfoList.paymentInfo(0).transactionId"));
-        payment.setPaymentStatus(map.get("status"));
-        payment.setTimeOfTransaction(map.get("responseEnvelope.timestamp"));
-        payment.setTransactionAmount(Double.parseDouble(map.get("paymentInfoList.paymentInfo(0).receiver.amount")));
-         */ sessionTimer.setPayment(payment);
+        sessionTimer.setPayment(payment);
         payment.setSession(sessionTimer);
+        tutor.addPayment(payment);
+        payment.setTutor(tutor);
         em.persist(payment);
-        em.merge(sessionTimer);
         em.flush();
         return payment;
     }
@@ -1374,9 +1373,6 @@ public class Tut4YouApp {
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public Map<String, String> getPayments(String payKey) {
-        System.out.println("GETPAYMENTS: " + payKey);
-                
-        System.out.println("I'm HERE");
         OkHttpClient client = new OkHttpClient();
         Map<String, String> map = new HashMap<>();
         MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
@@ -1402,14 +1398,15 @@ public class Tut4YouApp {
 
             for (int i = 0; i < tokens.length - 1;) {
                 map.put(tokens[i++], tokens[i++]);
+                
             }
+            
             for (Map.Entry<String, String> entry : map.entrySet()) {
                 if (entry.getKey().equals("responseEnvelope.timestamp")) {
                     String result = entry.getValue();
                     result = result.substring(0, 10);
                     map.put(entry.getKey(), result);
                 }
-                System.out.println(entry.getKey() + " / " + entry.getValue());
             }
             return map;
 
@@ -1432,7 +1429,6 @@ public class Tut4YouApp {
         } else {
             User user = findUser(currentUserEmail);
             email = user.getEmail();
-            System.out.println("Did you at least get here");
             TypedQuery<Payment> paymentQuery = em.createNamedQuery(Payment.FIND_PAYMENTS_BY_EMAIL, Payment.class);
             // paymentQuery.setParameter("email", email);
             return paymentQuery.getResultList();
@@ -1441,13 +1437,10 @@ public class Tut4YouApp {
 
     public List<Payment> getPaymentList() {
         List<Payment> payKeyList = createPaymentList();
-        System.out.println("Are you here");
-        System.out.println("SIZE: " + payKeyList.size());
         Map<String, String> map = new HashMap<>();
         for (int x = 0; x < payKeyList.size(); x++) {
             map = getPayments(payKeyList.get(x).getPayKey());
             Payment payment = em.find(Payment.class, payKeyList.get(x).getPayKey());
-            System.out.println("PAYKEY BOI:" + payment.getPayKey());
             payment.setTransactionAmount(Double.parseDouble(map.get("paymentInfoList.paymentInfo(0).receiver.amount")));
             payment.setTransactionId(map.get("paymentInfoList.paymentInfo(0).transactionId"));
             payment.setPaymentStatus(map.get("status"));
@@ -1457,4 +1450,42 @@ public class Tut4YouApp {
         List<Payment> paymentList = createPaymentList();
         return paymentList;
     }
+
+    public boolean checkRequestTutorEmail(Tutor tutor) {
+        UserBean userBean = new UserBean();
+        String currentUserEmail = userBean.getEmailFromSession();
+        if (!tutor.getEmail().isEmpty() || tutor.getEmail() != null) {
+            String tutorEmail = tutor.getEmail();
+            return currentUserEmail.equals(tutorEmail);
+        } else {
+            return true;
+        }
+    }
+
+    
+
+    public boolean checkCompletedStatus(String payKey) {
+        System.out.println("CHECLCOMPLETEDSTATUS: " + payKey);
+        TypedQuery<Payment> paymentQuery = em.createNamedQuery(Payment.FIND_PAYMENTS_BY_PAYKEY, Payment.class);
+        paymentQuery.setParameter("payKey", payKey);
+        Payment payment = paymentQuery.getSingleResult();
+        System.out.println(payment);
+        String val = payment.getPaymentStatus();
+        System.out.println("STATUS: " + val);
+        if(val.equals("COMPLETED"))
+            return true;
+        else
+            return false;
+      /*  String val = payment.getPaymentStatus().toLowerCase();
+        System.out.println("VALUE: " + val);
+        String completed = "COMPLETED";
+        completed = completed.toLowerCase();
+        System.out.println("COMPLETED: " + completed);
+        if (val.equals(completed)) {
+            return true;
+        } else {
+            return false;
+        }*/
+    }
+
 }

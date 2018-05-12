@@ -26,7 +26,6 @@ import javax.persistence.DiscriminatorType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -48,12 +47,13 @@ import javax.persistence.TemporalType;
 @DiscriminatorValue(value = "Tutor")
 @Entity
 @NamedQueries({
-    //@NamedQuery(name = Tutor.FIND_TUTORS_BY_COURSE_DAY_TIME_DZIP, query = "SELECT t FROM Tutor t JOIN t.courses c JOIN t.availabilities a WHERE c.courseName = :coursename AND a.dayOfWeek = :dayofweek AND a.startTime <= :requestTime AND a.endTime >= :requestTime AND t.doNotDisturb = :doNotDisturb AND t.defaultZip = :zipCode AND t.currentZip IS NULL UNION ALL SELECT t FROM Tutor t JOIN t.courses c JOIN t.availabilities a WHERE c.courseName = :coursename AND a.dayOfWeek = :dayofweek AND a.startTime <= :requestTime AND a.endTime >= :requestTime AND t.doNotDisturb = :doNotDisturb AND t.currentZip = :zipCode"),
-    @NamedQuery(name = Tutor.FIND_TUTORS_BY_COURSE_DAY_TIME_DZIP, query = "SELECT t FROM Tutor t JOIN t.courses c JOIN t.availabilities a JOIN t.zipCode z WHERE c.courseName = :coursename AND a.dayOfWeek = :dayofweek AND a.startTime <= :requestTime AND a.endTime >= :requestTime AND t.doNotDisturb = :doNotDisturb AND t.defaultZip = :zipCode AND z.currentZipCode IS NULL UNION ALL SELECT t FROM Tutor t JOIN t.courses c JOIN t.availabilities a JOIN t.zipCode z WHERE c.courseName = :coursename AND a.dayOfWeek = :dayofweek AND a.startTime <= :requestTime AND a.endTime >= :requestTime AND t.doNotDisturb = :doNotDisturb AND z.currentZipCode = :zipCode"),
-    //@NamedQuery(name = Tutor.FIND_TUTORS_BY_COURSE_DAY_TIME_DZIP, query = "SELECT t FROM Tutor t JOIN t.courses c JOIN t.availabilities a WHERE c.courseName = :coursename AND a.dayOfWeek = :dayofweek AND a.startTime <= :requestTime AND a.endTime >= :requestTime AND t.doNotDisturb = :doNotDisturb AND t.currentZip = :zipCode"),
+    @NamedQuery(name = Tutor.FIND_HOURLY_RATE_BY_EMAIL, query = "SELECT t.hourlyRate FROM Tutor t WHERE t.email = :email"),
+    @NamedQuery(name = Tutor.FIND_DATE_JOINED_BY_EMAIL, query = "SELECT t.dateJoinedAsTutor FROM Tutor t WHERE t.email = :email"),
+    @NamedQuery(name = Tutor.FIND_TUTORS_BY_COURSE_DAY_TIME_DZIP, query = "SELECT t FROM Tutor t JOIN t.courses c JOIN t.availabilities a WHERE c.courseName = :coursename AND a.dayOfWeek = :dayofweek AND a.startTime <= :requestTime AND a.endTime >= :requestTime AND t.doNotDisturb = :doNotDisturb AND t.defaultZip = :zipCode AND t.currentZip IS NULL"),
+    @NamedQuery(name = Tutor.FIND_TUTORS_BY_COURSE_DAY_TIME_CZIP, query = "SELECT t FROM Tutor t JOIN t.courses c JOIN t.availabilities a WHERE c.courseName = :coursename AND a.dayOfWeek = :dayofweek AND a.startTime <= :requestTime AND a.endTime >= :requestTime AND t.doNotDisturb = :doNotDisturb AND t.currentZip = :zipCode"),
     @NamedQuery(name = Tutor.FIND_TUTORS_BY_COURSE, query = "SELECT COUNT(t) FROM Tutor t JOIN t.courses c WHERE c.courseName = :coursename"),
     @NamedQuery(name = Tutor.FIND_TUTORS, query = "SELECT t FROM Tutor t"),
-        @NamedQuery(name = Tutor.FIND_TUTOR_BY_USERNAME, query = "SELECT t FROM Tutor t WHERE t.username = :username"),
+    @NamedQuery(name = Tutor.FIND_TUTOR_BY_USERNAME, query = "SELECT t FROM Tutor t WHERE t.username = :username"),
    
 
 })
@@ -65,6 +65,9 @@ public class Tutor extends User implements Serializable {
      * JPQL Query to obtain a list of tutors who taught a specific course and is available using default zip code
      */
     public static final String FIND_TUTORS_BY_COURSE_DAY_TIME_DZIP = "Tutor.findTutorsByCourseDayTimeDZip";
+    public static final String FIND_TUTORS_BY_COURSE_DAY_TIME_CZIP = "Tutor.findTutorsByCourseDayTimeCZip";
+    public static final String FIND_HOURLY_RATE_BY_EMAIL = "Tutor.findHourlyRateByEmail";
+    public static final String FIND_DATE_JOINED_BY_EMAIL = "Tutor.findDateJoinedByEmail";
     /**
      * JPQL Query to obtain a list of tutors who taught a specific course and is
      * available
@@ -93,24 +96,8 @@ public class Tutor extends User implements Serializable {
     private String transcriptFilePath;
     private int overallRating;
     private String defaultZip;
+    private String currentZip;
     
-    @ManyToOne
-    private ZipCode zipCode;
-    /**
-     * get ZipCode
-     * @return ZipCode
-     */
-    public ZipCode getZipCode() {
-        return zipCode;
-    }
-    /**
-     * set ZipCode
-     * @param zipCode 
-     */
-    public void setZipCode(ZipCode zipCode) {
-        this.zipCode = zipCode;
-    }
-//    
     /**
      * A Tutor can tutor multiple Courses and a Course can be tutored by
      * multiple Tutors.
@@ -143,8 +130,8 @@ public class Tutor extends User implements Serializable {
         hourlyRate = 0.00;
         overallRating = 0;
         doNotDisturb = false;
-        this.zipCode = new ZipCode();
-        //currentZip = null;
+        currentZip = null;
+        numOfPeopleTutored = 0;
     }
 
     /**
@@ -164,8 +151,9 @@ public class Tutor extends User implements Serializable {
      * @param transcriptFileLocation
      * @param overallRating
      * @param defaultZip
+     * @param currentZip
      */
-    public Tutor(Date dateJoined, int numPeopleTutored, double priceRate, boolean doNotDisturb, String transcriptFileLocation, int overallRating, String defaultZip) {
+    public Tutor(Date dateJoined, int numPeopleTutored, double priceRate, boolean doNotDisturb, String transcriptFileLocation, int overallRating, String defaultZip, String currentZip) {
         this.dateJoinedAsTutor = dateJoined;
         this.numOfPeopleTutored = numPeopleTutored;
         this.hourlyRate = priceRate;
@@ -173,6 +161,7 @@ public class Tutor extends User implements Serializable {
         this.transcriptFilePath = transcriptFileLocation;
         this.overallRating = overallRating;
         this.defaultZip = defaultZip;
+        this.currentZip = currentZip;
     }
     
     /**
@@ -193,9 +182,10 @@ public class Tutor extends User implements Serializable {
      * @param priceRate
      * @param doNotDisturb
      * @param defaultZip
+     * @param currentZip
      * @param transcriptFileLocation
      */
-    public Tutor(String email, String firstName, String lastName, String userName, String phoneNumber, String password, String university, String securityQuestion, String securityAnswer, int overallRating, Date dateJoined, int numPeopleTutored, double priceRate, boolean doNotDisturb, String defaultZip, String transcriptFileLocation) {
+    public Tutor(String email, String firstName, String lastName, String userName, String phoneNumber, String password, String university, String securityQuestion, String securityAnswer, int overallRating, Date dateJoined, int numPeopleTutored, double priceRate, boolean doNotDisturb, String defaultZip, String currentZip, String transcriptFileLocation) {
         super(email, firstName, lastName, userName, phoneNumber, password, university, securityQuestion, securityAnswer);
         this.dateJoinedAsTutor = dateJoined;
         this.numOfPeopleTutored = numPeopleTutored;
@@ -204,8 +194,17 @@ public class Tutor extends User implements Serializable {
         this.overallRating = overallRating;
         this.transcriptFilePath = transcriptFileLocation;
         this.defaultZip = defaultZip;
+        this.currentZip = currentZip;
     }
 
+    public String getCurrentZip() {
+        return currentZip;
+    }
+
+    public void setCurrentZip(String currentZip) {
+        this.currentZip = currentZip;
+    }
+    
     public int getNumOfPeopleTutored() {
         return numOfPeopleTutored;
     }
@@ -222,11 +221,20 @@ public class Tutor extends User implements Serializable {
         this.overallRating = overallRating;
     }
 
-    public Collection<Rating> getTutorRatings() {
+//    public Collection<Rating> getTutorRatings() {
+//        return ratings;
+//    }
+//
+//    public void setTutorRatings(Collection<Rating> ratings) {
+//        
+//    }
+    @Override
+    public Collection<Rating> getRatings() {
         return ratings;
     }
 
-    public void setTutorRatings(Collection<Rating> ratings) {
+    @Override
+    public void setRatings(Collection<Rating> ratings) {
         this.ratings = ratings;
     }
     

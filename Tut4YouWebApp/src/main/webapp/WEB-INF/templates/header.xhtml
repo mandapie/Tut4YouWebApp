@@ -9,14 +9,11 @@
     <!--
         Licensed under the Academic Free License (AFL 3.0).
         http://opensource.org/licenses/AFL-3.0
-
         This code has been developed by a group of CSULB students working on their 
         Computer Science senior project called Tutors4You.
-
         Tutors4You is a web application that students can utilize to find a tutor and
         ask them to meet at any location of their choosing. Students that struggle to understand 
         the courses they are taking would benefit from this peer to peer tutoring service.
-
         2017 Amanda Pan <daikiraidemodaisuki@gmail.com>
         2017 Andrew Kaichi <ahkaichi@gmail.com>
         2017 Keith Tran <keithtran25@gmail.com>
@@ -30,12 +27,6 @@
                     <c:when test="#{userBean.isUserAuthenticated}">
                         <b:navLink value="Dashboard" outcome="/accounts/index.xhtml"/>
                         <b:navLink value="Forum" outcome="/forum/index.xhtml"/>
-                        <b:dropMenu value="My Account">
-                            <b:navLink value="My Profile" outcome="/accounts/profile.xhtml"></b:navLink>
-                            <b:navLink value="My Availability" outcome="/tutors/availability.xhtml"></b:navLink>
-                            <b:navLink value="My Courses" outcome="/tutors/course.xhtml"></b:navLink>
-                            <b:navLink value="My Sessions" outcome="/accounts/mySessions.xhtml"></b:navLink>
-                        </b:dropMenu>
                     </c:when>
                     <c:otherwise>
                         <b:navLink value="Login" outcome="/accounts/index.xhtml"/>
@@ -44,7 +35,20 @@
             </b:navbarLinks>
             <c:if test="#{userBean.isUserAuthenticated}">
                 <b:navbarLinks pull="right">
-                    <b:navLink value="Welcome back, #{userBean.user.firstName}!" outcome="/accounts/profile.xhtml"/>
+                    <b:dropMenu value="My Account">
+                        <b:navLink value="My Profile" outcome="/accounts/profile.xhtml"></b:navLink>
+                        <c:if test="#{userBean.isTutor}">
+                            <b:navLink value="View Reviews" outcome="tutorProfile" includeViewParams="true">
+                                <f:param name="username" value="#{userBean.user.username}" />
+                            </b:navLink>
+                            <b:navLink value="My Transcript" outcome="/tutors/uploadTranscript.xhtml"></b:navLink>
+
+                        </c:if>
+                        <b:navLink></b:navLink>
+                        <c:if test="#{!(userBean.isTutor)}">
+                            <b:navLink value="Become Tutor" outcome="/students/becomeTutor.xhtml"/>
+                        </c:if>
+                    </b:dropMenu>
                     <b:form styleClass="navbar-form navbar-right">
                         <b:commandButton action="#{userBean.logout}" value="Sign Out" look="success" iconAlign="right"/>
                     </b:form>

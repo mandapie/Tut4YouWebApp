@@ -23,34 +23,15 @@
         2017 Syed Haider <shayder426@gmail.com>
     -->
     <!-- @author Andrew Kaichi <ahkaichi@gmail.com> -->
-    <ui:define name="title">Transcript</ui:define>
+    <ui:define name="title">Download a Transcript</ui:define>
     <ui:define name="content">
-        <h1>Your Transcript</h1>
-        <b:panel title="Select what you would like to do." collapsible="false" look="info">
+        <h1>Download a Transcript</h1>
+        <b:panel title="Add your transcript as a PDF file" collapsible="false" look="info">
             <h:form id="transcript" enctype="multipart/form-data">
-                
+                <p:growl id="downloadTranscript" showDetail="true"/>
                 <b:row>
+
                     <b:column>
-                        <h:outputLabel for="uploadTranscript">
-                            Upload Your Transcript
-                        </h:outputLabel>
-                        <p:fileUpload value="#{transcriptBean.file}"
-                                      mode="simple"
-                                      allowTypes="/(\.|\/)(gif|jpe?g|pdf)$/"
-                                      fileLimit="1"
-                                      update="uploadTranscript"/>
-                        <p:growl id="uploadTranscript" showDetail="true" />
-                        <br></br>
-                        <p:commandButton value="Upload" action="#{transcriptBean.uploadTranscript}" ajax="false" />
-                    </b:column>
-                </b:row>
-                <b:row> 
-                    <b:column>
-                        <br></br>
-                        <h:outputLabel for="downloadTranscript">
-                            Download Your Transcript
-                        </h:outputLabel>
-                        <br></br>
                         <p:commandButton value="Download Transcript" action="#{transcriptBean.downloadTranscript}" ajax="false" />
                     </b:column>
                 </b:row>

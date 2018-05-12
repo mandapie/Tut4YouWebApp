@@ -64,8 +64,6 @@ public class ZipCode implements Serializable {
     private Collection<ZipCodeByRadius> zipCodesByRadius;    
     private String currentZipCode;
     private int maxRadius;
-    @OneToMany(mappedBy="zipCode", cascade=CascadeType.ALL)
-    private Collection<Tutor> tutors;
     
     /**
      * default constructor
@@ -91,34 +89,6 @@ public class ZipCode implements Serializable {
     public ZipCode(int maxRadius) {
         this.currentZipCode = "00000";
         this.maxRadius = maxRadius;
-    }
-    
-    /**
-     * get collection of Tutors
-     * @return tutors
-     */
-    public Collection<Tutor> getTutors() {
-        return tutors;
-    }
-    
-    /**
-     * set collection of tutors
-     * @param tutors 
-     */
-    public void setTutors(Collection<Tutor> tutors) {
-        this.tutors = tutors;
-    }
-    
-    /**
-     * adds a tutor to ZipCode
-     *
-     * @param tutor is the user to be added to the ZipCode
-     */
-    public void addTutor(Tutor tutor) {
-        if (this.tutors == null) {
-            this.tutors = new HashSet();
-        }
-        this.tutors.add(tutor);
     }
     
     /**
@@ -222,6 +192,4 @@ public class ZipCode implements Serializable {
     public String toString() {
         return "tut4you.model.ZipCode[ id=" + id + " zipCode=" + currentZipCode + " maxRad=" + maxRadius ;
     }
-    
-    
 }

@@ -437,7 +437,8 @@ public class RequestBean implements Serializable {
         String result = "failure";
         if (time.equals("Later")) {
             request.setCurrentTime(getLaterTime());
-        } else {
+        }
+        else {
             request.setCurrentTime(getCurrentTime());
         }
         request.setDayOfWeek(getCurrentDayOfWeek());
@@ -445,7 +446,6 @@ public class RequestBean implements Serializable {
         zipCode = tut4youApp.addZipCode(zipCode);
         request.setZipCode(zipCode);
         request = tut4youApp.newRequest(request);
-
         if (request != null) {
             numOfTutors = tut4youApp.getNumOfTutorsFromCourse(request.getCourse().getCourseName());
             result = "success";
@@ -461,16 +461,11 @@ public class RequestBean implements Serializable {
                 zipCodeByRadius = new ZipCodeByRadius(zipCodesByRadiusList.get(i));
                 zipCodeByRadius = tut4youApp.addZipCodeByRadius(zipCode, zipCodeByRadius);
                 temp = new ArrayList();
-                temp = (tut4youApp.getTutorsFromCourse(request.getCourse().getCourseName(), request.getDayOfWeek(), request.getCurrentTime(), false, zipCodesByRadiusList.get(i)));
+                temp = tut4youApp.getTutorsFromCourse(request.getCourse().getCourseName(), request.getDayOfWeek(), request.getCurrentTime(), false, zipCodesByRadiusList.get(i));
                 tutorList.addAll(temp);
-
                 System.out.println("Zip code " + i + ": " + zipCodesByRadiusList.get(i));
                 System.out.println("temp " + i + ": " + temp);
-
-                temp.clear();
-
             }
-
         }
         return result;
     }
@@ -489,9 +484,11 @@ public class RequestBean implements Serializable {
      * Sets a tutor to the request if tutor accepts
      *
      * @param r
+     * @return 
      */
-    public void setTutorToRequest(Request r) {
+    public String setTutorToRequest(Request r) {
         tut4youApp.setTutorToRequest(r);
+        return "chat";
     }
 
     /**

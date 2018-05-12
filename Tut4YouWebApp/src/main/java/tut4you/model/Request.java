@@ -109,7 +109,7 @@ public class Request implements Serializable {
      */
     @OneToOne
     @JoinColumn(nullable=false)
-    private Course course;    
+    private Course course;
     /**
      * Association class between request and tutor.
      * One tutor can receive many pending requests and

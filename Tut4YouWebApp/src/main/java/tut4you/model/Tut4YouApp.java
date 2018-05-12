@@ -1436,7 +1436,7 @@ public class Tut4YouApp {
     
     @RolesAllowed("tut4youapp.moderator")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void flagUser(User reportedUser) {
+    public void flagUser(User reportedUser, Date dateFlagged) {
         UserBean userBean = new UserBean();
         String currentUserEmail = userBean.getEmailFromSession();
         
@@ -1450,6 +1450,7 @@ public class Tut4YouApp {
         flaggedUser.setUser(reportedUser);
         flaggedUser.addModerator(moderator);
         flaggedUser.setCount(flaggedUser.getCount() + 1);
+        flaggedUser.setDateFlagged(dateFlagged);
         
         em.persist(flaggedUser);
         em.flush();

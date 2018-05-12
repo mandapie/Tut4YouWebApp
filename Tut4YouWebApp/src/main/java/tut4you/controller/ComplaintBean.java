@@ -17,7 +17,9 @@
 package tut4you.controller;
 
 import java.io.Serializable;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -25,9 +27,9 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedProperty;
 
 import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
 import tut4you.model.Complaint;
-import tut4you.model.Course;
 
 import tut4you.model.Tut4YouApp;
 import tut4you.model.Tutor;
@@ -42,16 +44,32 @@ import tut4you.model.User;
 //@RequestScoped
 @ViewScoped
 public class ComplaintBean implements Serializable {
+    
+    @Inject
+    private RegistrationBean registrationBean;
+    
     @EJB
     private Tut4YouApp tut4youApp;
     private User user;
 
     @ManagedProperty("#{param.id}")
     private int id;
+    
+    @ManagedProperty("#{param.username}")
+    private String username;
+
 
     private Complaint complaint;
     private List<Complaint> complaintList = new ArrayList();
+    
+    public String getUsername() {
+        return username;
+    }
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    
     public List<Complaint> getComplaintList() {
         if (complaintList.isEmpty()) {
             complaintList = tut4youApp.getComplaints();
@@ -105,6 +123,14 @@ public class ComplaintBean implements Serializable {
     public void showID(int id) {
         complaint  = findComplaint(id);
     }
+    public void showUsername(String username) {
+        Tutor tutor = findTutorEmail(username);
+        user = tut4youApp.findUser(tutor.getEmail());
+    }
+    public Tutor findTutorEmail(String username)
+    {
+        return tut4youApp.findTutorEmail(username);
+    }
     public Complaint findComplaint(int id)
     {
         return tut4youApp.findComplaint(id);
@@ -115,8 +141,9 @@ public class ComplaintBean implements Serializable {
     public void closeComplaint() {
         tut4youApp.closeComplaint(complaint);
     }
-    public void flagUser() {
+    public void flagUser() throws ParseException {
+        Date currentDateTime = registrationBean.getCurrentDate();
         tut4youApp.closeComplaint(complaint);
-        tut4youApp.flagUser(complaint.getReportedUser());
+        tut4youApp.flagUser(complaint.getReportedUser(), currentDateTime);
     }
 }

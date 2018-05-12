@@ -49,6 +49,8 @@ public class FlaggedUser implements Serializable {
     
     private int count;
     
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dateFlagged;
     @ManyToMany
     private Collection<User> moderators;
 
@@ -75,8 +77,6 @@ public class FlaggedUser implements Serializable {
     public void setUser(User user) {
         this.user = user;
     }
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date dateFlagged;
 
     public int getCount() {
         return count;

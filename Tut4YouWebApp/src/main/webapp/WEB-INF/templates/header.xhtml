@@ -35,20 +35,44 @@
             </b:navbarLinks>
             <c:if test="#{userBean.isUserAuthenticated}">
                 <b:navbarLinks pull="right">
-                    <b:dropMenu value="My Account">
-                        <b:navLink value="My Profile" outcome="/accounts/profile.xhtml"></b:navLink>
-                        <c:if test="#{userBean.isTutor}">
-                            <b:navLink value="View Reviews" outcome="tutorProfile" includeViewParams="true">
-                                <f:param name="username" value="#{userBean.user.username}" />
-                            </b:navLink>
-                            <b:navLink value="My Transcript" outcome="/tutors/uploadTranscript.xhtml"></b:navLink>
-
-                        </c:if>
-                        <b:navLink></b:navLink>
-                        <c:if test="#{!(userBean.isTutor)}">
-                            <b:navLink value="Become Tutor" outcome="/students/becomeTutor.xhtml"/>
-                        </c:if>
-                    </b:dropMenu>
+                    <c:choose>
+                        <c:when test="#{userBean.submittedTranscript}">
+                            <b:dropMenu value="My Account" iconAwesome="warning" iconAlign="right" style="color:orange;">
+                                <c:if test="#{userBean.isTutor}">
+                                    <b:navLink value="View Reviews" outcome="tutorProfile" includeViewParams="true">
+                                        <f:param name="username" value="#{userBean.user.username}" />
+                                    </b:navLink>
+                                    <b:navLink value="My Transcript " outcome="/tutors/uploadTranscript.xhtml">
+                                        <c:if test="#{userBean.submittedTranscript}">
+                                            <b:iconAwesome name="warning" style="color:orange;"/>
+                                        </c:if>
+                                    </b:navLink>
+                                </c:if>
+                                <b:navLink></b:navLink>
+                                <c:if test="#{!(userBean.isTutor)}">
+                                    <b:navLink value="Become Tutor" outcome="/students/becomeTutor.xhtml"/>
+                                </c:if>
+                            </b:dropMenu>
+                        </c:when>
+                        <c:otherwise>
+                            <b:dropMenu value="My Account">
+                                <c:if test="#{userBean.isTutor}">
+                                    <b:navLink value="View Reviews" outcome="tutorProfile" includeViewParams="true">
+                                        <f:param name="username" value="#{userBean.user.username}" />
+                                    </b:navLink>
+                                    <b:navLink value="My Transcript " outcome="/tutors/uploadTranscript.xhtml">
+                                        <c:if test="#{userBean.submittedTranscript}">
+                                            <b:iconAwesome name="warning" style="color:orange;"/>
+                                        </c:if>
+                                    </b:navLink>
+                                </c:if>
+                                <b:navLink></b:navLink>
+                                <c:if test="#{!(userBean.isTutor)}">
+                                    <b:navLink value="Become Tutor" outcome="/students/becomeTutor.xhtml"/>
+                                </c:if>
+                            </b:dropMenu>
+                        </c:otherwise>
+                    </c:choose>
                     <b:form styleClass="navbar-form navbar-right">
                         <b:commandButton action="#{userBean.logout}" value="Sign Out" look="success" iconAlign="right"/>
                     </b:form>

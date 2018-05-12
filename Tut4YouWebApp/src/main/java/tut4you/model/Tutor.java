@@ -48,6 +48,7 @@ import javax.persistence.TemporalType;
 @Entity
 @NamedQueries({
     @NamedQuery(name = Tutor.FIND_HOURLY_RATE_BY_EMAIL, query = "SELECT t.hourlyRate FROM Tutor t WHERE t.email = :email"),
+    @NamedQuery(name = Tutor.FIND_TRANSCRIPT_PATH_BY_EMAIL, query = "SELECT t.transcriptFilePath from Tutor t WHERE t.email = :email"),
     @NamedQuery(name = Tutor.FIND_DATE_JOINED_BY_EMAIL, query = "SELECT t.dateJoinedAsTutor FROM Tutor t WHERE t.email = :email"),
     @NamedQuery(name = Tutor.FIND_TUTORS_BY_COURSE_DAY_TIME_DZIP, query = "SELECT t FROM Tutor t JOIN t.courses c JOIN t.availabilities a WHERE c.courseName = :coursename AND a.dayOfWeek = :dayofweek AND a.startTime <= :requestTime AND a.endTime >= :requestTime AND t.doNotDisturb = :doNotDisturb AND t.defaultZip = :zipCode AND t.currentZip IS NULL"),
     @NamedQuery(name = Tutor.FIND_TUTORS_BY_COURSE_DAY_TIME_CZIP, query = "SELECT t FROM Tutor t JOIN t.courses c JOIN t.availabilities a WHERE c.courseName = :coursename AND a.dayOfWeek = :dayofweek AND a.startTime <= :requestTime AND a.endTime >= :requestTime AND t.doNotDisturb = :doNotDisturb AND t.currentZip = :zipCode"),
@@ -65,6 +66,7 @@ public class Tutor extends User implements Serializable {
     public static final String FIND_TUTORS_BY_COURSE_DAY_TIME_CZIP = "Tutor.findTutorsByCourseDayTimeCZip";
     public static final String FIND_HOURLY_RATE_BY_EMAIL = "Tutor.findHourlyRateByEmail";
     public static final String FIND_DATE_JOINED_BY_EMAIL = "Tutor.findDateJoinedByEmail";
+    public static final String FIND_TRANSCRIPT_PATH_BY_EMAIL = "Tutor.findTranscriptPathByEmail";
     /**
      * JPQL Query to obtain a list of tutors who taught a specific course and is
      * available
@@ -129,6 +131,7 @@ public class Tutor extends User implements Serializable {
         doNotDisturb = false;
         currentZip = null;
         numOfPeopleTutored = 0;
+        transcriptFilePath = null;
     }
 
     /**

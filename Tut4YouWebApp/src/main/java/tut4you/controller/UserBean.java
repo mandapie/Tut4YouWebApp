@@ -40,6 +40,7 @@ import tut4you.model.*;
 
 /**
  * UserBean checks if a user is authenticated.
+ *
  * @author Alvaro Monge <alvaro.monge@csulb.edu>
  * Modified by Amanda Pan <daikiraidemodaisuki@gmail.com>
  * Modified by Andrew Kaichi <ahkaichi@gmail.com>
@@ -107,7 +108,7 @@ public class UserBean implements Serializable {
     public void setCurrentZip(String currentZip) {
         this.currentZip = currentZip;
     }
-    
+
     public String getEmail() {
         return email;
     }
@@ -263,6 +264,7 @@ public class UserBean implements Serializable {
 
     /**
      * login method to check user is a registered user who is
+     *
      * @return result
      */
     public String login() {
@@ -271,11 +273,10 @@ public class UserBean implements Serializable {
         try {
             // check user credentials
             List<String> users = tut4youapp.getUserEmails();
-            if(!users.contains(email)) {
+            if (!users.contains(email)) {
                 context.addMessage("login:email", new FacesMessage("This email does not exsist"));
                 return "login";
-            }
-            else {
+            } else {
                 String hashedpass = tut4you.controller.HashPassword.getSHA512Digest(pass);
                 User loginUser = tut4youapp.getUser(email);
                 if (!hashedpass.equals(loginUser.getPassword())) {
@@ -284,8 +285,7 @@ public class UserBean implements Serializable {
                 }
                 request.login(email, pass); //log user in
             }
-        }
-        catch (ServletException e) {
+        } catch (ServletException e) {
             FacesContext.getCurrentInstance().addMessage("login:error", new FacesMessage("Login Failed"));
             return "login";
         }
@@ -345,6 +345,7 @@ public class UserBean implements Serializable {
 
     /**
      * Updates a User's information
+     *
      * @param user User or Tutor object
      * @return result
      */
@@ -361,6 +362,7 @@ public class UserBean implements Serializable {
     /**
      * https://stackoverflow.com/questions/33098603/convert-localtime-java-8-to-date
      * gets the current date which is used for date joined attribute in tutor
+     *
      * @return date joined
      * @throws ParseException
      */
@@ -374,6 +376,7 @@ public class UserBean implements Serializable {
     /**
      * confirms if the user entered the correct password and if so allows them
      * to change their password
+     *
      * @param oldPassword
      * @param newPassword
      * @return
@@ -394,5 +397,9 @@ public class UserBean implements Serializable {
             result = "failure";
         }
         return result;
+    }
+
+    public boolean isSubmittedTranscript() {
+        return tut4youapp.hasSubmittedTranscript();
     }
 }

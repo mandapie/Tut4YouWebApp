@@ -464,8 +464,8 @@ public class Tut4YouApp {
     /**
      * Only a tutor can delete his/her course
      *
-     * @param availability
      * @author Syed Haider <shayder426@gmail.com>
+     * @param course
      */
     @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
@@ -732,6 +732,16 @@ public class Tut4YouApp {
         } else {
             throw new UserExistsException();
         }
+    }
+    
+    @RolesAllowed("tut4youapp.tutor")
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public boolean hasSubmittedTranscript() {
+        UserBean userBean = new UserBean();
+        String currentUserEmail = userBean.getEmailFromSession();
+        TypedQuery<String> transcriptPathQuery = em.createNamedQuery(Tutor.FIND_TRANSCRIPT_PATH_BY_EMAIL, String.class);
+        transcriptPathQuery.setParameter("email", currentUserEmail);
+        return transcriptPathQuery.getSingleResult() == null;
     }
 
     /**

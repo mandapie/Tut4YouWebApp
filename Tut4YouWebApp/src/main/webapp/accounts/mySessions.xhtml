@@ -26,6 +26,13 @@
     -->
     <!-- @author Amanda Pan <daikiraidemodaisuki@gmail.com> -->
     <ui:define name="title">Sessions</ui:define>
+    <script src="https://www.paypalobjects.com/js/external/apdg.js" type="text/javascript"></script>
+    <script type="text/javascript" charset="utf-8">
+        var dgFlowMini = new PAYPAL.apps.DGFlowMini({trigger: 'submitBtn'});
+    </script>
+    <style class="paypalButton">
+
+    </style>
     <ui:define name="content">
         <b:container fluid="true">
             <h:panelGrid columns="1" style="text-align:center; margin-left: 34%">
@@ -63,25 +70,26 @@
                     <b:row>
                         <b:panel title="Previous Sessions" collapsible="false" look="info">
                             <b:dataTable value="#{requestBean.completedList}" var="req" id="completedTable">
-                                <c:if test="#{userBean.isTutor}">
-                                    <b:dataTableColumn>
-                                        <f:facet name="header">Student</f:facet>
-                                        <h:outputText value="#{req.student.firstName} #{req.student.lastName}"/>
-                                    </b:dataTableColumn>
-                                </c:if>
-                                <c:if test="#{!userBean.isTutor}">
-                                    <b:dataTableColumn>
-                                        <f:facet name="header">Tutor</f:facet>
-                                        <h:outputText value="#{req.tutor.firstName} #{req.tutor.lastName}"/>
-                                    </b:dataTableColumn>
-                                </c:if>
+                                <b:dataTableColumn>
+                                    <f:facet name="header">Student</f:facet>
+                                    <h:outputText value="#{req.student.firstName} #{req.student.lastName}"/>
+                                </b:dataTableColumn>
+                                <b:dataTableColumn>
+                                    <f:facet name="header">Tutor</f:facet>
+                                    <h:outputText value="#{req.tutor.firstName} #{req.tutor.lastName}"/>
+                                </b:dataTableColumn>
                                 <b:dataTableColumn>
                                     <f:facet name="header">Day Of Week</f:facet>
                                     <h:outputText value="#{req.dayOfWeek}"/>
                                 </b:dataTableColumn>
+
                                 <b:dataTableColumn>
-                                    <f:facet name="header">Length of Session</f:facet>
-                                    <h:outputText value="#{req.session.elapsedTimeOfSession}"/>
+                                    <f:facet name="header">Session Length</f:facet>
+                                    <h:outputText value="#{req.session.payment.payKey}"/>
+                                </b:dataTableColumn>
+                                <b:dataTableColumn>
+                                    <f:facet name="header">Pay Now!</f:facet>
+                                    <b:commandButton value="Pay Tutor" look="primary" action="#{paymentBean.payForTutoringSession(req.tutor,req.session)}" rendered="#{!requestBean.checkRequestTutorEmail(req.tutor) and paymentBean.checkCompletedStatus(req.session.payment.payKey)}"/>
                                 </b:dataTableColumn>
                             </b:dataTable>  
                         </b:panel>

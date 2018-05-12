@@ -40,13 +40,12 @@ import javax.persistence.TemporalType;
  * @author Keith Tran <keithtran25@gmail.com>
  * @author Syed Haider <shayder426@gmail.com>
  */
-
-
 @Table(name = "Tutor")
 @DiscriminatorColumn(name = "user_type", discriminatorType = DiscriminatorType.STRING)
 @DiscriminatorValue(value = "Tutor")
 @Entity
 @NamedQueries({
+
     @NamedQuery(name = Tutor.FIND_HOURLY_RATE_BY_EMAIL, query = "SELECT t.hourlyRate FROM Tutor t WHERE t.email = :email"),
     @NamedQuery(name = Tutor.FIND_DATE_JOINED_BY_EMAIL, query = "SELECT t.dateJoinedAsTutor FROM Tutor t WHERE t.email = :email"),
     @NamedQuery(name = Tutor.FIND_TUTORS_BY_COURSE_DAY_TIME_DZIP, query = "SELECT t FROM Tutor t JOIN t.courses c JOIN t.availabilities a WHERE c.courseName = :coursename AND a.dayOfWeek = :dayofweek AND a.startTime <= :requestTime AND a.endTime >= :requestTime AND t.doNotDisturb = :doNotDisturb AND t.defaultZip = :zipCode AND t.currentZip IS NULL"),
@@ -57,9 +56,10 @@ import javax.persistence.TemporalType;
 public class Tutor extends User implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     /**
-     * JPQL Query to obtain a list of tutors who taught a specific course and is available using default zip code
+     * JPQL Query to obtain a list of tutors who taught a specific course and is
+     * available using default zip code
      */
     public static final String FIND_TUTORS_BY_COURSE_DAY_TIME_DZIP = "Tutor.findTutorsByCourseDayTimeDZip";
     public static final String FIND_TUTORS_BY_COURSE_DAY_TIME_CZIP = "Tutor.findTutorsByCourseDayTimeCZip";
@@ -79,7 +79,7 @@ public class Tutor extends User implements Serializable {
      * JPQL Query to obtain a list of tutors
      */
     public static final String FIND_TUTORS = "Tutor.findTutors";
-    
+
     /**
      * JPQL Query to obtain a list of tutors by username
      */
@@ -109,6 +109,12 @@ public class Tutor extends User implements Serializable {
     private Collection<Availability> availabilities;
 
     /**
+     * A tutor can receive multiple payments
+     */
+    @OneToMany(mappedBy = "tutor", cascade = CascadeType.ALL)
+    private Collection<Payment> payments;
+
+    /**
      * Many tutors can view many requests
      */
     @ManyToMany(mappedBy = "availableTutors", cascade = CascadeType.ALL)
@@ -133,14 +139,16 @@ public class Tutor extends User implements Serializable {
 
     /**
      * Copy constructor
+     *
      * @param newTutor
      */
     public Tutor(User newTutor) {
         super(newTutor);
     }
 
-   /**
+    /**
      * Tutor overloaded constructor with existing attributes
+     *
      * @param dateJoined
      * @param numPeopleTutored
      * @param priceRate
@@ -160,7 +168,7 @@ public class Tutor extends User implements Serializable {
         this.defaultZip = defaultZip;
         this.currentZip = currentZip;
     }
-    
+
     /**
      * Tutor overloaded constructor with inherited and existing attributes
      *
@@ -227,9 +235,10 @@ public class Tutor extends User implements Serializable {
     public void setRatings(Collection<Rating> ratings) {
         this.ratings = ratings;
     }
-    
+
     /**
      * Gets the state of doNotDistrub
+     *
      * @return doNotDisturb
      */
     public boolean isDoNotDisturb() {
@@ -238,6 +247,7 @@ public class Tutor extends User implements Serializable {
 
     /**
      * Sets the state of doNotDistrub
+     *
      * @param doNotDisturb
      */
     public void setDoNotDisturb(boolean doNotDisturb) {
@@ -246,6 +256,7 @@ public class Tutor extends User implements Serializable {
 
     /**
      * Gets the list of pending requests
+     *
      * @return list of pendingRequests
      */
     public Collection<Request> getPendingRequests() {
@@ -254,6 +265,7 @@ public class Tutor extends User implements Serializable {
 
     /**
      * Sets the list of pending requests
+     *
      * @param pendingRequests
      */
     public void setPendingRequests(Collection<Request> pendingRequests) {
@@ -262,6 +274,7 @@ public class Tutor extends User implements Serializable {
 
     /**
      * Gets the list of availabilities
+     *
      * @return availabilities
      */
     public Collection<Availability> getAvailabilities() {
@@ -270,6 +283,7 @@ public class Tutor extends User implements Serializable {
 
     /**
      * Sets the list of availabilities
+     *
      * @param availabilities
      */
     public void setAvailabilities(Collection<Availability> availabilities) {
@@ -278,6 +292,7 @@ public class Tutor extends User implements Serializable {
 
     /**
      * Sets the date joined by a tutor
+     *
      * @param dateJoinedAsTutor
      */
     public void setDateJoinedAsTutor(Date dateJoinedAsTutor) {
@@ -286,6 +301,7 @@ public class Tutor extends User implements Serializable {
 
     /**
      * Gets the date joined by a tutor
+     *
      * @return the date
      */
     public Date getDateJoinedAsTutor() {
@@ -294,6 +310,7 @@ public class Tutor extends User implements Serializable {
 
     /**
      * Sets the number of student taught by a tutor
+     *
      * @param numPeopleTutored
      */
     public void setNumTutored(int numPeopleTutored) {
@@ -302,6 +319,7 @@ public class Tutor extends User implements Serializable {
 
     /**
      * Gets the number of student taught by a tutor
+     *
      * @return the number of student taught
      */
     public int getNumTutored() {
@@ -310,6 +328,7 @@ public class Tutor extends User implements Serializable {
 
     /**
      * Sets the price rate a tutor wants to be compensated per hour
+     *
      * @param hourlyRate
      */
     public void setHourlyRate(double hourlyRate) {
@@ -318,6 +337,7 @@ public class Tutor extends User implements Serializable {
 
     /**
      * Gets the price rate a tutor wants to be compensated per hour
+     *
      * @return the price rate
      */
     public double getHourlyRate() {
@@ -326,6 +346,7 @@ public class Tutor extends User implements Serializable {
 
     /**
      * Gets the collection of courses a tutor can teach
+     *
      * @return the list of courses
      */
     public Collection<Course> getCourses() {
@@ -334,6 +355,7 @@ public class Tutor extends User implements Serializable {
 
     /**
      * Sets the collection of courses a tutor can teach
+     *
      * @param courses the list of courses
      */
     public void setCourse(Collection<Course> courses) {
@@ -343,6 +365,7 @@ public class Tutor extends User implements Serializable {
     /**
      * Add a course to a collection of Courses if collection of courses is null,
      * create new HashSet
+     *
      * @param course
      */
     public void addCourse(Course course) {
@@ -351,25 +374,28 @@ public class Tutor extends User implements Serializable {
         }
         this.courses.add(course);
     }
-    
+
     /**
      * get Default Zip
+     *
      * @return default zip
      */
     public String getDefaultZip() {
         return defaultZip;
     }
-    
+
     /**
      * set default zip
-     * @param defaultZip 
+     *
+     * @param defaultZip
      */
     public void setDefaultZip(String defaultZip) {
         this.defaultZip = defaultZip;
     }
-    
+
     /**
      * Adds a pending request to the list
+     *
      * @param pr
      */
     public void addPendingRequest(Request pr) {
@@ -381,9 +407,10 @@ public class Tutor extends User implements Serializable {
 
     /**
      * Adds a pending rating to the list
+     *
      * @param rating
      */
-    public void addPendingRating(Rating rating) {
+    public void addRating(Rating rating) {
         if (this.ratings == null) {
             this.ratings = new HashSet();
         }
@@ -392,6 +419,7 @@ public class Tutor extends User implements Serializable {
 
     /**
      * removes a pending request from the list
+     *
      * @param pr
      */
     public void removePendingRequest(Request pr) {
@@ -401,6 +429,7 @@ public class Tutor extends User implements Serializable {
     /**
      * Adds an availability to a collection if availability is null, create new
      * HashSet
+     *
      * @param availability
      */
     public void addAvailability(Availability availability) {
@@ -416,5 +445,26 @@ public class Tutor extends User implements Serializable {
 
     public void setTrancriptFileLocation(String transcriptFileLocation) {
         this.transcriptFilePath = transcriptFileLocation;
+    }
+
+    public Collection<Payment> getPayments() {
+        return payments;
+    }
+
+    public void setPayments(Collection<Payment> payments) {
+        this.payments = payments;
+    }
+    
+     /**
+     * Add a payment to a collection if payment is null, create new
+     * HashSet
+     *
+     * @param payment
+     */
+    public void addPayment(Payment payment) {
+        if (this.payments == null) {
+            this.payments = new HashSet();
+        }
+        this.payments.add(payment);
     }
 }

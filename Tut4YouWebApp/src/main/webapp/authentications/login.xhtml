@@ -26,13 +26,13 @@
     <ui:define name="content">
         <h1>Login</h1>
         <b:panel title="Enter Your Information To Log In " collapsible="false" look="info">
-            <b:form id="login" onsubmit="document.getElementById('login').action='j_security_check';">
+            <b:form id="login">
                 <b:row>
                     <b:column medium-screen="2">
                         <h:outputLabel value="Email"/>
                     </b:column>
                     <b:column medium-screen="4">
-                        <b:inputText id="email" name="j_username" placeholder="Enter Email" required="true" requiredMessage="required">
+                        <b:inputText id="email" value="#{userBean.email}" placeholder="Enter Email" required="true" requiredMessage="required">
                             <b:message for="email"/>
                         </b:inputText>
                     </b:column>
@@ -42,23 +42,21 @@
                         <h:outputLabel value="Password"/>
                     </b:column>
                     <b:column medium-screen="4">
-                        <b:inputSecret id="pass" name="j_password" placeholder="Enter Password" required="true" requiredMessage="required">
+                        <b:inputSecret id="pass" value="#{userBean.pass}" placeholder="Enter Password" required="true" requiredMessage="required">
                             <b:message for="pass"/>
                         </b:inputSecret>
                     </b:column>
                 </b:row>
                 <b:row>
+                    <h:messages for="error" id="error" style="color:red;list-style:none;padding:15px;"/>
+                </b:row>
+                <b:row>
                     <b:column medium-screen="2">
-                        <b:commandButton value="Sign In" look="success"/>
+                        <b:commandButton value="Sign In" action="#{userBean.login}" look="success"/>
                     </b:column>
                 </b:row>
             </b:form>
         </b:panel>
-        <!-- Invalid login credentials -->
-        <c:if test="#{!empty param['error'] and param['error']}">
-            <p class="error" style="color:red">There was an error authenticating. You may want to try again</p>
-        </c:if>
-        <!-- Redirect to the registration page -->
         <p>
             Not signed up with us?
             <a href="/Tut4YouWebApp/authentications/registration.xhtml">Register</a>

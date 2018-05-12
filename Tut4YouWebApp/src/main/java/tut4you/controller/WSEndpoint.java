@@ -21,7 +21,6 @@ import javax.websocket.OnError;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
-import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import tut4you.messenger.*;
 import tut4you.model.*;

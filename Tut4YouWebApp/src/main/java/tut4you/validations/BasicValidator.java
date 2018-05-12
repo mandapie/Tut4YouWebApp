@@ -138,7 +138,7 @@ public class BasicValidator {
      */
     public void validateZipcode(FacesContext context, UIComponent toValidate, Object value) {
         String zip = (String) value;
-        String pattern = "^\\d{5}";
+        String pattern = "(^\\d{5})?";
         if (!zip.matches(pattern)) {
             FacesMessage message = new FacesMessage("zipcodes contains 5 digits");
             throw new ValidatorException(message);

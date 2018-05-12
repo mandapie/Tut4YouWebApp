@@ -208,6 +208,11 @@ public class Rating implements Serializable {
         this.description = description;
     }
 
+    /**
+     * Override hashCode
+     *
+     * @return hash
+     */
     @Override
     public int hashCode() {
         int hash = 0;

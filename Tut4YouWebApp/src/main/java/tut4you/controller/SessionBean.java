@@ -50,80 +50,143 @@ public class SessionBean implements Serializable {
     private String securityQuestion;
     private User student;
     private SessionBean sessionBean;
+    /**
+     * This will check if the "Start Button"
+     * on the "sessionTimer.xhtml" page has 
+     * been clicked.
+     */
     private boolean checkStartButtonState = false;
     private boolean checkEndButtonState = true;
 
+    /**
+     * Gets checkStartButtonState
+     * 
+     * @return true if start button is clicked
+     */
     public boolean isCheckStartButtonState() {
         return checkStartButtonState;
     }
 
+    /**
+     * Sets checkStartButtonState to true or false
+     * 
+     * @param checkStartButtonState true if clicked
+     */
     public void setCheckStartButtonState(boolean checkStartButtonState) {
         this.checkStartButtonState = checkStartButtonState;
     }
 
+    /**
+     * Gets checkEndButtonState
+     * 
+     * @return true if button is clicked
+     */
     public boolean isCheckEndButtonState() {
         return checkEndButtonState;
     }
 
+    /**
+     * Sets checkEndButtonState to true or false
+     *
+     * @param checkEndButtonState true if button is clicked
+     */
     public void setCheckEndButtonState(boolean checkEndButtonState) {
         this.checkEndButtonState = checkEndButtonState;
     }
 
-    public SessionBean() {
-        sessionTimer = new Session();
-    }
 
-    public SessionBean getSessionBean() {
-        return sessionBean;
-    }
-
-    public void setSessionBean(SessionBean sessionBean) {
-        this.sessionBean = sessionBean;
-    }
-
+    /**
+     * Gets the student of the session
+     * @return student - student of session
+     */
     public User getStudent() {
         return student;
     }
 
+    /**
+     * Sets the student of the session
+     * 
+     *
+     * @param student - student of session
+     */
     public void setStudent(User student) {
         this.student = student;
     }
 
+    /**
+     * Gets the security answer
+     *
+     * @return securityAnswer
+     */
     public String getSecurityAnswer() {
         return securityAnswer;
     }
 
+    /**
+     * Sets the security answer
+     * 
+     * @param securityAnswer
+     */
     public void setSecurityAnswer(String securityAnswer) {
         this.securityAnswer = securityAnswer;
     }
 
+    /**
+     * Gets the security question
+     *
+     * @return securityQuestion
+     */
     public String getSecurityQuestion() {
         return securityQuestion;
     }
 
+    /**
+     * Sets the security question
+     *
+     * @param securityQuestion
+     */
     public void setSecurityQuestion(String securityQuestion) {
         this.securityQuestion = securityQuestion;
     }
 
+    /**
+     * Gets the request
+     *
+     * @return request
+     */
     public Request getRequest() {
         return request;
     }
 
+    /**
+     * Sets the request of a session
+     *
+     * @param request
+     */
     public void setRequest(Request request) {
         this.request = request;
     }
 
+    /**
+     * Gets the session
+     *
+     * @return
+     */
     public Session getSessionTimer() {
         return sessionTimer;
     }
 
+    /**
+     * Sets the session
+     *
+     * @param sessionTimer
+     */
     public void setSessionTimer(Session sessionTimer) {
         this.sessionTimer = sessionTimer;
     }
 
     /**
-     * This checks and sees if the email inputted (for the security question) is
-     * equivalent to the email in the database
+     * Gets checkAnswer (true if security answer is correct)
      *
      * @return checkAnswer true if email is the same
      */
@@ -133,7 +196,7 @@ public class SessionBean implements Serializable {
 
     /**
      * Sets the checkAnswer attribute to true or false depending on if the
-     * emails are equivalent
+     * security answer is equivalent
      *
      * @param checkAnswer
      */
@@ -141,28 +204,10 @@ public class SessionBean implements Serializable {
         this.checkAnswer = checkAnswer;
     }
 
-    /**
-     * Gets the email that is inputted by the user
-     *
-     * @return email inputted by user
-     */
-    public String getEmail() {
-        return email;
-    }
-
-    /**
-     * Sets the email that is inputted by the user
-     *
-     * @param email
-     */
-    public void setEmail(String email) {
-        this.email = email;
-    }
 
     /**
      * This will set the start session time of the session
      *
-     * @param r the active request of the tutoring session
      */
     public void startTutorSession() {
         sessionTimer = tut4youApp.startSessionTime(request, sessionTimer);
@@ -170,24 +215,28 @@ public class SessionBean implements Serializable {
         checkEndButtonState = false;
     }
 
+    /**
+     * This ends the tutoring session and sets the request to be a complete
+     * status
+     *     */
+    
     public String endTutorSession() {
-        return tut4youApp.setRequestToComplete(request, sessionTimer);
+        return tut4youApp.endSessionTime(request, sessionTimer);
     }
 
-    public String reloadPage() {
-        return "success";
-    }
 
-    public Date getDate() {
-        Date date = new Date();
-        return date;
-    }
 
+    /**
+     *
+     * This checks to see if the securityAnswer answers
+     * the security question
+     * 
+     * @param answer the answer inputted
+     * @return true if answer is correct
+     */
     public boolean checkAnswer(String answer) {
-        //System.out.println("answer: "  + answer);
         String email = request.getStudent().getEmail();
         checkAnswer = tut4youApp.checkAnswer(answer, email);
-        //System.out.println("checkAnswer:" + checkAnswer);
         if (!checkAnswer) {
             FacesMessage message = new FacesMessage("Answer is false. Try again.");
             FacesContext.getCurrentInstance().addMessage(null, message);
@@ -195,16 +244,7 @@ public class SessionBean implements Serializable {
         return checkAnswer;
     }
 
-    public void loadData(User user) {
-        this.student = user;
-    }
 
-    /**
-     * This ends the tutoring session and sets the request to be a complete
-     * status
-     *
-     * @param r the active request of the tutoring session
-     */
     /**
      * This will forward the tutor to the session timer page to start the
      * tutoring session
@@ -221,6 +261,10 @@ public class SessionBean implements Serializable {
         return result;
     }
 
+    /**
+     * This displays when a tutor will click
+     * "Start Session" on the sessionTimer.xhtml page
+     */
     public void showGrowlStartMessage() {
         FacesContext context = FacesContext.getCurrentInstance();
         context.addMessage(null, new FacesMessage("Successful!", "You started your session!"));

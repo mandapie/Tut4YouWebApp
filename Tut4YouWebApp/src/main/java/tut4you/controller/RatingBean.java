@@ -146,7 +146,7 @@ public class RatingBean implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, message);
         }
         rating.setDateRated(date);
-        rating = tut4youApp.newRating(rating, tutor);
+        rating = tut4youApp.createRating(rating, tutor);
         tut4youApp.updateAverageRating(tutor.getEmail());
         return result;
     }

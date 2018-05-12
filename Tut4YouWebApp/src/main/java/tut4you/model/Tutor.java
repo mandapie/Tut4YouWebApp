@@ -410,7 +410,7 @@ public class Tutor extends User implements Serializable {
      *
      * @param rating
      */
-    public void addPendingRating(Rating rating) {
+    public void addRating(Rating rating) {
         if (this.ratings == null) {
             this.ratings = new HashSet();
         }

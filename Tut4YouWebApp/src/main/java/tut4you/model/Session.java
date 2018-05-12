@@ -12,8 +12,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -21,10 +19,11 @@ import javax.persistence.TemporalType;
 
 /**
  * The Session Timer will keep track of the length of each tutoring session
+ *
  * @author Syed Haider <shayder426@gmail.com>
  */
 @Entity
-@Table(name="Sessions")
+@Table(name = "Sessions")
 public class Session implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -33,10 +32,10 @@ public class Session implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, unique = true)
     private Long id;
-    
+
     @OneToOne
     private Request request;
-    
+
     @OneToOne
     private Payment payment;
 
@@ -61,8 +60,10 @@ public class Session implements Serializable {
 
     /**
      * SessionTimer overloaded constructor
-     * @param startSessionTime starting millisecond of the session (typically 0:00)
-     * @param endSessionTime ending millisecond of the session 
+     *
+     * @param startSessionTime starting millisecond of the session (typically
+     * 0:00)
+     * @param endSessionTime ending millisecond of the session
      * @param elapsedTimeOfSession total milliSeconds of the sessions
      */
     public Session(Date startSessionTime, Date endSessionTime, double elapsedTimeOfSession) {
@@ -70,9 +71,10 @@ public class Session implements Serializable {
         this.endSessionTime = endSessionTime;
         this.elapsedTimeOfSession = elapsedTimeOfSession;
     }
-    
+
     /**
      * Gets the id
+     *
      * @return id
      */
     public Long getId() {
@@ -80,7 +82,8 @@ public class Session implements Serializable {
     }
 
     /**
-     * Sets the id 
+     * Sets the id
+     *
      * @param id
      */
     public void setId(Long id) {
@@ -89,6 +92,7 @@ public class Session implements Serializable {
 
     /**
      * Gets the active request
+     *
      * @return request the active request
      */
     public Request getRequest() {
@@ -97,6 +101,7 @@ public class Session implements Serializable {
 
     /**
      * Sets the active request
+     *
      * @param request the active request
      */
     public void setRequest(Request request) {
@@ -105,6 +110,7 @@ public class Session implements Serializable {
 
     /**
      * Gets the start session time
+     *
      * @return startSessionTime the start session time
      */
     public Date getStartSessionTime() {
@@ -113,6 +119,7 @@ public class Session implements Serializable {
 
     /**
      * Sets the start session time
+     *
      * @param startSessionTime the start session time
      */
     public void setStartSessionTime(Date startSessionTime) {
@@ -121,6 +128,7 @@ public class Session implements Serializable {
 
     /**
      * Gets the end session time
+     *
      * @return endSessionTime the end session time
      */
     public Date getEndSessionTime() {
@@ -129,6 +137,7 @@ public class Session implements Serializable {
 
     /**
      * Sets the end session time
+     *
      * @param endSessionTime the end session time
      */
     public void setEndSessionTime(Date endSessionTime) {
@@ -137,6 +146,7 @@ public class Session implements Serializable {
 
     /**
      * Gets the elapsed time of the session
+     *
      * @return elapsedTimeOfSession the total time of the session
      */
     public double getElapsedTimeOfSession() {
@@ -145,12 +155,18 @@ public class Session implements Serializable {
 
     /**
      * Sets the elapsed time of the session
+     *
      * @param elapsedTimeOfSession the total time of the session
      */
     public void setElapsedTimeOfSession(double elapsedTimeOfSession) {
         this.elapsedTimeOfSession = elapsedTimeOfSession;
     }
 
+    /**
+     * Override hashCode
+     *
+     * @return hash
+     */
     @Override
     public int hashCode() {
         int hash = 0;
@@ -158,6 +174,12 @@ public class Session implements Serializable {
         return hash;
     }
 
+    /**
+     * Overrides the equals method
+     *
+     * @param object
+     * @return true if object is Subject, else false
+     */
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
@@ -168,9 +190,14 @@ public class Session implements Serializable {
         return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
     }
 
+    /**
+     * Override toString
+     *
+     * @return SessionTimer attributes
+     */
     @Override
     public String toString() {
         return "tut4you.model.SessionTimer[ id=" + id + " ]";
     }
-    
+
 }

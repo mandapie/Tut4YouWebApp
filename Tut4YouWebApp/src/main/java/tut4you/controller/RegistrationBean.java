@@ -59,7 +59,6 @@ public class RegistrationBean implements Serializable {
     private String hourlyRate;
     private Boolean isStudent;
     private String defaultZip;
-    private int maxRadius;
     private Date joinedDateAsTutor;
 
     public Tut4YouApp getTut4youApp() {

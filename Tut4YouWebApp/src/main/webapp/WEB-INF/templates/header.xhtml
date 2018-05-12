@@ -39,6 +39,8 @@
                         <c:when test="#{userBean.submittedTranscript}">
                             <b:dropMenu value="My Account" iconAwesome="warning" iconAlign="right" style="color:orange;">
                                 <b:navLink value="My Profile" outcome="/accounts/profile.xhtml"/>
+                                <b:navLink value="My Sessions" href="/Tut4YouWebApp/accounts/mySessions.xhtml"/>
+                                <b:navLink value="My Payments" href="/Tut4YouWebApp/accounts/myPayments.xhtml"/>
                                 <c:if test="#{userBean.isTutor}">
                                     <b:navLink value="View Reviews" outcome="tutorProfile" includeViewParams="true">
                                         <f:param name="username" value="#{userBean.user.username}" />
@@ -58,6 +60,8 @@
                         <c:otherwise>
                             <b:dropMenu value="My Account">
                                 <b:navLink value="My Profile" outcome="/accounts/profile.xhtml"/>
+                                <b:navLink value="My Sessions" outcome="/accounts/mySessions.xhtml"/>
+                                <b:navLink value="My Payments" outcome="/accounts/myPayments.xhtml"/>
                                 <c:if test="#{userBean.isTutor}">
                                     <b:navLink value="View Reviews" outcome="tutorProfile" includeViewParams="true">
                                         <f:param name="username" value="#{userBean.user.username}" />

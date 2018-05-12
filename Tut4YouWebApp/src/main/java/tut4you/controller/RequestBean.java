@@ -73,12 +73,44 @@ public class RequestBean implements Serializable {
     private List<Request> acceptedList = new ArrayList(); //list of accepted requests
     private List<Request> completedList = new ArrayList(); //list of completed requests
 
-
     private List<Tutor> tutorList; //list of available tutors
     private List<Tutor> temp = new ArrayList();
     private List<String> zipCodesByRadiusList = new ArrayList();
     private Tutor tutor; //the tutor who accepts the request
     private User student;
+    private Date dayOfWeek;
+
+    private double hourlyRate;
+    private Session session;
+
+    private boolean checkRequestTutorEmail;
+
+    public Date getStartSessionTime() {
+        return startSessionTime;
+    }
+
+    public void setStartSessionTime(Date startSessionTime) {
+        this.startSessionTime = startSessionTime;
+    }
+
+    public Date getEndSessionTime() {
+        return endSessionTime;
+    }
+
+    public void setEndSessionTime(Date endSessionTime) {
+        this.endSessionTime = endSessionTime;
+    }
+
+    public double getElapsedTimeOfSession() {
+        return elapsedTimeOfSession;
+    }
+
+    public void setElapsedTimeOfSession(double elapsedTimeOfSession) {
+        this.elapsedTimeOfSession = elapsedTimeOfSession;
+    }
+    private Date startSessionTime;
+    private Date endSessionTime;
+    private double elapsedTimeOfSession;
 
     /**
      * RequestBean encapsulates all the functions/services involved in making a
@@ -198,8 +230,7 @@ public class RequestBean implements Serializable {
     public void setAcceptedList(List<Request> acceptedList) {
         this.acceptedList = acceptedList;
     }
-    
-    
+
     public List<Request> getCompletedList() {
         completedList = tut4youApp.getCompletedRequests();
         return completedList;
@@ -208,7 +239,6 @@ public class RequestBean implements Serializable {
     public void setCompletedList(List<Request> completedList) {
         this.completedList = completedList;
     }
-    
 
     /**
      * gets the declined request
@@ -437,8 +467,7 @@ public class RequestBean implements Serializable {
         String result = "failure";
         if (time.equals("Later")) {
             request.setCurrentTime(getLaterTime());
-        }
-        else {
+        } else {
             request.setCurrentTime(getCurrentTime());
         }
         request.setDayOfWeek(getCurrentDayOfWeek());
@@ -484,7 +513,7 @@ public class RequestBean implements Serializable {
      * Sets a tutor to the request if tutor accepts
      *
      * @param r
-     * @return 
+     * @return
      */
     public String setTutorToRequest(Request r) {
         tut4youApp.setTutorToRequest(r);
@@ -541,4 +570,48 @@ public class RequestBean implements Serializable {
             Arrays.toString(zipCodeAPI.getDataList())
         };
     }
+
+    public Session getSession() {
+        return session;
+    }
+
+    public void setSession(Session session) {
+        this.session = session;
+    }
+
+    public Date getDayOfWeek() {
+        return dayOfWeek;
+    }
+
+    public void setDayOfWeek(Date dayOfWeek) {
+        this.dayOfWeek = dayOfWeek;
+    }
+
+    public double getHourlyRate() {
+        return hourlyRate;
+    }
+
+    public void setHourlyRate(double hourlyRate) {
+        this.hourlyRate = hourlyRate;
+    }
+
+    public boolean isCheckRequestTutorEmail(Tutor t) {
+        this.tutor = t;
+        return tut4youApp.checkRequestTutorEmail(tutor);
+    }
+
+    public boolean checkRequestTutorEmail(Tutor t) {
+        this.tutor = t;
+        System.out.println("String:" + t);
+        if (tutor != null) {
+            return tut4youApp.checkRequestTutorEmail(tutor);
+        } else {
+            return false;
+        }
+    }
+
+    public void setCheckRequestTutorEmail(boolean checkRequestTutorEmail) {
+        this.checkRequestTutorEmail = checkRequestTutorEmail;
+    }
+
 }

@@ -12,9 +12,9 @@
     </context-param>
     <!-- Empty field validator -->
     <context-param>
-    <param-name>javax.faces.VALIDATE_EMPTY_FIELDS</param-name>
-    <param-value>true</param-value>
-</context-param>
+        <param-name>javax.faces.VALIDATE_EMPTY_FIELDS</param-name>
+        <param-value>true</param-value>
+    </context-param>
     <!-- Time Zone Converter -->
     <context-param>
         <param-name>javax.faces.DATETIMECONVERTER_DEFAULT_TIMEZONE_IS_SYSTEM_TIMEZONE</param-name>
@@ -64,10 +64,10 @@
             <description>Have the role of student</description>
             <role-name>tut4youapp.student</role-name>
         </auth-constraint>
-	<user-data-constraint>
+        <user-data-constraint>
             <!-- transport-guarantee can be CONFIDENTIAL, INTEGRAL, or NONE -->
             <transport-guarantee>NONE</transport-guarantee>
-	</user-data-constraint>
+        </user-data-constraint>
     </security-constraint>
     
     <security-constraint>
@@ -105,7 +105,7 @@
         </form-login-config>
     </login-config>
     
-<!-- Destination pages for common error codes -->
+    <!-- Destination pages for common error codes -->
     <error-page>
         <error-code>404</error-code>
         <location>/errors/unknown.xhtml</location>

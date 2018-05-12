@@ -377,24 +377,19 @@ public class UserBean implements Serializable {
      * confirms if the user entered the correct password and if so allows them
      * to change their password
      *
-     * @param oldPassword
-     * @param newPassword
-     * @return
+     * @return result
      */
-    public String changePassword(String oldPassword, String newPassword) {
+    public String changePassword() {
         FacesContext context = FacesContext.getCurrentInstance();
         String confirmPassword = tut4you.controller.HashPassword.getSHA512Digest(oldPassword);
-        String result;
-
+        String result = "failure";
         String currentPassword = user.getPassword();
-
         if (confirmPassword.equalsIgnoreCase(currentPassword)) {
             tut4youapp.changePassword(tut4you.controller.HashPassword.getSHA512Digest(newPassword));
-            context.addMessage(null, new FacesMessage("Successful", "Password successfully changed"));
             result = "updateProfile";
         } else {
-            context.addMessage(null, new FacesMessage("Failed", "Password entered does not match your current password"));
-            result = "failure";
+            context.addMessage("change-password:currentpassword", new FacesMessage("Password entered does not match your current password"));
+            result = "changePassword";
         }
         return result;
     }

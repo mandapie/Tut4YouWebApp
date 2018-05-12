@@ -38,6 +38,7 @@
                     <c:choose>
                         <c:when test="#{userBean.submittedTranscript}">
                             <b:dropMenu value="My Account" iconAwesome="warning" iconAlign="right" style="color:orange;">
+                                <b:navLink value="My Profile" outcome="/accounts/profile.xhtml"/>
                                 <c:if test="#{userBean.isTutor}">
                                     <b:navLink value="View Reviews" outcome="tutorProfile" includeViewParams="true">
                                         <f:param name="username" value="#{userBean.user.username}" />
@@ -56,6 +57,7 @@
                         </c:when>
                         <c:otherwise>
                             <b:dropMenu value="My Account">
+                                <b:navLink value="My Profile" outcome="/accounts/profile.xhtml"/>
                                 <c:if test="#{userBean.isTutor}">
                                     <b:navLink value="View Reviews" outcome="tutorProfile" includeViewParams="true">
                                         <f:param name="username" value="#{userBean.user.username}" />

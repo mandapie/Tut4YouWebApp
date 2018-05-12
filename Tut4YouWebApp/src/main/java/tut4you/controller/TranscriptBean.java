@@ -162,7 +162,8 @@ public class TranscriptBean implements Serializable {
         try {
             String userName = userbean.getEmailFromSession();
             tutor = tut4youApp.findTutor(userName);
-            String keyName = tutor.getTranscriptFilePath();
+       
+                 String keyName = tutor.getTranscriptFilePath();
             if (keyName == null){
                 FacesMessage message = new FacesMessage("No transcript uploaded yet! Please upload a transcript.");
                 FacesContext.getCurrentInstance().addMessage(null, message); 

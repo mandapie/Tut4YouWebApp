@@ -32,14 +32,21 @@
     <ui:define name="content">
         <h1>Review Application</h1>
         <h:form>
+            <p:growl id="downloadTranscript" showDetail="true"/>
             <b:row>
+                <b:column>
+                    <h:outputText value="Applicant's Username: "/>
+                    <h:outputText value="#{moderatorBean.moderatorApplication.user.username}"/>
+                </b:column>
                 <b:column>
                     <h:outputLabel value="Reason "/>
                     <h:outputText value="#{moderatorBean.moderatorApplication.reason}"/>
                 </b:column>
                 <b:column>
                     <h:outputLabel value="Resume "/>
-                    <h:outputText value="#{moderatorBean.moderatorApplication.resumeFilePath}"/>
+                    <b:column>
+                        <p:commandButton value="Download Resume" action="#{moderatorBean.downloadResume}" ajax="false" />
+                    </b:column>
                 </b:column>
             </b:row>
 

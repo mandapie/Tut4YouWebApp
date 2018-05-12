@@ -677,6 +677,12 @@ public class Tut4YouApp {
     public User findUser(String email) {
         return em.find(User.class, email);
     }
+    public User findUserByUsername(String username) {
+        TypedQuery<User> query = em.createNamedQuery(User.FIND_USER_BY_UNAME, User.class);
+        query.setParameter("username", username);
+        return query.getSingleResult();
+        
+    }
             
             /**
      * Gets a user by finding the email in the user entity.
@@ -1105,11 +1111,13 @@ public class Tut4YouApp {
         ModeratorApplication moderatorApplication = new ModeratorApplication(resumeFilePath, reason);
         if (tutor == null) {
             User student = findUser(currentUserEmail);
+            student.setModeratorApplication(moderatorApplication);
             moderatorApplication.setUser(student);
             moderatorApplication.setApplicationStatus(ModeratorApplication.ApplicationStatus.PENDING);
             em.persist(moderatorApplication);
         }
         else {
+            tutor.setModeratorApplication(moderatorApplication);
             moderatorApplication.setUser(tutor);
             moderatorApplication.setApplicationStatus(ModeratorApplication.ApplicationStatus.PENDING);
             em.persist(moderatorApplication);

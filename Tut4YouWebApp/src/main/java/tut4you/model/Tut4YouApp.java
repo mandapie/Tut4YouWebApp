@@ -1451,20 +1451,33 @@ public class Tut4YouApp {
     public void flagUser(User reportedUser, Date dateFlagged) {
         UserBean userBean = new UserBean();
         String currentUserEmail = userBean.getEmailFromSession();
-        
+        boolean newFlaggedUser = false;
         User moderator = em.find(User.class, currentUserEmail);
-        FlaggedUser flaggedUser = new FlaggedUser();
-        //FlaggedUser flaggedUser = findFlaggedUser(reportedUser.getEmail());
-        //if(flaggedUser == null) {
-         //   flaggedUser = new FlaggedUser();
-        //}
+        FlaggedUser flaggedUser = checkFlaggedUserLogIn(reportedUser.getEmail());
+        if(flaggedUser == null) {
+            flaggedUser = new FlaggedUser();
+            newFlaggedUser = true;
+        }
         
-        flaggedUser.setUser(reportedUser);
-        flaggedUser.addModerator(moderator);
-        flaggedUser.setCount(flaggedUser.getCount() + 1);
-        flaggedUser.setDateFlagged(dateFlagged);
         
-        em.persist(flaggedUser);
+        if(newFlaggedUser == true) {
+            flaggedUser.setUser(reportedUser);
+            reportedUser.setFlaggedUser(flaggedUser);
+            flaggedUser.addModerator(moderator);
+            moderator.addModeratorFlaggingUser(flaggedUser);
+            flaggedUser.setCount(flaggedUser.getCount() + 1);
+            flaggedUser.setDateFlagged(dateFlagged);
+            em.persist(flaggedUser);
+        }
+        else {
+            if(!(flaggedUser.getModerators().contains(moderator))) {
+                flaggedUser.addModerator(moderator);
+                moderator.addModeratorFlaggingUser(flaggedUser);
+            }
+            flaggedUser.setCount(flaggedUser.getCount() + 1);
+            flaggedUser.setDateFlagged(dateFlagged);
+            em.merge(flaggedUser);
+        }
         em.flush();
     }
 }

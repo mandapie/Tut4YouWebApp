@@ -129,3 +129,4 @@ INSERT INTO Courses_tutors(email,courseName) VALUES ('carmen@gmail.com','Compute
 --INSERT INTO Rating(student_email,description,ratingValue,tutor_email) VALUES ('daniel@gmail.com','He was a good tutor.', 1,'carmen@gmail.com')
 
 INSERT INTO Complaint(title,details,user_email,reporteduser_email) VALUES ('Tutor did not answer my question', 'Tutor failed to answer my questions and was not prepared','evan@gmail.com','carmen@gmail.com')
+INSERT INTO Complaint(title,details,user_email,reporteduser_email) VALUES ('FAIL', 'Tutor failed to answer my questions and was not prepared','keith@gmail.com','carmen@gmail.com')

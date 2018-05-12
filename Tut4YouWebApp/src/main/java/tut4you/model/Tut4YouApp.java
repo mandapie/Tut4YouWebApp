@@ -681,6 +681,20 @@ public class Tut4YouApp {
         return em.find(User.class,
                 email);
     }
+            
+            /**
+     * Gets a user by finding the email in the user entity.
+     *
+     * @param email
+     * @return user email
+     */
+    @PermitAll
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+
+    public FlaggedUser
+            findflaggeduser(String email) {
+        return em.find(FlaggedUser.class, findUser(email).getFlaggedUser().getId());
+    }
 
     /**
      * Gets a tutor by finding the email in the tutor entity.
@@ -1432,6 +1446,26 @@ public class Tut4YouApp {
         
         return flaggedUser;
     }
+    
+    @PermitAll
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public FlaggedUser checkFlaggedUserLogIn(String email) {
+        TypedQuery<FlaggedUser> query = em.createNamedQuery(FlaggedUser.FIND_FLAGGED_USER, FlaggedUser.class);
+        query.setParameter("email", email);
+        
+        FlaggedUser flaggedUser;
+        if(query.getSingleResult() == null) {
+            flaggedUser = null;
+        }
+        else {
+            flaggedUser = query.getSingleResult();
+        }
+        
+        return flaggedUser;
+    }
+    
+    
+    
     
     @RolesAllowed("tut4youapp.moderator")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)

@@ -79,8 +79,8 @@ public class FlaggedUserBean implements Serializable {
     public void destroyFlaggedUserBean() {
         
     }
-    public boolean checkIfSuspended(Date logInTime, Date flaggedTime) {
-        double diff = logInTime.getTime() - flaggedTime.getTime();
+    public boolean checkIfSuspended(Date logInTime, FlaggedUser flaggedUser) {
+        double diff = logInTime.getTime() - flaggedUser.getDateFlagged().getTime();
         double minutes = (diff / 1000) / 60;
         int count = flaggedUser.getCount();
         if(count == 1 && minutes < 1) {

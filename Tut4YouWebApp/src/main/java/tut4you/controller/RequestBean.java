@@ -571,6 +571,7 @@ public class RequestBean implements Serializable {
         };
     }
 
+
     public Session getSession() {
         return session;
     }

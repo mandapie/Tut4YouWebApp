@@ -1,0 +1,67 @@
+<ui:composition template="/WEB-INF/templates/layout.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <!--
+        Licensed under the Academic Free License (AFL 3.0).
+        http://opensource.org/licenses/AFL-3.0
+
+        This code has been developed by a group of CSULB students working on their 
+        Computer Science senior project called Tutors4You.
+
+        Tutors4You is a web application that students can utilize to find a tutor and
+        ask them to meet at any location of their choosing. Students that struggle to understand 
+        the courses they are taking would benefit from this peer to peer tutoring service.
+
+        2017 Amanda Pan <daikiraidemodaisuki@gmail.com>
+        2017 Andrew Kaichi <ahkaichi@gmail.com>
+        2017 Keith Tran <keithtran25@gmail.com>
+        2017 Syed Haider <shayder426@gmail.com>
+    -->
+    <!-- @author Andrew Kaichi <ahkaichi@gmail.com> -->
+    <f:metadata>
+        <f:viewParam name="username" value="#{moderatorBean.username}"/>
+        <f:event type="preRenderView" listener="#{moderatorBean.showUsername(moderatorBean.username)}">
+        </f:event>
+    </f:metadata>
+    <ui:define name="title">Apply To Become a Moderator</ui:define>
+    <ui:define name="content">
+        <h1>Review Application</h1>
+        <h:form>
+            <p:growl id="downloadTranscript" showDetail="true"/>
+            <b:row>
+                <b:column>
+                    <h:outputText value="Applicant's Username: "/>
+                    <h:outputText value="#{moderatorBean.moderatorApplication.user.username}"/>
+                </b:column>
+                <b:column>
+                    <h:outputLabel value="Reason "/>
+                    <h:outputText value="#{moderatorBean.moderatorApplication.reason}"/>
+                </b:column>
+                <b:column>
+                    <h:outputLabel value="Resume "/>
+                    <b:column>
+                        <p:commandButton value="Download Resume" action="#{moderatorBean.downloadResume}" ajax="false" />
+                    </b:column>
+                </b:column>
+            </b:row>
+
+            <b:row>
+                <b:column>
+                    <b:commandButton value="Accept" look="primary" action="#{moderatorBean.acceptModeratorApplication(moderatorBean.moderatorApplication)}" />
+                </b:column>
+                <b:column>
+                    <b:commandButton value="Deny" look="danger" action="#{moderatorBean.declineModeratorApplication(moderatorApplication)}"/>
+                </b:column>
+
+
+            </b:row>
+        </h:form>
+
+        <ui:debug hotkey='x'/>
+    </ui:define>
+</ui:composition>

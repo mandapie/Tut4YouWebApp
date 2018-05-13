@@ -32,6 +32,7 @@ import com.paypal.svcs.types.common.RequestEnvelope;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -56,6 +57,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
@@ -81,6 +85,13 @@ public class Tut4YouApp {
 
     private static final Logger LOGGER = Logger.getLogger("Tut4YouApp");
 
+    /* @POST
+    @Consumes(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+    public Response createBook(Rating rating) {
+        em.persist(rating);
+        URI bookUri = uriInfo.getAbsolutePathBuilder().path(rating.getId().toString()).build();
+        return Response.created(bookUri).build();
+    }*/
     /**
      * Query all subjects from the database
      *
@@ -161,7 +172,7 @@ public class Tut4YouApp {
     }
 
     /**
-     *
+     * Gets a list of accepted requests
      * @return a list of requests from a user
      */
     @PermitAll
@@ -174,6 +185,7 @@ public class Tut4YouApp {
         User user;
         TypedQuery<Request> requestQuery;
         List<Request> list;
+        List<Request> acceptedRequest = new ArrayList<>();
         if (currentUserEmail == null) {
             return null;
         }
@@ -181,14 +193,33 @@ public class Tut4YouApp {
         if (tutor == null) {
             user = findUser(currentUserEmail);
             email = user.getEmail();
-            requestQuery = em.createNamedQuery(Request.FIND_REQUEST_BY_EMAIL, Request.class);
-            requestQuery.setParameter("student_email", email);
-
+            list = getStudentAcceptedRequestList(email);
+            return list;
         } else {
-            email = tutor.getEmail();
+            email = currentUserEmail;
             requestQuery = em.createNamedQuery(Request.FIND_REQUEST_BY_TUTOR_EMAIL, Request.class);
             requestQuery.setParameter("tutor_email", email);
+            requestQuery.setParameter("status", Request.Status.ACCEPTED);
+            list = requestQuery.getResultList();
+            System.out.println(list.size());
+            List<Request> list2 = getStudentAcceptedRequestList(email);
+            System.out.println(list2.size());
+            acceptedRequest = new ArrayList<>(list);
+            acceptedRequest.addAll(list2);
         }
+        return acceptedRequest;
+    }
+
+    /**
+     * Gets a list of accepted requests for a student
+     * @return a list of requests for a particular student
+     */
+    @PermitAll
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public List<Request> getStudentAcceptedRequestList(String email) {
+        List<Request> list = new ArrayList<>();
+        TypedQuery<Request> requestQuery = em.createNamedQuery(Request.FIND_REQUEST_BY_EMAIL, Request.class);
+        requestQuery.setParameter("student_email", email);
         requestQuery.setParameter("status", Request.Status.ACCEPTED);
         list = requestQuery.getResultList();
         return list;
@@ -932,6 +963,7 @@ public class Tut4YouApp {
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public Session startSessionTime(Request r, Session sessionTimer) {
         Request request = em.find(Request.class, r.getId());
+        System.out.println(request);
         Date startTime = new Date();
         sessionTimer.setStartSessionTime(startTime);
         request.setSession(sessionTimer);
@@ -979,8 +1011,6 @@ public class Tut4YouApp {
      * @return
      */
     public boolean checkAnswer(String answer, String email) {
-        //UserBean userBean = new UserBean();
-        //String currentUserEmail = userBean.getEmailFromSession();
         User user = findUser(email);
         String securityAnswer = user.getSecurityAnswer();
         boolean val = securityAnswer.equals(answer);
@@ -1246,7 +1276,9 @@ public class Tut4YouApp {
     }
 
     /**
-     * When a student clicks "Pay Now", it generates a paykey from the Pay response.
+     * When a student clicks "Pay Now", it generates a paykey from the Pay
+     * response.
+     *
      * @param email - receiver of the payment
      * @param hourlyRate - hourly rate the tutor charges
      * @param elapsedTimeOfSession - total time of a session
@@ -1319,10 +1351,10 @@ public class Tut4YouApp {
 
     /**
      * It initially creates a payment with just the paykey, tutor, and session.
-     * Since the payment details are not processed until after navigating to the 
-     * "My Payments" page (a completed payment will redirec the user to the page), the
-     * payment is only partially created in the database.
-     * 
+     * Since the payment details are not processed until after navigating to the
+     * "My Payments" page (a completed payment will redirec the user to the
+     * page), the payment is only partially created in the database.
+     *
      * @param payKey payKey that is generated from PayResponse
      * @param session the session that tutor is being paid for
      * @param tutor the tutor being paid
@@ -1346,6 +1378,7 @@ public class Tut4YouApp {
 
     /**
      * Gets a list of payments based on a user's email
+     *
      * @return paymentList - a list of payments
      */
     @PermitAll
@@ -1395,8 +1428,9 @@ public class Tut4YouApp {
 
     /**
      * This will get the details of the payment using the paykey
+     *
      * @param payKey payKey used to get details of the payment
-     * 
+     *
      * @return map - mpa that contains name-value pairs of the payment details
      */
     @PermitAll
@@ -1455,10 +1489,9 @@ public class Tut4YouApp {
     }
 
     /**
-     * If the current user logged in is a tutor
-     * and is viewing a previous session, the "Pay Now"
-     * button should not appear.
-     * 
+     * If the current user logged in is a tutor and is viewing a previous
+     * session, the "Pay Now" button should not appear.
+     *
      * @param tutor
      * @return true if the tutor email and email of the tutor in a session are
      * the same
@@ -1472,12 +1505,13 @@ public class Tut4YouApp {
             String tutorEmail = tutor.getEmail();
             return currentUserEmail.equals(tutorEmail);
         } else {
-            return true;
+            return false;
         }
     }
 
     /**
      * This checks to see if the payment is completed.
+     *
      * @param payKey finds payments based off paykey
      * @return true if payment is completed
      */

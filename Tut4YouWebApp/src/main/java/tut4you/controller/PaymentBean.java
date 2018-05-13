@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.ExternalContext;
@@ -33,9 +35,8 @@ import tut4you.model.Tut4YouApp;
 import tut4you.model.Tutor;
 
 /**
- * Payments are made to tutors
- * by students. This class binds the payment
- * inputs to the EJB.
+ * Payments are made to tutors by students. This class binds the payment inputs
+ * to the EJB.
  *
  * @author Syed Haider<shayder426@gmail.com>
  */
@@ -52,6 +53,21 @@ public class PaymentBean implements Serializable {
 
     @EJB
     private Tut4YouApp tut4youApp;
+
+    /**
+     * Creates an instance of the sessionBean
+     */
+    @PostConstruct
+    public void createSessionBean() {
+        payment = new Payment();
+    }
+
+    /**
+     * Destroys an instance of the sessionBean
+     */
+    @PreDestroy
+    public void destroySessionBean() {
+    }
 
     /**
      * Gets the tutor of a session involved with a payment
@@ -126,7 +142,7 @@ public class PaymentBean implements Serializable {
         this.session = session;
     }
 
-     /**
+    /**
      * Gets the paymentStatus
      *
      * @return paymentStatus - true if payment is completed
@@ -137,7 +153,7 @@ public class PaymentBean implements Serializable {
 
     /**
      * Sets the paymentStatus
-     * 
+     *
      * @param paymentStatus - true if payment is completed
      */
     public void setTransactionStatus(boolean paymentStatus) {

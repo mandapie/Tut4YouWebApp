@@ -44,18 +44,14 @@
                     <b:row>
                         <b:panel title="Upcoming Sessions" collapsible="false" look="info">
                             <b:dataTable value="#{requestBean.acceptedList}" var="req" id="accepetedTable">
-                                <c:if test="#{userBean.isTutor}">
                                     <b:dataTableColumn>
                                         <f:facet name="header">Student</f:facet>
                                         <h:outputText value="#{req.student.firstName} #{req.student.lastName}"/>
                                     </b:dataTableColumn>
-                                </c:if>
-                                <c:if test="#{!userBean.isTutor}">
                                     <b:dataTableColumn>
                                         <f:facet name="header">Tutor</f:facet>
                                         <h:outputText value="#{req.tutor.firstName} #{req.tutor.lastName}"/>
                                     </b:dataTableColumn>
-                                </c:if>
                                 <b:dataTableColumn>
                                     <f:facet name="header">Day Of Week</f:facet>
                                     <h:outputText value="#{req.dayOfWeek}"/>

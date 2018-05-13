@@ -152,6 +152,23 @@ public class Tut4YouApp {
         em.flush();
         return request;
     }
+    /**
+     * Find the current Tutor that is logged in
+     * @return 
+     */
+    @RolesAllowed("tut4youapp.student")
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public Tutor findCurrentTutor() {
+        UserBean userBean = new UserBean();
+        String currentUserEmail = userBean.getEmailFromSession();
+        Tutor tutor;
+        if (currentUserEmail == null) {
+            tutor = null;
+        } else {
+            tutor = findTutor(currentUserEmail);
+        }
+        return tutor;
+    }
 
     /**
      *

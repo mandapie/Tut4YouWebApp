@@ -518,6 +518,9 @@ public class CreateRequestBean implements Serializable {
                 System.out.println("Zip code " + i + ": " + zipCodesByRadiusList.get(i));
                 System.out.println("temp " + i + ": " + temp);
             }
+            if(tutorList.contains(tut4youApp.findCurrentTutor())) {
+                tutorList.remove(tut4youApp.findCurrentTutor());
+            }
         }
         return result;
     }

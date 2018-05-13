@@ -32,6 +32,7 @@ import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -52,7 +53,9 @@ public class UserBean implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private static final Logger LOGGER = Logger.getLogger("UserBean");
-
+    
+    @Inject
+    private RequestBean requestBean;
     @EJB
     private Tut4YouApp tut4youapp;
 
@@ -66,6 +69,7 @@ public class UserBean implements Serializable {
     private double hourlyRate; // need double type for <f:convertNumber> tag to work in jsf page
     private String hRate; // need a String type for regex validation to work
     private String currentZip;
+    private FlaggedUser flaggedUser;
 
     /**
      * Creates a new instance of UserIdentity
@@ -82,7 +86,13 @@ public class UserBean implements Serializable {
     @PreDestroy
     public void destroyUserBean() {
     }
+    public FlaggedUser getFlaggedUser() {
+        return flaggedUser;
+    }
 
+    public void setFlaggedUser(FlaggedUser flaggedUser) {
+        this.flaggedUser = flaggedUser;
+    }
     public double getHourlyRate() {
         hourlyRate = tut4youapp.getHourlyRate();
         return hourlyRate;
@@ -267,7 +277,7 @@ public class UserBean implements Serializable {
      *
      * @return result
      */
-    public String login() {
+    public String login() throws ParseException {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
         try {
@@ -281,6 +291,10 @@ public class UserBean implements Serializable {
                 User loginUser = tut4youapp.getUser(email);
                 if (!hashedpass.equals(loginUser.getPassword())) {
                     context.addMessage("login:pass", new FacesMessage("Incorrect password"));
+                    return "login";
+                }
+                if(checkIfSuspended(getCurrentDate()) == true) {
+                    context.addMessage("login:pass", new FacesMessage("User is currently suspended"));
                     return "login";
                 }
                 request.login(email, pass); //log user in
@@ -393,8 +407,41 @@ public class UserBean implements Serializable {
         }
         return result;
     }
-
+    
     public boolean isSubmittedTranscript() {
         return tut4youapp.hasSubmittedTranscript();
+    }
+    
+    public boolean checkIfSuspended(Date logInTime) {
+        flaggedUser = findFlaggedUser(email);
+        if(flaggedUser != null) {
+        double diff = logInTime.getTime() - flaggedUser.getDateFlagged().getTime();
+        double minutes = (diff / 1000) / 60;
+        int count = flaggedUser.getCount();
+        if(count == 1 && minutes < 1) {
+            return true;
+        }
+        else if(count == 2 && minutes < 3) {
+            return true;
+        }
+        else if(count == 3 && minutes < 5) {
+            return true;
+        }
+        
+        else if(count == 4) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+        else {
+            return false;
+        }
+    }
+    
+    public FlaggedUser findFlaggedUser(String email) {
+        flaggedUser = tut4youapp.checkFlaggedUserLogIn(email);
+        return flaggedUser;
     }
 }

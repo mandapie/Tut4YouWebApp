@@ -23,37 +23,27 @@
         2017 Syed Haider <shayder426@gmail.com>
     -->
     <!-- @author Andrew Kaichi <ahkaichi@gmail.com> -->
-    <ui:define name="title">Transcript</ui:define>
+    <ui:define name="title">Apply To Become a Moderator</ui:define>
     <ui:define name="content">
-        <h1>Your Transcript</h1>
-        <b:panel title="Select what you would like to do." collapsible="false" look="info">
+        <h1>Add a Transcript</h1>
+        <b:panel title="Add your resume as a PDF file" collapsible="false" look="info">
             <h:form id="transcript" enctype="multipart/form-data">
-                
                 <b:row>
                     <b:column>
+                        <h:outputLabel value="Reason for Applying"/>
+                        <h:inputText id="reason" required="true" requiredMessage="required" value="#{moderatorBean.reason}"/>
+                    </b:column>
+                    <b:column>
                         <h:outputLabel for="uploadTranscript">
-                            Upload Your Transcript
+                            Upload Your Resume
                         </h:outputLabel>
-                        <p:fileUpload value="#{transcriptBean.file}"
+                        <p:fileUpload value="#{moderatorBean.file}"
                                       mode="simple"
                                       allowTypes="/(\.|\/)(gif|jpe?g|pdf)$/"
                                       fileLimit="1"
-                                      update="uploadTranscript"
-                                      required="true"
-                                      requiredMessage="A file attachment is required."/>
+                                      update="uploadTranscript"/>
                         <p:growl id="uploadTranscript" showDetail="true" />
-                        <br></br>
-                        <p:commandButton value="Upload" action="#{transcriptBean.uploadTranscript}" ajax="false" />
-                    </b:column>
-                </b:row>
-                <b:row> 
-                    <b:column>
-                        <br></br>
-                        <h:outputLabel for="downloadTranscript">
-                            Download Your Transcript
-                        </h:outputLabel>
-                        <br></br>
-                        <p:commandButton value="Download Transcript" action="#{transcriptBean.downloadTranscript}" ajax="false" />
+                        <p:commandButton value="Upload" action="#{moderatorBean.uploadResume}" ajax="false" />
                     </b:column>
                 </b:row>
             </h:form>

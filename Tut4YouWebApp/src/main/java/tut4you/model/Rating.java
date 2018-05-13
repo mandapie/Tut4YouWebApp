@@ -38,7 +38,10 @@ import javax.persistence.Table;
 @NamedQueries({
     @NamedQuery(name = Rating.FIND_RATING_BY_EMAIL, query = "SELECT r from Rating r"),
     @NamedQuery(name = Rating.FIND_RATING_BY_TUTOR, query = "SELECT r FROM Rating r JOIN r.tutor s WHERE s.email = :email"),
-    @NamedQuery(name = Rating.FIND_AVG_RATING_BY_TUTOR, query = "SELECT AVG(r.ratingValue) FROM Rating r JOIN r.tutor s WHERE s.email = :email")})
+    @NamedQuery(name = Rating.FIND_AVG_RATING_BY_TUTOR, query = "SELECT AVG(r.ratingValue) FROM Rating r JOIN r.tutor s WHERE s.email = :email"),
+    @NamedQuery(name = Rating.FIND_RATING_BY_STUDENT, query = "SELECT r FROM Rating r JOIN r.student s WHERE s.email = :email"),
+})
+
 @Entity
 @Table(name="Rating")
 public class Rating implements Serializable {
@@ -53,6 +56,10 @@ public class Rating implements Serializable {
      * JPQL Query to find ratings from available/selected tutors
      */
     public static final String FIND_RATING_BY_TUTOR = "Rating.findRatingByTutor";
+    /**
+     * JPQL Query to find ratings from available/selected tutors
+     */
+    public static final String FIND_RATING_BY_STUDENT = "Rating.findRatingByStudent";
     /**
      * JPQL Query to find average rating from available/selected tutors
      */

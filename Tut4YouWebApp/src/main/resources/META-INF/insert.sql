@@ -109,6 +109,10 @@ INSERT INTO Request(student_email,tutor_email,course_courseName,description,stat
 INSERT INTO Request(student_email,tutor_email,course_courseName,description,status) VALUES ('evan@gmail.com','amanda@gmail.com','General Biology I','Photosynthesis process',1)
 INSERT INTO Request(student_email,tutor_email,course_courseName,description,status) VALUES ('daniel@gmail.com','amanda@gmail.com','General Biology I','Photosynthesis process',1)
 
+INSERT INTO Request(student_email,tutor_email,course_courseName,description,status) VALUES ('evan@gmail.com','andrew@gmail.com','General Biology I','Photosynthesis process',4)
+INSERT INTO Request(student_email,tutor_email,course_courseName,description,status) VALUES ('evan@gmail.com','keith@gmail.com','General Biology I','Photosynthesis process',4)
+INSERT INTO Request(student_email,tutor_email,course_courseName,description,status) VALUES ('amanda@gmail.com','keith@gmail.com','General Biology I','Photosynthesis process',4)
+INSERT INTO Request(student_email,tutor_email,course_courseName,description,status) VALUES ('keith@gmail.com','amanda@gmail.com','General Biology I','Photosynthesis process',4)
 INSERT INTO Availability(DAYOFWEEK, ENDTIME, STARTTIME, TUTOR_EMAIL) VALUES ('Monday', '03:59:00', '02:00:00', 'amanda@gmail.com')
 INSERT INTO Availability(DAYOFWEEK, ENDTIME, STARTTIME, TUTOR_EMAIL) VALUES ('Monday', '04:59:00', '04:00:00', 'amanda@gmail.com')
 INSERT INTO Availability(DAYOFWEEK, ENDTIME, STARTTIME, TUTOR_EMAIL) VALUES ('Monday', '06:59:00', '05:00:00', 'amanda@gmail.com')
@@ -142,3 +146,11 @@ INSERT INTO Rating(student_email,description,ratingValue,tutor_email) VALUES ('e
 INSERT INTO Rating(student_email,description,ratingValue,tutor_email) VALUES ('evan@gmail.com','She did well.',5,'amanda@gmail.com')
 INSERT INTO Rating(student_email,description,ratingValue,tutor_email) VALUES ('evan@gmail.com','She did bad.',2,'amanda@gmail.com')
 INSERT INTO Rating(student_email,description,ratingValue,tutor_email) VALUES ('evan@gmail.com','She did okay.',3,'amanda@gmail.com')
+
+INSERT INTO ModeratorApplication(applicationStatus,reason,resumeFilePath,user_email) VALUES (0,'to help people','fsdafdsafsfasdf','carmen@gmail.com')
+INSERT INTO Availability(DAYOFWEEK, ENDTIME, STARTTIME, TUTOR_EMAIL) VALUES ('Monday', '06:59:00', '05:00:00', 'carmen@gmail.com')
+INSERT INTO Courses_tutors(email,courseName) VALUES ('carmen@gmail.com','Computer Security')
+--INSERT INTO Rating(student_email,description,ratingValue,tutor_email) VALUES ('daniel@gmail.com','He was a good tutor.', 1,'carmen@gmail.com')
+
+INSERT INTO Complaint(title,details,user_email,reporteduser_email) VALUES ('Tutor did not answer my question', 'Tutor failed to answer my questions and was not prepared','evan@gmail.com','carmen@gmail.com')
+INSERT INTO Complaint(title,details,user_email,reporteduser_email) VALUES ('FAIL', 'Tutor failed to answer my questions and was not prepared','keith@gmail.com','carmen@gmail.com')

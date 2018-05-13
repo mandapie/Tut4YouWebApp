@@ -53,7 +53,10 @@ import javax.persistence.TemporalType;
     @NamedQuery(name = Tutor.FIND_TUTORS_BY_COURSE_DAY_TIME_CZIP, query = "SELECT t FROM Tutor t JOIN t.courses c JOIN t.availabilities a WHERE c.courseName = :coursename AND a.dayOfWeek = :dayofweek AND a.startTime <= :requestTime AND a.endTime >= :requestTime AND t.doNotDisturb = :doNotDisturb AND t.currentZip = :zipCode"),
     @NamedQuery(name = Tutor.FIND_TUTORS_BY_COURSE, query = "SELECT COUNT(t) FROM Tutor t JOIN t.courses c WHERE c.courseName = :coursename"),
     @NamedQuery(name = Tutor.FIND_TUTORS, query = "SELECT t FROM Tutor t"),
-    @NamedQuery(name = Tutor.FIND_TUTOR_BY_USERNAME, query = "SELECT t FROM Tutor t WHERE t.username = :username")})
+    @NamedQuery(name = Tutor.FIND_TUTOR_BY_USERNAME, query = "SELECT t FROM Tutor t WHERE t.username = :username"),
+   
+
+})
 public class Tutor extends User implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -125,7 +128,7 @@ public class Tutor extends User implements Serializable {
     /**
      * One tutor can view many ratings
      */
-    @OneToMany(mappedBy = "tutorsList", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "tutor", cascade = CascadeType.ALL)
     private Collection<Rating> ratings;
 
     /**
@@ -229,6 +232,13 @@ public class Tutor extends User implements Serializable {
         this.overallRating = overallRating;
     }
 
+//    public Collection<Rating> getTutorRatings() {
+//        return ratings;
+//    }
+//
+//    public void setTutorRatings(Collection<Rating> ratings) {
+//        
+//    }
     @Override
     public Collection<Rating> getRatings() {
         return ratings;

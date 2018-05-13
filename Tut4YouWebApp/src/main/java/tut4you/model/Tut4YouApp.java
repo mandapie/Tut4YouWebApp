@@ -745,7 +745,21 @@ public class Tut4YouApp {
         tutorQuery.setParameter("username", username);
         return tutorQuery.getSingleResult();
     }
-   
+    
+    /**
+     * Find low rating tutors of 2 stars or lower
+     *
+     * @param username
+     * @return moderator application
+     * @Keith <keithtran25@gmail.com>
+     */
+    @RolesAllowed("tut4youapp.moderator")
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public List<Tutor> findLowRatingTutors() {
+        TypedQuery<Tutor> query = em.createNamedQuery(Tutor.FIND_LOW_RATING_TUTORS, Tutor.class);
+        query.setParameter("overallRating", 2);
+        return query.getResultList();
+    }
 
     /**
      * Gets a moderatorApplication by finding the email in the entity.

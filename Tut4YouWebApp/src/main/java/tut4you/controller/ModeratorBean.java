@@ -79,11 +79,20 @@ public class ModeratorBean implements Serializable {
     private String reason;
     private ModeratorApplication moderatorApplication;
     private List<ModeratorApplication> moderatorApplicationList = new ArrayList();
+    private List<Tutor> lowRatingTutorList = new ArrayList();
     
     @ManagedProperty("#{param.username}")
     private String username;
     private Tutor tutor;
+    
+    public List<Tutor> getLowRatingTutorList() {
+        lowRatingTutorList = tut4youApp.findLowRatingTutors();
+        return lowRatingTutorList;
+    }
 
+    public void setLowRatingTutorList(List<Tutor> lowRatingTutorList) {
+        this.lowRatingTutorList = lowRatingTutorList;
+    }
     public Tutor getTutor() {
         return tutor;
     }

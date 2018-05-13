@@ -28,6 +28,10 @@
         <f:event type="preRenderView" listener="#{profileBean.showUsername(profileBean.username)}">
         </f:event>
     </f:metadata>
+    <f:metadata>
+            <f:event listener="#{createRequestBean.endConversation()}"
+                     type="preRenderView"></f:event>
+    </f:metadata>
     <ui:define name="title">Tutor's Profile Page</ui:define>
     <ui:define name="content">
         <h1>Tutor's Profile</h1>

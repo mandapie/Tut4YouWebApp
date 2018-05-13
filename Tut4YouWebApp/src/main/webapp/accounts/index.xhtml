@@ -25,6 +25,10 @@
     <!-- @author Amanda Pan <daikiraidemodaisuki@gmail.com> -->
     <ui:define name="title">Dashboard</ui:define>
     <ui:define name="content">
+        <f:metadata>
+            <f:event listener="#{createRequestBean.endConversation()}"
+                     type="preRenderView"></f:event>
+        </f:metadata>
         <h1>Dashboard</h1>
         <b:form>
             <p:dialog header="Request Declined" widgetVar="modalID" minHeight="40" visible="#{requestBean.declinedRequest.size() != 0}" closable="false">

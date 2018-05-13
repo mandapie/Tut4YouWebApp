@@ -57,7 +57,6 @@
             <b:row>
                 <c:if test="#{complaintBean.complaint.reportedUser.groups.contains('tut4youapp.tutor')}" >
                     <b:column>
-
                         <h:outputLabel value="Transcript "/>
                         <b:column>
                             <p:commandButton value="Download Transcript" action="#{complaintBean.downloadTranscript}" ajax="false" />

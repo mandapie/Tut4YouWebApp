@@ -95,8 +95,11 @@
                                 </b:dataTableColumn>
                                 <b:dataTableColumn>
                                     <f:facet name="header">Complaint</f:facet>
-                                    <b:button value="Report Tutor" outcome="submitComplaint">
+                                    <b:button value="Report Tutor" outcome="submitComplaint" rendered="#{!requestBean.checkRequestTutorEmail(req.tutor)}">
                                         <f:param name="username" value="#{req.tutor.username}" />
+                                    </b:button>
+                                    <b:button value="Report Student" outcome="submitComplaint" rendered="#{requestBean.checkRequestTutorEmail(req.tutor)}">
+                                        <f:param name="username" value="#{req.student.username}" />
                                     </b:button>
                                 </b:dataTableColumn>
                                 <b:dataTableColumn>

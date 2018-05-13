@@ -125,12 +125,12 @@ public class ComplaintBean implements Serializable {
         complaint  = findComplaint(id);
     }
     public void showUsername(String username) {
-        Tutor tutor = findTutorEmail(username);
-        user = tut4youApp.findUser(tutor.getEmail());
+        User findUser = findUserByUsername(username);
+        user = tut4youApp.findUser(findUser.getEmail());
     }
-    public Tutor findTutorEmail(String username)
+    public User findUserByUsername(String username)
     {
-        return tut4youApp.findTutorEmail(username);
+        return tut4youApp.findUserByUsername(username);
     }
     public Complaint findComplaint(int id)
     {

@@ -745,6 +745,7 @@ public class Tut4YouApp {
         tutorQuery.setParameter("username", username);
         return tutorQuery.getSingleResult();
     }
+   
 
     /**
      * Gets a moderatorApplication by finding the email in the entity.

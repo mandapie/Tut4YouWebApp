@@ -113,7 +113,8 @@ INSERT INTO Request(student_email,tutor_email,course_courseName,description,stat
 
 INSERT INTO Request(student_email,tutor_email,course_courseName,description,status) VALUES ('evan@gmail.com','andrew@gmail.com','General Biology I','Photosynthesis process',4)
 INSERT INTO Request(student_email,tutor_email,course_courseName,description,status) VALUES ('evan@gmail.com','keith@gmail.com','General Biology I','Photosynthesis process',4)
-
+INSERT INTO Request(student_email,tutor_email,course_courseName,description,status) VALUES ('amanda@gmail.com','keith@gmail.com','General Biology I','Photosynthesis process',4)
+INSERT INTO Request(student_email,tutor_email,course_courseName,description,status) VALUES ('keith@gmail.com','amanda@gmail.com','General Biology I','Photosynthesis process',4)
 INSERT INTO Availability(DAYOFWEEK, ENDTIME, STARTTIME, TUTOR_EMAIL) VALUES ('Monday', '03:59:00', '02:00:00', 'amanda@gmail.com')
 INSERT INTO Availability(DAYOFWEEK, ENDTIME, STARTTIME, TUTOR_EMAIL) VALUES ('Monday', '04:59:00', '04:00:00', 'amanda@gmail.com')
 INSERT INTO Availability(DAYOFWEEK, ENDTIME, STARTTIME, TUTOR_EMAIL) VALUES ('Monday', '06:59:00', '05:00:00', 'amanda@gmail.com')

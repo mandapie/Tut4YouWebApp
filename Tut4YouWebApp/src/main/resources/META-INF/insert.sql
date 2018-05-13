@@ -39,7 +39,7 @@ INSERT INTO Users(email,user_type,firstName,lastName,phoneNumber,username,univer
 INSERT INTO Users(email,user_type,firstName,lastName,phoneNumber,username,university,securityQuestion,securityAnswer,password) VALUES ('john@gmail.com','Student','John','Smith','9496662541','jSmith','UCLA','In what city or town did your parents meet?','long beach','B7FCC6E612145267D2FFEA04BE754A34128C1ED8133A09BFBBABD6AFE6327688AA71D47343DD36E719F35F30FA79AEC540E91B81C214FDDFE0BEDD53370DF46D')
 INSERT INTO Users(email,user_type,firstName,lastName,phoneNumber,username,university,securityQuestion,securityAnswer,password) VALUES ('caleb@gmail.com','Student','Caleb','Young','7143341556','cYoung','CSUF','What was your childhood nickname?','caleb','B7F05F9993451875B68DE9DD0D190B43AD2B01C8392A8FC7672F9BBD98CC24739059755983A1519E06E76AD95928484526FE4B83E90287D03BE9023D6BEE047A')
 INSERT INTO Users(email,user_type,firstName,lastName,password,phoneNumber,username,university,securityQuestion,securityAnswer) VALUES ('samtesting1@gmail.com','Student','Sam','Chen','B30314C311F4ADF562B16BD400113EA39C6E08934600E2C5707195B5CCE66740402C18CB3F1A534C7C576C1F1E2F8A4914EBCD7894C99D23AA5A03C2F69EBA59','6266579513','sChen','USC','What was your childhood nickname?','sam')
-INSERT INTO Users(email,user_type,firstName,lastName,password,phoneNumber,username,university,hourlyRate,defaultZip,ZipCode_ID,securityQuestion,securityAnswer) VALUES ('briantesting1@gmail.com','Tutor','Brian','Chen','B30314C311F4ADF562B16BD400113EA39C6E08934600E2C5707195B5CCE66740402C18CB3F1A534C7C576C1F1E2F8A4914EBCD7894C99D23AA5A03C2F69EBA59','7146579513','bChen','CSULB',15.00,'92704',1,'What was your childhood nickname?','brian')
+INSERT INTO Users(email,user_type,firstName,lastName,password,phoneNumber,username,university,hourlyRate,defaultZip,securityQuestion,securityAnswer) VALUES ('briantesting1@gmail.com','Tutor','Brian','Chen','B30314C311F4ADF562B16BD400113EA39C6E08934600E2C5707195B5CCE66740402C18CB3F1A534C7C576C1F1E2F8A4914EBCD7894C99D23AA5A03C2F69EBA59','7146579513','bChen','CSULB',15.00,'92704',1,'What was your childhood nickname?','brian')
 
 INSERT INTO Groups_users(email,groupName) VALUES ('amanda@gmail.com','tut4youapp.moderator')
 INSERT INTO Groups_users(email,groupName) VALUES ('andrew@gmail.com','tut4youapp.moderator')
@@ -56,7 +56,6 @@ INSERT INTO Groups_users(email,groupName) VALUES ('william@gmail.com','tut4youap
 INSERT INTO Groups_users(email,groupName) VALUES ('david@gmail.com','tut4youapp.tutor')
 INSERT INTO Groups_users(email,groupName) VALUES ('briantesting1@gmail.com','tut4youapp.tutor')
 
-
 INSERT INTO Groups_users(email,groupName) VALUES ('amanda@gmail.com','tut4youapp.student')
 INSERT INTO Groups_users(email,groupName) VALUES ('andrew@gmail.com','tut4youapp.student')
 INSERT INTO Groups_users(email,groupName) VALUES ('keith@gmail.com','tut4youapp.student')
@@ -70,7 +69,6 @@ INSERT INTO Groups_users(email,groupName) VALUES ('grace@gmail.com','tut4youapp.
 INSERT INTO Groups_users(email,groupName) VALUES ('lily@gmail.com','tut4youapp.student')
 INSERT INTO Groups_users(email,groupName) VALUES ('daniel@gmail.com','tut4youapp.student')
 INSERT INTO Groups_users(email,groupName) VALUES ('evan@gmail.com','tut4youapp.student')
-
 INSERT INTO Groups_users(email,groupName) VALUES ('john@gmail.com','tut4youapp.student')
 INSERT INTO Groups_users(email,groupName) VALUES ('caleb@gmail.com','tut4youapp.student')
 INSERT INTO Groups_users(email,groupName) VALUES ('samtesting1@gmail.com','tut4youapp.student')
@@ -123,9 +121,7 @@ INSERT INTO Availability(DAYOFWEEK, ENDTIME, STARTTIME, TUTOR_EMAIL) VALUES ('We
 INSERT INTO Availability(DAYOFWEEK, ENDTIME, STARTTIME, TUTOR_EMAIL) VALUES ('Wednesday', '11:00:00', '02:00:00', 'andrew@gmail.com')
 INSERT INTO Availability(DAYOFWEEK, ENDTIME, STARTTIME, TUTOR_EMAIL) VALUES ('Friday', '23:00:00', '02:00:00', 'amanda@gmail.com')
 INSERT INTO Availability(DAYOFWEEK, ENDTIME, STARTTIME, TUTOR_EMAIL) VALUES ('Saturday', '23:00:00', '02:00:00', 'amanda@gmail.com')
-
 INSERT INTO Availability(DAYOFWEEK, ENDTIME, STARTTIME, TUTOR_EMAIL) VALUES ('Monday', '01:00:00', '23:59:00', 'andrew@gmail.com')
-
 
 INSERT INTO Requests_tutors(id,email) VALUES (1,'amanda@gmail.com')
 INSERT INTO Requests_tutors(id,email) VALUES (2,'amanda@gmail.com')

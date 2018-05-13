@@ -337,10 +337,10 @@ public class UserBean implements Serializable {
      * updates current zip
      */
     public void updateCurrentZip() {
-        Tutor tutor = tut4youapp.updateCurrentZip(currentZip);
-        if (tutor.getCurrentZip() != null) {
-            condition = false;
+        if (currentZip != null) {
+            tut4youapp.updateCurrentZip(currentZip);
         }
+        condition = false;
     }
 
     /**

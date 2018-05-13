@@ -32,12 +32,7 @@ import com.paypal.svcs.types.common.RequestEnvelope;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import javax.ejb.Stateless;
 import java.util.List;
@@ -753,7 +748,7 @@ public class Tut4YouApp {
             throw new UserExistsException();
         }
     }
-    
+
     @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public boolean hasSubmittedTranscript() {
@@ -1097,14 +1092,13 @@ public class Tut4YouApp {
      */
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     @RolesAllowed("tut4youapp.tutor")
-    public Tutor updateCurrentZip(String currentZip) {
+    public void updateCurrentZip(String currentZip) {
         UserBean userBean = new UserBean();
         String currentUserEmail = userBean.getEmailFromSession();
         Tutor tutor = findTutor(currentUserEmail);
         tutor.setCurrentZip(currentZip);
         em.merge(tutor);
         em.flush();
-        return tutor;
     }
 
     /**
@@ -1256,7 +1250,9 @@ public class Tut4YouApp {
     }
 
     /**
-     * When a student clicks "Pay Now", it generates a paykey from the Pay response.
+     * When a student clicks "Pay Now", it generates a paykey from the Pay
+     * response.
+     *
      * @param email - receiver of the payment
      * @param hourlyRate - hourly rate the tutor charges
      * @return payKey - allows student to complete a payment
@@ -1328,10 +1324,10 @@ public class Tut4YouApp {
 
     /**
      * It initially creates a payment with just the paykey, tutor, and session.
-     * Since the payment details are not processed until after navigating to the 
-     * "My Payments" page (a completed payment will redirec the user to the page), the
-     * payment is only partially created in the database.
-     * 
+     * Since the payment details are not processed until after navigating to the
+     * "My Payments" page (a completed payment will redirec the user to the
+     * page), the payment is only partially created in the database.
+     *
      * @param payKey payKey that is generated from PayResponse
      * @param session the session that tutor is being paid for
      * @param tutor the tutor being paid
@@ -1355,6 +1351,7 @@ public class Tut4YouApp {
 
     /**
      * Gets a list of payments based on a user's email
+     *
      * @return paymentList - a list of payments
      */
     @PermitAll
@@ -1404,8 +1401,9 @@ public class Tut4YouApp {
 
     /**
      * This will get the details of the payment using the paykey
+     *
      * @param payKey payKey used to get details of the payment
-     * 
+     *
      * @return map - mpa that contains name-value pairs of the payment details
      */
     @PermitAll
@@ -1464,10 +1462,9 @@ public class Tut4YouApp {
     }
 
     /**
-     * If the current user logged in is a tutor
-     * and is viewing a previous session, the "Pay Now"
-     * button should not appear.
-     * 
+     * If the current user logged in is a tutor and is viewing a previous
+     * session, the "Pay Now" button should not appear.
+     *
      * @param tutor
      * @return true if the tutor email and email of the tutor in a session are
      * the same
@@ -1487,6 +1484,7 @@ public class Tut4YouApp {
 
     /**
      * This checks to see if the payment is completed.
+     *
      * @param payKey finds payments based off paykey
      * @return true if payment is completed
      */

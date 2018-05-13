@@ -42,25 +42,23 @@ public class SessionBean implements Serializable {
     @EJB
     private Tut4YouApp tut4youApp;
 
-    private String email;
     private boolean checkAnswer;
     private Request request;
     private Session sessionTimer;
     private String securityAnswer;
     private String securityQuestion;
     private User student;
-    private SessionBean sessionBean;
+
     /**
-     * This will check if the "Start Button"
-     * on the "sessionTimer.xhtml" page has 
-     * been clicked.
+     * This will check if the "Start Button" on the "sessionTimer.xhtml" page
+     * has been clicked.
      */
     private boolean checkStartButtonState = false;
     private boolean checkEndButtonState = true;
 
     /**
      * Gets checkStartButtonState
-     * 
+     *
      * @return true if start button is clicked
      */
     public boolean isCheckStartButtonState() {
@@ -69,7 +67,7 @@ public class SessionBean implements Serializable {
 
     /**
      * Sets checkStartButtonState to true or false
-     * 
+     *
      * @param checkStartButtonState true if clicked
      */
     public void setCheckStartButtonState(boolean checkStartButtonState) {
@@ -78,7 +76,7 @@ public class SessionBean implements Serializable {
 
     /**
      * Gets checkEndButtonState
-     * 
+     *
      * @return true if button is clicked
      */
     public boolean isCheckEndButtonState() {
@@ -94,9 +92,9 @@ public class SessionBean implements Serializable {
         this.checkEndButtonState = checkEndButtonState;
     }
 
-
     /**
      * Gets the student of the session
+     *
      * @return student - student of session
      */
     public User getStudent() {
@@ -105,7 +103,6 @@ public class SessionBean implements Serializable {
 
     /**
      * Sets the student of the session
-     * 
      *
      * @param student - student of session
      */
@@ -124,7 +121,7 @@ public class SessionBean implements Serializable {
 
     /**
      * Sets the security answer
-     * 
+     *
      * @param securityAnswer
      */
     public void setSecurityAnswer(String securityAnswer) {
@@ -204,7 +201,6 @@ public class SessionBean implements Serializable {
         this.checkAnswer = checkAnswer;
     }
 
-
     /**
      * This will set the start session time of the session
      *
@@ -218,19 +214,17 @@ public class SessionBean implements Serializable {
     /**
      * This ends the tutoring session and sets the request to be a complete
      * status
-     *     */
-    
+     *
+     * @return 
+     */
     public String endTutorSession() {
         return tut4youApp.endSessionTime(request, sessionTimer);
     }
 
-
-
     /**
      *
-     * This checks to see if the securityAnswer answers
-     * the security question
-     * 
+     * This checks to see if the securityAnswer answers the security question
+     *
      * @param answer the answer inputted
      * @return true if answer is correct
      */
@@ -243,7 +237,6 @@ public class SessionBean implements Serializable {
         }
         return checkAnswer;
     }
-
 
     /**
      * This will forward the tutor to the session timer page to start the
@@ -262,8 +255,8 @@ public class SessionBean implements Serializable {
     }
 
     /**
-     * This displays when a tutor will click
-     * "Start Session" on the sessionTimer.xhtml page
+     * This displays when a tutor will click "Start Session" on the
+     * sessionTimer.xhtml page
      */
     public void showGrowlStartMessage() {
         FacesContext context = FacesContext.getCurrentInstance();

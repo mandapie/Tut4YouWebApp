@@ -19,6 +19,7 @@ package tut4you.controller;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -145,5 +146,9 @@ public class ComplaintBean implements Serializable {
         Date currentDateTime = registrationBean.getCurrentDate();
         tut4youApp.closeComplaint(complaint);
         tut4youApp.flagUser(complaint.getReportedUser(), currentDateTime);
+    }
+    public boolean isComplaintSubmitted(Collection<Complaint> complaints) {
+        return tut4youApp.isComplaintSubmitted(complaints);
+        
     }
 }

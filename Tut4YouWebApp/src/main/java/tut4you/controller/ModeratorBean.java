@@ -188,8 +188,6 @@ public class ModeratorBean implements Serializable {
         AccessControlList acl = new AccessControlList();
         acl.grantPermission(GroupGrantee.AllUsers, Permission.Write);
         try {
-            //String userName = userbean.getEmailFromSession();
-            //user = tut4youApp.findUser(userName);
             user = tut4youApp.findUserByUsername(username);
                  String keyName = user.getModeratorApplication().getResumeFilePath();
             if (keyName == null){

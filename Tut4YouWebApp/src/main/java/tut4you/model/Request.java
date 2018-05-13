@@ -45,11 +45,14 @@ import javax.persistence.TemporalType;
  */
 @Table(name = "Request")
 @NamedQueries({
-    @NamedQuery(name = Request.FIND_REQUEST_BY_EMAIL, query = "SELECT r from Request r JOIN r.student s WHERE s.email = :student_email AND r.status = :status"),
-    @NamedQuery(name = Request.FIND_REQUEST_BY_TUTOR_EMAIL, query = "SELECT r from Request r JOIN r.tutor s WHERE s.email = :tutor_email AND r.status = :status"),
-    @NamedQuery(name = Request.FIND_REQUESTS_BY_TUTOR, query = "SELECT r FROM Request r JOIN r.availableTutors t WHERE t.email = :email"),
+  
     @NamedQuery(name = Request.FIND_REQUESTS_BY_USER, query = "SELECT r FROM Request r  JOIN r.student s WHERE s.email = :email"),
     
+    @NamedQuery(name = Request.FIND_REQUEST_BY_EMAIL, query = "SELECT r from Request r JOIN r.student s WHERE s.email = :student_email AND r.status = :status ORDER BY r.id DESC")
+    ,
+    @NamedQuery(name = Request.FIND_REQUEST_BY_TUTOR_EMAIL, query = "SELECT r from Request r JOIN r.tutor s WHERE s.email = :tutor_email AND r.status = :status ORDER BY r.id DESC")
+    ,
+    @NamedQuery(name = Request.FIND_REQUESTS_BY_TUTOR, query = "SELECT r FROM Request r JOIN r.availableTutors t WHERE t.email = :email ORDER BY r.id DESC")
 })
 @Entity
 public class Request implements Serializable {
@@ -60,14 +63,14 @@ public class Request implements Serializable {
      * Tells whether a Request is pending, accepted or canceled
      * http://tomee.apache.org/examples-trunk/jpa-enumerated/README.html
      */
-    public enum Status{
+    public enum Status {
         PENDING,
         ACCEPTED,
         CANCELLED,
         DECLINED,
         COMPLETED;
     }
-    
+
     /**
      * JPQL Query to find Requests by user email
      */
@@ -84,7 +87,6 @@ public class Request implements Serializable {
      * JPQL Query to find requests made by a user
      */
     public static final String FIND_REQUESTS_BY_USER = "Request.findRequestsByUser";
-
 
     /**
      * Primary key is generated uniquely
@@ -108,31 +110,31 @@ public class Request implements Serializable {
      * only one course can be associated with one request
      */
     @OneToOne
-    @JoinColumn(nullable=false)
+    @JoinColumn(nullable = false)
     private Course course;
     /**
-     * Association class between request and tutor.
-     * One tutor can receive many pending requests and
-     * One request can be sent to many tutors.
+     * Association class between request and tutor. One tutor can receive many
+     * pending requests and One request can be sent to many tutors.
      */
     @ManyToMany
-    @JoinTable(name="Requests_tutors",
-          joinColumns={
-              @JoinColumn(name="id")
-          },
-          inverseJoinColumns=@JoinColumn(name="email"))
+    @JoinTable(name = "Requests_tutors",
+            joinColumns = {
+                @JoinColumn(name = "id")
+            },
+            inverseJoinColumns = @JoinColumn(name = "email"))
     private Collection<Tutor> availableTutors;
     @OneToOne
     private Tutor tutor;
+
     @OneToOne
     private Session session;
+
     private String description;
     private String dayOfWeek;
     @Temporal(TemporalType.TIME)
     private Date currentTime;
     private Status status;
     private float lengthOfSession;
- 
 
     /**
      * Request Constructor
@@ -157,7 +159,7 @@ public class Request implements Serializable {
         this.currentTime = currentTime;
         this.lengthOfSession = lengthOfSession;
     }
-    
+
     public Session getSession() {
         return session;
     }
@@ -165,21 +167,25 @@ public class Request implements Serializable {
     public void setSession(Session session) {
         this.session = session;
     }
-    
+
     /**
      * get ZipCode of Request
+     *
      * @return zipCode
      */
     public ZipCode getZipCode() {
         return zipCode;
     }
+
     /**
      * set zipCode of Request
-     * @param zipCode 
+     *
+     * @param zipCode
      */
     public void setZipCode(ZipCode zipCode) {
         this.zipCode = zipCode;
     }
+
     /**
      * Gets the id of a Request
      *
@@ -197,16 +203,20 @@ public class Request implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
+
     /**
      * get day of week
+     *
      * @return dayOfWeek
      */
     public String getDayOfWeek() {
         return dayOfWeek;
     }
+
     /**
      * set day of week
-     * @param dayOfWeek 
+     *
+     * @param dayOfWeek
      */
     public void setDayOfWeek(String dayOfWeek) {
         this.dayOfWeek = dayOfWeek;
@@ -223,28 +233,32 @@ public class Request implements Serializable {
 
     /**
      * set currentTime
-     * @param currentTime 
+     *
+     * @param currentTime
      */
     public void setCurrentTime(Date currentTime) {
         this.currentTime = currentTime;
 
     }
-    
+
     /**
      * Gets the status of the Request
+     *
      * @return status of the Request
      */
-    public Status getStatus(){
+    public Status getStatus() {
         return status;
     }
-    
+
     /**
      * Sets the status of the Request
+     *
      * @param status of the Request
      */
-    public void setStatus(Status status){
+    public void setStatus(Status status) {
         this.status = status;
     }
+
     /**
      * Gets a course from the courseList
      *
@@ -373,7 +387,7 @@ public class Request implements Serializable {
     public void removeAvailableTutor(Tutor at) {
         availableTutors.remove(at);
     }
-    
+
     /**
      * Override hashCode
      *
@@ -404,7 +418,6 @@ public class Request implements Serializable {
         }
         return true;
     }
-
 
     /**
      * Override toString

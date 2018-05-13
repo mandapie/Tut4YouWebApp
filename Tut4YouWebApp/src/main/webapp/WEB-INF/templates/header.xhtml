@@ -44,7 +44,8 @@
                             <b:navLink value="My Transcript" outcome="/tutors/uploadTranscript.xhtml"></b:navLink>
 
                         </c:if>
-                        <b:navLink></b:navLink>
+                        <b:navLink value="My Sessions" href="/Tut4YouWebApp/accounts/mySessions.xhtml"/>
+                        <b:navLink value="My Payments" href="/Tut4YouWebApp/accounts/myPayments.xhtml"/>
                         <c:if test="#{!(userBean.isTutor)}">
                             <b:navLink value="Become Tutor" outcome="/students/becomeTutor.xhtml"/>
                         </c:if>

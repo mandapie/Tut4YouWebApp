@@ -29,9 +29,11 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 /**
@@ -51,7 +53,8 @@ import javax.persistence.Table;
 @NamedQueries({
     @NamedQuery(name = User.FIND_USER_EMAILS, query = "SELECT t.email FROM User t"),
     @NamedQuery(name = User.FIND_USER_USERNAMES, query = "SELECT t.username FROM User t"),
-    @NamedQuery(name = User.FIND_USER_BY_EMAIL, query = "SELECT u FROM User u WHERE u.email = :email")
+    @NamedQuery(name = User.FIND_USER_BY_EMAIL, query = "SELECT u FROM User u WHERE u.email = :email"),
+    @NamedQuery(name = User.FIND_USER_BY_UNAME, query = "SELECT u FROM User u WHERE u.username = :username")
 })
 public class User implements Serializable {
     /**
@@ -67,6 +70,7 @@ public class User implements Serializable {
      */
     public static final String FIND_USER_BY_RATING = "User.FindUserByRating";
     public static final String FIND_USER_BY_EMAIL = "User.FindUserByEmail";
+    public static final String FIND_USER_BY_UNAME = "User.FindUserByUName";
     
     private static final long serialVersionUID = 1L;
 
@@ -97,7 +101,57 @@ public class User implements Serializable {
      */
     @ManyToMany(mappedBy = "students", cascade = CascadeType.ALL)
     private Collection<Group> groups;
+    
+    @OneToMany(mappedBy = "moderator", cascade = CascadeType.ALL)
+    private Collection<ModeratorApplication> moderatorApplications;
+    
+    @OneToOne
+    private ModeratorApplication moderatorApplication;
+    
+    @ManyToMany(mappedBy = "moderators", cascade = CascadeType.ALL)
+    private Collection<FlaggedUser> moderatorFlaggingUser;
 
+    @OneToOne 
+    private FlaggedUser flaggedUser;
+    
+    @OneToMany(mappedBy = "moderator", cascade = CascadeType.ALL)
+    private Collection<Complaint> moderatorComplaint;
+    
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private Collection<Complaint> userComplaint;
+    
+    @OneToMany(mappedBy = "reportedUser", cascade = CascadeType.ALL)
+    private Collection<Complaint> reportedUserComplaint;
+    public ModeratorApplication getModeratorApplication() {
+        return moderatorApplication;
+    }
+     public Collection<Complaint> getModeratorComplaint() {
+        return moderatorComplaint;
+    }
+
+    public void setModeratorComplaint(Collection<Complaint> moderatorComplaint) {
+        this.moderatorComplaint = moderatorComplaint;
+    }
+
+    public Collection<Complaint> getUserComplaint() {
+        return userComplaint;
+    }
+
+    public void setUserComplaint(Collection<Complaint> userComplaint) {
+        this.userComplaint = userComplaint;
+    }
+
+    public Collection<Complaint> getReportedUserComplaint() {
+        return reportedUserComplaint;
+    }
+
+    public void setReportedUserComplaint(Collection<Complaint> reportedUserComplaint) {
+        this.reportedUserComplaint = reportedUserComplaint;
+    }
+    public void setModeratorApplication(ModeratorApplication moderatorApplication) {
+        this.moderatorApplication = moderatorApplication;
+    }
+    
     /**
      * User constructor
      */
@@ -143,7 +197,50 @@ public class User implements Serializable {
         this.securityQuestion = securityQuestion;
         this.securityAnswer = securityAnswer;
     }
+    
+    public Collection<FlaggedUser> getModeratorFlaggingUser() {
+        return moderatorFlaggingUser;
+    }
 
+    public void setModeratorFlaggingUser(Collection<FlaggedUser> moderatorFlaggingUser) {
+        this.moderatorFlaggingUser = moderatorFlaggingUser;
+    }
+    public void addModeratorFlaggingUser(FlaggedUser moderatorFlaggingUser) {
+        if (this.moderatorFlaggingUser == null) {
+            this.moderatorFlaggingUser = new HashSet();
+        }
+        this.moderatorFlaggingUser.add(moderatorFlaggingUser);
+    }
+    
+    public Collection<ModeratorApplication> getModeratorApplications() {
+        return moderatorApplications;
+    }
+
+    public void setModeratorApplications(Collection<ModeratorApplication> moderatorApplications) {
+        this.moderatorApplications = moderatorApplications;
+    }
+    
+    public void addModeratorApplication(ModeratorApplication moderatorApplication) {
+        if (this.moderatorApplications == null) {
+            this.moderatorApplications = new HashSet();
+        }
+        this.moderatorApplications.add(moderatorApplication);
+    }
+    
+    /**
+     * get the flagged user
+     * @return flaggedUser
+     */
+    public FlaggedUser getFlaggedUser() {
+        return flaggedUser;
+    }
+    /**
+     * set the flagged user
+     * @param flaggedUser 
+     */
+    public void setFlaggedUser(FlaggedUser flaggedUser) {
+        this.flaggedUser = flaggedUser;
+    }
     /**
      * Gets the email of a user
      * @return the email

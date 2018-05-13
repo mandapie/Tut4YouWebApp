@@ -81,6 +81,20 @@
             <to-view-id>/accounts/tutorProfile.xhtml</to-view-id>
         </navigation-case>
         <navigation-case>
+            <from-outcome>reviewComplaint</from-outcome>
+            <to-view-id>/moderators/reviewComplaint.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>submitComplaint</from-outcome>
+            <to-view-id>/students/submitComplaint.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>moderatorApplication</from-outcome>
+            <to-view-id>/moderators/reviewApplication.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{userBean.updateUser(userBean.user)}</from-action>
+            <from-outcome>success</from-outcome>
             <from-action>#{registrationBean.createUser}</from-action>
             <from-outcome>register</from-outcome>
             <to-view-id>/authentications/registration.xhtml</to-view-id>

@@ -84,6 +84,21 @@
                                     <h:outputText value="#{req.session.payment.payKey}"/>
                                 </b:dataTableColumn>
                                 <b:dataTableColumn>
+                                    <f:facet name="header">Rating</f:facet>
+                                    <b:button value="Write a Review" outcome="writeReview">
+                                        <f:param name="username" value="#{req.tutor.username}" />
+                                    </b:button>
+                                </b:dataTableColumn>
+                                <b:dataTableColumn>
+                                    <f:facet name="header">Complaint</f:facet>
+                                    <b:button value="Report Tutor" outcome="submitComplaint" rendered="#{!requestBean.checkRequestTutorEmail(req.tutor)}">
+                                        <f:param name="username" value="#{req.tutor.username}" />
+                                    </b:button>
+                                    <b:button value="Report Student" outcome="submitComplaint" rendered="#{requestBean.checkRequestTutorEmail(req.tutor)}">
+                                        <f:param name="username" value="#{req.student.username}" />
+                                    </b:button>
+                                </b:dataTableColumn>
+                                <b:dataTableColumn>
                                     <f:facet name="header">Pay Now!</f:facet>
                                     <b:commandButton value="Pay Tutor" look="primary" action="#{paymentBean.payForTutoringSession(req.tutor,req.session)}" rendered="#{!requestBean.checkRequestTutorEmail(req.tutor) and paymentBean.checkCompletedStatus(req.session.payment.payKey)}"/>
                                 </b:dataTableColumn>

@@ -53,8 +53,17 @@
                 <b:column>
                     <b:commandButton value="Close Complaint" look="primary" action="#{complaintBean.closeComplaint()}"/>
                 </b:column>
+            </b:row>
+            <b:row>
+                <c:if test="#{complaintBean.complaint.reportedUser.groups.contains('tut4youapp.tutor')}" >
+                    <b:column>
 
-
+                        <h:outputLabel value="Transcript "/>
+                        <b:column>
+                            <p:commandButton value="Download Transcript" action="#{complaintBean.downloadTranscript}" ajax="false" />
+                        </b:column>
+                    </b:column>
+                </c:if>
             </b:row>
         </h:form>
 

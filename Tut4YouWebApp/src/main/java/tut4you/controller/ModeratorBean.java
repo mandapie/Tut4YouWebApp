@@ -57,6 +57,7 @@ import static org.omnifaces.util.Faces.getServletContext;
 import org.primefaces.model.UploadedFile;
 import tut4you.model.ModeratorApplication;
 import tut4you.model.Tut4YouApp;
+import tut4you.model.Tutor;
 import tut4you.model.User;
 
 
@@ -81,6 +82,15 @@ public class ModeratorBean implements Serializable {
     
     @ManagedProperty("#{param.username}")
     private String username;
+    private Tutor tutor;
+
+    public Tutor getTutor() {
+        return tutor;
+    }
+
+    public void setTutor(Tutor tutor) {
+        this.tutor = tutor;
+    }
 
     public String getUsername() {
         return username;
@@ -173,6 +183,7 @@ public class ModeratorBean implements Serializable {
     public void declineModeratorApplication(ModeratorApplication moderatorApplication) {
         tut4youApp.declineModeratorApplication(moderatorApplication);
     }
+    
     
     public void downloadResume() throws IOException {
         Properties prop = new Properties();
@@ -277,5 +288,6 @@ public class ModeratorBean implements Serializable {
                     + "trying to communicate with S3, such as not being able to access the network.");
         }
     }
+    
    
 }

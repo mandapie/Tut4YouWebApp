@@ -25,6 +25,10 @@
     <!-- @author Amanda Pan <daikiraidemodaisuki@gmail.com> -->
     <ui:define name="title">Dashboard</ui:define>
     <ui:define name="content">
+        <f:metadata>
+            <f:event listener="#{createRequestBean.endConversation()}"
+                     type="preRenderView"></f:event>
+        </f:metadata>
         <h1>Dashboard</h1>
         <b:form>
             <p:dialog header="Request Declined" widgetVar="modalID" minHeight="40" visible="#{requestBean.declinedRequest.size() != 0}" closable="false">
@@ -169,7 +173,7 @@
                 </b:row>
                 <b:row>
                     <b:panel title="Previous Sessions" collapsible="false" look="info">
-                        <b:dataTable value="#{requestBean.completedList[0]}" var="req" id="completedTable">
+                        <b:dataTable value="#{requestBean.completedList}" var="req">
                             <b:dataTableColumn>
                                 <f:facet name="header">Tutor</f:facet>
                                 <h:outputText value="#{req.tutor.firstName}"/>                        

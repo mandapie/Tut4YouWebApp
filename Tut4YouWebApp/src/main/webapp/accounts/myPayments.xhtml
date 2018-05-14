@@ -26,6 +26,10 @@
     -->
     <!-- @author Amanda Pan <daikiraidemodaisuki@gmail.com> -->
     <ui:define name="title">Sessions</ui:define>
+    <f:metadata>
+        <f:event listener="#{createRequestBean.endConversation()}"
+                 type="preRenderView"></f:event>
+    </f:metadata>
     <script src="https://www.paypalobjects.com/js/external/apdg.js" type="text/javascript"></script>
     <script type="text/javascript" charset="utf-8">
         var dgFlowMini = new PAYPAL.apps.DGFlowMini({trigger: 'submitBtn'});

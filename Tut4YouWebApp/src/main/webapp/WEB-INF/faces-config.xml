@@ -55,7 +55,7 @@
             <to-view-id>/tutors/addNewCourse.xhtml</to-view-id>
         </navigation-case>
         <navigation-case>
-            <from-action>#{requestBean.createNewRequest}</from-action>
+            <from-action>#{createRequestBean.createNewRequest}</from-action>
             <from-outcome>success</from-outcome>
             <to-view-id>/students/tutorsNotified.xhtml</to-view-id>
             <redirect/>

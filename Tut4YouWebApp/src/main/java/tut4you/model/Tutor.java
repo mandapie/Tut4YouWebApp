@@ -53,6 +53,7 @@ import javax.persistence.TemporalType;
     @NamedQuery(name = Tutor.FIND_TUTORS_BY_COURSE, query = "SELECT COUNT(t) FROM Tutor t JOIN t.courses c WHERE c.courseName = :coursename"),
     @NamedQuery(name = Tutor.FIND_TUTORS, query = "SELECT t FROM Tutor t"),
     @NamedQuery(name = Tutor.FIND_TUTOR_BY_USERNAME, query = "SELECT t FROM Tutor t WHERE t.username = :username"),
+    @NamedQuery(name = Tutor.FIND_LOW_RATING_TUTORS, query = "SELECT t FROM Tutor t WHERE t.overallRating <= :overallRating")
 })
 public class Tutor extends User implements Serializable {
 
@@ -67,6 +68,7 @@ public class Tutor extends User implements Serializable {
     public static final String FIND_HOURLY_RATE_BY_EMAIL = "Tutor.findHourlyRateByEmail";
     public static final String FIND_DATE_JOINED_BY_EMAIL = "Tutor.findDateJoinedByEmail";
     public static final String FIND_TRANSCRIPT_PATH_BY_EMAIL = "Tutor.findTranscriptPathByEmail";
+    public static final String FIND_LOW_RATING_TUTORS = "Tutor.findLowRatingTutors";
     /**
      * JPQL Query to obtain a list of tutors who taught a specific course and is
      * available
@@ -413,6 +415,7 @@ public class Tutor extends User implements Serializable {
      *
      * @param rating
      */
+    @Override
     public void addRating(Rating rating) {
         if (this.ratings == null) {
             this.ratings = new HashSet();

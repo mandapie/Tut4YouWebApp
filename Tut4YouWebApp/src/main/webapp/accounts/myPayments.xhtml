@@ -1,0 +1,74 @@
+
+
+<ui:composition template="/WEB-INF/templates/layout.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                xmlns:p="http://primefaces.org/ui">
+    <!--
+        Licensed under the Academic Free License (AFL 3.0).
+        http://opensource.org/licenses/AFL-3.0
+
+        This code has been developed by a group of CSULB students working on their 
+        Computer Science senior project called Tutors4You.
+
+        Tutors4You is a web application that students can utilize to find a tutor and
+        ask them to meet at any location of their choosing. Students that struggle to understand 
+        the courses they are taking would benefit from this peer to peer tutoring service.
+
+        2017 Amanda Pan <daikiraidemodaisuki@gmail.com>
+        2017 Andrew Kaichi <ahkaichi@gmail.com>
+        2017 Keith Tran <keithtran25@gmail.com>
+        2017 Syed Haider <shayder426@gmail.com>
+    -->
+    <!-- @author Amanda Pan <daikiraidemodaisuki@gmail.com> -->
+    <ui:define name="title">Sessions</ui:define>
+    <f:metadata>
+        <f:event listener="#{createRequestBean.endConversation()}"
+                 type="preRenderView"></f:event>
+    </f:metadata>
+    <script src="https://www.paypalobjects.com/js/external/apdg.js" type="text/javascript"></script>
+    <script type="text/javascript" charset="utf-8">
+        var dgFlowMini = new PAYPAL.apps.DGFlowMini({trigger: 'submitBtn'});
+    </script>
+    <style class="paypalButton">
+
+    </style>
+    <ui:define name="content">
+        <b:container fluid="true">
+            <h:panelGrid columns="1" style="text-align:center; margin-left: 34%">
+                <h1 style="font-weight:bold">My Payments </h1>
+                <p:separator />                       
+            </h:panelGrid>
+            <b:column>
+                <b:form>
+                    <b:row>
+                        <b:panel title="My Payments" collapsible="false" look="info">
+                            <b:dataTable value="#{paymentBean.paymentList}" var="pay" id="payTable">
+
+                                <b:dataTableColumn>
+                                    <f:facet name="header">Transaction ID</f:facet>
+                                    <h:outputText value="#{pay.transactionId}"/>
+                                </b:dataTableColumn>
+                                <b:dataTableColumn>
+                                    <f:facet name="header">Date of Transaction</f:facet>
+                                    <h:outputText value="#{pay.timeOfTransaction}"/>
+                                </b:dataTableColumn>
+                                <b:dataTableColumn>
+                                    <f:facet name="header">Amount </f:facet>
+                                    <h:outputText value="#{pay.transactionAmount}">
+                                        <f:convertNumber currencySymbol="$" type="currency" />
+                                    </h:outputText>
+                                </b:dataTableColumn> 
+                            </b:dataTable>
+                        </b:panel>
+                    </b:row>
+                </b:form>
+            </b:column>  
+        </b:container>
+        <ui:debug hotkey='x'/>
+    </ui:define>
+</ui:composition>

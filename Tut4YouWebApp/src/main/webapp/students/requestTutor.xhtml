@@ -24,6 +24,10 @@
     <!-- @author Amanda Pan <daikiraidemodaisuki@gmail.com> -->
     <ui:define name="title">Request</ui:define>
     <ui:define name="content">
+        <f:metadata>
+        <f:event listener="#{createRequestBean.initConversation()}"
+    type="preRenderView"></f:event>
+            </f:metadata>
         <b:panel title="Select the following choices to request for a tutor" collapsible="false" look="info">
             <b:form>
                 <!-- subject -->
@@ -32,11 +36,11 @@
                         <h:outputLabel value="Subject"/>
                     </b:column>
                     <b:column medium-screen="4">
-                        <b:selectOneMenu id="subjectList" value="#{requestBean.subject}" required="true" requiredMessage="required">
+                        <b:selectOneMenu id="subjectList" value="#{createRequestBean.subject}" required="true" requiredMessage="required">
                             <f:selectItem itemLabel="select Subject..." itemValue="" noSelectionOption="true"/>
-                            <f:selectItems value="#{requestBean.subjectList}" var="subject" itemLabel="#{subject.subjectName}" itemValue="#{subject}"/>
+                            <f:selectItems value="#{createRequestBean.subjectList}" var="subject" itemLabel="#{subject.subjectName}" itemValue="#{subject}"/>
                             <!-- source: https://stackoverflow.com/questions/18498194/loading-hselectonemenu-depending-of-another-hselectonemenu-value -->
-                            <f:ajax render="courseList" listener="#{requestBean.changeSubject}"/>
+                            <f:ajax render="courseList" listener="#{createRequestBean.changeSubject}"/>
                         </b:selectOneMenu>
                     </b:column>
                 </b:row>
@@ -46,9 +50,9 @@
                         <h:outputLabel value="Course"/>
                     </b:column>
                     <b:column medium-screen="4">
-                        <b:selectOneMenu id="courseList" value="#{requestBean.request.course}" required="true" requiredMessage="required course">
+                        <b:selectOneMenu id="courseList" value="#{createRequestBean.request.course}" required="true" requiredMessage="required course">
                             <f:selectItem itemLabel="select Course..." itemValue="" noSelectionOption="true"/>
-                            <f:selectItems value="#{requestBean.courseList}" var="course" itemLabel="#{course.courseName}" itemValue="#{course}"/>
+                            <f:selectItems value="#{createRequestBean.courseList}" var="course" itemLabel="#{course.courseName}" itemValue="#{course}"/>
                         </b:selectOneMenu>
                     </b:column>
                 </b:row>
@@ -59,7 +63,7 @@
                     </b:column>
                     <b:column medium-screen="4">
                         <p:inputTextarea id="dt" placeholder="Enter a short description..." 
-                                 value="#{requestBean.request.description}" 
+                                 value="#{createRequestBean.request.description}" 
                                  style="width:100%" rows="7" counter="display" maxlength="300" 
                                  counterTemplate="{0} characters remaining." autoResize="false">
                             <b:message for="dt"/>
@@ -74,7 +78,7 @@
                         <h:outputLabel value="Length of Session"/>
                     </b:column>
                     <b:column medium-screen="4">
-                        <b:selectOneMenu id="stringLengthOfSession" value="#{requestBean.lengthOfSession}" required="true" requiredMessage="required">
+                        <b:selectOneMenu id="stringLengthOfSession" value="#{createRequestBean.lengthOfSession}" required="true" requiredMessage="required">
                             <f:selectItem itemLabel="Select One..." itemValue="" noSelectionOption="true"/>
                             <f:selectItem itemLabel="30min" itemValue="30" /> 
                             <f:selectItem itemLabel="1 hour" itemValue="60" />
@@ -94,16 +98,16 @@
                         <h:outputLabel value="Appointment Time"/>
                     </b:column>
                     <b:column medium-screen="4">
-                        <p:selectOneRadio id="time" value="#{requestBean.time}">
+                        <p:selectOneRadio id="time" value="#{createRequestBean.time}">
                             <f:selectItem itemLabel="Immediate" itemValue="Immediate" />
                             <f:selectItem itemValue="Later" itemLabel="Later" />
                             <b:message for="time"/>
                             <f:ajax render="output" />
                         </p:selectOneRadio>
                         <h:panelGroup id="output">
-                            <h:panelGroup rendered="#{requestBean.time eq 'Later'}">
+                            <h:panelGroup rendered="#{createRequestBean.time eq 'Later'}">
                                 <b:inputText type="time" id="laterTime"
-                                             value="#{requestBean.laterTime}"
+                                             value="#{createRequestBean.laterTime}"
                                              binding="#{passwordComponent}"
                                              required="true" requiredMessage="required"
                                              validator="#{basicValidator.validateLaterTime}">
@@ -119,7 +123,7 @@
                         <h:outputLabel value="Zip Code"/>
                     </b:column>
                     <b:column medium-screen="4">
-                        <b:inputText id="zip" placeholder="Enter Current Zip Code" required="true" requiredMessage="required" value="#{requestBean.zipCode.currentZipCode}" validator="#{basicValidator.validateZipcode}">
+                        <b:inputText id="zip" placeholder="Enter Current Zip Code" required="true" requiredMessage="required" value="#{createRequestBean.zipCode.currentZipCode}" validator="#{basicValidator.validateZipcode}">
                             <f:validateLength minimum="5" maximum="5"/> <!-- I DON'T UNDERSTAND WHY NEED THIS TO WORK -->
                             <b:message for="zip"/>
                         </b:inputText>
@@ -131,7 +135,7 @@
                         <h:outputLabel value="Travel Distance"/>
                     </b:column>
                     <b:column medium-screen="4">
-                        <b:selectOneMenu value="#{requestBean.zipCode.maxRadius}" required="true" requiredMessage="required">
+                        <b:selectOneMenu value="#{createRequestBean.zipCode.maxRadius}" required="true" requiredMessage="required">
                             <f:selectItem itemLabel="Select max radius..." itemValue="" noSelectionOption="true"/>
                             <f:selectItem itemLabel="1 mile" itemValue="1" />
                             <f:selectItem itemLabel="3 miles" itemValue="3" /> 
@@ -144,7 +148,8 @@
                     </b:column>
                 </b:row>
                 <b:row>
-                    <b:commandButton medium-screen="2" value="Submit" look="primary" action="#{requestBean.createNewRequest}" />
+                    <b:commandButton medium-screen="2" value="Submit" look="primary" action="#{createRequestBean.createNewRequest}">
+                </b:commandButton>
                 </b:row>
             </b:form>
         </b:panel>        

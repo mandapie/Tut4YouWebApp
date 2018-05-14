@@ -25,6 +25,10 @@
     <!-- @author Amanda Pan <daikiraidemodaisuki@gmail.com> -->
     <ui:define name="title">Dashboard</ui:define>
     <ui:define name="content">
+        <f:metadata>
+            <f:event listener="#{createRequestBean.endConversation()}"
+                     type="preRenderView"></f:event>
+        </f:metadata>
         <h1>Dashboard</h1>
         <b:form>
             <p:dialog header="Request Declined" widgetVar="modalID" minHeight="40" visible="#{requestBean.declinedRequest.size() != 0}" closable="false">
@@ -190,6 +194,8 @@
                         <b:navLink value="Session Timer" href="/Tut4YouWebApp/tutors/sessionTimer.xhtml"/>
                         <b:navLink value="Add Transcript" href="/Tut4YouWebApp/tutors/uploadTranscript.xhtml"/>
                     </c:if>
+                    <b:navLink value="View Moderator Applications" href="/Tut4YouWebApp/moderators/viewModeratorApplications.xhtml"/>
+                    <b:navLink value="View Complaints" href="/Tut4YouWebApp/moderators/viewComplaints.xhtml"/>
                 </b:listLinks>
             </b:row>
         </b:column>

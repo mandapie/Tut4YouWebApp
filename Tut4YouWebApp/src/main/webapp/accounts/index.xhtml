@@ -54,7 +54,7 @@
                         <br/> <!-- for better spacing -->
                         <b:button style="font-weight:bold;font-size:20px;" look="primary" value="Request for a Tutor" outcome="/students/requestTutor.xhtml"/>
                         <div style="max-height:400px;overflow:auto;margin-bottom:15px;">
-                            <ui:repeat value="#{requestBean.requestList}" var="r">
+                            <ui:repeat value="#{userBean.user.requests}" var="r">
                                 <div style="border-bottom:solid 1px;padding:15px;">
                                     <h:outputText value="#{r.course.courseName}" style="font-size:20px;"/>
                                     <span/>
@@ -62,7 +62,7 @@
                                     <span/>
                                     <h:outputText value="#{r.currentTime}">
                                         <!-- sets the date and time to a certain format-->
-                                        <f:convertDateTime pattern = "hh:mm a" />
+                                        <f:convertDateTime pattern="hh:mm a" />
                                     </h:outputText>
                                     <br/>
                                     <h:outputText value="#{r.description}"/>
@@ -106,7 +106,7 @@
                             <b:switch label="Do Not Disturb" value="#{userBean.user.doNotDisturb}" id="doNotDisturb" update="@form">
                                 <f:ajax event="change" render="doNotDisturb" listener="#{userBean.switchDoNotDisturb(userBean.user.doNotDisturb)}" />
                             </b:switch>
-                            <b:dataTable value="#{availabilityBean.availabilityList}" var="avail" id="availabilityTable">
+                            <b:dataTable value="#{userBean.user.availabilities}" var="avail" id="availabilityTable">
                                 <b:dataTableColumn>
                                     <f:facet name="header">Day of Week</f:facet>
                                     <h:outputText value="#{avail.dayOfWeek}"/>
@@ -132,7 +132,7 @@
                         <b:tab title="Courses" disabled="#{userBean.submittedTranscript}">
                             <br/>
                             <b:button style="font-weight:bold;font-size:20px;" look="primary" value="Add Courses" outcome="/tutors/addCourse.xhtml"/>
-                            <b:dataTable value="#{courseBean.tutorCourses}" var="course">
+                            <b:dataTable value="#{userBean.user.courses}" var="course">
                                 <b:dataTableColumn>
                                     <f:facet name="header">Courses You Have Taken</f:facet>
                                         #{course.courseName}

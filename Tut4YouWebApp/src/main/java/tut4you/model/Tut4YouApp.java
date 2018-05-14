@@ -815,7 +815,8 @@ public class Tut4YouApp {
         }
     }
 
-    @RolesAllowed("tut4youapp.tutor")
+    //@RolesAllowed("tut4youapp.tutor")
+    @PermitAll
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public boolean hasSubmittedTranscript() {
         UserBean userBean = new UserBean();

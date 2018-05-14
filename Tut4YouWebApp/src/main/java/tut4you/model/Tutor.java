@@ -45,7 +45,6 @@ import javax.persistence.TemporalType;
 @DiscriminatorValue(value = "Tutor")
 @Entity
 @NamedQueries({
-
     @NamedQuery(name = Tutor.FIND_HOURLY_RATE_BY_EMAIL, query = "SELECT t.hourlyRate FROM Tutor t WHERE t.email = :email"),
     @NamedQuery(name = Tutor.FIND_TRANSCRIPT_PATH_BY_EMAIL, query = "SELECT t.transcriptFilePath from Tutor t WHERE t.email = :email"),
     @NamedQuery(name = Tutor.FIND_DATE_JOINED_BY_EMAIL, query = "SELECT t.dateJoinedAsTutor FROM Tutor t WHERE t.email = :email"),
@@ -54,8 +53,6 @@ import javax.persistence.TemporalType;
     @NamedQuery(name = Tutor.FIND_TUTORS_BY_COURSE, query = "SELECT COUNT(t) FROM Tutor t JOIN t.courses c WHERE c.courseName = :coursename"),
     @NamedQuery(name = Tutor.FIND_TUTORS, query = "SELECT t FROM Tutor t"),
     @NamedQuery(name = Tutor.FIND_TUTOR_BY_USERNAME, query = "SELECT t FROM Tutor t WHERE t.username = :username"),
-   
-
 })
 public class Tutor extends User implements Serializable {
 
@@ -232,13 +229,6 @@ public class Tutor extends User implements Serializable {
         this.overallRating = overallRating;
     }
 
-//    public Collection<Rating> getTutorRatings() {
-//        return ratings;
-//    }
-//
-//    public void setTutorRatings(Collection<Rating> ratings) {
-//        
-//    }
     @Override
     public Collection<Rating> getRatings() {
         return ratings;

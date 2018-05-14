@@ -425,6 +425,7 @@ public class CreateRequestBean implements Serializable {
         tut4youApp.addPendingRequest(t, request);
         tutorList.remove(t);
     }
+    
     /**
      * http://square.github.io/okhttp/ get request to use for api
      *
@@ -433,14 +434,9 @@ public class CreateRequestBean implements Serializable {
      * @throws IOException
      */
     public static String getJSON(String url) throws IOException {
-        okhttp3.Request request = new okhttp3.Request.Builder()
-                .url(url)
-                .build();
-
+        okhttp3.Request request = new okhttp3.Request.Builder().url(url).build();
         Response response = client.newCall(request).execute();
-
         return response.body().string();
-
     }
 
     /**
@@ -466,6 +462,7 @@ public class CreateRequestBean implements Serializable {
             Arrays.toString(zipCodeAPI.getDataList())
         };
     }
+    
     /**
      * get day of week
      * @return dayOfWeek
@@ -473,6 +470,7 @@ public class CreateRequestBean implements Serializable {
     public Date getDayOfWeek() {
         return dayOfWeek;
     }
+    
     /**
      * set day of week
      * @param dayOfWeek 

@@ -53,9 +53,7 @@ public class UserBean implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private static final Logger LOGGER = Logger.getLogger("UserBean");
-    
-    @Inject
-    private RequestBean requestBean;
+
     @EJB
     private Tut4YouApp tut4youapp;
 
@@ -86,6 +84,7 @@ public class UserBean implements Serializable {
     @PreDestroy
     public void destroyUserBean() {
     }
+
     public FlaggedUser getFlaggedUser() {
         return flaggedUser;
     }
@@ -93,6 +92,7 @@ public class UserBean implements Serializable {
     public void setFlaggedUser(FlaggedUser flaggedUser) {
         this.flaggedUser = flaggedUser;
     }
+
     public double getHourlyRate() {
         hourlyRate = tut4youapp.getHourlyRate();
         return hourlyRate;
@@ -273,37 +273,57 @@ public class UserBean implements Serializable {
     }
 
     /**
+     * Determine if current authenticated user has the role of moderator
+     *
+     * @return
+     */
+    public boolean isIsModerator() {
+        boolean isModerator = false;
+        if (this.isIsUserAuthenticated()) {
+            FacesContext context = FacesContext.getCurrentInstance();
+            HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+            isModerator = request.isUserInRole("tut4youapp.moderator");
+        }
+        return isModerator;
+    }
+
+    /**
      * login method to check user is a registered user who is
      *
      * @return result
+     * @throws java.text.ParseException
      */
     public String login() throws ParseException {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+        String result = "failure";
         try {
             // check user credentials
             List<String> users = tut4youapp.getUserEmails();
             if (!users.contains(email)) {
                 context.addMessage("login:email", new FacesMessage("This email does not exsist"));
-                return "login";
+                result = "login";
             } else {
                 String hashedpass = tut4you.controller.HashPassword.getSHA512Digest(pass);
                 User loginUser = tut4youapp.getUser(email);
                 if (!hashedpass.equals(loginUser.getPassword())) {
                     context.addMessage("login:pass", new FacesMessage("Incorrect password"));
-                    return "login";
+                    result = "login";
                 }
-                if(checkIfSuspended(getCurrentDate()) == true) {
-                    context.addMessage("login:pass", new FacesMessage("User is currently suspended"));
-                    return "login";
+                else if (checkIfSuspended(getCurrentDate()) == true) {
+                    context.addMessage("login:error", new FacesMessage("User is currently suspended"));
+                    result = "login";
                 }
-                request.login(email, pass); //log user in
+                else {
+                    request.login(email, pass); //log user in
+                    result = "success";
+                }
             }
         } catch (ServletException e) {
             FacesContext.getCurrentInstance().addMessage("login:error", new FacesMessage("Login Failed"));
-            return "login";
+            result = "login";
         }
-        return "success";
+        return result;
     }
 
     /**
@@ -407,39 +427,31 @@ public class UserBean implements Serializable {
         }
         return result;
     }
-    
+
     public boolean isSubmittedTranscript() {
         return tut4youapp.hasSubmittedTranscript();
     }
-    
+
     public boolean checkIfSuspended(Date logInTime) {
         flaggedUser = findFlaggedUser(email);
-        if(flaggedUser != null) {
-        double diff = logInTime.getTime() - flaggedUser.getDateFlagged().getTime();
-        double minutes = (diff / 1000) / 60;
-        int count = flaggedUser.getCount();
-        if(count == 1 && minutes < 1) {
-            return true;
-        }
-        else if(count == 2 && minutes < 3) {
-            return true;
-        }
-        else if(count == 3 && minutes < 5) {
-            return true;
-        }
-        
-        else if(count == 4) {
-            return true;
-        }
-        else {
+        if (flaggedUser != null) {
+            double diff = logInTime.getTime() - flaggedUser.getDateFlagged().getTime();
+            double minutes = (diff / 1000) / 60;
+            int count = flaggedUser.getCount();
+            if (count == 1 && minutes < 1) {
+                return true;
+            } else if (count == 2 && minutes < 3) {
+                return true;
+            } else if (count == 3 && minutes < 5) {
+                return true;
+            } else {
+                return count == 4;
+            }
+        } else {
             return false;
         }
     }
-        else {
-            return false;
-        }
-    }
-    
+
     public FlaggedUser findFlaggedUser(String email) {
         flaggedUser = tut4youapp.checkFlaggedUserLogIn(email);
         return flaggedUser;

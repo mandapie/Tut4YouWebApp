@@ -26,13 +26,12 @@
     <ui:define name="title">Dashboard</ui:define>
     <ui:define name="content">
         <f:metadata>
-            <f:event listener="#{createRequestBean.endConversation()}"
-                     type="preRenderView"></f:event>
+            <f:event listener="#{createRequestBean.endConversation()}" type="preRenderView"></f:event>
         </f:metadata>
         <h1>Dashboard</h1>
         <b:form>
-            <p:dialog header="Request Declined" widgetVar="modalID" minHeight="40" visible="#{requestBean.declinedRequest.size() != 0}" closable="false">
-                <ui:repeat var="re" value="#{requestBean.declinedRequest}">
+            <p:dialog header="Request Declined" widgetVar="modalID" minHeight="40" visible="#{requestBean.declinedRequests.size() != 0}" closable="false">
+                <ui:repeat var="re" value="#{requestBean.declinedRequests}">
                     <p>Your request with the description: #{re.description} has been declined</p>
                     <p:commandButton value="Dismiss" style="width:100%" action="#{requestBean.cancelRequest(re)}" oncomplete="PF('modalID').hide();"/>
                 </ui:repeat>
@@ -155,7 +154,7 @@
             <b:form>
                 <b:row>
                     <b:panel title="Upcoming Sessions" collapsible="false" look="info">
-                        <b:dataTable value="#{requestBean.acceptedList[0]}" var="req" id="accepetedTable">
+                        <b:dataTable value="#{requestBean.acceptedRequests[0]}" var="req" id="accepetedTable">
                             <b:dataTableColumn>
                                 <f:facet name="header">Tutor</f:facet>
                                 <h:outputText value="#{req.tutor.firstName}"/>                        
@@ -173,7 +172,7 @@
                 </b:row>
                 <b:row>
                     <b:panel title="Previous Sessions" collapsible="false" look="info">
-                        <b:dataTable value="#{requestBean.completedList}" var="req">
+                        <b:dataTable value="#{requestBean.completedRequests}" var="req">
                             <b:dataTableColumn>
                                 <f:facet name="header">Tutor</f:facet>
                                 <h:outputText value="#{req.tutor.firstName}"/>                        
@@ -188,12 +187,10 @@
             </b:form>
             <b:row>
                 <b:listLinks>
-                    <c:if test="#{userBean.isTutor}">
-                        <b:navLink value="Session Timer" href="/Tut4YouWebApp/tutors/sessionTimer.xhtml"/>
-                        <b:navLink value="Add Transcript" href="/Tut4YouWebApp/tutors/uploadTranscript.xhtml"/>
+                    <c:if test="#{userBean.isModerator}">
+                        <b:navLink value="View Moderator Applications" href="/Tut4YouWebApp/moderators/viewModeratorApplications.xhtml"/>
+                        <b:navLink value="View Complaints" href="/Tut4YouWebApp/moderators/viewComplaints.xhtml"/>
                     </c:if>
-                    <b:navLink value="View Moderator Applications" href="/Tut4YouWebApp/moderators/viewModeratorApplications.xhtml"/>
-                    <b:navLink value="View Complaints" href="/Tut4YouWebApp/moderators/viewComplaints.xhtml"/>
                 </b:listLinks>
             </b:row>
         </b:column>

@@ -17,6 +17,7 @@
 package tut4you.controller;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -37,9 +38,11 @@ public class RequestBean implements Serializable {
 
     private static final Logger LOGGER = Logger.getLogger("RequestBean");
     @EJB
-    private Tut4YouApp tut4youApp;
+    private Tut4YouApp tut4youapp;
     private Request request;
-    private Tutor tutor;
+    private List<Request> acceptedRequests;
+    private List<Request> completedRequests;
+    private List<Request> declinedRequests;
     
     /**
      * RequestBean encapsulates all the functions/services involved in making a
@@ -67,23 +70,32 @@ public class RequestBean implements Serializable {
     public void setRequest(Request request) {
         this.request = request;
     }
-
-    /**
-     * get Tutor from Request
-     *
-     * @return tutor
-     */
-    public Tutor getTutor() {
-        return tutor;
+    
+    public List<Request> getAcceptedRequests() {
+        acceptedRequests = tut4youapp.getAcceptedRequestList();
+        return acceptedRequests;
     }
 
-    /**
-     * set tutor for request
-     *
-     * @param tutor
-     */
-    public void setTutor(Tutor tutor) {
-        this.tutor = tutor;
+    public void setAcceptedRequests(List<Request> acceptedRequests) {
+        this.acceptedRequests = acceptedRequests;
+    }
+
+    public List<Request> getCompletedRequests() {
+        completedRequests = tut4youapp.getCompletedRequests();
+        return completedRequests;
+    }
+
+    public void setCompletedRequests(List<Request> completedRequests) {
+        this.completedRequests = completedRequests;
+    }
+    
+    public List<Request> getDeclinedRequests() {
+        declinedRequests = tut4youapp.getDeclinedRequest();
+        return declinedRequests;
+    }
+
+    public void setDeclinedRequests(List<Request> declinedRequests) {
+        this.declinedRequests = declinedRequests;
     }
     
     /**
@@ -92,7 +104,7 @@ public class RequestBean implements Serializable {
      * @param r
      */
     public void cancelRequest(Request r) {
-        tut4youApp.cancelRequest(r);
+        tut4youapp.cancelRequest(r);
     }
 
     /**
@@ -101,8 +113,8 @@ public class RequestBean implements Serializable {
      * @param r
      */
     public void declineRequest(Request r) {
-        tut4youApp.declineRequest(r);
-        tut4youApp.removeRequestFromNotification(r);
+        tut4youapp.declineRequest(r);
+        tut4youapp.removeRequestFromNotification(r);
     }
     
     /**
@@ -111,6 +123,6 @@ public class RequestBean implements Serializable {
      * @param r
      */
     public void removeRequestFromTutor(Request r) {
-        tut4youApp.removeRequestFromNotification(r);
+        tut4youapp.removeRequestFromNotification(r);
     }
 }

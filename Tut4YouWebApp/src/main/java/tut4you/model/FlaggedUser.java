@@ -57,6 +57,7 @@ public class FlaggedUser implements Serializable {
     @OneToOne
     private User user;
     
+    
     public Collection<User> getModerators() {
         return moderators;
     }

@@ -191,8 +191,8 @@ public class Tut4YouApp {
             return requestQuery.getResultList();
         }
     }
-
     /**
+     * Gets a list of accepted requests
      *
      * @return a list of requests from a user
      */
@@ -201,29 +201,37 @@ public class Tut4YouApp {
     public List<Request> getAcceptedRequestList() {
         UserBean userBean = new UserBean();
         String currentUserEmail = userBean.getEmailFromSession();
-        String email;
-        Tutor tutor;
-        User user;
-        TypedQuery<Request> requestQuery;
-        List<Request> list;
         if (currentUserEmail == null) {
             return null;
         }
-        tutor = findTutor(currentUserEmail);
+        Tutor tutor = findTutor(currentUserEmail);
         if (tutor == null) {
-            user = findUser(currentUserEmail);
-            email = user.getEmail();
-            requestQuery = em.createNamedQuery(Request.FIND_REQUEST_BY_EMAIL, Request.class);
+            User user = findUser(currentUserEmail);
+            String email = user.getEmail();
+            
+            TypedQuery<Request> requestQuery = em.createNamedQuery(Request.FIND_REQUEST_BY_EMAIL, Request.class);
             requestQuery.setParameter("student_email", email);
-
+            requestQuery.setParameter("status", Request.Status.ACCEPTED);
+            List<Request> list = requestQuery.getResultList();
+            
+            return list;
         } else {
-            email = tutor.getEmail();
-            requestQuery = em.createNamedQuery(Request.FIND_REQUEST_BY_TUTOR_EMAIL, Request.class);
+            String email = currentUserEmail;
+            TypedQuery<Request> requestQuery = em.createNamedQuery(Request.FIND_REQUEST_BY_TUTOR_EMAIL, Request.class);
             requestQuery.setParameter("tutor_email", email);
+            requestQuery.setParameter("status", Request.Status.ACCEPTED);
+            List<Request> list = requestQuery.getResultList();
+            
+            TypedQuery<Request> request2Query = em.createNamedQuery(Request.FIND_REQUEST_BY_EMAIL, Request.class);
+            request2Query.setParameter("student_email", email);
+            request2Query.setParameter("status", Request.Status.ACCEPTED);
+            List<Request> list2 = request2Query.getResultList();
+            
+            List<Request> acceptedRequest = new ArrayList<>(list);
+            acceptedRequest.addAll(list2);
+            
+            return acceptedRequest;
         }
-        requestQuery.setParameter("status", Request.Status.ACCEPTED);
-        list = requestQuery.getResultList();
-        return list;
     }
 
     /**
@@ -793,9 +801,9 @@ public class Tut4YouApp {
         return query.getSingleResult();
     }
     /**
-     * Gets a complaint by finding the email in the entity.
+     * Gets a complaint by finding the id in the entity.
      *
-     * @param username
+     * @param id
      * @return moderator application
      * @Keith <keithtran25@gmail.com>
      */
@@ -803,6 +811,20 @@ public class Tut4YouApp {
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public Complaint findComplaint(int id) {
         TypedQuery<Complaint> query = em.createNamedQuery(Complaint.FIND_COMPLAINT_BY_ID, Complaint.class);
+        query.setParameter("id", id);
+        return query.getSingleResult();
+    }   
+    /**
+     * Gets a request by finding the id in the entity.
+     *
+     * @param id
+     * @return moderator application
+     * @Keith <keithtran25@gmail.com>
+     */
+    @RolesAllowed("tut4youapp.moderator")
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public Request findRequest(int id) {
+        TypedQuery<Request> query = em.createNamedQuery(Request.FIND_REQUEST_BY_ID, Request.class);
         query.setParameter("id", id);
         return query.getSingleResult();
     }   
@@ -983,38 +1005,37 @@ public class Tut4YouApp {
     public List<Request> getCompletedRequests() {
         UserBean userBean = new UserBean();
         String currentUserEmail = userBean.getEmailFromSession();
-        String email;
-        Tutor tutor;
-        User user;
-        TypedQuery<Request> requestQuery;
-        List<Request> list;
+        Tutor tutor = findTutor(currentUserEmail);
         if (currentUserEmail == null) {
             return null;
         }
-        tutor = findTutor(currentUserEmail);
         if (tutor == null) {
-            user = findUser(currentUserEmail);
-            email = user.getEmail();
-            requestQuery = em.createNamedQuery(Request.FIND_REQUEST_BY_EMAIL, Request.class);
-            requestQuery.setParameter("student_email", email);
-
-        } else {
-            email = tutor.getEmail();
-            requestQuery = em.createNamedQuery(Request.FIND_REQUEST_BY_TUTOR_EMAIL, Request.class);
-            requestQuery.setParameter("tutor_email", email);
-        }
-        requestQuery.setParameter("status", Request.Status.COMPLETED);
-        list = requestQuery.getResultList();
-
-        if (list.isEmpty()) {
-            user = findUser(currentUserEmail);
-            email = user.getEmail();
-            requestQuery = em.createNamedQuery(Request.FIND_REQUEST_BY_EMAIL, Request.class);
+            User user = findUser(currentUserEmail);
+            String email = user.getEmail();
+            
+            TypedQuery<Request> requestQuery = em.createNamedQuery(Request.FIND_REQUEST_BY_EMAIL, Request.class);
             requestQuery.setParameter("student_email", email);
             requestQuery.setParameter("status", Request.Status.COMPLETED);
-            list = requestQuery.getResultList();
+            List<Request> list = requestQuery.getResultList();
+            
+            return list;
+        } else {
+            String email = currentUserEmail;
+            TypedQuery<Request> requestQuery = em.createNamedQuery(Request.FIND_REQUEST_BY_TUTOR_EMAIL, Request.class);
+            requestQuery.setParameter("tutor_email", email);
+            requestQuery.setParameter("status", Request.Status.COMPLETED);
+            List<Request> list = requestQuery.getResultList();
+            
+            TypedQuery<Request> request2Query = em.createNamedQuery(Request.FIND_REQUEST_BY_EMAIL, Request.class);
+            request2Query.setParameter("student_email", email);
+            request2Query.setParameter("status", Request.Status.COMPLETED);
+            List<Request> list2 = request2Query.getResultList();
+            
+            List<Request> acceptedRequest = new ArrayList<>(list);
+            acceptedRequest.addAll(list2);
+            
+            return acceptedRequest;
         }
-        return list;
     }
 
     /**
@@ -1451,7 +1472,7 @@ public class Tut4YouApp {
     
     @RolesAllowed("tut4youapp.student")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void createNewComplaint(User reportedUser, Complaint complaint) {
+    public void createNewComplaint(User reportedUser, Complaint complaint, Request request) {
         UserBean userBean = new UserBean();
         String currentUserEmail = userBean.getEmailFromSession();
         
@@ -1459,6 +1480,7 @@ public class Tut4YouApp {
         
         complaint.setUser(user);
         complaint.setReportedUser(reportedUser);
+        complaint.setRequest(request);
         em.persist(complaint);
         em.flush();
     }

@@ -18,6 +18,7 @@ package tut4you.controller;
 
 import java.io.Serializable;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -274,6 +275,7 @@ public class UserBean implements Serializable {
     /**
      * login method to check user is a registered user who is
      * @return result
+     * @throws java.text.ParseException
      */
     public String login() throws ParseException {
         FacesContext context = FacesContext.getCurrentInstance();
@@ -293,7 +295,25 @@ public class UserBean implements Serializable {
                     return "login";
                 }
                 if(checkIfSuspended(getCurrentDate()) == true) {
-                    context.addMessage("login:pass", new FacesMessage("User is currently suspended"));
+                    int count = flaggedUser.getCount();
+                    Date date = flaggedUser.getDateFlagged();
+                    SimpleDateFormat sdf = new SimpleDateFormat("hh:mm");
+                    String dateFlagged = sdf.format(date);
+                    String suspensionLength = null;
+                    if(count == 1) {
+                        suspensionLength = "User was suspended for 1 minute at " + dateFlagged;
+                    }
+                    else if(count == 2) {
+                        suspensionLength = "User was suspended for 3 minutes at " + dateFlagged;
+                    }
+                    else if(count == 3) {
+                        suspensionLength = "User was suspended for 5 minutes at " + dateFlagged;
+                    }
+                    else if(count >= 4) {
+                        suspensionLength = "User has been banned";
+                    }
+                    
+                    context.addMessage("login:pass", new FacesMessage(suspensionLength));
                     return "login";
                 }
                 request.login(email, pass); //log user in
@@ -411,28 +431,22 @@ public class UserBean implements Serializable {
     }
     public boolean checkIfSuspended(Date logInTime) {
         flaggedUser = findFlaggedUser(email);
-        if(flaggedUser != null) {
-        double diff = logInTime.getTime() - flaggedUser.getDateFlagged().getTime();
-        double minutes = (diff / 1000) / 60;
-        int count = flaggedUser.getCount();
-        if(count == 1 && minutes < 1) {
-            return true;
-        }
-        else if(count == 2 && minutes < 3) {
-            return true;
-        }
-        else if(count == 3 && minutes < 5) {
-            return true;
-        }
-        
-        else if(count == 4) {
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-        else {
+        if (flaggedUser != null) {
+            double diff = logInTime.getTime() - flaggedUser.getDateFlagged().getTime();
+            double minutes = (diff / 1000) / 60;
+            int count = flaggedUser.getCount();
+            if (count == 1 && minutes < 1) {
+                return true;
+            } else if (count == 2 && minutes < 3) {
+                return true;
+            } else if (count == 3 && minutes < 5) {
+                return true;
+            } else if (count == 4) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
             return false;
         }
     }

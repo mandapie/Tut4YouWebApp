@@ -56,6 +56,7 @@ import javax.inject.Named;
 import org.apache.commons.io.FileUtils;
 import static org.omnifaces.util.Faces.getServletContext;
 import tut4you.model.Complaint;
+import tut4you.model.Request;
 
 import tut4you.model.Tut4YouApp;
 import tut4you.model.Tutor;
@@ -77,6 +78,7 @@ public class ComplaintBean implements Serializable {
     @EJB
     private Tut4YouApp tut4youApp;
     private User user;
+    private Request request;
 
     @ManagedProperty("#{param.id}")
     private int id;
@@ -146,8 +148,11 @@ public class ComplaintBean implements Serializable {
     }
     
     
-    public void showID(int id) {
+    public void showComplaintID(int id) {
         complaint  = findComplaint(id);
+    }
+    public void showRequestID(int id) {
+        request = findRequest(id);
     }
     public void showUsername(String username) {
         User findUser = findUserByUsername(username);
@@ -161,8 +166,12 @@ public class ComplaintBean implements Serializable {
     {
         return tut4youApp.findComplaint(id);
     }
+    public Request findRequest(int id)
+    {
+        return tut4youApp.findRequest(id);
+    }
     public void createNewComplaint() {
-        tut4youApp.createNewComplaint(user, complaint);
+        tut4youApp.createNewComplaint(user, complaint, request);
     }
     public void closeComplaint() {
         tut4youApp.closeComplaint(complaint);

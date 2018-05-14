@@ -25,7 +25,7 @@
     <!-- @author Andrew Kaichi <ahkaichi@gmail.com> -->
     <f:metadata>
         <f:viewParam name="id" value="#{complaintBean.id}"/>
-        <f:event type="preRenderView" listener="#{complaintBean.showID(complaintBean.id)}">
+        <f:event type="preRenderView" listener="#{complaintBean.showComplaintID(complaintBean.id)}">
         </f:event>
     </f:metadata>
     <ui:define name="title">Review Complaint</ui:define>

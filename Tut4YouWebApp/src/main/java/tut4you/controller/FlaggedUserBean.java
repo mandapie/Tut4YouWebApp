@@ -93,7 +93,7 @@ public class FlaggedUserBean implements Serializable {
             return true;
         }
         
-        else if(count == 4) {
+        else if(count >= 4) {
             return true;
         }
         else {

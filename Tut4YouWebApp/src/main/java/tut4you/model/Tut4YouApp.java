@@ -1365,16 +1365,34 @@ public class Tut4YouApp {
     @RolesAllowed("tut4youapp.student")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public ZipCodeByRadius addZipCodeByRadius(ZipCode zipCode, ZipCodeByRadius zipCodeByRadius) {
+        boolean isZipCodeInDB = false;     
+        ZipCode findZipCode = em.find(ZipCode.class, zipCode.getId());
         ZipCodeByRadius zipCodeByRadiusTemp = em.find(ZipCodeByRadius.class, zipCodeByRadius.getZipCodeByRadius());
-        if (zipCodeByRadiusTemp == null) {
-            zipCode.addZipCodeByRadius(zipCodeByRadius);
-            zipCodeByRadius.addZipCode(zipCode);
-            em.persist(zipCodeByRadius);
-            em.flush();
-        } else {
-            zipCodeByRadiusTemp.addZipCode(zipCode);
-            zipCode.addZipCodeByRadius(zipCodeByRadiusTemp);
-            em.merge(zipCode);
+        
+        TypedQuery<String> Query = em.createNamedQuery(ZipCodeByRadius.FIND_ZIPCODEBYRADIUS, String.class);
+        Query.setParameter("id", findZipCode.getId());
+        List<String> zipCodesByRadiusList = Query.getResultList();
+        
+        if (zipCodeByRadiusTemp != null) {
+            for (int i = 0; i < zipCodesByRadiusList.size(); i++) {
+                if (zipCodesByRadiusList.get(i).equals(zipCodeByRadiusTemp.getZipCodeByRadius())) {
+                    isZipCodeInDB = true;
+                }
+            }
+        }
+        System.out.println("BOOLEAN: "+ isZipCodeInDB);
+        if (isZipCodeInDB == false) {
+            if (zipCodeByRadiusTemp == null) {
+                zipCode.addZipCodeByRadius(zipCodeByRadius);
+                zipCodeByRadius.addZipCode(zipCode);
+                em.persist(zipCodeByRadius);
+                em.flush();
+            } else {
+                zipCodeByRadiusTemp.addZipCode(zipCode);
+                zipCode.addZipCodeByRadius(zipCodeByRadiusTemp);
+                em.merge(zipCode);
+                em.flush();
+            }
         }
         return zipCodeByRadius;
     }

@@ -26,7 +26,9 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -509,6 +511,8 @@ public class CreateRequestBean implements Serializable {
             System.out.println("course " + ": " + request.getCourse().getCourseName());
             System.out.println("day of week " + ": " + request.getDayOfWeek());
             System.out.println("course " + ": " + request.getCurrentTime());
+            System.out.println("ZIPCODESBYRADIUS: " +zipCode.getZipCodesByRadius());
+  
             for (int i = 0; i < zipCodesByRadiusList.size(); i++) {
                 zipCodeByRadius = new ZipCodeByRadius(zipCodesByRadiusList.get(i));
                 zipCodeByRadius = tut4youApp.addZipCodeByRadius(zipCode, zipCodeByRadius);
@@ -585,7 +589,7 @@ public class CreateRequestBean implements Serializable {
     public static String[] getData(int maxRadius, String zipCode) {
         String json = null;
         try {
-            json = getJSON("http://api.zip-codes.com/ZipCodesAPI.svc/1.0/FindZipCodesInRadius?zipcode=" + zipCode + "&minimumradius=0&maximumradius=" + maxRadius + "&key=9EH2HQMG9WY56C9UO3EJ");
+            json = getJSON("http://api.zip-codes.com/ZipCodesAPI.svc/1.0/FindZipCodesInRadius?zipcode=" + zipCode + "&minimumradius=0&maximumradius=" + maxRadius + "&key=Q24CBEALGGXBA6CPP4U9");
         } catch (IOException e) {
 
         }

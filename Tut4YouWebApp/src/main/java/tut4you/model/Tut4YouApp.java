@@ -1380,7 +1380,6 @@ public class Tut4YouApp {
                 }
             }
         }
-        System.out.println("BOOLEAN: "+ isZipCodeInDB);
         if (isZipCodeInDB == false) {
             if (zipCodeByRadiusTemp == null) {
                 zipCode.addZipCodeByRadius(zipCodeByRadius);
@@ -1422,7 +1421,6 @@ public class Tut4YouApp {
         UserBean userBean = new UserBean();
         String currentUserEmail = userBean.getEmailFromSession();
         User clone = em.find(User.class, currentUserEmail);
-        System.out.print("CLONE: " + clone);
         clone.setGroups(null);
         TypedQuery<Request> requestQuery = em.createNamedQuery(Request.FIND_REQUESTS_BY_USER, Request.class);
         requestQuery.setParameter("email", clone.getEmail());

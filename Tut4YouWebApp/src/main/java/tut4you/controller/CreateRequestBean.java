@@ -508,10 +508,6 @@ public class CreateRequestBean implements Serializable {
                 System.out.println(str);
                 zipCodesByRadiusList = Arrays.asList(str.substring(1, str.length() - 1).split(", "));
             }
-            System.out.println("course " + ": " + request.getCourse().getCourseName());
-            System.out.println("day of week " + ": " + request.getDayOfWeek());
-            System.out.println("course " + ": " + request.getCurrentTime());
-            System.out.println("ZIPCODESBYRADIUS: " +zipCode.getZipCodesByRadius());
   
             for (int i = 0; i < zipCodesByRadiusList.size(); i++) {
                 zipCodeByRadius = new ZipCodeByRadius(zipCodesByRadiusList.get(i));

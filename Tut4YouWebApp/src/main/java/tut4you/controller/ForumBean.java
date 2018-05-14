@@ -17,17 +17,80 @@
 package tut4you.controller;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Logger;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.enterprise.context.SessionScoped;
+import javax.faces.view.ViewScoped;
 import javax.inject.Named;
+import tut4you.model.*;
+
 
 /**
  *
  * @author Andrew Kaichi <ahkaichi@gmail.com>
  */
 @Named
-@SessionScoped
+@ViewScoped
 public class ForumBean implements Serializable{
 
+    private static final long serialVersionUID = 1L;
+
+    private static final Logger LOGGER = Logger.getLogger("ForumBean");
+    @EJB
+    private Tut4YouApp tut4youApp;
+    private Question question;
+    private Response response;
+    private Subject subject;
+    private Course course;
+    private User student;
+    private Tutor tutor;
+    private List<Subject> subjectList = new ArrayList();
+    private List<Course> courseList = new ArrayList();
+    private List<Question> questionList = new ArrayList();
     
+    public Subject getSubject(){
+        return subject;
+    }
+    
+    public void setSubject(Subject subject){
+        this.subject = subject;
+    }
+    public List<Subject> getSubjectList(){
+        if (subjectList.isEmpty()){
+            subjectList = tut4youApp.getSubjects();
+        }
+        return subjectList;
+    }
+    
+    public void setSubjectList(List<Subject> subjectList){
+        this.subjectList = subjectList;
+    }
+    
+    public List<Course> getCourseList(){
+        return courseList;
+    }
+    
+    public void setCourseList(List<Course> courseList) {
+        this.courseList = courseList;
+    }
+    
+    
+    public List<Question> getQuestionList(){
+        return questionList;
+    }
+    
+    public void setQuestionList(List<Question> questionList) {
+        this.questionList = questionList;
+    }
+    
+    public void changeSubject(String name) {
+        courseList = tut4youApp.getCourses(name);
+    }
+    
+    public void changeCourse(String name) {
+        questionList = tut4youApp.getQuestions(name);
+    }
 }

@@ -17,19 +17,32 @@
 package tut4you.model;
 
 import java.io.Serializable;
+import java.util.Collection;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 /**
  *
  * @author Andrew Kaichi <ahkaichi@gmail.com>
  */
+@Table(name = "Question")
 @Entity
+@NamedQueries({
+    @NamedQuery(name = Question.FIND_QUESTION_BY_COURSE, query = "SELECT q FROM Question q JOIN q.course c WHERE c.courseName = :name")
+})
 public class Question implements Serializable {
+    /**
+     * JPQL Query to find questions by their course name
+     */
+    public static final String FIND_QUESTION_BY_COURSE = "Question.findQuestionByCourse";
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -37,9 +50,10 @@ public class Question implements Serializable {
     private Long id;
     private String title;
     private String description;
+    private User student;
     
-    @OneToMany
-    private Response response;
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
+    private Collection<Response> response;
     
     @OneToOne
     private Course course;
@@ -48,7 +62,7 @@ public class Question implements Serializable {
     
     }
     
-    public Question(String title, String description, Response response) {
+    public Question(String title, String description, Collection<Response> response) {
         this.title = title;
         this.description = description;
         this.response = response;
@@ -78,11 +92,11 @@ public class Question implements Serializable {
         this.description = description;
     }
     
-    public Response getResponse(){
+    public Collection<Response> getResponse(){
         return response;
     }
     
-    public void setResponse(Response response){
+    public void setResponse(Collection<Response> response){
         this.response = response;
     }
     

@@ -79,6 +79,19 @@ public class Tut4YouApp {
         courseQuery.setParameter("name", subject);
         return courseQuery.getResultList();
     }
+    
+    /**
+     * Based on the selected course, query all the questions
+     * @param courseName is course name
+     * @return List of courses
+     */
+    @RolesAllowed("tut4youapp.student")
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public List<Question> getQuestions(String courseName) {
+        TypedQuery<Question> questionQuery = em.createNamedQuery(Course.FIND_COURSE_BY_SUBJECT, Question.class);
+        questionQuery.setParameter("name", courseName);
+        return questionQuery.getResultList();
+    }
 
     /**
      * This method can only be called by a student. This methods gets the

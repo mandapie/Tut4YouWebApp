@@ -24,13 +24,15 @@
     <!-- @author Andrew Kaichi <ahkaichi@gmail.com> -->
     <ui:define name="title">Forum</ui:define>
     <ui:define name="content">
-        <b:panel title="Welcome to the Tut4You Forum" collapsible="false" look="info">
+        <b:panel title="Select the course that you have questions about" collapsible="false" look="info">
             <div style="max-height:100%;overflow:auto;margin-bottom:15px;">
                 <b:form>
-                  <ui:repeat value="#{forumBean.subjectList}" var="subject">
+                    <f:viewParam name="courseList" value="#{forumBean.changeSubject(param['subject'])}"/>
+                  <ui:repeat value="#{forumBean.courseList}" var="course">
                     <div style="border-bottom:solid 1px;padding:15px;">
-                        <b:button value="#{subject.subjectName}" style="font-size:180%;" look="link" outcome="forumCourse.xhtml">
-                            <f:param name="subject" value="#{subject.subjectName}"/>
+                        <b:button value="#{course.courseName}" style="font-size:180%;" look="link" outcome="forumQuestion.xhtml">
+                            <f:param name="subject" value="#{param['subject']}"/>
+                            <f:param name="course" value="#{course.courseName}"/>    
                         </b:button>
                         <span/>
                     <br/>

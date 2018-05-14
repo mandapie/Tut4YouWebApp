@@ -31,17 +31,16 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 /**
- * After each session, a tutor can be paid for their services
- * by a student.
+ * After each session, a tutor can be paid for their services by a student.
  *
  * @author Syed Haider <shayder426@gmail.com>
  */
 @Entity
 @Table(name = "Payment")
 @NamedQueries({
-    @NamedQuery(name = Payment.FIND_PAYMENTS_BY_EMAIL, query = "SELECT p FROM Payment p"),
-        @NamedQuery(name = Payment.FIND_PAYMENTS_BY_PAYKEY, query = "SELECT p FROM Payment p WHERE p.payKey = :payKey"),
-})
+    @NamedQuery(name = Payment.FIND_PAYMENTS_BY_EMAIL, query = "SELECT p FROM Payment p")
+    ,
+        @NamedQuery(name = Payment.FIND_PAYMENTS_BY_PAYKEY, query = "SELECT p FROM Payment p WHERE p.payKey = :payKey"),})
 public class Payment implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -57,7 +56,7 @@ public class Payment implements Serializable {
     public static final String FIND_PAYMENTS_BY_PAYKEY = "Payment.findPaymentsByPaykey";
 
     /**
-     * Each session has one payment made for it. 
+     * Each session has one payment made for it.
      */
     @OneToOne
     @JoinColumn(name = "session_id")
@@ -70,10 +69,18 @@ public class Payment implements Serializable {
     @JoinColumn(name = "tutor", nullable = false)
     private Tutor tutor;
 
+    /**
+     * Multiple payments can be sent to a user
+     */
+    @ManyToOne
+    @JoinColumn(name = "student", nullable = false)
+    private User student;
+
     @Id
     private String payKey;
 
     private String paymentId;
+
     private String timeOfPayment;
     private double paymentAmount;
     private String paymentStatus;
@@ -91,7 +98,8 @@ public class Payment implements Serializable {
      * @param paymentId a confirmation number
      * @param timeOfPayment the time the payment was processed
      * @param paymentAmount the cost of the tutoring session
-     * @param paymentStatus the status of the payment (APPROVED,COMPLETED,CREATED)
+     * @param paymentStatus the status of the payment
+     * (APPROVED,COMPLETED,CREATED)
      */
     public Payment(String payKey, String paymentId, String timeOfPayment, double paymentAmount, String paymentStatus) {
         this.payKey = payKey;
@@ -104,6 +112,7 @@ public class Payment implements Serializable {
 
     /**
      * Gets the current session
+     *
      * @return session (tutoring session)
      */
     public Session getSession() {
@@ -112,6 +121,7 @@ public class Payment implements Serializable {
 
     /**
      * Sets the session
+     *
      * @param session (tutoring session)
      */
     public void setSession(Session session) {
@@ -120,6 +130,7 @@ public class Payment implements Serializable {
 
     /**
      * Gets the payKey that is generated for each payment
+     *
      * @return payKey - key that is appended to URL for user to make a payment
      */
     public String getPayKey() {
@@ -128,6 +139,7 @@ public class Payment implements Serializable {
 
     /**
      * Sets the payKey that is generated for each payment
+     *
      * @param payKey - key that is appended to URL for user to make a payment
      */
     public void setPayKey(String payKey) {
@@ -136,6 +148,7 @@ public class Payment implements Serializable {
 
     /**
      * Gets the payment id for the payment
+     *
      * @return paymentId - id that can be used to identify a payment
      */
     public String getPaymentId() {
@@ -144,6 +157,7 @@ public class Payment implements Serializable {
 
     /**
      * Sets the payment id for the payment
+     *
      * @param paymentId - id that can be used to identify a payment
      */
     public void setPaymentId(String paymentId) {
@@ -152,6 +166,7 @@ public class Payment implements Serializable {
 
     /**
      * Gets the time of the payment
+     *
      * @return timeOfPayment - time of the payment
      */
     public String getTimeOfPayment() {
@@ -160,6 +175,7 @@ public class Payment implements Serializable {
 
     /**
      * Sets the time of the payment
+     *
      * @param timeOfPayment - time of the payment
      */
     public void setTimeOfPayment(String timeOfPayment) {
@@ -168,6 +184,7 @@ public class Payment implements Serializable {
 
     /**
      * Gets the cost of the payment
+     *
      * @return paymentAmount - amount of payment
      */
     public double getPaymentAmount() {
@@ -176,6 +193,7 @@ public class Payment implements Serializable {
 
     /**
      * Sets the cost of the payment
+     *
      * @param paymentAmount - amount of payment
      */
     public void setPaymentAmount(double paymentAmount) {
@@ -184,6 +202,7 @@ public class Payment implements Serializable {
 
     /**
      * Gets the status of the payment
+     *
      * @return paymentStatus - status of payment
      */
     public String getPaymentStatus() {
@@ -192,6 +211,7 @@ public class Payment implements Serializable {
 
     /**
      * Sets the status of the payment
+     *
      * @param paymentStatus - status of payment
      */
     public void setPaymentStatus(String paymentStatus) {
@@ -200,6 +220,7 @@ public class Payment implements Serializable {
 
     /**
      * Gets the tutor of the session/payment
+     *
      * @return tutor - tutor of payment
      */
     public Tutor getTutor() {
@@ -208,6 +229,7 @@ public class Payment implements Serializable {
 
     /**
      * Sets the tutor of the session/payment
+     *
      * @param tutor - tutor of payment
      */
     public void setTutor(Tutor tutor) {
@@ -215,6 +237,14 @@ public class Payment implements Serializable {
     }
 
     
+    public User getStudent() {
+        return student;
+    }
+
+    public void setStudent(User student) {
+        this.student = student;
+    }
+
     /**
      * Override hashCode
      *
@@ -227,7 +257,7 @@ public class Payment implements Serializable {
         return hash;
     }
 
-        /**
+    /**
      * Overrides the equals method
      *
      * @param object

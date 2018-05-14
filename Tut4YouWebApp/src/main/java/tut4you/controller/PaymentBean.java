@@ -30,6 +30,7 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import tut4you.model.Payment;
+import tut4you.model.Request;
 import tut4you.model.Session;
 import tut4you.model.Tut4YouApp;
 import tut4you.model.Tutor;
@@ -48,6 +49,7 @@ public class PaymentBean implements Serializable {
     private Payment payment;
     private List<Payment> paymentList = new ArrayList(); //list of payments
     private Tutor tutor;
+    private Request request;
     private Session session;
     private boolean paymentStatus;
 
@@ -184,7 +186,7 @@ public class PaymentBean implements Serializable {
      * @param tutor the tutor getting paid
      * @param session the session for which the tutor is getting paid
      */
-    public void payForTutoringSession(Tutor tutor, Session session) {
+    public void payForTutoringSession(Request request, Session session) {
         String payKey;
         String email = tutor.getEmail();
         double hourlyRate = tutor.getHourlyRate();
@@ -193,7 +195,7 @@ public class PaymentBean implements Serializable {
         //This redirects the user to an external website (paypal's payment sandbox URL)
         ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
         String url = "https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_ap-payment&paykey=" + payKey;
-        payment = tut4youApp.createPayment(payKey, session, tutor);
+        payment = tut4youApp.createPayment(payKey, session, request);
         try {
             externalContext.redirect(url);
         } catch (IOException ex) {

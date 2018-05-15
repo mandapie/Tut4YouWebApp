@@ -27,6 +27,12 @@
                     <c:when test="#{userBean.isUserAuthenticated}">
                         <b:navLink value="Dashboard" outcome="/accounts/index.xhtml"/>
                         <b:navLink value="Forum" outcome="/forum/index.xhtml"/>
+                        <c:if test="#{userBean.isModerator}">
+                            <b:dropMenu value="Moderator">
+                                <b:navLink value="Moderator Applications" href="/Tut4YouWebApp/moderators/viewModeratorApplications.xhtml"/>
+                                <b:navLink value="View Complaints" href="/Tut4YouWebApp/moderators/viewComplaints.xhtml"/>
+                            </b:dropMenu>
+                        </c:if>
                     </c:when>
                     <c:otherwise>
                         <b:navLink value="Login" outcome="/accounts/index.xhtml"/>

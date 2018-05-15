@@ -106,9 +106,16 @@
                         </b:tab>
                         <b:tab title="Schedule">
                             <br/> <!-- for better spacing -->
-                            <b:switch label="Do Not Disturb" value="#{userBean.user.doNotDisturb}" id="doNotDisturb" update="@form">
-                                <f:ajax event="change" render="doNotDisturb" listener="#{userBean.switchDoNotDisturb(userBean.user.doNotDisturb)}" />
-                            </b:switch>
+                            <b:row>
+                                <b:column medium-screen="half">
+                                    <b:button style="font-weight:bold;font-size:20px;" look="primary" value="Add Availability" outcome="/tutors/availability.xhtml"/>
+                                </b:column>
+                                <b:column medium-screen="half">
+                                    <b:switch label="Do Not Disturb" value="#{userBean.user.doNotDisturb}" id="doNotDisturb" update="@form">
+                                        <f:ajax event="change" render="doNotDisturb" listener="#{userBean.switchDoNotDisturb(userBean.user.doNotDisturb)}" />
+                                    </b:switch>
+                                </b:column>
+                            </b:row>
                             <b:dataTable value="#{availabilityBean.availabilityList}" var="avail" id="availabilityTable">
                                 <b:dataTableColumn>
                                     <f:facet name="header">Day of Week</f:facet>

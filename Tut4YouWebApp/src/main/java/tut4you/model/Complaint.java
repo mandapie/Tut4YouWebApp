@@ -59,24 +59,6 @@ public class Complaint implements Serializable {
     
     @ManyToOne 
     private User moderator;
-    
-    @OneToOne 
-    private Request request;
-    
-    /**
-     * get request
-     * @return request
-     */
-    public Request getRequest() {
-        return request;
-    }
-    /**
-     * set request
-     * @param request 
-     */
-    public void setRequest(Request request) {
-        this.request = request;
-    }
     /**
      * get moderator
      * @return moderator

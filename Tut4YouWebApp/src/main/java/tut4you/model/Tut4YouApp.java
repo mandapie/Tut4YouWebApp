@@ -1472,7 +1472,7 @@ public class Tut4YouApp {
     
     @RolesAllowed("tut4youapp.student")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void createNewComplaint(User reportedUser, Complaint complaint, Request request) {
+    public void createNewComplaint(User reportedUser, Complaint complaint) {
         UserBean userBean = new UserBean();
         String currentUserEmail = userBean.getEmailFromSession();
         
@@ -1480,7 +1480,6 @@ public class Tut4YouApp {
         
         complaint.setUser(user);
         complaint.setReportedUser(reportedUser);
-        complaint.setRequest(request);
         em.persist(complaint);
         em.flush();
     }
@@ -1549,10 +1548,15 @@ public class Tut4YouApp {
     
     @RolesAllowed("tut4youapp.moderator")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void flagUser(User reportedUser, Date dateFlagged) {
+    public void flagUser(User reportedUser, Date dateFlagged,String type) {
         UserBean userBean = new UserBean();
         String currentUserEmail = userBean.getEmailFromSession();
         boolean newFlaggedUser = false;
+        int count = 1;
+        if(type.equals("ban")) {
+            count = 4;
+        }
+        
         User moderator = em.find(User.class, currentUserEmail);
         FlaggedUser flaggedUser = checkFlaggedUserLogIn(reportedUser.getEmail());
         if(flaggedUser == null) {
@@ -1566,7 +1570,7 @@ public class Tut4YouApp {
             reportedUser.setFlaggedUser(flaggedUser);
             flaggedUser.addModerator(moderator);
             moderator.addModeratorFlaggingUser(flaggedUser);
-            flaggedUser.setCount(flaggedUser.getCount() + 1);
+            flaggedUser.setCount(flaggedUser.getCount() + count);
             flaggedUser.setDateFlagged(dateFlagged);
             em.persist(flaggedUser);
         }
@@ -1575,7 +1579,7 @@ public class Tut4YouApp {
                 flaggedUser.addModerator(moderator);
                 moderator.addModeratorFlaggingUser(flaggedUser);
             }
-            flaggedUser.setCount(flaggedUser.getCount() + 1);
+            flaggedUser.setCount(flaggedUser.getCount() + count);
             flaggedUser.setDateFlagged(dateFlagged);
             em.merge(flaggedUser);
         }

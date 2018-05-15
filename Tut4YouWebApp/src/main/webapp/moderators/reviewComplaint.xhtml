@@ -48,7 +48,10 @@
             </b:row>
             <b:row>
                 <b:column>
-                    <b:commandButton value="Suspend User" look="danger" action="#{complaintBean.flagUser()}" />
+                    <b:commandButton value="Suspend User" look="danger" action="#{complaintBean.flagUser('suspend')}" />
+                </b:column>
+                <b:column>
+                    <b:commandButton value="Ban User" look="danger" action="#{complaintBean.flagUser('ban')}" />
                 </b:column>
                 <b:column>
                     <b:commandButton value="Close Complaint" look="primary" action="#{complaintBean.closeComplaint()}"/>

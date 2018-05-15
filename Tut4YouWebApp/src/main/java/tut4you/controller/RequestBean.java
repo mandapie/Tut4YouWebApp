@@ -493,5 +493,10 @@ public class RequestBean implements Serializable {
     public void setCheckRequestTutorEmail(boolean checkRequestTutorEmail) {
         this.checkRequestTutorEmail = checkRequestTutorEmail;
     }
+    public boolean isCheckRequestStudentEmail(User user) {
+        UserBean userBean = new UserBean();
+        String currentUserEmail = userBean.getEmailFromSession();
+        return user.getEmail().equals(currentUserEmail);
+    }
 
 }

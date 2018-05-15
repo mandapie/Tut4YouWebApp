@@ -51,6 +51,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
 import org.apache.commons.io.FileUtils;
 import static org.omnifaces.util.Faces.getServletContext;
@@ -70,7 +71,16 @@ import tut4you.model.User;
 @ViewScoped
 public class ModeratorBean implements Serializable {
     private static final Logger LOGGER = Logger.getLogger("TranscriptBean");
-    
+    @Inject
+    private ComplaintBean complaintBean;
+
+    public ComplaintBean getComplaintBean() {
+        return complaintBean;
+    }
+
+    public void setComplaintBean(ComplaintBean complaintBean) {
+        this.complaintBean = complaintBean;
+    }
     private UserBean userbean = new UserBean();
     @EJB
     private Tut4YouApp tut4youApp;
@@ -176,6 +186,9 @@ public class ModeratorBean implements Serializable {
     public void setModeratorApplicationList(List<ModeratorApplication> moderatorApplicationList) {
         this.moderatorApplicationList = moderatorApplicationList;
     }
+    public void showLowRatingTutorUsername(String username) {
+        tutor = findLowRatingTutor(username);
+    }
     public void showUsername(String username) {
         moderatorApplication  = findModeratorApplication(username);
         user = tut4youApp.findUser(moderatorApplication.getUser().getUsername());
@@ -183,6 +196,10 @@ public class ModeratorBean implements Serializable {
     public ModeratorApplication findModeratorApplication(String username)
     {
         return tut4youApp.findModeratorApplication(username);
+    }
+    public Tutor findLowRatingTutor(String username)
+    {
+        return tut4youApp.findTutor(username);
     }
     public void acceptModeratorApplication(ModeratorApplication moderatorApplication) {
         //System.out.println("moderatorApplication: " + moderatorApplication);

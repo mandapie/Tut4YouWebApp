@@ -171,15 +171,15 @@ public class ComplaintBean implements Serializable {
         return tut4youApp.findRequest(id);
     }
     public void createNewComplaint() {
-        tut4youApp.createNewComplaint(user, complaint, request);
+        tut4youApp.createNewComplaint(user, complaint);
     }
     public void closeComplaint() {
         tut4youApp.closeComplaint(complaint);
     }
-    public void flagUser() throws ParseException {
+    public void flagUser(String type) throws ParseException {
         Date currentDateTime = registrationBean.getCurrentDate();
         tut4youApp.closeComplaint(complaint);
-        tut4youApp.flagUser(complaint.getReportedUser(), currentDateTime);
+        tut4youApp.flagUser(complaint.getReportedUser(), currentDateTime, type);
     }
     public boolean isComplaintSubmitted(Collection<Complaint> complaints) {
         return tut4youApp.isComplaintSubmitted(complaints);

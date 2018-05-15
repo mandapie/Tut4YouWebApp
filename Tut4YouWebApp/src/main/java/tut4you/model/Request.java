@@ -101,11 +101,6 @@ public class Request implements Serializable {
     @Column(nullable = false, unique = true)
     private Long id;
     /**
-     * OneToOne relationship between request and complaint
-     */
-    @OneToOne
-    private Complaint complaint;
-    /**
      * Multiple requests can be submitted by a student
      */
     @ManyToOne
@@ -167,20 +162,6 @@ public class Request implements Serializable {
         this.status = status;
         this.currentTime = currentTime;
         this.lengthOfSession = lengthOfSession;
-    }
-    /**
-     * getComplaint
-     * @return complaint
-     */
-    public Complaint getComplaint() {
-        return complaint;
-    }
-    /**
-     * set complaint
-     * @param complaint 
-     */
-    public void setComplaint(Complaint complaint) {
-        this.complaint = complaint;
     }
     /**
      * get session

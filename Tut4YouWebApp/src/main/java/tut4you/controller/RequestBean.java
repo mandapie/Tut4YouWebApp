@@ -40,6 +40,7 @@ public class RequestBean implements Serializable {
     @EJB
     private Tut4YouApp tut4youapp;
     private Request request;
+    private List<Request> pendingRequests;
     private List<Request> acceptedRequests;
     private List<Request> completedRequests;
     private List<Request> declinedRequests;
@@ -69,6 +70,15 @@ public class RequestBean implements Serializable {
      */
     public void setRequest(Request request) {
         this.request = request;
+    }
+    
+    public List<Request> getPendingRequests() {
+        pendingRequests = tut4youapp.getActiveRequest();
+        return pendingRequests;
+    }
+
+    public void setPendingRequests(List<Request> pendingRequests) {
+        this.pendingRequests = pendingRequests;
     }
     
     public List<Request> getAcceptedRequests() {
@@ -118,11 +128,13 @@ public class RequestBean implements Serializable {
     }
     
     /**
-     * Remove the request from the notification list
+     * Sets a tutor to the request if tutor accepts
      *
      * @param r
+     * @return
      */
-    public void removeRequestFromTutor(Request r) {
-        tut4youapp.removeRequestFromNotification(r);
+    public String setTutorToRequest(Request r) {
+        tut4youapp.setTutorToRequest(r);
+        return "chat";
     }
 }

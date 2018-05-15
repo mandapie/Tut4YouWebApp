@@ -45,10 +45,10 @@ import javax.persistence.TemporalType;
  */
 @Table(name = "Request")
 @NamedQueries({
-    @NamedQuery(name = Request.FIND_REQUESTS_BY_USER, query = "SELECT r FROM Request r  JOIN r.student s WHERE s.email = :email"),
-    @NamedQuery(name = Request.FIND_REQUEST_BY_EMAIL, query = "SELECT r from Request r JOIN r.student s WHERE s.email = :student_email AND r.status = :status ORDER BY r.id DESC"),
-    @NamedQuery(name = Request.FIND_REQUEST_BY_TUTOR_EMAIL, query = "SELECT r from Request r JOIN r.tutor s WHERE s.email = :tutor_email AND r.status = :status ORDER BY r.id DESC"),
-    @NamedQuery(name = Request.FIND_REQUESTS_BY_TUTOR, query = "SELECT r FROM Request r JOIN r.availableTutors t WHERE t.email = :email ORDER BY r.id DESC")
+    @NamedQuery(name = Request.FIND_REQUESTS_BY_USER, query = "SELECT r FROM Request r JOIN r.student s WHERE s.email = :email ORDER BY r.dayOfWeek, r.sessionTime ASC"),
+    @NamedQuery(name = Request.FIND_REQUEST_BY_EMAIL, query = "SELECT r from Request r JOIN r.student s WHERE s.email = :student_email AND r.status = :status ORDER BY r.dayOfWeek, r.sessionTime ASC"),
+    @NamedQuery(name = Request.FIND_REQUEST_BY_TUTOR_EMAIL, query = "SELECT r from Request r JOIN r.tutor s WHERE s.email = :tutor_email AND r.status = :status ORDER BY r.dayOfWeek, r.sessionTime ASC"),
+    @NamedQuery(name = Request.FIND_REQUESTS_BY_TUTOR, query = "SELECT r FROM Request r JOIN r.availableTutors t WHERE t.email = :email ORDER BY r.dayOfWeek, r.sessionTime ASC")
 })
 @Entity
 public class Request implements Serializable {
@@ -121,14 +121,12 @@ public class Request implements Serializable {
     private Collection<Tutor> availableTutors;
     @OneToOne
     private Tutor tutor;
-
     @OneToOne
     private Session session;
-
     private String description;
     private String dayOfWeek;
     @Temporal(TemporalType.TIME)
-    private Date currentTime;
+    private Date sessionTime;
     private Status status;
     private float lengthOfSession;
 
@@ -152,7 +150,7 @@ public class Request implements Serializable {
         this.student = student;
         this.description = description;
         this.status = status;
-        this.currentTime = currentTime;
+        this.sessionTime = currentTime;
         this.lengthOfSession = lengthOfSession;
     }
 
@@ -219,21 +217,21 @@ public class Request implements Serializable {
     }
 
     /**
-     * get currentTime
+     * get sessionTime
      *
      * @return currenTime
      */
-    public Date getCurrentTime() {
-        return currentTime;
+    public Date getSessionTime() {
+        return sessionTime;
     }
 
     /**
-     * set currentTime
+     * set sessionTime
      *
-     * @param currentTime
+     * @param sessionTime
      */
-    public void setCurrentTime(Date currentTime) {
-        this.currentTime = currentTime;
+    public void setSessionTime(Date sessionTime) {
+        this.sessionTime = sessionTime;
 
     }
 
@@ -422,7 +420,7 @@ public class Request implements Serializable {
      */
     @Override
     public String toString() {
-        return "tut4you.model.Request[ id=" + id + " course=" + course + " description=" + description + " dayOfWeek=" + dayOfWeek + " currentTime= " + currentTime + " ]";
+        return "tut4you.model.Request[ id=" + id + " course=" + course + " description=" + description + " dayOfWeek=" + dayOfWeek + " currentTime= " + sessionTime + " ]";
     }
 
 }

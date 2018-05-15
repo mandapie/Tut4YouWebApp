@@ -23,13 +23,14 @@
         2017 Syed Haider <shayder426@gmail.com>
     -->
     <!-- @author Syed Haider <shayder426@gmail.com> -->
-    <ui:define name="title">Session</ui:define>
-    <h:head>
-        <h:outputStylesheet name="/css/style.css" library="css" />
-    </h:head>    
+    <f:metadata>
+        <f:viewParam name="id" value="#{sessionBean.id}"/>
+        <f:event listener="#{sessionBean.showRequestId(sessionBean.id)}" type="preRenderView"/>
+    </f:metadata>
+    <ui:define name="title">Session</ui:define>  
     <ui:define name="content">
         <h:form id="securityId">
-            <p:dialog  widgetVar="dlg3" header="#{sessionBean.student.firstName}" visible="#{!sessionBean.checkAnswer}" closable="false" modal="true">  
+            <p:dialog widgetVar="dlg3" header="#{sessionBean.request.student.firstName}" visible="#{!sessionBean.checkAnswer}" closable="false" modal="true">  
                 <h:outputText value="#{sessionBean.securityQuestion}">
                 </h:outputText>
                 <b:inputText value="#{sessionBean.securityAnswer}" type="password" id="securityAnswer" required="true" requiredMessage="required">

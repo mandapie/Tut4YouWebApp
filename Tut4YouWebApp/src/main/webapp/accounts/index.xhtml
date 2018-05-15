@@ -57,13 +57,13 @@
                         <br/> <!-- for better spacing -->
                         <b:button style="font-weight:bold;font-size:20px;" look="primary" value="Request for a Tutor" outcome="/students/requestTutor.xhtml"/>
                         <div style="max-height:400px;overflow:auto;margin-bottom:15px;">
-                            <ui:repeat value="#{userBean.user.requests}" var="r">
+                            <ui:repeat value="#{requestBean.pendingRequests}" var="r">
                                 <div style="border-bottom:solid 1px;padding:15px;">
                                     <h:outputText value="#{r.course.courseName}" style="font-size:20px;"/>
                                     <span/>
                                     <h:outputText value="#{r.dayOfWeek}"/>
                                     <span/>
-                                    <h:outputText value="#{r.currentTime}">
+                                    <h:outputText value="#{r.sessionTime}">
                                         <!-- sets the date and time to a certain format-->
                                         <f:convertDateTime pattern="hh:mm a" />
                                     </h:outputText>
@@ -92,7 +92,7 @@
                                         <span/>
                                         <h:outputText value="#{req.dayOfWeek}"/>
                                         <span/>
-                                        <h:outputText value="#{req.currentTime}">
+                                        <h:outputText value="#{req.sessionTime}">
                                             <!-- sets the date and time to a certain format-->
                                             <f:convertDateTime pattern = "hh:mm a" />
                                         </h:outputText>
@@ -109,7 +109,7 @@
                             <b:switch label="Do Not Disturb" value="#{userBean.user.doNotDisturb}" id="doNotDisturb" update="@form">
                                 <f:ajax event="change" render="doNotDisturb" listener="#{userBean.switchDoNotDisturb(userBean.user.doNotDisturb)}" />
                             </b:switch>
-                            <b:dataTable value="#{userBean.user.availabilities}" var="avail" id="availabilityTable">
+                            <b:dataTable value="#{availabilityBean.availabilityList}" var="avail" id="availabilityTable">
                                 <b:dataTableColumn>
                                     <f:facet name="header">Day of Week</f:facet>
                                     <h:outputText value="#{avail.dayOfWeek}"/>
@@ -117,11 +117,11 @@
                                 <b:dataTableColumn>
                                     <f:facet name="header">Time</f:facet>
                                     <h:outputText value="#{avail.startTime}">                        
-                                        <f:convertDateTime pattern="hh:mm a"></f:convertDateTime>
+                                        <f:convertDateTime pattern="hh:mm a"/>
                                     </h:outputText>
                                     <h:outputText value=" - "/>
                                     <h:outputText value="#{avail.endTime}">                        
-                                        <f:convertDateTime pattern="hh:mm a"></f:convertDateTime>
+                                        <f:convertDateTime pattern="hh:mm a"/>
                                     </h:outputText>
                                 </b:dataTableColumn>
                                 <b:dataTableColumn>
@@ -132,20 +132,27 @@
                                 </b:dataTableColumn>
                             </b:dataTable>
                         </b:tab>
-                        <b:tab title="Courses" disabled="#{userBean.submittedTranscript}">
-                            <br/>
-                            <b:button style="font-weight:bold;font-size:20px;" look="primary" value="Add Courses" outcome="/tutors/addCourse.xhtml"/>
-                            <b:dataTable value="#{userBean.user.courses}" var="course">
-                                <b:dataTableColumn>
-                                    <f:facet name="header">Courses You Have Taken</f:facet>
-                                        #{course.courseName}
-                                </b:dataTableColumn>
-                                <b:dataTableColumn>
-                                    <f:facet name="header">Action</f:facet>
-                                    <b:commandButton value="Delete" action="#{courseBean.deleteCourse(course)}"/>
-                                </b:dataTableColumn>
-                            </b:dataTable>
-                        </b:tab>
+                        <c:choose>
+                            <c:when test="#{userBean.submittedTranscript}">
+                                <b:tab title="Courses" disabled="true" tooltip="Please upload your transcript so that you can add courses to tutor"></b:tab>
+                            </c:when>
+                            <c:otherwise>
+                                <b:tab title="Courses">
+                                    <br/>
+                                    <b:button style="font-weight:bold;font-size:20px;" look="primary" value="Add Courses" outcome="/tutors/addCourse.xhtml"/>
+                                    <b:dataTable value="#{userBean.user.courses}" var="course">
+                                        <b:dataTableColumn>
+                                            <f:facet name="header">Courses You Have Taken</f:facet>
+                                                #{course.courseName}
+                                        </b:dataTableColumn>
+                                        <b:dataTableColumn>
+                                            <f:facet name="header">Action</f:facet>
+                                            <b:commandButton value="Delete" action="#{courseBean.deleteCourse(course)}"/>
+                                        </b:dataTableColumn>
+                                    </b:dataTable>
+                                </b:tab>
+                            </c:otherwise>
+                        </c:choose>
                     </c:if>
                 </b:tabView>
             </b:form>
@@ -154,20 +161,29 @@
             <b:form>
                 <b:row>
                     <b:panel title="Upcoming Sessions" collapsible="false" look="info">
-                        <b:dataTable value="#{requestBean.acceptedRequests[0]}" var="req" id="accepetedTable">
-                            <b:dataTableColumn>
-                                <f:facet name="header">Tutor</f:facet>
-                                <h:outputText value="#{req.tutor.firstName}"/>                        
-                            </b:dataTableColumn>
-                            <b:dataTableColumn>
-                                <f:facet name="header">Student</f:facet>
-                                <h:outputText value="#{req.student.firstName}"/>
-                            </b:dataTableColumn>
-                            <b:dataTableColumn>
-                                <f:facet name="header">Action</f:facet>
-                                <b:commandButton value="Start Session" action="#{sessionBean.goToSessionTimerPage(req)}"/>                        
-                            </b:dataTableColumn>
-                        </b:dataTable>  
+                        <ui:repeat value="#{requestBean.acceptedRequests[0]}" var="req">
+                            <h:outputText value="#{req.course.courseName}" style="font-size:20px;"/>
+<!--                            <c:choose>
+                                <c:when test="#{requestBean.request.tutor}">-->
+                                    <h:outputText value=" with #{req.student.firstName}"/>
+<!--                                </c:when>
+                                <c:otherwise>-->
+                                    <h:outputText value=" with #{req.tutor.firstName}"/>
+<!--                                </c:otherwise>
+                            </c:choose>-->
+                            <br/>
+                            <h:outputText value=" on #{req.dayOfWeek},"/>
+                            <h:outputText value="#{req.sessionTime}">
+                                <f:convertDateTime pattern="hh:mm a"/>
+                            </h:outputText>
+                            <br/>
+                            <h:outputText value="#{req.description}"/>
+                            <!--<c:if test="#{userBean.isTutor}">-->
+                            <b:button style="float:right;" value="Start Session" outcome="sessionTimer">
+                                <f:param name="id" value="#{req.id}" />
+                            </b:button>
+                            <!--</c:if>-->
+                        </ui:repeat>  
                     </b:panel>
                 </b:row>
                 <b:row>

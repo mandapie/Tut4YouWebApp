@@ -18,7 +18,6 @@ package tut4you.controller;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -146,16 +145,7 @@ public class ProfileBean implements Serializable {
      * @param username 
      */
     public void showUsername(String username) {
-        Tutor tutor = findTutorEmail(username);
+        Tutor tutor = tut4youapp.findTutorEmail(username);
         user = tut4youapp.findUser(tutor.getEmail());
-    }
-
-    /**
-     * This finds the tutor based off their username
-     * @param username
-     * @return tutor
-     */
-    public Tutor findTutorEmail(String username) {
-        return tut4youapp.findTutorEmail(username);
     }
 }

@@ -382,9 +382,9 @@ public class CreateRequestBean implements Serializable {
         zipCodeByRadius = new ZipCodeByRadius();
         String result = "failure";
         if (time.equals("Later")) {
-            request.setCurrentTime(getLaterTime());
+            request.setSessionTime(getLaterTime());
         } else {
-            request.setCurrentTime(getCurrentTime());
+            request.setSessionTime(getCurrentTime());
         }
         request.setDayOfWeek(getCurrentDayOfWeek());
         request.setLengthOfSession(lengthOfSession);
@@ -404,7 +404,7 @@ public class CreateRequestBean implements Serializable {
                 zipCodeByRadius = new ZipCodeByRadius(zipCodesByRadiusList.get(i));
                 zipCodeByRadius = tut4youApp.addZipCodeByRadius(zipCode, zipCodeByRadius);
                 temp = new ArrayList();
-                temp = tut4youApp.getTutorsFromCourse(request.getCourse().getCourseName(), request.getDayOfWeek(), request.getCurrentTime(), false, zipCodesByRadiusList.get(i));
+                temp = tut4youApp.getTutorsFromCourse(request.getCourse().getCourseName(), request.getDayOfWeek(), request.getSessionTime(), false, zipCodesByRadiusList.get(i));
                 tutorList.addAll(temp);
                 System.out.println("Zip code " + i + ": " + zipCodesByRadiusList.get(i));
                 System.out.println("temp " + i + ": " + temp);

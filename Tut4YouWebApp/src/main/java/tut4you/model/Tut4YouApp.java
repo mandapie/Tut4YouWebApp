@@ -700,10 +700,10 @@ public class Tut4YouApp {
      */
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-
     public User findUser(String email) {
         return em.find(User.class, email);
     }
+    
     public User findUserByUsername(String username) {
         TypedQuery<User> query = em.createNamedQuery(User.FIND_USER_BY_UNAME, User.class);
         query.setParameter("username", username);
@@ -1808,6 +1808,7 @@ public class Tut4YouApp {
         String val = payment.getPaymentStatus();
         return val.equals("COMPLETED");
     }
+    
     @RolesAllowed("tut4youapp.student")
     public boolean isComplaintSubmitted(Collection<Complaint> complaints) {
         boolean isComplaintSubmitted;
@@ -1826,5 +1827,10 @@ public class Tut4YouApp {
         return isComplaintSubmitted;
     }
 
+    @PermitAll
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public Request findRequest(Long id) {
+        return em.find(Request.class, id);
+    }
 }
 

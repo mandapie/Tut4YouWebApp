@@ -17,11 +17,11 @@
 package tut4you.controller;
 
 import java.io.Serializable;
-import java.util.Date;
 import javax.ejb.EJB;
-import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import tut4you.model.Request;
 import tut4you.model.Session;
@@ -34,21 +34,21 @@ import tut4you.model.User;
  * @author Syed Haider <shayder426@gmail.com>
  */
 @Named
-@SessionScoped
+@ViewScoped
 public class SessionBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @EJB
-    private Tut4YouApp tut4youApp;
-
-    private boolean checkAnswer;
+    private Tut4YouApp tut4youapp;
+    @ManagedProperty("#{param.id}")
+    private Long id; //requestId
     private Request request;
+    private boolean checkAnswer;
     private Session sessionTimer;
     private String securityAnswer;
     private String securityQuestion;
     private User student;
-
     /**
      * This will check if the "Start Button" on the "sessionTimer.xhtml" page
      * has been clicked.
@@ -56,6 +56,14 @@ public class SessionBean implements Serializable {
     private boolean checkStartButtonState = false;
     private boolean checkEndButtonState = true;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+    
     /**
      * Gets checkStartButtonState
      *
@@ -206,7 +214,7 @@ public class SessionBean implements Serializable {
      *
      */
     public void startTutorSession() {
-        sessionTimer = tut4youApp.startSessionTime(request, sessionTimer);
+        sessionTimer = tut4youapp.startSessionTime(request, sessionTimer);
         checkStartButtonState = true;
         checkEndButtonState = false;
     }
@@ -218,7 +226,7 @@ public class SessionBean implements Serializable {
      * @return 
      */
     public String endTutorSession() {
-        return tut4youApp.endSessionTime(request, sessionTimer);
+        return tut4youapp.endSessionTime(request, sessionTimer);
     }
 
     /**
@@ -230,7 +238,7 @@ public class SessionBean implements Serializable {
      */
     public boolean checkAnswer(String answer) {
         String email = request.getStudent().getEmail();
-        checkAnswer = tut4youApp.checkAnswer(answer, email);
+        checkAnswer = tut4youapp.checkAnswer(answer, email);
         if (!checkAnswer) {
             FacesMessage message = new FacesMessage("Answer is false. Try again.");
             FacesContext.getCurrentInstance().addMessage(null, message);
@@ -263,4 +271,7 @@ public class SessionBean implements Serializable {
         context.addMessage(null, new FacesMessage("Successful!", "You started your session!"));
     }
 
+    public void showRequestId(Long id) {
+        request = tut4youapp.findRequest(id);
+    }
 }

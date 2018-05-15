@@ -164,6 +164,23 @@ public class Tut4YouApp {
         em.flush();
         return request;
     }
+    /**
+     * Find the current Tutor that is logged in
+     * @return 
+     */
+    @RolesAllowed("tut4youapp.student")
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public Tutor findCurrentTutor() {
+        UserBean userBean = new UserBean();
+        String currentUserEmail = userBean.getEmailFromSession();
+        Tutor tutor;
+        if (currentUserEmail == null) {
+            tutor = null;
+        } else {
+            tutor = findTutor(currentUserEmail);
+        }
+        return tutor;
+    }
 
     /**
      *
@@ -782,6 +799,21 @@ public class Tut4YouApp {
     }
 
     /**
+     * Find low rating tutors of 2 stars or lower
+     *
+     * @param username
+     * @return moderator application
+     * @Keith <keithtran25@gmail.com>
+     */
+    @RolesAllowed("tut4youapp.moderator")
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public List<Tutor> findLowRatingTutors() {
+        TypedQuery<Tutor> query = em.createNamedQuery(Tutor.FIND_LOW_RATING_TUTORS, Tutor.class);
+        query.setParameter("overallRating", 2);
+        return query.getResultList();
+    }
+
+    /**
      * Gets a moderatorApplication by finding the email in the entity.
      *
      * @param username
@@ -1371,16 +1403,33 @@ public class Tut4YouApp {
     @RolesAllowed("tut4youapp.student")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public ZipCodeByRadius addZipCodeByRadius(ZipCode zipCode, ZipCodeByRadius zipCodeByRadius) {
+        boolean isZipCodeInDB = false;     
+        ZipCode findZipCode = em.find(ZipCode.class, zipCode.getId());
         ZipCodeByRadius zipCodeByRadiusTemp = em.find(ZipCodeByRadius.class, zipCodeByRadius.getZipCodeByRadius());
-        if (zipCodeByRadiusTemp == null) {
-            zipCode.addZipCodeByRadius(zipCodeByRadius);
-            zipCodeByRadius.addZipCode(zipCode);
-            em.persist(zipCodeByRadius);
-            em.flush();
-        } else {
-            zipCodeByRadiusTemp.addZipCode(zipCode);
-            zipCode.addZipCodeByRadius(zipCodeByRadiusTemp);
-            em.merge(zipCode);
+        
+        TypedQuery<String> Query = em.createNamedQuery(ZipCodeByRadius.FIND_ZIPCODEBYRADIUS, String.class);
+        Query.setParameter("id", findZipCode.getId());
+        List<String> zipCodesByRadiusList = Query.getResultList();
+        
+        if (zipCodeByRadiusTemp != null) {
+            for (int i = 0; i < zipCodesByRadiusList.size(); i++) {
+                if (zipCodesByRadiusList.get(i).equals(zipCodeByRadiusTemp.getZipCodeByRadius())) {
+                    isZipCodeInDB = true;
+                }
+            }
+        }
+        if (isZipCodeInDB == false) {
+            if (zipCodeByRadiusTemp == null) {
+                zipCode.addZipCodeByRadius(zipCodeByRadius);
+                zipCodeByRadius.addZipCode(zipCode);
+                em.persist(zipCodeByRadius);
+                em.flush();
+            } else {
+                zipCodeByRadiusTemp.addZipCode(zipCode);
+                zipCode.addZipCodeByRadius(zipCodeByRadiusTemp);
+                em.merge(zipCode);
+                em.flush();
+            }
         }
         return zipCodeByRadius;
     }
@@ -1410,7 +1459,6 @@ public class Tut4YouApp {
         UserBean userBean = new UserBean();
         String currentUserEmail = userBean.getEmailFromSession();
         User clone = em.find(User.class, currentUserEmail);
-        System.out.print("CLONE: " + clone);
         clone.setGroups(null);
         TypedQuery<Request> requestQuery = em.createNamedQuery(Request.FIND_REQUESTS_BY_USER, Request.class);
         requestQuery.setParameter("email", clone.getEmail());

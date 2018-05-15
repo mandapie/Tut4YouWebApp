@@ -16,6 +16,8 @@
  */
 package tut4you.controller;
 
+import com.google.gson.Gson;
+import java.io.IOException;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -23,32 +25,40 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.faces.view.ViewScoped;
+import javax.enterprise.context.ConversationScoped;
+import javax.enterprise.context.Conversation;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import json.ZipCodeAPI;
+import okhttp3.OkHttpClient;
+import okhttp3.Response;
 import tut4you.model.*;
 
 /**
- * Binds request inputs to the EJB.
+ * Binds creating a request inputs to the EJB.
  *
- * @author Amanda Pan <daikiraidemodaisuki@gmail.com>
+ * @author Keith Tran <keithtran25@gmail.com>
  */
 @Named
-@ViewScoped
-public class RequestBean implements Serializable {
+@ConversationScoped
+public class CreateRequestBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     private static final Logger LOGGER = Logger.getLogger("RequestBean");
+    private @Inject Conversation conversation;
     @EJB
     private Tut4YouApp tut4youApp;
+    private static final OkHttpClient client = new OkHttpClient();
     private Request request;
     private ZipCode zipCode;
     private ZipCodeByRadius zipCodeByRadius;
@@ -61,48 +71,10 @@ public class RequestBean implements Serializable {
     private long numOfTutors; //number of tutors who teaches the course
     private List<Subject> subjectList = new ArrayList(); //list of subjects to be loaded to the request form
     private List<Course> courseList = new ArrayList(); //list of courses based on subject to load to the request form
-    private List<Request> requestList = new ArrayList(); //list of pending requests
-    private List<Request> cancelledList = new ArrayList(); //list of cancelled requests
-    private List<Request> declinedList = new ArrayList(); //list of declined requests
-    private List<Request> acceptedList = new ArrayList(); //list of accepted requests
-    private List<Request> completedList = new ArrayList(); //list of completed requests
-
-    private List<String> zipCodesByRadiusList = new ArrayList();
-    private Tutor tutor; //the tutor who accepts the request
-    private User student;
+    private List<Tutor> tutorList; //list of available tutors
+    private List<Tutor> temp = new ArrayList();//adds this arraylist into tutorList
+    private List<String> zipCodesByRadiusList = new ArrayList();//list of zipCodesByRadius based on a ZipCode
     private Date dayOfWeek;
-
-    private double hourlyRate;
-    private Session session;
-
-    private boolean checkRequestTutorEmail;
-
-    public Date getStartSessionTime() {
-        return startSessionTime;
-    }
-
-    public void setStartSessionTime(Date startSessionTime) {
-        this.startSessionTime = startSessionTime;
-    }
-
-    public Date getEndSessionTime() {
-        return endSessionTime;
-    }
-
-    public void setEndSessionTime(Date endSessionTime) {
-        this.endSessionTime = endSessionTime;
-    }
-
-    public double getElapsedTimeOfSession() {
-        return elapsedTimeOfSession;
-    }
-
-    public void setElapsedTimeOfSession(double elapsedTimeOfSession) {
-        this.elapsedTimeOfSession = elapsedTimeOfSession;
-    }
-    private Date startSessionTime;
-    private Date endSessionTime;
-    private double elapsedTimeOfSession;
 
     /**
      * RequestBean encapsulates all the functions/services involved in making a
@@ -113,13 +85,40 @@ public class RequestBean implements Serializable {
         request = new Request();
         zipCode = new ZipCode();
         zipCodeByRadius = new ZipCodeByRadius();
+        tutorList = new ArrayList();
+        time = "Immediate";
+        endConversation();
+        initConversation();
+        
     }
+    /**
+     * initialize the conversation scope
+     */
+    public void initConversation(){
+        if (!FacesContext.getCurrentInstance().isPostback() && conversation.isTransient()) {
+            conversation.begin();
+        }
+    }
+    /**
+     * End the conversation scope
+     */
+    public void endConversation(){
 
-
+        if(!conversation.isTransient()){
+            conversation.end();
+        }
+    }
+    /**
+     * get ZipCodeByRadius
+     * @return ZipCodeByRadius
+     */
     public ZipCodeByRadius getZipCodeByRadius() {
         return zipCodeByRadius;
     }
-
+    /**
+     * set ZipCodeByRadius
+     * @param zipCodeByRadius 
+     */
     public void setZipCodeByRadius(ZipCodeByRadius zipCodeByRadius) {
         this.zipCodeByRadius = zipCodeByRadius;
     }
@@ -141,7 +140,20 @@ public class RequestBean implements Serializable {
         String currentDay = str.substring(0, 1).toUpperCase() + str.substring(1);
         return currentDay;
     }
-
+    /**
+     * Get ZipCode
+     * @return ZipCode
+     */
+    public ZipCode getZipCode() {
+        return zipCode;
+    }
+    /**
+     * Set ZipCode
+     * @param zipCode 
+     */
+    public void setZipCode(ZipCode zipCode) {
+        this.zipCode = zipCode;
+    }
 
     /**
      * Gets the Request entity
@@ -160,89 +172,6 @@ public class RequestBean implements Serializable {
     public void setRequest(Request request) {
         this.request = request;
     }
-
-    /**
-     * get Tutor from Request
-     *
-     * @return tutor
-     */
-    public Tutor getTutor() {
-        return tutor;
-    }
-
-    /**
-     * set tutor for request
-     *
-     * @param tutor
-     */
-    public void setTutor(Tutor tutor) {
-        this.tutor = tutor;
-    }
-
-    public User getStudent() {
-        return student;
-    }
-
-    public void setStudent(User student) {
-        this.student = student;
-    }
-
-    /**
-     * get request list
-     *
-     * @return request list
-     */
-    public List<Request> getRequestList() {
-        requestList = tut4youApp.getActiveRequest();
-        return requestList;
-    }
-
-    /**
-     * set request list
-     *
-     * @param requestList
-     */
-    public void setRequestList(List<Request> requestList) {
-        this.requestList = requestList;
-    }
-
-    public List<Request> getAcceptedList() {
-        acceptedList = tut4youApp.getAcceptedRequestList();
-        return acceptedList;
-    }
-
-    public void setAcceptedList(List<Request> acceptedList) {
-        this.acceptedList = acceptedList;
-    }
-
-    public List<Request> getCompletedList() {
-        completedList = tut4youApp.getCompletedRequests();
-        return completedList;
-    }
-
-    public void setCompletedList(List<Request> completedList) {
-        this.completedList = completedList;
-    }
-
-    /**
-     * gets the declined request
-     *
-     * @return
-     */
-    public List<Request> getDeclinedRequest() {
-        declinedList = tut4youApp.getDeclinedRequest();
-        return declinedList;
-    }
-
-    /**
-     * sets the declined list
-     *
-     * @param declinedList
-     */
-    public void setDeclinedRequest(List<Request> declinedList) {
-        this.declinedList = declinedList;
-    }
-
     /**
      * get zip codes by Radius
      *
@@ -403,6 +332,15 @@ public class RequestBean implements Serializable {
     public void setCourseList(List<Course> c) {
         courseList = c;
     }
+
+    public List<Tutor> getTutorList() {
+        return tutorList;
+    }
+
+    public void setTutorList(List<Tutor> c) {
+        tutorList = c;
+    }
+
     /**
      * ajax calls this method to load the courses based on the selected subject
      */
@@ -429,69 +367,115 @@ public class RequestBean implements Serializable {
         tut4youApp.removeRequestFromNotification(r);
     }
 
-   
+    /**
+     * Creates a new request. If successful, get the number of tutors that
+     * tutors the course.
+     *
+     * @return result to be redirected another page
+     * @throws java.text.ParseException
+     */
+    public String createNewRequest() throws ParseException {
+        tutorList = new ArrayList();
+        zipCodeByRadius = new ZipCodeByRadius();
+        String result = "failure";
+        if (time.equals("Later")) {
+            request.setCurrentTime(getLaterTime());
+        } else {
+            request.setCurrentTime(getCurrentTime());
+        }
+        request.setDayOfWeek(getCurrentDayOfWeek());
+        request.setLengthOfSession(lengthOfSession);
+        zipCode = tut4youApp.addZipCode(zipCode);
+        request.setZipCode(zipCode);
+        request = tut4youApp.newRequest(request);
+        if (request != null) {
+            numOfTutors = tut4youApp.getNumOfTutorsFromCourse(request.getCourse().getCourseName());
+            result = "success";
+
+            for (String str : getData(zipCode.getMaxRadius(), zipCode.getCurrentZipCode())) {
+                System.out.println(str);
+                zipCodesByRadiusList = Arrays.asList(str.substring(1, str.length() - 1).split(", "));
+            }
+  
+            for (int i = 0; i < zipCodesByRadiusList.size(); i++) {
+                zipCodeByRadius = new ZipCodeByRadius(zipCodesByRadiusList.get(i));
+                zipCodeByRadius = tut4youApp.addZipCodeByRadius(zipCode, zipCodeByRadius);
+                temp = new ArrayList();
+                temp = tut4youApp.getTutorsFromCourse(request.getCourse().getCourseName(), request.getDayOfWeek(), request.getCurrentTime(), false, zipCodesByRadiusList.get(i));
+                tutorList.addAll(temp);
+                System.out.println("Zip code " + i + ": " + zipCodesByRadiusList.get(i));
+                System.out.println("temp " + i + ": " + temp);
+            }
+            if(tutorList.contains(tut4youApp.findCurrentTutor())) {
+                tutorList.remove(tut4youApp.findCurrentTutor());
+            }
+        }
+        return result;
+    }
 
     /**
-     * Sets a tutor to the request if tutor accepts
+     * Send request to a specific tutor
      *
-     * @param r
+     * @param t
+     */
+    public void sendToTutor(Tutor t) {
+        tut4youApp.addPendingRequest(t, request);
+        tutorList.remove(t);
+    }
+    /**
+     * http://square.github.io/okhttp/ get request to use for api
+     *
+     * @param url
      * @return
+     * @throws IOException
      */
-    public String setTutorToRequest(Request r) {
-        tut4youApp.setTutorToRequest(r);
-        return "chat";
+    public static String getJSON(String url) throws IOException {
+        okhttp3.Request request = new okhttp3.Request.Builder()
+                .url(url)
+                .build();
+
+        Response response = client.newCall(request).execute();
+
+        return response.body().string();
+
     }
 
     /**
-     * Remove the request from the notification list
+     * used to retrieve data from zipcode api api used:
+     * http://www.zip-codes.com/content/api/samples/FindZipCodesInRadius.html
      *
-     * @param r
+     * @param maxRadius
+     * @param zipCode
+     * @return string of zipcodes
      */
-    public void removeRequestFromTutor(Request r) {
-        tut4youApp.removeRequestFromNotification(r);
-    }
+    public static String[] getData(int maxRadius, String zipCode) {
+        String json = null;
+        try {
+            json = getJSON("http://api.zip-codes.com/ZipCodesAPI.svc/1.0/FindZipCodesInRadius?zipcode=" + zipCode + "&minimumradius=0&maximumradius=" + maxRadius + "&key=Q24CBEALGGXBA6CPP4U9");
+        } catch (IOException e) {
 
-    public Session getSession() {
-        return session;
-    }
+        }
 
-    public void setSession(Session session) {
-        this.session = session;
-    }
+        Gson gson = new Gson();
+        ZipCodeAPI zipCodeAPI = gson.fromJson(json, ZipCodeAPI.class);
 
+        return new String[]{
+            Arrays.toString(zipCodeAPI.getDataList())
+        };
+    }
+    /**
+     * get day of week
+     * @return dayOfWeek
+     */
     public Date getDayOfWeek() {
         return dayOfWeek;
     }
-
+    /**
+     * set day of week
+     * @param dayOfWeek 
+     */
     public void setDayOfWeek(Date dayOfWeek) {
         this.dayOfWeek = dayOfWeek;
-    }
-
-    public double getHourlyRate() {
-        return hourlyRate;
-    }
-
-    public void setHourlyRate(double hourlyRate) {
-        this.hourlyRate = hourlyRate;
-    }
-
-    public boolean isCheckRequestTutorEmail(Tutor t) {
-        this.tutor = t;
-        return tut4youApp.checkRequestTutorEmail(tutor);
-    }
-
-    public boolean checkRequestTutorEmail(Tutor t) {
-        this.tutor = t;
-        System.out.println("String:" + t);
-        if (tutor != null) {
-            return tut4youApp.checkRequestTutorEmail(tutor);
-        } else {
-            return false;
-        }
-    }
-
-    public void setCheckRequestTutorEmail(boolean checkRequestTutorEmail) {
-        this.checkRequestTutorEmail = checkRequestTutorEmail;
     }
 
 }

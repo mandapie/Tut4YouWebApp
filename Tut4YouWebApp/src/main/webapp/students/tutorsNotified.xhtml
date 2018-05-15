@@ -28,7 +28,7 @@
         <p>The number of tutors that may help you with is: #{requestBean.numOfTutors}</p>
         <h1>Tutors Available</h1>
         <h:form>
-            <b:dataTable value="#{requestBean.tutorList}" var="tutor">
+            <b:dataTable value="#{createRequestBean.tutorList}" var="tutor">
                 <b:dataTableColumn>
                     <f:facet name="header">Tutor</f:facet>
                     <h:link value="#{tutor.firstName} #{tutor.lastName}" outcome="tutorProfile" includeViewParams="true">
@@ -37,10 +37,11 @@
                 </b:dataTableColumn>
                 <b:dataTableColumn>
                     <f:facet name="header">Request</f:facet>
-                    <b:commandButton span="6" value="Request" look="info" action="#{requestBean.sendToTutor(tutor)}"/>
+                    <b:commandButton span="6" value="Request" look="info" action="#{createRequestBean.sendToTutor(tutor)}">
+                    </b:commandButton>
                 </b:dataTableColumn>
             </b:dataTable>
-            <b:button style="width:100%" value="Return to Dashboard" look="info" outcome="/accounts/index.xhtml"/>
+            <b:button style="width:100%"  value="Return to Dashboard" look="info"  outcome="/accounts/index.xhtml"/>
         </h:form>
         <ui:debug hotkey='x' />
     </ui:define>

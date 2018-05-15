@@ -26,6 +26,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 /**
@@ -35,13 +36,13 @@ import javax.persistence.Table;
 @Table(name="ZipCodeByRadius")
 @Entity
 @NamedQueries({
-    //@NamedQuery(name = ZipCodeByRadius.FIND_ZIPCODEBYRADIUS, query = "SELECT t.zipCodeByRadius from ZipCodeByRadius t JOIN t.zipCodes r WHERE r.zipCode = : zipCode")
+    @NamedQuery(name = ZipCodeByRadius.FIND_ZIPCODEBYRADIUS, query = "SELECT t.zipCodeByRadius from ZipCodeByRadius t JOIN t.zipCodes r WHERE r.id = :id ")
 })
 public class ZipCodeByRadius implements Serializable {
     /**
      * JPQL Query to obtain a zipCode locations
      */
-   // public static final String FIND_ZIPCODEBYRADIUS= "ZipCode.FindZipCodeByRadius";
+    public static final String FIND_ZIPCODEBYRADIUS= "ZipCode.FindZipCodeByRadius";
     
     @Id
     private String zipCodeByRadius;

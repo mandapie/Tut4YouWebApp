@@ -38,22 +38,25 @@
                     <h:outputText value="#{moderatorBean.tutor.username}"/>
                 </b:column>
                 <b:column>
-                    <h:outputLabel value="Overall Rating"/>
+                    <h:outputLabel value="Overall Rating: "/>
                     <h:outputText value="#{moderatorBean.tutor.overallRating}"/>
                 </b:column>
                 <b:column>
                         <h:outputLabel value="Transcript "/>
                         <b:column>
-                            <p:commandButton value="Download Transcript" action="#{moderatorBean.downloadTranscript}" ajax="false" />
+                            <p:commandButton value="Download Transcript" action="#{moderatorBean.complaintBean.downloadTranscript(moderatorBean.tutor.username)}" ajax="false" />
                         </b:column>
                 </b:column>
             </b:row>
             <b:row>
                 <b:column>
-                    <b:commandButton value="Suspend User" look="danger" action="#{moderatorBean.flagUser()}" />
+                    <b:commandButton value="Suspend User" look="danger" action="#{moderatorBean.complaintBean.flagUser(moderatorBean.tutor.email,'suspend')}" />
                 </b:column>
                 <b:column>
-                    <b:commandButton value="Close Complaint" look="primary" action="#{moderatorBean.closeComplaint()}"/>
+                    <b:commandButton value="Ban User" look="danger" action="#{moderatorBean.complaintBean.flagUser(moderatorBean.tutor.email,'ban')}" />
+                </b:column>
+                <b:column>
+                    <b:commandButton value="Close Complaint" look="primary" action="#{moderatorBean.complaintBean.closeComplaint()}"/>
                 </b:column>
             </b:row>
         </h:form>

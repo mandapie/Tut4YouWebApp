@@ -176,16 +176,17 @@ public class ComplaintBean implements Serializable {
     public void closeComplaint() {
         tut4youApp.closeComplaint(complaint);
     }
-    public void flagUser(String type) throws ParseException {
+    public void flagUser(String email, String type) throws ParseException {
         Date currentDateTime = registrationBean.getCurrentDate();
         tut4youApp.closeComplaint(complaint);
-        tut4youApp.flagUser(complaint.getReportedUser(), currentDateTime, type);
+        User user = tut4youApp.findUser(email);
+        tut4youApp.flagUser(user, currentDateTime, type);
     }
     public boolean isComplaintSubmitted(Collection<Complaint> complaints) {
         return tut4youApp.isComplaintSubmitted(complaints);
         
     }
-    public void downloadTranscript() throws IOException {
+    public void downloadTranscript(String username) throws IOException {
         Properties prop = new Properties();
         InputStream propstream = new FileInputStream(getServletContext().getRealPath("WEB-INF/s3.properties"));
         prop.load(propstream);
@@ -199,7 +200,7 @@ public class ComplaintBean implements Serializable {
         AccessControlList acl = new AccessControlList();
         acl.grantPermission(GroupGrantee.AllUsers, Permission.Write);
         try {
-            tutor = tut4youApp.findTutorEmail(complaint.getReportedUser().getUsername());
+            tutor = tut4youApp.findTutorEmail(username);
        
                  String keyName = tutor.getTranscriptFilePath();
             if (keyName == null){

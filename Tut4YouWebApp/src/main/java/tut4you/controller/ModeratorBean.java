@@ -199,7 +199,7 @@ public class ModeratorBean implements Serializable {
     }
     public Tutor findLowRatingTutor(String username)
     {
-        return tut4youApp.findTutor(username);
+        return tut4youApp.findTutorEmail(username);
     }
     public void acceptModeratorApplication(ModeratorApplication moderatorApplication) {
         //System.out.println("moderatorApplication: " + moderatorApplication);

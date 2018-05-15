@@ -107,10 +107,10 @@
                         <b:tab title="Schedule">
                             <br/> <!-- for better spacing -->
                             <b:row>
-                                <b:column medium-screen="half">
+                                <b:column tiny-screen="half">
                                     <b:button style="font-weight:bold;font-size:20px;" look="primary" value="Add Availability" outcome="/tutors/availability.xhtml"/>
                                 </b:column>
-                                <b:column medium-screen="half">
+                                <b:column tiny-screen="half">
                                     <b:switch label="Do Not Disturb" value="#{userBean.user.doNotDisturb}" id="doNotDisturb" update="@form">
                                         <f:ajax event="change" render="doNotDisturb" listener="#{userBean.switchDoNotDisturb(userBean.user.doNotDisturb)}" />
                                     </b:switch>
@@ -167,11 +167,11 @@
         <b:column medium-screen="one-third">
             <b:form>
                 <b:row>
-                    <b:panel title="Upcoming Sessions" collapsible="false" look="info">
+                    <b:panel title="Upcoming Session" collapsible="false" look="info">
                         <ui:repeat value="#{requestBean.acceptedRequests[0]}" var="req">
                             <h:outputText value="#{req.course.courseName}" style="font-size:20px;"/>
-                            <h:outputText value=" with #{req.tutor.firstName}" rendered="#{!requestBean.isCheckRequestStudentEmail(req.student)}"/>
-                            <h:outputText value=" with #{req.student.firstName}" rendered="#{requestBean.isCheckRequestStudentEmail(req.student)}"/>
+                            <h:outputText value=" with #{req.tutor.firstName}" rendered="#{requestBean.isCheckRequestStudentEmail(req.student)}"/>
+                            <h:outputText value=" with #{req.student.firstName}" rendered="#{!requestBean.isCheckRequestStudentEmail(req.student)}"/>
                             <br/>
                             <h:outputText value=" on #{req.dayOfWeek},"/>
                             <h:outputText value="#{req.sessionTime}">
@@ -179,26 +179,32 @@
                             </h:outputText>
                             <br/>
                             <h:outputText value="#{req.description}"/>
-                            <!--<c:if test="#{userBean.isTutor}">-->
-                            <b:button style="float:right;" value="Start Session" outcome="sessionTimer">
+                            <b:button style="float:right;" value="Start Session" outcome="sessionTimer" rendered="#{!requestBean.isCheckRequestStudentEmail(req.student)}">
                                 <f:param name="id" value="#{req.id}" />
                             </b:button>
-                            <!--</c:if>-->
-                        </ui:repeat>  
+
+                        </ui:repeat>
                     </b:panel>
                 </b:row>
                 <b:row>
                     <b:panel title="Previous Sessions" collapsible="false" look="info">
-                        <b:dataTable value="#{requestBean.completedRequests}" var="req">
-                            <b:dataTableColumn>
-                                <f:facet name="header">Tutor</f:facet>
-                                <h:outputText value="#{req.tutor.firstName}"/>                        
-                            </b:dataTableColumn>
-                            <b:dataTableColumn>
-                                <f:facet name="header">Student</f:facet>
-                                <h:outputText value="#{req.student.firstName}"/>
-                            </b:dataTableColumn>
-                        </b:dataTable>  
+                        <ui:repeat value="#{requestBean.completedRequests}" var="req">
+                            <div style="border-bottom:solid 1px;padding:15px;">
+                                <h:outputText value="#{req.course.courseName}" style="font-size:20px;"/>
+                                <h:outputText value=" with #{req.tutor.firstName}" rendered="#{requestBean.isCheckRequestStudentEmail(req.student)}"/>
+                                <h:outputText value=" with #{req.student.firstName}" rendered="#{!requestBean.isCheckRequestStudentEmail(req.student)}"/>
+                                <br/>
+                                <h:outputText value=" on #{req.dayOfWeek},"/>
+                                <h:outputText value="#{req.sessionTime}">
+                                    <f:convertDateTime pattern="hh:mm a"/>
+                                </h:outputText>
+                                <br/>
+                                <h:outputText value="#{req.description}"/>
+                                <b:button style="float:right;" value="Start Session" outcome="sessionTimer" rendered="#{!requestBean.isCheckRequestStudentEmail(req.student)}">
+                                    <f:param name="id" value="#{req.id}" />
+                                </b:button>
+                            </div>
+                        </ui:repeat>
                     </b:panel>
                 </b:row>
             </b:form>

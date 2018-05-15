@@ -20,8 +20,10 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.ejb.EJB;
 import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
 import tut4you.model.*;
 
@@ -39,6 +41,8 @@ public class RequestBean implements Serializable {
     private static final Logger LOGGER = Logger.getLogger("RequestBean");
     @EJB
     private Tut4YouApp tut4youapp;
+    @Inject
+    private UserBean userbean;
     private Request request;
     private List<Request> pendingRequests;
     private List<Request> acceptedRequests;
@@ -50,8 +54,13 @@ public class RequestBean implements Serializable {
      * request
      */
     @PostConstruct
-    public void RequestBean() {
+    public void createRequestBean() {
         request = new Request();
+    }
+    
+    @PreDestroy
+    public void destroyRequestBean() {
+        
     }
 
     /**
@@ -136,5 +145,11 @@ public class RequestBean implements Serializable {
     public String setTutorToRequest(Request r) {
         tut4youapp.setTutorToRequest(r);
         return "chat";
+    }
+    
+    public boolean isCheckRequestStudentEmail(User user) {
+        System.out.println(user);
+        String currentUserEmail = userbean.getEmailFromSession();
+        return user.getEmail().equals(currentUserEmail);
     }
 }

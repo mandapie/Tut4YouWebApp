@@ -60,11 +60,11 @@ public class Request implements Serializable {
      * http://tomee.apache.org/examples-trunk/jpa-enumerated/README.html
      */
     public enum Status {
-        PENDING,
-        ACCEPTED,
-        CANCELLED,
-        DECLINED,
-        COMPLETED;
+        PENDING, //0
+        ACCEPTED, //1
+        CANCELLED, //2
+        DECLINED, //3
+        COMPLETED; //4
     }
 
     /**

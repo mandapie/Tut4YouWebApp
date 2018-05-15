@@ -189,7 +189,7 @@
                 <b:row>
                     <b:panel title="Previous Sessions" collapsible="false" look="info">
                         <ui:repeat value="#{requestBean.completedRequests}" var="req">
-                            <div style="border-bottom:solid 1px;padding:15px;">
+                            <div style="border-bottom:solid 1px;padding-bottom:15px;">
                                 <h:outputText value="#{req.course.courseName}" style="font-size:20px;"/>
                                 <h:outputText value=" with #{req.tutor.firstName}" rendered="#{requestBean.isCheckRequestStudentEmail(req.student)}"/>
                                 <h:outputText value=" with #{req.student.firstName}" rendered="#{!requestBean.isCheckRequestStudentEmail(req.student)}"/>
@@ -200,9 +200,6 @@
                                 </h:outputText>
                                 <br/>
                                 <h:outputText value="#{req.description}"/>
-                                <b:button style="float:right;" value="Start Session" outcome="sessionTimer" rendered="#{!requestBean.isCheckRequestStudentEmail(req.student)}">
-                                    <f:param name="id" value="#{req.id}" />
-                                </b:button>
                             </div>
                         </ui:repeat>
                     </b:panel>

@@ -358,25 +358,6 @@ public class CreateRequestBean implements Serializable {
     }
 
     /**
-     * Change the status of a request to canceled
-     *
-     * @param r
-     */
-    public void cancelRequest(Request r) {
-        tut4youApp.cancelRequest(r);
-    }
-
-    /**
-     * Change the status of a request to declined
-     *
-     * @param r
-     */
-    public void declineRequest(Request r) {
-        tut4youApp.declineRequest(r);
-        tut4youApp.removeRequestFromNotification(r);
-    }
-
-    /**
      * Creates a new request. If successful, get the number of tutors that
      * tutors the course.
      *
@@ -417,7 +398,7 @@ public class CreateRequestBean implements Serializable {
                 temp = tut4youApp.getTutorsFromCourse(request.getCourse().getCourseName(), request.getDayOfWeek(), request.getSessionTime(), false, zipCodesByRadiusList.get(i));
                 tutorList.addAll(temp);
                 System.out.println("Zip code " + i + ": " + zipCodesByRadiusList.get(i));
-                System.out.println("temp " + i + ": " + temp);
+                System.out.println("temp " + i + ": " + temp);  
             }
             if(tutorList.contains(tut4youApp.findCurrentTutor())) {
                 tutorList.remove(tut4youApp.findCurrentTutor());
@@ -508,5 +489,4 @@ public class CreateRequestBean implements Serializable {
     public void setTutor(Tutor tutor) {
         this.tutor = tutor;
     }
-
 }

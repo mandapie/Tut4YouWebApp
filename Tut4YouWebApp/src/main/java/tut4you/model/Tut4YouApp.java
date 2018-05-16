@@ -1089,7 +1089,6 @@ public class Tut4YouApp {
         double hours = minutes / 60;
         sessionTimer.setElapsedTimeOfSession(hours);
         em.merge(sessionTimer);
-
         Tutor tutor = findTutor(currentUserEmail);
         Request request = em.find(Request.class, r.getId());
         request.setStatus(Request.Status.COMPLETED);
@@ -1662,7 +1661,7 @@ public class Tut4YouApp {
      */
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-    public String generatePayKey(String email, double hourlyRate) {
+    public String generatePayKey(String email, double hourlyRate, double elapsedTimeOfSession) {
         PayRequest payRequest = new PayRequest();
         try {
             RequestEnvelope env = new RequestEnvelope();
@@ -1672,8 +1671,8 @@ public class Tut4YouApp {
             /**
              * FIXME: This needs to take in hourly rate * elapsed time
              */
-            //rec.setAmount(hourlyRate * elapsedTimeOfSession);
-            rec.setAmount(hourlyRate);
+            double amount = Math.round(hourlyRate * elapsedTimeOfSession * 100.0) / 100.0;
+            rec.setAmount(amount);
             rec.setEmail(email);
             receiver.add(rec);
             String returnUrl = "http://localhost:8080/Tut4YouWebApp/accounts/myPayments.xhtml";

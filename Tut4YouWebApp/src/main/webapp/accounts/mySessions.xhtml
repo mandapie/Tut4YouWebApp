@@ -90,7 +90,7 @@
                     </b:dataTableColumn>
                     <b:dataTableColumn>
                         <f:facet name="header">Rating</f:facet>
-                        <b:commandButton value="Write a Review" action="#{ratingBean.goToWriteReviewPage(req.tutor)}" rendered="#{!requestBean.checkRequestTutorEmail(req.tutor)}"/>
+                        <b:commandButton value="Write a Review" action="#{ratingBean.goToWriteReviewPage(req.tutor)}" rendered="#{requestBean.isCheckRequestStudentEmail(req.student)}"/>
                     </b:dataTableColumn>
                     <b:dataTableColumn>
                         <f:facet name="header">Action</f:facet>
@@ -102,7 +102,7 @@
                             <f:param name="username" value="#{req.student.username}" />
                             <f:param name="id" value="#{req.id}" />
                         </b:button>
-                        <b:commandButton icon="fa-paypal" value="Pay Tutor" look="primary" action="#{paymentBean.payForTutoringSession(req)}" rendered="#{requestBean.isCheckRequestStudentEmail(req.student) and paymentBean.checkCompletedStatus(req.session.payment.payKey)}"/>
+                        <b:commandButton icon="paypal" value="Pay Tutor" look="primary" action="#{paymentBean.payForTutoringSession(req)}" rendered="#{requestBean.isCheckRequestStudentEmail(req.student) and paymentBean.checkCompletedStatus(req.session.payment.payKey)}"/>
                     </b:dataTableColumn>
                 </b:dataTable>
             </b:form> 

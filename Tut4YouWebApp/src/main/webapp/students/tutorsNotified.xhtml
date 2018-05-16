@@ -27,7 +27,7 @@
     <ui:define name="metadata"/>
     <ui:define name="content">
         <h1>Tutors Teaching the Course</h1>
-        <p>The number of tutors that may help you with is: #{requestBean.numOfTutors}</p>
+        <p>The number of tutors that may help you with is: #{createRequestBean.numOfTutors}</p>
         <h1>Tutors Available</h1>
         <h:form>
             <b:dataTable value="#{createRequestBean.tutorList}" var="tutor">
@@ -41,7 +41,7 @@
                             <b:label text="Offline" severity="danger" rendered="#{tutor.currentZip == null}"/>
                         </h:link>
                     </b:column>
-=                </b:dataTableColumn>
+                </b:dataTableColumn>
                 <b:dataTableColumn>
                     <f:facet name="header">Request</f:facet>
                     <b:commandButton span="6" value="Request" look="info" action="#{createRequestBean.sendToTutor(tutor)}">

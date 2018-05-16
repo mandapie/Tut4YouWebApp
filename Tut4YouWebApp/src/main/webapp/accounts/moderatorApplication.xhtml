@@ -25,7 +25,7 @@
     <!-- @author Andrew Kaichi <ahkaichi@gmail.com> -->
     <ui:define name="title">Apply To Become a Moderator</ui:define>
     <ui:define name="content">
-        <h1>Add a Transcript</h1>
+        <h1>Apply To Become Moderator</h1>
         <b:panel title="Add your resume as a PDF file" collapsible="false" look="info">
             <h:form id="transcript" enctype="multipart/form-data">
                 <b:row>
@@ -39,6 +39,7 @@
                         </h:outputLabel>
                         <p:fileUpload value="#{moderatorBean.file}"
                                       mode="simple"
+                                      required="true"
                                       allowTypes="/(\.|\/)(gif|jpe?g|pdf)$/"
                                       fileLimit="1"
                                       update="uploadTranscript"/>

@@ -376,6 +376,16 @@ public class UserBean implements Serializable {
             condition = false;
         }
     }
+    /**
+     * set the default zip to current if user declines to update their current zip location
+     */
+    public void setDefaultToCurrentZip() {
+        Tutor tutor = tut4youapp.setDefaultToCurrentZip();
+        if (tutor.getCurrentZip() != null) {
+            condition = false;
+        }
+        
+    }
 
     /**
      * Updates a User's information

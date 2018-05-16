@@ -783,6 +783,7 @@ public class Tut4YouApp {
     public List<Tutor> findLowRatingTutors() {
         TypedQuery<Tutor> query = em.createNamedQuery(Tutor.FIND_LOW_RATING_TUTORS, Tutor.class);
         query.setParameter("overallRating", 2);
+        
         return query.getResultList();
     }
 
@@ -1515,7 +1516,7 @@ public class Tut4YouApp {
         query.setParameter("email", email);
         
         FlaggedUser flaggedUser;
-        if(query.getSingleResult() == null) {
+        if(query.getResultList().isEmpty()) {
             flaggedUser = new FlaggedUser();
         }
         else {

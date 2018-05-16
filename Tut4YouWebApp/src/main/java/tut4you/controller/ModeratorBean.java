@@ -40,7 +40,9 @@ import java.io.Serializable;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 import java.util.logging.Logger;
@@ -56,6 +58,7 @@ import javax.inject.Named;
 import org.apache.commons.io.FileUtils;
 import static org.omnifaces.util.Faces.getServletContext;
 import org.primefaces.model.UploadedFile;
+import tut4you.model.FlaggedUser;
 import tut4you.model.ModeratorApplication;
 import tut4you.model.Tut4YouApp;
 import tut4you.model.Tutor;
@@ -63,8 +66,8 @@ import tut4you.model.User;
 
 
 /**
- * Uploads .pdf files to an Amazon bucket.
- * @author Andrew Kaichi <ahkaichi@gmail.com>
+ * Moderator bean that has moderator features
+ * @author Keith Tran <Keithtran25@gmail.com>
  */
 @Named
 //@RequestScoped
@@ -73,76 +76,153 @@ public class ModeratorBean implements Serializable {
     private static final Logger LOGGER = Logger.getLogger("TranscriptBean");
     @Inject
     private ComplaintBean complaintBean;
+    
+    @Inject
+    private FlaggedUserBean flaggedUserBean;
 
+    private UserBean userbean = new UserBean();
+
+    @EJB
+    private Tut4YouApp tut4youApp;
+    //uploaded file for AWS
+    private UploadedFile file;
+    //string reason for the complaint
+    private String reason;
+    //moderator application object
+    private ModeratorApplication moderatorApplication;
+    //list of moderator applications
+    private List<ModeratorApplication> moderatorApplicationList = new ArrayList();
+    //list of low rating tutors
+    private List<Tutor> lowRatingTutorList = new ArrayList();
+    //string username used as a parameter
+    @ManagedProperty("#{param.username}")
+    private String username;
+    //tutor object
+    private Tutor tutor;
+    //User object
+    private User user;
+    
+    /**
+     * get ComplaintBean
+     * @return complaintBean
+     */
     public ComplaintBean getComplaintBean() {
         return complaintBean;
     }
-
+    /**
+     * set ComplaintBean
+     * @param complaintBean 
+     */
     public void setComplaintBean(ComplaintBean complaintBean) {
         this.complaintBean = complaintBean;
     }
-    private UserBean userbean = new UserBean();
-    @EJB
-    private Tut4YouApp tut4youApp;
-
-    private UploadedFile file;
-    private String reason;
-    private ModeratorApplication moderatorApplication;
-    private List<ModeratorApplication> moderatorApplicationList = new ArrayList();
-    private List<Tutor> lowRatingTutorList = new ArrayList();
-    
-    @ManagedProperty("#{param.username}")
-    private String username;
-    private Tutor tutor;
-    
-    public List<Tutor> getLowRatingTutorList() {
+    /**
+     * gets list of tutors with ratings at or below a 2.0, 
+     * and removes tutors from the list that have been flagged before in the past 5 minutes
+     * @return tutor list
+     * @throws ParseException 
+     */
+    public List<Tutor> getLowRatingTutorList() throws ParseException {
+        Date currentDate = new Date();
         lowRatingTutorList = tut4youApp.findLowRatingTutors();
+        for(int i = 0; i < lowRatingTutorList.size(); i++) {
+            FlaggedUser flaggedUser = flaggedUserBean.findFlaggedUser(lowRatingTutorList.get(i).getEmail());
+            
+            if(flaggedUser.getUser() == null) {  
+                System.out.print("EHEHEHHEHEHE");
+            }
+            
+            else {
+                double timeDifference = currentDate.getTime() - flaggedUser.getDateFlagged().getTime();
+                double minutes = (timeDifference / 1000) / 60;
+                System.out.println("MINUTES: "+ minutes);
+                if(minutes < 5 || flaggedUser.getCount() >= 4) {
+                    lowRatingTutorList.remove(lowRatingTutorList.get(i));
+                }
+            }
+        }
         return lowRatingTutorList;
     }
-
+    /**
+     * set low rating tutor list
+     * @param lowRatingTutorList 
+     */
     public void setLowRatingTutorList(List<Tutor> lowRatingTutorList) {
         this.lowRatingTutorList = lowRatingTutorList;
     }
+    /**
+     * get tutor
+     * @return 
+     */
     public Tutor getTutor() {
         return tutor;
     }
-
+    /**
+     * set tutor
+     * @param tutor 
+     */
     public void setTutor(Tutor tutor) {
         this.tutor = tutor;
     }
-
+    /**
+     * get Username
+     * @return 
+     */
     public String getUsername() {
         return username;
     }
-
+    /**
+     * set Username
+     * @param username 
+     */
     public void setUsername(String username) {
         this.username = username;
     }
+    /**
+     * get moderator application
+     * @return moderator application
+     */
     public ModeratorApplication getModeratorApplication() {
         return moderatorApplication;
     }
-
+    /**
+     * set moderator application
+     * @param moderatorApplication 
+     */
     public void setModeratorApplication(ModeratorApplication moderatorApplication) {
         this.moderatorApplication = moderatorApplication;
     }
+    /**
+     * get reason
+     * @return reason
+     */
     public String getReason() {
         return reason;
     }
-
+    /**
+     * set reason
+     * @param reason 
+     */
     public void setReason(String reason) {
         this.reason = reason;
     }
-    private User user;
-
+    /**
+     * get user
+     * @return user
+     */
     public User getUser() {
         return user;
     }
-
+    /**
+     * set user
+     * @param user 
+     */
     public void setUser(User user) {
         this.user = user;
     }
-    
-  
+    /**
+     * PostConstruct for Moderatorbean
+     */
     @PostConstruct
     public void createModeratorBean() {
     }
@@ -153,21 +233,27 @@ public class ModeratorBean implements Serializable {
     @PreDestroy
     public void destroyModeratorBean() {
     }
-    public ModeratorBean () {
-        
-    }
+    /**
+     * Constructor with uploaded file parameter
+     * @param file 
+     */
     public ModeratorBean(UploadedFile file) {
         this.file = file;
     }
-    
+    /**
+     * set uploaded file
+     * @param file 
+     */
     public void setFile(UploadedFile file) {
         this.file = file;
     }
-    
+    /**
+     * get uploaded file
+     * @return 
+     */
     public UploadedFile getFile() {
         return file;
     }
-    
     /**
      * Gets a list of the moderator Applications in the EJB
      * @return a list of subjects
@@ -178,7 +264,6 @@ public class ModeratorBean implements Serializable {
         }
         return moderatorApplicationList;
     }
-
     /**
      * Sets the moderatorApplicationList
      * @param moderatorApplicationList
@@ -186,31 +271,58 @@ public class ModeratorBean implements Serializable {
     public void setModeratorApplicationList(List<ModeratorApplication> moderatorApplicationList) {
         this.moderatorApplicationList = moderatorApplicationList;
     }
+    /**
+     * show low rating tutor username which is used when passing in the username parameter
+     * @param username 
+     */
     public void showLowRatingTutorUsername(String username) {
         tutor = findLowRatingTutor(username);
     }
+    /**
+     * showUsername method used when passing the parameter between 
+     * jsf pages for moderatorApplication
+     * @param username 
+     */
     public void showUsername(String username) {
         moderatorApplication  = findModeratorApplication(username);
         user = tut4youApp.findUser(moderatorApplication.getUser().getUsername());
     }
+    /**
+     * find moderator application based on username
+     * @param username
+     * @return moderator application
+     */
     public ModeratorApplication findModeratorApplication(String username)
     {
         return tut4youApp.findModeratorApplication(username);
     }
+    /**
+     * find low rating tutor based on username
+     * @param username
+     * @return tutor
+     */
     public Tutor findLowRatingTutor(String username)
     {
         return tut4youApp.findTutorEmail(username);
     }
+    /**
+     * accept moderator application
+     * @param moderatorApplication 
+     */
     public void acceptModeratorApplication(ModeratorApplication moderatorApplication) {
-        //System.out.println("moderatorApplication: " + moderatorApplication);
         tut4youApp.acceptModeratorApplication(moderatorApplication);
     }
-
+    /**
+     * decline moderator application
+     * @param moderatorApplication 
+     */
     public void declineModeratorApplication(ModeratorApplication moderatorApplication) {
         tut4youApp.declineModeratorApplication(moderatorApplication);
     }
-    
-    
+    /**
+     * download resume from S3
+     * @throws IOException 
+     */
     public void downloadResume() throws IOException {
         Properties prop = new Properties();
         InputStream propstream = new FileInputStream(getServletContext().getRealPath("WEB-INF/s3.properties"));
@@ -263,6 +375,10 @@ public class ModeratorBean implements Serializable {
                     + "trying to communicate with S3, such as not being able to access the network.");
         }
     }
+    /**
+     * upload resume to S3
+     * @throws IOException 
+     */
     public void uploadResume() throws IOException {
         Properties prop = new Properties();
         InputStream propstream = new FileInputStream(getServletContext().getRealPath("WEB-INF/s3.properties"));
@@ -314,6 +430,4 @@ public class ModeratorBean implements Serializable {
                     + "trying to communicate with S3, such as not being able to access the network.");
         }
     }
-    
-   
 }

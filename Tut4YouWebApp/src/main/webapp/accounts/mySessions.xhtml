@@ -27,9 +27,9 @@
     <!-- @author Amanda Pan <daikiraidemodaisuki@gmail.com> -->
     <ui:define name="title">Sessions</ui:define>
     <f:metadata>
-        <f:event listener="#{createRequestBean.endConversation()}"
+        <f:event listener="#{ratingBean.initConversation()}"
                  type="preRenderView"></f:event>
-    </f:metadata>
+    </f:metadata> 
     <script src="https://www.paypalobjects.com/js/external/apdg.js" type="text/javascript"></script>
     <script type="text/javascript" charset="utf-8">
         var dgFlowMini = new PAYPAL.apps.DGFlowMini({trigger: 'submitBtn'});
@@ -48,21 +48,29 @@
                     <b:row>
                         <b:panel title="Upcoming Sessions" collapsible="false" look="info">
                             <b:dataTable value="#{requestBean.acceptedList}" var="req" id="accepetedTable">
-                                    <b:dataTableColumn>
-                                        <f:facet name="header">Student</f:facet>
-                                        <h:outputText value="#{req.student.firstName} #{req.student.lastName}"/>
-                                    </b:dataTableColumn>
-                                    <b:dataTableColumn>
-                                        <f:facet name="header">Tutor</f:facet>
-                                        <h:outputText value="#{req.tutor.firstName} #{req.tutor.lastName}"/>
-                                    </b:dataTableColumn>
+                                <b:dataTableColumn>
+                                    <f:facet name="header">Student</f:facet>
+                                    <h:outputText value="#{req.student.firstName} #{req.student.lastName}"/>
+                                </b:dataTableColumn>
+                                <b:dataTableColumn>
+                                    <f:facet name="header">Tutor</f:facet>
+                                    <h:link value="#{req.tutor.firstName} #{req.tutor.lastName}" outcome="tutorProfile" includeViewParams="true">
+                                        <f:param name="username" value="#{req.tutor.username}" />
+                                    </h:link>  
+                                </b:dataTableColumn>
                                 <b:dataTableColumn>
                                     <f:facet name="header">Day Of Week</f:facet>
                                     <h:outputText value="#{req.dayOfWeek}"/>
                                 </b:dataTableColumn>
+                                 <b:dataTableColumn>
+                                    <f:facet name="header">Time</f:facet>
+                                    <h:outputText value="#{req.currentTime}"/>
+                                </b:dataTableColumn>
                                 <b:dataTableColumn>
-                                    <f:facet name="header">Estimated Length of Session</f:facet>
-                                    <h:outputText value="#{req.lengthOfSession}"/>
+                                    <f:facet name="header">Estimated Length of Session (Hours) </f:facet>
+                                    <h:outputText value="#{req.lengthOfSession}">
+                                        <f:convertNumber minFractionDigits="0" />
+                                    </h:outputText>
                                 </b:dataTableColumn>
                             </b:dataTable>  
                         </b:panel>
@@ -76,23 +84,27 @@
                                 </b:dataTableColumn>
                                 <b:dataTableColumn>
                                     <f:facet name="header">Tutor</f:facet>
-                                    <h:outputText value="#{req.tutor.firstName} #{req.tutor.lastName}"/>
+                                    <h:link value="#{req.tutor.firstName} #{req.tutor.lastName}" outcome="tutorProfile" includeViewParams="true">
+                                        <f:param name="username" value="#{req.tutor.username}" />
+                                    </h:link>                                
                                 </b:dataTableColumn>
                                 <b:dataTableColumn>
-                                    <f:facet name="header">Day Of Week</f:facet>
-                                    <h:outputText value="#{req.dayOfWeek}"/>
+                                    <f:facet name="header">Confirmation Number</f:facet>
+                                    <h:link value="#{req.session.payment.paymentId}" outcome="myPayments"/>
                                 </b:dataTableColumn>
 
                                 <b:dataTableColumn>
                                     <f:facet name="header">Session Length</f:facet>
-                                    <h:outputText value="#{req.session.payment.payKey}"/>
+                                    <h:outputText value="#{req.session.elapsedTimeOfSession}">
+                                        <f:convertNumber minFractionDigits="0" />
+                                    </h:outputText>
                                 </b:dataTableColumn>
+
                                 <b:dataTableColumn>
                                     <f:facet name="header">Rating</f:facet>
-                                    <b:button value="Write a Review" outcome="writeReview">
-                                        <f:param name="username" value="#{req.tutor.username}" />
-                                    </b:button>
+                                    <b:commandButton value="Write a Review" action="#{ratingBean.goToWriteReviewPage(req.tutor)}" rendered="#{!requestBean.checkRequestTutorEmail(req.tutor)}"/>
                                 </b:dataTableColumn>
+
                                 <b:dataTableColumn>
                                     <f:facet name="header">Complaint</f:facet>
                                     <b:button value="Report Tutor" outcome="submitComplaint" rendered="#{!requestBean.checkRequestTutorEmail(req.tutor)}">
@@ -104,7 +116,7 @@
                                 </b:dataTableColumn>
                                 <b:dataTableColumn>
                                     <f:facet name="header">Pay Now!</f:facet>
-                                    <b:commandButton value="Pay Tutor" look="primary" action="#{paymentBean.payForTutoringSession(req)}" rendered="#{!requestBean.checkRequestTutorEmail(req.tutor) and paymentBean.checkCompletedStatus(req.session.payment.payKey)}"/>
+                                    <b:commandButton icon="fa-paypal" value="Pay Tutor" look="primary" action="#{paymentBean.payForTutoringSession(req)}" rendered="#{!requestBean.checkRequestTutorEmail(req.tutor) and paymentBean.checkCompletedStatus(req.session.payment.payKey)}"/>
                                 </b:dataTableColumn>
                             </b:dataTable>  
                         </b:panel>

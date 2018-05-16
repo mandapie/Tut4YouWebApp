@@ -155,6 +155,9 @@ INSERT INTO Rating(student_email,description,ratingValue,tutor_email) VALUES ('e
 INSERT INTO Rating(student_email,description,ratingValue,tutor_email) VALUES ('evan@gmail.com','She did bad.',2,'amanda@gmail.com')
 INSERT INTO Rating(student_email,description,ratingValue,tutor_email) VALUES ('evan@gmail.com','She did okay.',3,'amanda@gmail.com')
 
+INSERT INTO Rating(student_email,description,ratingValue,tutor_email,dateRated) VALUES ('daniel@gmail.com','He was a good tutor.', 1,'amanda@gmail.com','02/17/14')
+INSERT INTO Rating(student_email,description,ratingValue,tutor_email,dateRated) VALUES ('evan@gmail.com','She was a good tutor.', 1,'amanda@gmail.com','03/17/14')
+
 INSERT INTO ModeratorApplication(applicationStatus,reason,resumeFilePath,user_email) VALUES (0,'to help people','fsdafdsafsfasdf','carmen@gmail.com')
 INSERT INTO Availability(DAYOFWEEK, ENDTIME, STARTTIME, TUTOR_EMAIL) VALUES ('Monday', '06:59:00', '05:00:00', 'carmen@gmail.com')
 INSERT INTO Courses_tutors(email,courseName) VALUES ('carmen@gmail.com','Computer Security')

@@ -123,11 +123,13 @@ public class ProfileBean implements Serializable {
 
     /**
      * Gets the date joined as a tutor
+     * @param username
      * @return dateJoinedAsTutor 
      */
-    public String getDateJoinedAsTutor() {
+    public String getDateJoinedAsTutor(String username) {
         SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy");
-        dateJoinedAsTutor = sdf.format(tut4youapp.getDateJoinedAsTutor());
+        Tutor tutor = findTutorByUsername(username);
+        dateJoinedAsTutor = sdf.format(tut4youapp.getDateJoinedAsTutor(tutor.getEmail()));
         return dateJoinedAsTutor;
     }
 

@@ -28,6 +28,8 @@
         <f:metadata>
             <f:event listener="#{createRequestBean.endConversation()}"
                      type="preRenderView"></f:event>
+            <f:event listener="#{ratingBean.endConversation()}"
+                     type="preRenderView"></f:event>
         </f:metadata>
         <h1>Dashboard</h1>
         <b:form>
@@ -160,18 +162,20 @@
                         <b:dataTable value="#{requestBean.acceptedList[0]}" var="req" id="accepetedTable">
                             <b:dataTableColumn>
                                 <f:facet name="header">Tutor</f:facet>
-                                <h:outputText value="#{req.tutor.firstName}"/>                        
+                                <h:link value="#{req.tutor.firstName} #{req.tutor.lastName}" outcome="tutorProfile" includeViewParams="true">
+                                    <f:param name="username" value="#{req.tutor.username}" />
+                                </h:link>                              
                             </b:dataTableColumn>
                             <b:dataTableColumn>
                                 <f:facet name="header">Student</f:facet>
                                 <h:outputText value="#{req.student.firstName}"/>
                             </b:dataTableColumn>
                             <c:if test="#{userBean.isTutor}">
-                            <b:dataTableColumn>
-                                <f:facet name="header">Action</f:facet>
-                                <b:commandButton value="Start Session" action="#{sessionBean.goToSessionTimerPage(req)}"/>                        
-                            </b:dataTableColumn>
-                        </c:if>
+                                <b:dataTableColumn>
+                                    <f:facet name="header">Session</f:facet>
+                                    <b:commandButton value="Start Session" action="#{sessionBean.goToSessionTimerPage(req)}" look="primary"/>                        
+                                </b:dataTableColumn>
+                            </c:if>
                         </b:dataTable>  
                     </b:panel>
                 </b:row>
@@ -180,11 +184,17 @@
                         <b:dataTable value="#{requestBean.completedList[0]}" var="req" id="completedTable">
                             <b:dataTableColumn>
                                 <f:facet name="header">Tutor</f:facet>
-                                <h:outputText value="#{req.tutor.firstName}"/>                        
+                                <h:link value="#{req.tutor.firstName} #{req.tutor.lastName}" outcome="tutorProfile" includeViewParams="true">
+                                    <f:param name="username" value="#{req.tutor.username}" />
+                                </h:link>                           
                             </b:dataTableColumn>
                             <b:dataTableColumn>
                                 <f:facet name="header">Student</f:facet>
                                 <h:outputText value="#{req.student.firstName}"/>
+                            </b:dataTableColumn>
+                            <b:dataTableColumn>
+                                <f:facet name="header">Pay Now!</f:facet>
+                                <b:commandButton value="Pay Tutor" look="primary" action="#{paymentBean.payForTutoringSession(req)}" rendered="#{!requestBean.checkRequestTutorEmail(req.tutor) and paymentBean.checkCompletedStatus(req.session.payment.payKey)}"/>
                             </b:dataTableColumn>
                         </b:dataTable>  
                     </b:panel>

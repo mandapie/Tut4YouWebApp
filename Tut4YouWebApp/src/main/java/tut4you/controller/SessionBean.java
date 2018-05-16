@@ -21,11 +21,14 @@ import java.util.Date;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.ejb.EJB;
+import javax.enterprise.context.Conversation;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import javax.inject.Named;
 import tut4you.model.Course;
+import tut4you.model.Rating;
 import tut4you.model.Request;
 import tut4you.model.Session;
 import tut4you.model.Tut4YouApp;
@@ -53,20 +56,16 @@ public class SessionBean implements Serializable {
     private String securityQuestion;
     private User student;
 
+
     /**
-     * Creates an instance of the sessionBean
+     * SessionBean encapsulates all the functions/services involved in making a
+     * session
      */
     @PostConstruct
-    public void createSessionBean() {
+    public void SessionBean() {
         sessionTimer = new Session();
     }
 
-    /**
-     * Destroys an instance of the sessionBean
-     */
-    @PreDestroy
-    public void destroySessionBean() {
-    }
 
     /**
      * Get email of the users in a session
@@ -253,6 +252,7 @@ public class SessionBean implements Serializable {
      *
      */
     public String endTutorSession() {
+        
         return tut4youApp.endSessionTime(request, sessionTimer);
     }
 

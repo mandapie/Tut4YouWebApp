@@ -235,9 +235,7 @@ public class Tut4YouApp {
             requestQuery.setParameter("tutor_email", email);
             requestQuery.setParameter("status", Request.Status.ACCEPTED);
             list = requestQuery.getResultList();
-            System.out.println(list.size());
             List<Request> list2 = getStudentAcceptedRequestList(email);
-            System.out.println(list2.size());
             acceptedRequest = new ArrayList<>(list);
             acceptedRequest.addAll(list2);
         }
@@ -901,10 +899,12 @@ public class Tut4YouApp {
     public Rating createRating(Rating rating, Tutor tutor) {
         UserBean userBean = new UserBean();
         String currentUserEmail = userBean.getEmailFromSession();
+        Date date = new Date();
         if (currentUserEmail == null) {
             return null;
         } else {
             User student = findUser(currentUserEmail);
+            rating.setDateRated(date);
             if (student != null) {
                 student.addRating(rating);
                 rating.setStudent(student);
@@ -936,6 +936,8 @@ public class Tut4YouApp {
         if (updatedRating == null) {
             updatedRating = rating;
         }
+        Date date = new Date();
+        updatedRating.setDateRated(date);
         updatedRating.setDescription(description);
         updatedRating.setRatingValue(ratingValue);
         em.merge(updatedRating);
@@ -1064,7 +1066,6 @@ public class Tut4YouApp {
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public Session startSessionTime(Request r, Session sessionTimer) {
         Request request = em.find(Request.class, r.getId());
-        System.out.println(request);
         Date startTime = new Date();
         sessionTimer.setStartSessionTime(startTime);
         request.setSession(sessionTimer);
@@ -1152,7 +1153,6 @@ public class Tut4YouApp {
     public User getUser(String email) {
         TypedQuery<User> Query = em.createNamedQuery(User.FIND_USER_BY_EMAIL, User.class);
         Query.setParameter("email", email);
-        System.out.println(Query.getSingleResult());
         return Query.getSingleResult();
     }
 
@@ -1348,11 +1348,11 @@ public class Tut4YouApp {
      */
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-    public Date getDateJoinedAsTutor() {
+    public Date getDateJoinedAsTutor(String email) {
         UserBean userBean = new UserBean();
-        String currentUserEmail = userBean.getEmailFromSession();
+        //String currentUserEmail = userBean.getEmailFromSession();
         TypedQuery<Date> Query = em.createNamedQuery(Tutor.FIND_DATE_JOINED_BY_EMAIL, Date.class);
-        Query.setParameter("email", currentUserEmail);
+        Query.setParameter("email", email);
         return Query.getSingleResult();
     }
 
@@ -1724,7 +1724,6 @@ public class Tut4YouApp {
             if(payment.getPaymentStatus() != null)
             {
             if (payment.getPaymentStatus().equals("COMPLETED")) {
-                System.out.println(payment.getPaymentStatus());
                 break;
             }} else {
                 map = getPayments(payKeyList.get(x).getPayKey());

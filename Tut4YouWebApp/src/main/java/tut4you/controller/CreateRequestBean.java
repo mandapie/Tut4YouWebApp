@@ -75,7 +75,8 @@ public class CreateRequestBean implements Serializable {
     private List<Tutor> temp = new ArrayList();//adds this arraylist into tutorList
     private List<String> zipCodesByRadiusList = new ArrayList();//list of zipCodesByRadius based on a ZipCode
     private Date dayOfWeek;
-
+    private Tutor tutor;
+    
     /**
      * RequestBean encapsulates all the functions/services involved in making a
      * request
@@ -480,6 +481,17 @@ public class CreateRequestBean implements Serializable {
      */
     public void setDayOfWeek(Date dayOfWeek) {
         this.dayOfWeek = dayOfWeek;
+    }
+    public void findTutorByUsername(String username) {
+        tutor = tut4youApp.findTutorByUsername(username);
+        System.out.println("CURRENTZIP: " + tutor.getCurrentZip());
+    }
+    public Tutor getTutor() {
+        return tutor;
+    }
+
+    public void setTutor(Tutor tutor) {
+        this.tutor = tutor;
     }
 
 }

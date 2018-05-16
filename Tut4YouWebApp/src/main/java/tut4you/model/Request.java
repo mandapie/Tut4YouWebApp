@@ -46,7 +46,7 @@ import javax.persistence.TemporalType;
 @Table(name = "Request")
 @NamedQueries({
   
-    @NamedQuery(name = Request.FIND_REQUESTS_BY_USER, query = "SELECT r FROM Request r  JOIN r.student s WHERE s.email = :email"),
+    @NamedQuery(name = Request.FIND_REQUESTS_BY_USER, query = "SELECT r FROM Request r  JOIN r.student s WHERE s.email = :email ORDER BY r.id DESC" ),
     
     @NamedQuery(name = Request.FIND_REQUEST_BY_EMAIL, query = "SELECT r from Request r JOIN r.student s WHERE s.email = :student_email AND r.status = :status ORDER BY r.id DESC")
     ,

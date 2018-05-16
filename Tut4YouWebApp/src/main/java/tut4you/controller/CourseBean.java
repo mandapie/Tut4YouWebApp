@@ -34,6 +34,7 @@ import tut4you.model.Tut4YouApp;
 
 /**
  * Adds courses that exists in the database to the tutor.
+ *
  * @author Keith Tran <keithtran25@gmail.com>
  * @author Syed Haider <shayder426@gmail.com>
  * modified by Amanda Pan <daikiraidemodaisuki@gmail.com>
@@ -54,6 +55,7 @@ public class CourseBean implements Serializable {
     private List<Subject> subjectList = new ArrayList();
     private List<Course> courseList = new ArrayList();
     private List<Course> tutorCourses = new ArrayList();
+    private boolean addNewCourse = false;
 
     /**
      * Creates an instance of the courseBean
@@ -62,7 +64,7 @@ public class CourseBean implements Serializable {
     public void createCourseBean() {
         course = new Course();
     }
-    
+
     /**
      * Destroys an instance of the courseBean
      */
@@ -72,6 +74,7 @@ public class CourseBean implements Serializable {
 
     /**
      * Gets the subject
+     *
      * @return the subject
      */
     public Subject getSubject() {
@@ -80,6 +83,7 @@ public class CourseBean implements Serializable {
 
     /**
      * Sets the subject
+     *
      * @param s the subject associated to course
      */
     public void setSubject(Subject s) {
@@ -88,6 +92,7 @@ public class CourseBean implements Serializable {
 
     /**
      * Gets the course
+     *
      * @return the course
      */
     public Course getCourse() {
@@ -96,6 +101,7 @@ public class CourseBean implements Serializable {
 
     /**
      * Sets the course
+     *
      * @param course the course is set
      */
     public void setCourse(Course course) {
@@ -104,6 +110,7 @@ public class CourseBean implements Serializable {
 
     /**
      * Gets a list of the subjects in the EJB
+     *
      * @return a list of subjects
      */
     public List<Subject> getSubjectList() {
@@ -115,6 +122,7 @@ public class CourseBean implements Serializable {
 
     /**
      * Sets the subjectList
+     *
      * @param s list of subjects
      */
     public void setSubjectList(List<Subject> s) {
@@ -123,6 +131,7 @@ public class CourseBean implements Serializable {
 
     /**
      * Gets the courses of the tutor
+     *
      * @return list of courses of tutor
      */
     public List<Course> getTutorCourses() {
@@ -132,6 +141,7 @@ public class CourseBean implements Serializable {
 
     /**
      * Sets the courses of the tutor
+     *
      * @param tutorCourses
      */
     public void setTutorCourses(List<Course> tutorCourses) {
@@ -140,6 +150,7 @@ public class CourseBean implements Serializable {
 
     /**
      * Gets the list of courses
+     *
      * @return the list of courses
      */
     public List<Course> getCourseList() {
@@ -148,10 +159,19 @@ public class CourseBean implements Serializable {
 
     /**
      * Sets the list of courses
+     *
      * @param courseList list of courses
      */
     public void setCourseList(List<Course> courseList) {
         this.courseList = courseList;
+    }
+
+    public boolean isAddNewCourse() {
+        return addNewCourse;
+    }
+
+    public void setAddNewCourse(boolean addNewCourse) {
+        this.addNewCourse = addNewCourse;
     }
 
     /**
@@ -163,27 +183,27 @@ public class CourseBean implements Serializable {
 
     /**
      * Adds a new course to the tutor
+     *
      * @return course
      */
-    public String addCourse() {
-        String result = "failure";
+    public void addCourse() {
+        //String result = "failure";
         try {
             course = tut4youApp.addCourse(course);
             if (this.course != null) {
-                result = "success";
+                addNewCourse = course != null;
+                //result = "success";
             }
-        }
-        catch (CourseExistsException see) {
+        } catch (CourseExistsException see) {
             FacesContext.getCurrentInstance().addMessage("addCourseForm:courses", new FacesMessage("You have already taken this course."));
-            result = "addCourse";
-        }
-        catch (Exception e) {
+            //result = "addCourse";
+        } catch (Exception e) {
             LOGGER.log(Level.SEVERE, null, e);
-            result = "failure";
+            //result = "failure";
         }
-        return result;
+        //return result;
     }
-    
+
     public void deleteCourse(Course course) {
         tut4youApp.deleteCourse(course);
     }

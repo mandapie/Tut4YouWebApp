@@ -61,6 +61,11 @@
             <redirect/>
         </navigation-case>
         <navigation-case>
+            <from-outcome>myPayments</from-outcome>
+            <to-view-id>/accounts/myPayments.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>            
+        <navigation-case>
             <from-outcome>chat</from-outcome>
             <to-view-id>/accounts/message.xhtml</to-view-id>
             <redirect/>

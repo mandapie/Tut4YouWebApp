@@ -1952,4 +1952,10 @@ public class Tut4YouApp {
         transcriptPathQuery.setParameter("email", currentUserEmail);
         return transcriptPathQuery.getSingleResult() == null;
     }
+    
+    @PermitAll
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public Request findRequest(Long id) {
+        return em.find(Request.class, id);
+    }
 }

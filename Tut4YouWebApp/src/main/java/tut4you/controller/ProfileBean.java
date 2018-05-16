@@ -140,7 +140,6 @@ public class ProfileBean implements Serializable {
         this.dateJoinedAsTutor = dateJoinedAsTutor;
     }
 
-
     /**
      * This method is used to display the information
      * about a tutor on their profile.

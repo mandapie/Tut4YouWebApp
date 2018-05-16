@@ -1,5 +1,3 @@
-
-
 <ui:composition template="/WEB-INF/templates/layout.xhtml"
                 xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
@@ -34,140 +32,81 @@
     <script type="text/javascript" charset="utf-8">
         var dgFlowMini = new PAYPAL.apps.DGFlowMini({trigger: 'submitBtn'});
     </script>
-    <style class="paypalButton">
-
-    </style>
     <ui:define name="content">
-        <b:container fluid="true">
-            <h:panelGrid columns="1" style="text-align:center; margin-left: 34%">
-                <h1 style="font-weight:bold">My Sessions &amp; Reviews </h1>
-                <p:separator />                       
-            </h:panelGrid>
-            <b:column>
-                <b:form>
-                    <b:row>
-                        <b:panel title="Upcoming Sessions" collapsible="false" look="info">
-                            <b:dataTable value="#{requestBean.acceptedList}" var="req" id="accepetedTable">
-                                <b:dataTableColumn>
-                                    <f:facet name="header">Student</f:facet>
-                                    <h:outputText value="#{req.student.firstName} #{req.student.lastName}"/>
-                                </b:dataTableColumn>
-                                <b:dataTableColumn>
-                                    <f:facet name="header">Tutor</f:facet>
-                                    <h:link value="#{req.tutor.firstName} #{req.tutor.lastName}" outcome="tutorProfile" includeViewParams="true">
-                                        <f:param name="username" value="#{req.tutor.username}" />
-                                    </h:link>  
-                                </b:dataTableColumn>
-                                <b:dataTableColumn>
-                                    <f:facet name="header">Day Of Week</f:facet>
-                                    <h:outputText value="#{req.dayOfWeek}"/>
-                                </b:dataTableColumn>
-                                 <b:dataTableColumn>
-                                    <f:facet name="header">Time</f:facet>
-                                    <h:outputText value="#{req.currentTime}"/>
-                                </b:dataTableColumn>
-                                <b:dataTableColumn>
-                                    <f:facet name="header">Estimated Length of Session (Hours) </f:facet>
-                                    <h:outputText value="#{req.lengthOfSession}">
-                                        <f:convertNumber minFractionDigits="0" />
-                                    </h:outputText>
-                                </b:dataTableColumn>
-                            </b:dataTable>  
-                        </b:panel>
-                    </b:row>
-                    <b:row>
-                        <b:panel title="Previous Sessions" collapsible="false" look="info">
-                            <b:dataTable value="#{requestBean.completedList}" var="req" id="completedTable">
-                                <b:dataTableColumn>
-                                    <f:facet name="header">Student</f:facet>
-                                    <h:outputText value="#{req.student.firstName} #{req.student.lastName}"/>
-                                </b:dataTableColumn>
-                                <b:dataTableColumn>
-                                    <f:facet name="header">Tutor</f:facet>
-                                    <h:link value="#{req.tutor.firstName} #{req.tutor.lastName}" outcome="tutorProfile" includeViewParams="true">
-                                        <f:param name="username" value="#{req.tutor.username}" />
-                                    </h:link>                                
-                                </b:dataTableColumn>
-                                <b:dataTableColumn>
-                                    <f:facet name="header">Confirmation Number</f:facet>
-                                    <h:link value="#{req.session.payment.paymentId}" outcome="myPayments"/>
-                                </b:dataTableColumn>
+        <h1>My Sessions</h1>
 
-                                <b:dataTableColumn>
-                                    <f:facet name="header">Session Length</f:facet>
-                                    <h:outputText value="#{req.session.elapsedTimeOfSession}">
-                                        <f:convertNumber minFractionDigits="0" />
-                                    </h:outputText>
-                                </b:dataTableColumn>
-
-                                <b:dataTableColumn>
-                                    <f:facet name="header">Rating</f:facet>
-                                    <b:commandButton value="Write a Review" action="#{ratingBean.goToWriteReviewPage(req.tutor)}" rendered="#{!requestBean.checkRequestTutorEmail(req.tutor)}"/>
-                                </b:dataTableColumn>
-
-                                <b:dataTableColumn>
-                                    <f:facet name="header">Complaint</f:facet>
-                                    <b:button value="Report Tutor" outcome="submitComplaint" rendered="#{requestBean.isCheckRequestStudentEmail(req.student)}">
-                                        <f:param name="username" value="#{req.tutor.username}" />
-                                        <f:param name="id" value="#{req.id}" />
-                                    </b:button>
-                                    <b:button value="Report Student" outcome="submitComplaint" rendered="#{!requestBean.isCheckRequestStudentEmail(req.student)}">
-                                        <f:param name="username" value="#{req.student.username}" />
-                                        <f:param name="id" value="#{req.id}" />
-                                    </b:button>
-                                </b:dataTableColumn>
-                                <b:dataTableColumn>
-                                    <f:facet name="header">Pay Now!</f:facet>
-                                    <b:commandButton icon="fa-paypal" value="Pay Tutor" look="primary" action="#{paymentBean.payForTutoringSession(req)}" rendered="#{!requestBean.checkRequestTutorEmail(req.tutor) and paymentBean.checkCompletedStatus(req.session.payment.payKey)}"/>
-                                </b:dataTableColumn>
-                            </b:dataTable>  
-                        </b:panel>
-                    </b:row>
-                </b:form>
-            </b:column>
-            <h:panelGrid columns="1" style="text-align:center; margin-left: 42%">
-                <h1 style="font-weight:bold">My Reviews</h1>
-                <p:separator />                       
-            </h:panelGrid>
-            <b:column>
-                <c:if test="#{userBean.isTutor}">
-                    <p:dataScroller value="#{ratingBean.getRatingList(userBean.user.email)}" var="rating" chunkSize="10">
-                        <div style="border-bottom:solid 1px;">
-                            <b:row>
-                                <b:column tiny-screen="3">
-                                    <h:outputLabel value="#{rating.student.firstName} #{rating.student.lastName}"/>
-                                </b:column>
-                                <b:column tiny-screen="9">
-                                    <b:row>
-                                        <b:column tiny-screen="3">
-                                            <p:rating value="#{rating.ratingValue}" readonly="true"/>
-                                        </b:column>
-                                        <b:column>
-                                            <h:outputText value="#{rating.dateRated}">
-                                                <f:convertDateTime pattern="M-d-yyyy"/>
-                                            </h:outputText>
-                                        </b:column>
-                                    </b:row>
-                                    <b:row>
-                                        <b:column>
-                                            <h:outputText value="#{rating.description}"/>
-                                        </b:column>
-                                    </b:row>
-                                    <b:row style="margin-bottom:5px;">
-                                        <b:column>
-                                            <b:commandLink style="color:#6ba2ff;" value="Edit Rating" action="#{updateRatingBean.goToEditRatingPage(rating)}" rendered="#{profileBean.checkIfUserRated(rating.student.email)}"/>
-                                            <span/>
-                                            <b:commandLink style="color:#6ba2ff;" value="Delete Rating" action="#{ratingBean.deleteRating(rating)}" rendered="#{profileBean.checkIfUserRated(rating.student.email)}"/>
-                                        </b:column>
-                                    </b:row>
-                                </b:column>
-                            </b:row>
-                        </div>
-                        <br/>
-                    </p:dataScroller>
-                </c:if>
-            </b:column>
-        </b:container>
+        <b:panel title="Upcoming Sessions" collapsible="false" look="info">
+            <b:form>
+                <b:dataTable value="#{requestBean.acceptedRequests}" var="req" id="accepetedTable">
+                    <b:dataTableColumn>
+                        <f:facet name="header">Student</f:facet>
+                        <h:outputText value="#{req.student.firstName} #{req.student.lastName}"/>
+                    </b:dataTableColumn>
+                    <b:dataTableColumn>
+                        <f:facet name="header">Tutor</f:facet>
+                        <h:link value="#{req.tutor.firstName} #{req.tutor.lastName}" outcome="tutorProfile" includeViewParams="true">
+                            <f:param name="username" value="#{req.tutor.username}" />
+                        </h:link>  
+                    </b:dataTableColumn>
+                    <b:dataTableColumn>
+                        <f:facet name="header">Time</f:facet>
+                        <h:outputText value="#{req.dayOfWeek}"/>
+                        <span/>
+                        <h:outputText value="#{req.sessionTime}">
+                            <f:convertDateTime pattern="hh:mm a" />
+                        </h:outputText>
+                    </b:dataTableColumn>
+                    <b:dataTableColumn>
+                        <f:facet name="header">Estimated Length of Session (Hours) </f:facet>
+                        <h:outputText value="#{req.lengthOfSession}">
+                            <f:convertNumber minFractionDigits="0" />
+                        </h:outputText>
+                    </b:dataTableColumn>
+                </b:dataTable>
+            </b:form>
+        </b:panel>
+        <b:panel title="Previous Sessions" collapsible="false" look="info">
+            <b:form>
+                <b:dataTable value="#{requestBean.completedRequests}" var="req" id="completedTable">
+                    <b:dataTableColumn>
+                        <f:facet name="header">Student</f:facet>
+                        <h:outputText value="#{req.student.firstName} #{req.student.lastName}"/>
+                    </b:dataTableColumn>
+                    <b:dataTableColumn>
+                        <f:facet name="header">Tutor</f:facet>
+                        <h:link value="#{req.tutor.firstName} #{req.tutor.lastName}" outcome="tutorProfile" includeViewParams="true">
+                            <f:param name="username" value="#{req.tutor.username}" />
+                        </h:link>                                
+                    </b:dataTableColumn>
+                    <b:dataTableColumn>
+                        <f:facet name="header">Confirmation Number</f:facet>
+                        <h:link value="#{req.session.payment.paymentId}" outcome="myPayments"/>
+                    </b:dataTableColumn>
+                    <b:dataTableColumn>
+                        <f:facet name="header">Session Length</f:facet>
+                        <h:outputText value="#{req.session.elapsedTimeOfSession}">
+                            <f:convertNumber minFractionDigits="0" />
+                        </h:outputText>
+                    </b:dataTableColumn>
+                    <b:dataTableColumn>
+                        <f:facet name="header">Rating</f:facet>
+                        <b:commandButton value="Write a Review" action="#{ratingBean.goToWriteReviewPage(req.tutor)}" rendered="#{!requestBean.checkRequestTutorEmail(req.tutor)}"/>
+                    </b:dataTableColumn>
+                    <b:dataTableColumn>
+                        <f:facet name="header">Action</f:facet>
+                        <b:button value="Report Tutor" outcome="submitComplaint" rendered="#{requestBean.isCheckRequestStudentEmail(req.student)}">
+                            <f:param name="username" value="#{req.tutor.username}" />
+                            <f:param name="id" value="#{req.id}" />
+                        </b:button>
+                        <b:button value="Report Student" outcome="submitComplaint" rendered="#{!requestBean.isCheckRequestStudentEmail(req.student)}">
+                            <f:param name="username" value="#{req.student.username}" />
+                            <f:param name="id" value="#{req.id}" />
+                        </b:button>
+                        <b:commandButton icon="fa-paypal" value="Pay Tutor" look="primary" action="#{paymentBean.payForTutoringSession(req)}" rendered="#{requestBean.isCheckRequestStudentEmail(req.student) and paymentBean.checkCompletedStatus(req.session.payment.payKey)}"/>
+                    </b:dataTableColumn>
+                </b:dataTable>
+            </b:form> 
+        </b:panel>
         <ui:debug hotkey='x'/>
     </ui:define>
 </ui:composition>

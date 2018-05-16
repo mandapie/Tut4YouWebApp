@@ -27,6 +27,7 @@
     <ui:define name="content">
         <f:metadata>
             <f:event listener="#{createRequestBean.endConversation()}" type="preRenderView"></f:event>
+            <f:event listener="#{ratingBean.endConversation()}" type="preRenderView"></f:event>
         </f:metadata>
         <b:row>
             <h1>Dashboard</h1>

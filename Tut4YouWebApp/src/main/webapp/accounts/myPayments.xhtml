@@ -26,10 +26,6 @@
     -->
     <!-- @author Amanda Pan <daikiraidemodaisuki@gmail.com> -->
     <ui:define name="title">Sessions</ui:define>
-    <f:metadata>
-        <f:event listener="#{createRequestBean.endConversation()}"
-                 type="preRenderView"></f:event>
-    </f:metadata>
     <script src="https://www.paypalobjects.com/js/external/apdg.js" type="text/javascript"></script>
     <script type="text/javascript" charset="utf-8">
         var dgFlowMini = new PAYPAL.apps.DGFlowMini({trigger: 'submitBtn'});
@@ -50,16 +46,16 @@
                             <b:dataTable value="#{paymentBean.paymentList}" var="pay" id="payTable">
 
                                 <b:dataTableColumn>
-                                    <f:facet name="header">Transaction ID</f:facet>
-                                    <h:outputText value="#{pay.transactionId}"/>
+                                    <f:facet name="header">Payment ID</f:facet>
+                                    <h:outputText value="#{pay.paymentId}"/>
                                 </b:dataTableColumn>
                                 <b:dataTableColumn>
                                     <f:facet name="header">Date of Transaction</f:facet>
-                                    <h:outputText value="#{pay.timeOfTransaction}"/>
+                                    <h:outputText value="#{pay.timeOfPayment}"/>
                                 </b:dataTableColumn>
                                 <b:dataTableColumn>
                                     <f:facet name="header">Amount </f:facet>
-                                    <h:outputText value="#{pay.transactionAmount}">
+                                    <h:outputText value="#{pay.paymentAmount}">
                                         <f:convertNumber currencySymbol="$" type="currency" />
                                     </h:outputText>
                                 </b:dataTableColumn> 

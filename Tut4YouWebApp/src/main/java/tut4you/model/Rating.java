@@ -36,10 +36,10 @@ import javax.persistence.Table;
  * @author Syed Haider <shayder426@gmail.com>
  */
 @NamedQueries({
-    @NamedQuery(name = Rating.FIND_RATING_BY_EMAIL, query = "SELECT r from Rating r"),
-    @NamedQuery(name = Rating.FIND_RATING_BY_TUTOR, query = "SELECT r FROM Rating r JOIN r.tutor s WHERE s.email = :email"),
+    @NamedQuery(name = Rating.FIND_RATING_BY_EMAIL, query = "SELECT r from Rating r ORDER BY r.id DESC"),
+    @NamedQuery(name = Rating.FIND_RATING_BY_TUTOR, query = "SELECT r FROM Rating r JOIN r.tutor s WHERE s.email = :email ORDER BY r.id DESC"),
     @NamedQuery(name = Rating.FIND_AVG_RATING_BY_TUTOR, query = "SELECT AVG(r.ratingValue) FROM Rating r JOIN r.tutor s WHERE s.email = :email"),
-    @NamedQuery(name = Rating.FIND_RATING_BY_STUDENT, query = "SELECT r FROM Rating r JOIN r.student s WHERE s.email = :email"),
+    @NamedQuery(name = Rating.FIND_RATING_BY_STUDENT, query = "SELECT r FROM Rating r JOIN r.student s WHERE s.email = :email ORDER BY r.id DESC"),
 })
 
 @Entity

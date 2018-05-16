@@ -36,7 +36,7 @@
                         </c:if>
                     </c:when>
                     <c:otherwise>
-                        <b:navLink value="Login" outcome="/accounts/index.xhtml"/>
+                        <b:navLink value="Login" outcome="/accounts/index.xhtml" actionListener="#{ratingBean.endConversation();createRequestBean.endConversation()}" />
                     </c:otherwise>
                 </c:choose>
             </b:navbarLinks>
@@ -84,7 +84,10 @@
                         </c:otherwise>
                     </c:choose>
                     <b:form styleClass="navbar-form navbar-right">
-                        <b:commandButton action="#{userBean.logout}" actionListener="#{createRequestBean.endConversation()}" value="Sign Out" look="success" iconAlign="right"/>
+                        <b:commandButton action="#{userBean.logout}" value="Sign Out" look="success" iconAlign="right">
+                            <f:actionListener binding="#{createRequestBean.endConversation()}"/>
+                            <f:actionListener binding="#{ratingBean.endConversation()}"/>
+                        </b:commandButton>
                     </b:form>
                 </b:navbarLinks>  
             </c:if>

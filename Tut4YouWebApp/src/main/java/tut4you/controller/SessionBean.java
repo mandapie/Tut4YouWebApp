@@ -17,18 +17,14 @@
 package tut4you.controller;
 
 import java.io.Serializable;
-import java.util.Date;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.ejb.EJB;
-import javax.enterprise.context.Conversation;
-import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
-import javax.inject.Inject;
+import javax.faces.view.ViewScoped;
 import javax.inject.Named;
-import tut4you.model.Course;
-import tut4you.model.Rating;
 import tut4you.model.Request;
 import tut4you.model.Session;
 import tut4you.model.Tut4YouApp;
@@ -40,56 +36,46 @@ import tut4you.model.User;
  * @author Syed Haider <shayder426@gmail.com>
  */
 @Named
-@SessionScoped
+@ViewScoped
 public class SessionBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @EJB
-    private Tut4YouApp tut4youApp;
-
-    private String email;
-    private boolean checkAnswer;
+    private Tut4YouApp tut4youapp;
+    @ManagedProperty("#{param.id}")
+    private Long id; //requestId
     private Request request;
+    private boolean correctAnswer;
     private Session sessionTimer;
     private String securityAnswer;
     private String securityQuestion;
     private User student;
-
-
-    /**
-     * SessionBean encapsulates all the functions/services involved in making a
-     * session
-     */
-    @PostConstruct
-    public void SessionBean() {
-        sessionTimer = new Session();
-    }
-
-
-    /**
-     * Get email of the users in a session
-     * @return email
-     */
-    public String getEmail() {
-        return email;
-    }
-
-    /**
-     * Sets email of the users in a session
-     * @param email 
-     */
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     /**
      * This will check if the "Start Button" on the "sessionTimer.xhtml" page
      * has been clicked.
      */
     private boolean checkStartButtonState = false;
     private boolean checkEndButtonState = true;
+    
+    @PostConstruct
+    public void createSessionBean() {
+        sessionTimer = new Session();
+    }
+    
+    @PreDestroy
+    public void destroySessionBean() {
+        
+    }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+    
     /**
      * Gets checkStartButtonState
      *
@@ -137,7 +123,6 @@ public class SessionBean implements Serializable {
 
     /**
      * Sets the student of the session
-     *
      *
      * @param student - student of session
      */
@@ -218,22 +203,22 @@ public class SessionBean implements Serializable {
     }
 
     /**
-     * Gets checkAnswer (true if security answer is correct)
+     * Gets correctAnswer (true if security answer is correct)
      *
-     * @return checkAnswer true if email is the same
+     * @return correctAnswer true if email is the same
      */
-    public boolean isCheckAnswer() {
-        return checkAnswer;
+    public boolean isCorrectAnswer() {
+        return correctAnswer;
     }
 
     /**
-     * Sets the checkAnswer attribute to true or false depending on if the
-     * security answer is equivalent
+     * Sets the correctAnswer attribute to true or false depending on if the
+ security answer is equivalent
      *
-     * @param checkAnswer
+     * @param correctAnswer
      */
-    public void setCheckAnswer(boolean checkAnswer) {
-        this.checkAnswer = checkAnswer;
+    public void setCorrectAnswer(boolean correctAnswer) {
+        this.correctAnswer = correctAnswer;
     }
 
     /**
@@ -241,7 +226,7 @@ public class SessionBean implements Serializable {
      *
      */
     public void startTutorSession() {
-        sessionTimer = tut4youApp.startSessionTime(request, sessionTimer);
+        sessionTimer = tut4youapp.startSessionTime(request, sessionTimer);
         checkStartButtonState = true;
         checkEndButtonState = false;
     }
@@ -250,27 +235,23 @@ public class SessionBean implements Serializable {
      * This ends the tutoring session and sets the request to be a complete
      * status
      *
+     * @return 
      */
     public String endTutorSession() {
-        
-        return tut4youApp.endSessionTime(request, sessionTimer);
+        return tut4youapp.endSessionTime(request, sessionTimer);
     }
 
     /**
      *
      * This checks to see if the securityAnswer answers the security question
-     *
-     * @param answer the answer inputted
-     * @return true if answer is correct
      */
-    public boolean checkAnswer(String answer) {
+    public void checkAnswer() {
         String email = request.getStudent().getEmail();
-        checkAnswer = tut4youApp.checkAnswer(answer, email);
-        if (!checkAnswer) {
-            FacesMessage message = new FacesMessage("Answer is false. Try again.");
+        correctAnswer = tut4youapp.checkAnswer(securityAnswer, email);
+        if (!correctAnswer) {
+            FacesMessage message = new FacesMessage("Incorrect Answer","Try again.");
             FacesContext.getCurrentInstance().addMessage(null, message);
         }
-        return checkAnswer;
     }
 
     /**
@@ -298,4 +279,7 @@ public class SessionBean implements Serializable {
         context.addMessage(null, new FacesMessage("Successful!", "You started your session!"));
     }
 
+    public void showRequestId(Long id) {
+        request = tut4youapp.findRequest(id);
+    }
 }

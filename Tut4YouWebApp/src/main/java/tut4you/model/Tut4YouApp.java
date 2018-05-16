@@ -32,13 +32,7 @@ import com.paypal.svcs.types.common.RequestEnvelope;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import javax.ejb.Stateless;
 import java.util.List;
@@ -53,10 +47,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
 import tut4you.exception.*;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.concurrent.TimeUnit;
-import javax.faces.application.FacesMessage;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -1098,7 +1089,6 @@ public class Tut4YouApp {
         double hours = minutes / 60;
         sessionTimer.setElapsedTimeOfSession(hours);
         em.merge(sessionTimer);
-
         Tutor tutor = findTutor(currentUserEmail);
         Request request = em.find(Request.class, r.getId());
         request.setStatus(Request.Status.COMPLETED);
@@ -1671,7 +1661,7 @@ public class Tut4YouApp {
      */
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-    public String generatePayKey(String email, double hourlyRate) {
+    public String generatePayKey(String email, double hourlyRate, double elapsedTimeOfSession) {
         PayRequest payRequest = new PayRequest();
         try {
             RequestEnvelope env = new RequestEnvelope();
@@ -1681,8 +1671,8 @@ public class Tut4YouApp {
             /**
              * FIXME: This needs to take in hourly rate * elapsed time
              */
-            //rec.setAmount(hourlyRate * elapsedTimeOfSession);
-            rec.setAmount(hourlyRate);
+            double amount = Math.round(hourlyRate * elapsedTimeOfSession * 100.0) / 100.0;
+            rec.setAmount(amount);
             rec.setEmail(email);
             receiver.add(rec);
             String returnUrl = "http://localhost:8080/Tut4YouWebApp/accounts/myPayments.xhtml";
@@ -1952,4 +1942,19 @@ public class Tut4YouApp {
         return isComplaintSubmitted;
     }
 
+    @PermitAll
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public boolean hasSubmittedTranscript() {
+        UserBean userBean = new UserBean();
+        String currentUserEmail = userBean.getEmailFromSession();
+        TypedQuery<String> transcriptPathQuery = em.createNamedQuery(Tutor.FIND_TRANSCRIPT_PATH_BY_EMAIL, String.class);
+        transcriptPathQuery.setParameter("email", currentUserEmail);
+        return transcriptPathQuery.getSingleResult() == null;
+    }
+    
+    @PermitAll
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public Request findRequest(Long id) {
+        return em.find(Request.class, id);
+    }
 }

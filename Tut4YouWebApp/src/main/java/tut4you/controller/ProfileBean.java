@@ -18,7 +18,6 @@ package tut4you.controller;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -140,7 +139,6 @@ public class ProfileBean implements Serializable {
     public void setDateJoinedAsTutor(String dateJoinedAsTutor) {
         this.dateJoinedAsTutor = dateJoinedAsTutor;
     }
-
 
     /**
      * This method is used to display the information

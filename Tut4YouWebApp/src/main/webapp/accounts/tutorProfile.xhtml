@@ -25,13 +25,8 @@
     <!-- @author Amanda Pan <daikiraidemodaisuki@gmail.com> -->
     <f:metadata>
         <f:viewParam name="username" value="#{profileBean.username}"/>
-        <f:event type="preRenderView" listener="#{profileBean.showUsername(profileBean.username)}">
-        </f:event>
-
-    </f:metadata>
-    <f:metadata>
-        <f:event listener="#{ratingBean.initConversation()}"
-                 type="preRenderView"></f:event>
+        <f:event listener="#{profileBean.showUsername(profileBean.username)}" type="preRenderView"/>
+        <f:event listener="#{createRequestBean.endConversation()}" type="preRenderView"/>
     </f:metadata>
     <ui:define name="title">Tutor's Profile Page</ui:define>
     <ui:define name="content">
@@ -45,7 +40,7 @@
                     <h:outputText value="#{profileBean.user.firstName} #{profileBean.user.lastName}"/>
                 </b:column>
                 <b:column small-screen="8">
-                    <h:outputText style="font-weight:bold" value="Joined Date: #{profileBean.getDateJoinedAsTutor(profileBean.user.username)}"/>
+                    <h:outputText value="joined since #{profileBean.getDateJoinedAsTutor(profileBean.user.username)}"/>
                 </b:column>
             </b:row>
             <b:row>
@@ -78,24 +73,17 @@
                 <div style="border-bottom:solid 1px;">
                     <b:row>
                         <b:column small-screen="3">
-                            <b:row>
-                                <b:column>
-                                    <h:outputLabel value="#{rating.student.firstName} #{rating.student.lastName}"/>
-                                </b:column>
-                            </b:row>
+                            <h:outputLabel value="#{rating.student.firstName} #{rating.student.lastName}"/>
+                        </b:column>
+                        <b:column small-screen="9">
                             <b:row>
                                 <b:column tiny-screen="3">
-                                    <h:outputText style="font-weight:bold" value="#{rating.dateRated}">
+                                    <p:rating value="#{rating.ratingValue}" readonly="true"/>
+                                </b:column>
+                                <b:column tiny-screen="6">
+                                    <h:outputText value="#{rating.dateRated}">
                                         <f:convertDateTime pattern="M-d-yyyy"/>
                                     </h:outputText>
-                                </b:column>
-                                <hr width="1" size="500"/>
-                            </b:row>
-                        </b:column>
-                        <b:column small-screen="5">
-                            <b:row>
-                                <b:column>
-                                    <p:rating value="#{rating.ratingValue}" readonly="true"/>
                                 </b:column>
                             </b:row>
                             <b:row>
@@ -105,9 +93,9 @@
                             </b:row>
                             <b:row style="margin-bottom:5px;">
                                 <b:column>
-                                    <b:commandButton look="primary" value="Edit Rating" action="#{updateRatingBean.goToEditRatingPage(rating)}" rendered="#{profileBean.checkIfUserRated(rating.student.email)}"/>
+                                    <b:commandLink style="color:#6ba2ff;" value="Edit Rating" action="#{updateRatingBean.goToEditRatingPage(rating)}" rendered="#{profileBean.checkIfUserRated(rating.student.email)}"/>
                                     <span/>
-                                    <b:commandButton look="danger" value="Delete Rating" action="#{ratingBean.deleteRating(rating)}" rendered="#{profileBean.checkIfUserRated(rating.student.email)}"/>
+                                    <b:commandLink style="color:#6ba2ff;" value="Delete Rating" action="#{ratingBean.deleteRating(rating)}" rendered="#{profileBean.checkIfUserRated(rating.student.email)}"/>
                                 </b:column>
                             </b:row>
                         </b:column>

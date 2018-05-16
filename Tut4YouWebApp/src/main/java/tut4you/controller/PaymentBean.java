@@ -25,7 +25,6 @@ import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.ejb.EJB;
-import javax.enterprise.context.SessionScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
@@ -174,10 +173,10 @@ public class PaymentBean implements Serializable {
     public boolean checkCompletedStatus(String payKey) {
         if (payKey != null && !payKey.isEmpty()) {
             paymentStatus = !tut4youApp.checkCompletedStatus(payKey);
-            return paymentStatus;
         } else {
-            return true;
+            paymentStatus = true;
         }
+        return paymentStatus;
     }
 
     /**
@@ -185,17 +184,16 @@ public class PaymentBean implements Serializable {
      * Sessions" page. Student will be redirected to Paypal to pay for the
      * tutoring session.
      *
-     * @param tutor the tutor getting paid
-     * @param session the session for which the tutor is getting paid
      * @param request the completed request in the tutoring session
      */
     public void payForTutoringSession(Request request) {
         String payKey;
         this.session = request.getSession();
+        System.out.println(session);
         this.tutor = request.getTutor();
         String email = tutor.getEmail();
         double hourlyRate = tutor.getHourlyRate();
-        payKey = tut4youApp.generatePayKey(email, hourlyRate);
+        payKey = tut4youApp.generatePayKey(email, hourlyRate, session.getElapsedTimeOfSession());
         
         //This redirects the user to an external website (paypal's payment sandbox URL)
         ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();

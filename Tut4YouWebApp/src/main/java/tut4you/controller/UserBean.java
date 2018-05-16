@@ -54,8 +54,8 @@ public class UserBean implements Serializable {
 
     private static final Logger LOGGER = Logger.getLogger("UserBean");
     
-    @Inject
-    private RequestBean requestBean;
+//    @Inject
+//    private RequestBean requestBean;
     @EJB
     private Tut4YouApp tut4youapp;
 
@@ -86,6 +86,7 @@ public class UserBean implements Serializable {
     @PreDestroy
     public void destroyUserBean() {
     }
+    
     public FlaggedUser getFlaggedUser() {
         return flaggedUser;
     }
@@ -271,6 +272,25 @@ public class UserBean implements Serializable {
         }
         return isTutor;
     }
+    
+    /**
+     * Determine if current authenticated user has the role of moderator
+     *
+     * @return
+     */
+    public boolean isIsModerator() {
+        boolean isModerator = false;
+        if (this.isIsUserAuthenticated()) {
+            FacesContext context = FacesContext.getCurrentInstance();
+            HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+            isModerator = request.isUserInRole("tut4youapp.moderator");
+        }
+        return isModerator;
+    }
+    
+    public boolean isSubmittedTranscript() {
+        return tut4youapp.hasSubmittedTranscript();
+    }
 
     /**
      * login method to check user is a registered user who is
@@ -312,7 +332,6 @@ public class UserBean implements Serializable {
                     else if(count >= 4) {
                         suspensionLength = "User has been banned";
                     }
-                    
                     context.addMessage("login:pass", new FacesMessage(suspensionLength));
                     return "login";
                 }
@@ -384,7 +403,6 @@ public class UserBean implements Serializable {
         if (tutor.getCurrentZip() != null) {
             condition = false;
         }
-        
     }
 
     /**
@@ -418,27 +436,24 @@ public class UserBean implements Serializable {
     /**
      * confirms if the user entered the correct password and if so allows them
      * to change their password
-     * @param oldPassword
-     * @param newPassword
      * @return
      */
-    public String changePassword(String oldPassword, String newPassword) {
+    public String changePassword() {
         FacesContext context = FacesContext.getCurrentInstance();
         String confirmPassword = tut4you.controller.HashPassword.getSHA512Digest(oldPassword);
         String result;
-
         String currentPassword = user.getPassword();
-
         if (confirmPassword.equalsIgnoreCase(currentPassword)) {
             tut4youapp.changePassword(tut4you.controller.HashPassword.getSHA512Digest(newPassword));
-            context.addMessage(null, new FacesMessage("Successful", "Password successfully changed"));
+            context.addMessage(null, new FacesMessage("Success","You have successfully changed your password"));
             result = "updateProfile";
         } else {
-            context.addMessage(null, new FacesMessage("Failed", "Password entered does not match your current password"));
-            result = "failure";
+            context.addMessage(null, new FacesMessage("Incorrect Password","Password entered does not match your current password"));
+            result = "changePassword";
         }
         return result;
     }
+    
     public boolean checkIfSuspended(Date logInTime) {
         flaggedUser = findFlaggedUser(email);
         if (flaggedUser != null) {
@@ -464,6 +479,4 @@ public class UserBean implements Serializable {
         flaggedUser = tut4youapp.checkFlaggedUserLogIn(email);
         return flaggedUser;
     }
-    
-
 }

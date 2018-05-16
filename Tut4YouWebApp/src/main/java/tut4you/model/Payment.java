@@ -38,7 +38,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "Payment")
 @NamedQueries({
-    @NamedQuery(name = Payment.FIND_PAYMENTS_BY_EMAIL, query = "SELECT p FROM Payment p")
+    @NamedQuery(name = Payment.FIND_PAYMENTS_BY_EMAIL, query = "SELECT p FROM Payment p JOIN p.student s JOIN p.tutor t WHERE s.email = :email OR t.email = :email")
     ,
         @NamedQuery(name = Payment.FIND_PAYMENTS_BY_PAYKEY, query = "SELECT p FROM Payment p WHERE p.payKey = :payKey"),})
 public class Payment implements Serializable {
@@ -244,43 +244,5 @@ public class Payment implements Serializable {
     public void setStudent(User student) {
         this.student = student;
     }
-
-    /**
-     * Override hashCode
-     *
-     * @return hash
-     */
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (payKey != null ? payKey.hashCode() : 0);
-        return hash;
-    }
-
-    /**
-     * Overrides the equals method
-     *
-     * @param object
-     * @return true if object is Payment, else false
-     */
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Payment)) {
-            return false;
-        }
-        Payment other = (Payment) object;
-        return !((this.payKey == null && other.payKey != null) || (this.payKey != null && !this.payKey.equals(other.payKey)));
-    }
-
-    /**
-     * Override toString
-     *
-     * @return payKey attributes
-     */
-    @Override
-    public String toString() {
-        return "tut4you.model.Payment[ payKey=" + payKey + " ]";
-    }
-
 }
+ 

@@ -190,7 +190,7 @@ public class ComplaintBean implements Serializable {
         AccessControlList acl = new AccessControlList();
         acl.grantPermission(GroupGrantee.AllUsers, Permission.Write);
         try {
-            tutor = tut4youApp.findTutorEmail(complaint.getReportedUser().getUsername());
+            tutor = tut4youApp.findTutorByUsername(complaint.getReportedUser().getUsername());
        
                  String keyName = tutor.getTranscriptFilePath();
             if (keyName == null){

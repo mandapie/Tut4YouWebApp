@@ -113,6 +113,7 @@ public class PaymentBean implements Serializable {
      * @return paymentList - list of payments
      */
     public List<Payment> getPaymentList() {
+        System.out.println("Just got called from the bean");
         paymentList = tut4youApp.getPaymentList();
         return paymentList;
     }
@@ -185,16 +186,21 @@ public class PaymentBean implements Serializable {
      *
      * @param tutor the tutor getting paid
      * @param session the session for which the tutor is getting paid
+     * @param request the completed request in the tutoring session
      */
-    public void payForTutoringSession(Request request, Session session) {
+    public void payForTutoringSession(Request request) {
         String payKey;
+        this.session = request.getSession();
+        this.tutor = request.getTutor();
         String email = tutor.getEmail();
         double hourlyRate = tutor.getHourlyRate();
-        this.tutor = tutor;
         payKey = tut4youApp.generatePayKey(email, hourlyRate);
+        
         //This redirects the user to an external website (paypal's payment sandbox URL)
         ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
         String url = "https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_ap-payment&paykey=" + payKey;
+        
+        //Creates the payment in the database
         payment = tut4youApp.createPayment(payKey, session, request);
         try {
             externalContext.redirect(url);

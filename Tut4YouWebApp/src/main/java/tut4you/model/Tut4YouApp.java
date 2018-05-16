@@ -792,7 +792,7 @@ public class Tut4YouApp {
      */
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-    public Tutor findTutorEmail(String username) {
+    public Tutor findTutorByUsername(String username) {
         TypedQuery<Tutor> tutorQuery = em.createNamedQuery(Tutor.FIND_TUTOR_BY_USERNAME, Tutor.class);
         tutorQuery.setParameter("username", username);
         return tutorQuery.getSingleResult();
@@ -1617,7 +1617,7 @@ public class Tut4YouApp {
              */
             //rec.setAmount(hourlyRate * elapsedTimeOfSession);
             rec.setAmount(hourlyRate);
-            rec.setEmail("briantesting1@gmail.com");
+            rec.setEmail(email);
             receiver.add(rec);
             String returnUrl = "http://localhost:8080/Tut4YouWebApp/accounts/myPayments.xhtml";
             String cancelUrl = "http://localhost:8080/Tut4YouWebApp/accounts/index.xhtml";
@@ -1721,9 +1721,12 @@ public class Tut4YouApp {
             //This will use the paykey to get details of the payment
             //and store it into a map
             Payment payment = em.find(Payment.class, payKeyList.get(x).getPayKey());
+            if(payment.getPaymentStatus() != null)
+            {
             if (payment.getPaymentStatus().equals("COMPLETED")) {
+                System.out.println(payment.getPaymentStatus());
                 break;
-            } else {
+            }} else {
                 map = getPayments(payKeyList.get(x).getPayKey());
                 payment = em.find(Payment.class, payKeyList.get(x).getPayKey());
                 payment.setPaymentAmount(Double.parseDouble(map.get("paymentInfoList.paymentInfo(0).receiver.amount")));

@@ -166,10 +166,12 @@
                                 <f:facet name="header">Student</f:facet>
                                 <h:outputText value="#{req.student.firstName}"/>
                             </b:dataTableColumn>
+                            <c:if test="#{userBean.isTutor}">
                             <b:dataTableColumn>
                                 <f:facet name="header">Action</f:facet>
                                 <b:commandButton value="Start Session" action="#{sessionBean.goToSessionTimerPage(req)}"/>                        
                             </b:dataTableColumn>
+                        </c:if>
                         </b:dataTable>  
                     </b:panel>
                 </b:row>

@@ -104,7 +104,7 @@
                                 </b:dataTableColumn>
                                 <b:dataTableColumn>
                                     <f:facet name="header">Pay Now!</f:facet>
-                                    <b:commandButton value="Pay Tutor" look="primary" action="#{paymentBean.payForTutoringSession(req.tutor,req.session)}" rendered="#{!requestBean.checkRequestTutorEmail(req.tutor) and paymentBean.checkCompletedStatus(req.session.payment.payKey)}"/>
+                                    <b:commandButton value="Pay Tutor" look="primary" action="#{paymentBean.payForTutoringSession(req)}" rendered="#{!requestBean.checkRequestTutorEmail(req.tutor) and paymentBean.checkCompletedStatus(req.session.payment.payKey)}"/>
                                 </b:dataTableColumn>
                             </b:dataTable>  
                         </b:panel>

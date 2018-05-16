@@ -81,6 +81,7 @@ public class RatingBean implements Serializable {
 
     /**
      * Gets the Rating entity
+     *
      * @return the rating entity
      */
     public Rating getRating() {
@@ -89,6 +90,7 @@ public class RatingBean implements Serializable {
 
     /**
      * Sets the Rating entity
+     *
      * @param rating the rating entity
      */
     public void setRating(Rating rating) {
@@ -119,15 +121,16 @@ public class RatingBean implements Serializable {
     }
 
     public void showUsername(String username) {
-        this.tutor = findTutorEmail(username);
+        this.tutor = findTutorByUsername(username);
     }
 
-    public Tutor findTutorEmail(String username) {
-        return tut4youApp.findTutorEmail(username);
+    public Tutor findTutorByUsername(String username) {
+        return tut4youApp.findTutorByUsername(username);
     }
 
     /**
      * Convert string to Time
+     *
      * @param time
      * @return
      * @throws java.text.ParseException
@@ -141,7 +144,7 @@ public class RatingBean implements Serializable {
     public String createNewRating() throws ParseException {
         String result = "success";
         Date date = new Date();
-        if(rating.getRatingValue()<=0) {
+        if (rating.getRatingValue() <= 0) {
             FacesMessage message = new FacesMessage("Click 1-5 stars!");
             FacesContext.getCurrentInstance().addMessage(null, message);
         }
@@ -153,6 +156,7 @@ public class RatingBean implements Serializable {
 
     /**
      * Updates the current rating of the tutor
+     *
      * @param rating
      * @return
      * @throws java.text.ParseException
@@ -175,6 +179,7 @@ public class RatingBean implements Serializable {
 
     /**
      * Delete the rating from the tutor
+     *
      * @param rating
      * @throws java.text.ParseException
      */
@@ -182,7 +187,7 @@ public class RatingBean implements Serializable {
         tut4youApp.deleteRating(rating);
         tut4youApp.updateAverageRating(rating.getTutor().getEmail());
     }
-    
+
     public List<Request> getRequestList() {
         requestList = tut4youApp.getCompletedRequests();
         return requestList;
@@ -190,6 +195,7 @@ public class RatingBean implements Serializable {
 
     /**
      * Gets a list of the availabilities of the Tutor in the EJB
+     *
      * @param email
      * @return a list of subjects
      */

@@ -32,12 +32,7 @@ import com.paypal.svcs.types.common.RequestEnvelope;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import javax.ejb.Stateless;
 import java.util.List;
@@ -52,10 +47,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
 import tut4you.exception.*;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.concurrent.TimeUnit;
-import javax.faces.application.FacesMessage;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -1900,5 +1892,14 @@ public class Tut4YouApp {
         return isComplaintSubmitted;
     }
 
+    @PermitAll
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public boolean hasSubmittedTranscript() {
+        UserBean userBean = new UserBean();
+        String currentUserEmail = userBean.getEmailFromSession();
+        TypedQuery<String> transcriptPathQuery = em.createNamedQuery(Tutor.FIND_TRANSCRIPT_PATH_BY_EMAIL, String.class);
+        transcriptPathQuery.setParameter("email", currentUserEmail);
+        return transcriptPathQuery.getSingleResult() == null;
+    }
 }
 

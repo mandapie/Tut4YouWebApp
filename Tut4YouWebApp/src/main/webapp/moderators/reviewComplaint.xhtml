@@ -25,7 +25,7 @@
     <!-- @author Andrew Kaichi <ahkaichi@gmail.com> -->
     <f:metadata>
         <f:viewParam name="id" value="#{complaintBean.id}"/>
-        <f:event type="preRenderView" listener="#{complaintBean.showID(complaintBean.id)}">
+        <f:event type="preRenderView" listener="#{complaintBean.showComplaintID(complaintBean.id)}">
         </f:event>
     </f:metadata>
     <ui:define name="title">Review Complaint</ui:define>
@@ -48,7 +48,10 @@
             </b:row>
             <b:row>
                 <b:column>
-                    <b:commandButton value="Suspend User" look="danger" action="#{complaintBean.flagUser()}" />
+                    <b:commandButton value="Suspend User" look="danger" action="#{complaintBean.flagUser(complaintBean.complaint.reportedUser.email,'suspend')}" />
+                </b:column>
+                <b:column>
+                    <b:commandButton value="Ban User" look="danger" action="#{complaintBean.flagUser(complaintBean.complaint.reportedUser.email,'ban')}" />
                 </b:column>
                 <b:column>
                     <b:commandButton value="Close Complaint" look="primary" action="#{complaintBean.closeComplaint()}"/>
@@ -59,7 +62,7 @@
                     <b:column>
                         <h:outputLabel value="Transcript "/>
                         <b:column>
-                            <p:commandButton value="Download Transcript" action="#{complaintBean.downloadTranscript}" ajax="false" />
+                            <p:commandButton value="Download Transcript" action="#{complaintBean.downloadTranscript(complaintBean.complaint.reportedUser.username)}" ajax="false" />
                         </b:column>
                     </b:column>
                 </c:if>

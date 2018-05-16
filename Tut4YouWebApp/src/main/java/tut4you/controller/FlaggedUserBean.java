@@ -60,7 +60,7 @@ public class FlaggedUserBean implements Serializable {
     public void setFlaggedUser(FlaggedUser flaggedUser) {
         this.flaggedUser = flaggedUser;
     }
-    public FlaggedUser findFlaggedUserbean(String email) {
+    public FlaggedUser findFlaggedUser(String email) {
         flaggedUser = tut4youApp.findFlaggedUser(email);
         return flaggedUser;
     }
@@ -93,7 +93,7 @@ public class FlaggedUserBean implements Serializable {
             return true;
         }
         
-        else if(count == 4) {
+        else if(count >= 4) {
             return true;
         }
         else {

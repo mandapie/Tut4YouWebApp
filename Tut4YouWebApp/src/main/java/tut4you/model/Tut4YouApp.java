@@ -191,8 +191,8 @@ public class Tut4YouApp {
             return requestQuery.getResultList();
         }
     }
-
     /**
+     * Gets a list of accepted requests
      *
      * @return a list of requests from a user
      */
@@ -201,29 +201,37 @@ public class Tut4YouApp {
     public List<Request> getAcceptedRequestList() {
         UserBean userBean = new UserBean();
         String currentUserEmail = userBean.getEmailFromSession();
-        String email;
-        Tutor tutor;
-        User user;
-        TypedQuery<Request> requestQuery;
-        List<Request> list;
         if (currentUserEmail == null) {
             return null;
         }
-        tutor = findTutor(currentUserEmail);
+        Tutor tutor = findTutor(currentUserEmail);
         if (tutor == null) {
-            user = findUser(currentUserEmail);
-            email = user.getEmail();
-            requestQuery = em.createNamedQuery(Request.FIND_REQUEST_BY_EMAIL, Request.class);
+            User user = findUser(currentUserEmail);
+            String email = user.getEmail();
+            
+            TypedQuery<Request> requestQuery = em.createNamedQuery(Request.FIND_REQUEST_BY_EMAIL, Request.class);
             requestQuery.setParameter("student_email", email);
-
+            requestQuery.setParameter("status", Request.Status.ACCEPTED);
+            List<Request> list = requestQuery.getResultList();
+            
+            return list;
         } else {
-            email = tutor.getEmail();
-            requestQuery = em.createNamedQuery(Request.FIND_REQUEST_BY_TUTOR_EMAIL, Request.class);
+            String email = currentUserEmail;
+            TypedQuery<Request> requestQuery = em.createNamedQuery(Request.FIND_REQUEST_BY_TUTOR_EMAIL, Request.class);
             requestQuery.setParameter("tutor_email", email);
+            requestQuery.setParameter("status", Request.Status.ACCEPTED);
+            List<Request> list = requestQuery.getResultList();
+            
+            TypedQuery<Request> request2Query = em.createNamedQuery(Request.FIND_REQUEST_BY_EMAIL, Request.class);
+            request2Query.setParameter("student_email", email);
+            request2Query.setParameter("status", Request.Status.ACCEPTED);
+            List<Request> list2 = request2Query.getResultList();
+            
+            List<Request> acceptedRequest = new ArrayList<>(list);
+            acceptedRequest.addAll(list2);
+            
+            return acceptedRequest;
         }
-        requestQuery.setParameter("status", Request.Status.ACCEPTED);
-        list = requestQuery.getResultList();
-        return list;
     }
 
     /**
@@ -719,22 +727,19 @@ public class Tut4YouApp {
         query.setParameter("username", username);
         return query.getSingleResult();
         
-    }
-            
-            /**
+    }        
+    /**
      * Gets a user by finding the email in the user entity.
      *
      * @param email
      * @return user email
+     * @author Keith Tran <keithtran25@gmail.com>
      */
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-
-    public FlaggedUser
-            findflaggeduser(String email) {
+    public FlaggedUser findflaggeduser(String email) {
         return em.find(FlaggedUser.class, findUser(email).getFlaggedUser().getId());
     }
-
     /**
      * Gets a tutor by finding the email in the tutor entity.
      *
@@ -757,7 +762,7 @@ public class Tut4YouApp {
      */
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-    public Tutor findTutorEmail(String username) {
+    public Tutor findTutorByUsername(String username) {
         TypedQuery<Tutor> tutorQuery = em.createNamedQuery(Tutor.FIND_TUTOR_BY_USERNAME, Tutor.class);
         tutorQuery.setParameter("username", username);
         return tutorQuery.getSingleResult();
@@ -766,8 +771,7 @@ public class Tut4YouApp {
     /**
      * Find low rating tutors of 2 stars or lower
      *
-     * @param username
-     * @return moderator application
+     * @return Low rating tutor
      * @Keith <keithtran25@gmail.com>
      */
     @RolesAllowed("tut4youapp.moderator")
@@ -775,6 +779,7 @@ public class Tut4YouApp {
     public List<Tutor> findLowRatingTutors() {
         TypedQuery<Tutor> query = em.createNamedQuery(Tutor.FIND_LOW_RATING_TUTORS, Tutor.class);
         query.setParameter("overallRating", 2);
+        
         return query.getResultList();
     }
 
@@ -793,9 +798,9 @@ public class Tut4YouApp {
         return query.getSingleResult();
     }
     /**
-     * Gets a complaint by finding the email in the entity.
+     * Gets a complaint by finding the id in the entity.
      *
-     * @param username
+     * @param id
      * @return moderator application
      * @Keith <keithtran25@gmail.com>
      */
@@ -803,6 +808,20 @@ public class Tut4YouApp {
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public Complaint findComplaint(int id) {
         TypedQuery<Complaint> query = em.createNamedQuery(Complaint.FIND_COMPLAINT_BY_ID, Complaint.class);
+        query.setParameter("id", id);
+        return query.getSingleResult();
+    }   
+    /**
+     * Gets a request by finding the id in the entity.
+     *
+     * @param id
+     * @return moderator application
+     * @Keith <keithtran25@gmail.com>
+     */
+    @RolesAllowed("tut4youapp.moderator")
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public Request findRequest(int id) {
+        TypedQuery<Request> query = em.createNamedQuery(Request.FIND_REQUEST_BY_ID, Request.class);
         query.setParameter("id", id);
         return query.getSingleResult();
     }   
@@ -983,38 +1002,37 @@ public class Tut4YouApp {
     public List<Request> getCompletedRequests() {
         UserBean userBean = new UserBean();
         String currentUserEmail = userBean.getEmailFromSession();
-        String email;
-        Tutor tutor;
-        User user;
-        TypedQuery<Request> requestQuery;
-        List<Request> list;
+        Tutor tutor = findTutor(currentUserEmail);
         if (currentUserEmail == null) {
             return null;
         }
-        tutor = findTutor(currentUserEmail);
         if (tutor == null) {
-            user = findUser(currentUserEmail);
-            email = user.getEmail();
-            requestQuery = em.createNamedQuery(Request.FIND_REQUEST_BY_EMAIL, Request.class);
-            requestQuery.setParameter("student_email", email);
-
-        } else {
-            email = tutor.getEmail();
-            requestQuery = em.createNamedQuery(Request.FIND_REQUEST_BY_TUTOR_EMAIL, Request.class);
-            requestQuery.setParameter("tutor_email", email);
-        }
-        requestQuery.setParameter("status", Request.Status.COMPLETED);
-        list = requestQuery.getResultList();
-
-        if (list.isEmpty()) {
-            user = findUser(currentUserEmail);
-            email = user.getEmail();
-            requestQuery = em.createNamedQuery(Request.FIND_REQUEST_BY_EMAIL, Request.class);
+            User user = findUser(currentUserEmail);
+            String email = user.getEmail();
+            
+            TypedQuery<Request> requestQuery = em.createNamedQuery(Request.FIND_REQUEST_BY_EMAIL, Request.class);
             requestQuery.setParameter("student_email", email);
             requestQuery.setParameter("status", Request.Status.COMPLETED);
-            list = requestQuery.getResultList();
+            List<Request> list = requestQuery.getResultList();
+            
+            return list;
+        } else {
+            String email = currentUserEmail;
+            TypedQuery<Request> requestQuery = em.createNamedQuery(Request.FIND_REQUEST_BY_TUTOR_EMAIL, Request.class);
+            requestQuery.setParameter("tutor_email", email);
+            requestQuery.setParameter("status", Request.Status.COMPLETED);
+            List<Request> list = requestQuery.getResultList();
+            
+            TypedQuery<Request> request2Query = em.createNamedQuery(Request.FIND_REQUEST_BY_EMAIL, Request.class);
+            request2Query.setParameter("student_email", email);
+            request2Query.setParameter("status", Request.Status.COMPLETED);
+            List<Request> list2 = request2Query.getResultList();
+            
+            List<Request> acceptedRequest = new ArrayList<>(list);
+            acceptedRequest.addAll(list2);
+            
+            return acceptedRequest;
         }
-        return list;
     }
 
     /**
@@ -1354,13 +1372,23 @@ public class Tut4YouApp {
         }
         return zipCode;
     }
-
+    /**
+     * Find ZipCodesByRadius of a ZipCode ID
+     * @param id
+     * @return list of zip codes by radius
+     */
+    public List<String> findZipCodeByRadius(Long id) {
+        TypedQuery<String> Query = em.createNamedQuery(ZipCodeByRadius.FIND_ZIPCODEBYRADIUS, String.class);
+        Query.setParameter("id", id);
+        return Query.getResultList();
+    }
     /**
      * Add ZipCodeByRadius if it does not belong to zip code location
      *
      * @param zipCode
      * @param zipCodeByRadius
-     * @return ZipCodeByRadius Keith Tran <keithtran25@gmail.com>
+     * @return ZipCodeByRadius 
+     * @author Keith Tran <keithtran25@gmail.com>
      */
     @RolesAllowed("tut4youapp.student")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
@@ -1369,9 +1397,7 @@ public class Tut4YouApp {
         ZipCode findZipCode = em.find(ZipCode.class, zipCode.getId());
         ZipCodeByRadius zipCodeByRadiusTemp = em.find(ZipCodeByRadius.class, zipCodeByRadius.getZipCodeByRadius());
         
-        TypedQuery<String> Query = em.createNamedQuery(ZipCodeByRadius.FIND_ZIPCODEBYRADIUS, String.class);
-        Query.setParameter("id", findZipCode.getId());
-        List<String> zipCodesByRadiusList = Query.getResultList();
+        List<String> zipCodesByRadiusList = findZipCodeByRadius(findZipCode.getId());
         
         if (zipCodeByRadiusTemp != null) {
             for (int i = 0; i < zipCodesByRadiusList.size(); i++) {
@@ -1414,6 +1440,7 @@ public class Tut4YouApp {
      * @param hourlyRate
      * @param dateJoinedAsTutor
      * @param defaultZip
+     * @author Keith Tran <keithtran25@gmail.com>
      */
     @RolesAllowed("tut4youapp.student")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
@@ -1448,7 +1475,12 @@ public class Tut4YouApp {
         em.persist(tutor);
         em.flush();
     }
-    
+    /**
+     * create a new complaint
+     * @param reportedUser
+     * @param complaint 
+     * @author Keith Tran <keithtran25@gmail.com>
+     */
     @RolesAllowed("tut4youapp.student")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void createNewComplaint(User reportedUser, Complaint complaint) {
@@ -1464,7 +1496,8 @@ public class Tut4YouApp {
     }
     /**
      * Query all complaints from the database
-     * @return 
+     * @return list of complaints
+     * @author Keith Tran <keithtran25@gmail.com>
      */
     @RolesAllowed("tut4youapp.moderator")
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
@@ -1473,7 +1506,11 @@ public class Tut4YouApp {
         query.setParameter("isReviewed", false);
         return query.getResultList();
     }
-    
+    /**
+     * close complaint and set isReviewed boolean to true
+     * @param complaint 
+     * @author Keith Tran <keithtran25@gmail.com>
+     */
     @RolesAllowed("tut4youapp.moderator")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void closeComplaint(Complaint complaint) {
@@ -1487,6 +1524,12 @@ public class Tut4YouApp {
         em.merge(complaint);
         em.flush();
     }
+    /**
+     * find flagged user based on user email
+     * @param email
+     * @return flaggedUser
+     * @author Keith Tran <keithtran25@gmail.com>
+     */
     @RolesAllowed("tut4youapp.moderator")
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public FlaggedUser findFlaggedUser(String email) {
@@ -1494,7 +1537,7 @@ public class Tut4YouApp {
         query.setParameter("email", email);
         
         FlaggedUser flaggedUser;
-        if(query.getSingleResult() == null) {
+        if(query.getResultList().isEmpty()) {
             flaggedUser = new FlaggedUser();
         }
         else {
@@ -1503,7 +1546,12 @@ public class Tut4YouApp {
         
         return flaggedUser;
     }
-    
+    /**
+     * checks to see if user logging in was banned or suspended
+     * @param email
+     * @return flaggedUser
+     * @author Keith Tran <keithtran25@gmail.com>
+     */
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public FlaggedUser checkFlaggedUserLogIn(String email) {
@@ -1521,16 +1569,24 @@ public class Tut4YouApp {
         
         return flaggedUser;
     }
-    
-    
-    
-    
+    /**
+     * Flags a User
+     * @param reportedUser is the user being flagged
+     * @param dateFlagged is the date the user was flagged
+     * @param type is whether it is a suspension or ban
+     * @author Keith Tran <keithtran25@gmail.com>
+     */
     @RolesAllowed("tut4youapp.moderator")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void flagUser(User reportedUser, Date dateFlagged) {
+    public void flagUser(User reportedUser, Date dateFlagged,String type) {
         UserBean userBean = new UserBean();
         String currentUserEmail = userBean.getEmailFromSession();
         boolean newFlaggedUser = false;
+        int count = 1;
+        if(type.equals("ban")) {
+            count = 4;
+        }
+        
         User moderator = em.find(User.class, currentUserEmail);
         FlaggedUser flaggedUser = checkFlaggedUserLogIn(reportedUser.getEmail());
         if(flaggedUser == null) {
@@ -1544,7 +1600,7 @@ public class Tut4YouApp {
             reportedUser.setFlaggedUser(flaggedUser);
             flaggedUser.addModerator(moderator);
             moderator.addModeratorFlaggingUser(flaggedUser);
-            flaggedUser.setCount(flaggedUser.getCount() + 1);
+            flaggedUser.setCount(flaggedUser.getCount() + count);
             flaggedUser.setDateFlagged(dateFlagged);
             em.persist(flaggedUser);
         }
@@ -1553,7 +1609,7 @@ public class Tut4YouApp {
                 flaggedUser.addModerator(moderator);
                 moderator.addModeratorFlaggingUser(flaggedUser);
             }
-            flaggedUser.setCount(flaggedUser.getCount() + 1);
+            flaggedUser.setCount(flaggedUser.getCount() + count);
             flaggedUser.setDateFlagged(dateFlagged);
             em.merge(flaggedUser);
         }
@@ -1805,6 +1861,12 @@ public class Tut4YouApp {
         String val = payment.getPaymentStatus();
         return val.equals("COMPLETED");
     }
+    /**
+     * boolean to check if complaint was submitted
+     * @param complaints
+     * @return 
+     * @author Keith Tran <keithtran25@gmail.com>
+     */
     @RolesAllowed("tut4youapp.student")
     public boolean isComplaintSubmitted(Collection<Complaint> complaints) {
         boolean isComplaintSubmitted;

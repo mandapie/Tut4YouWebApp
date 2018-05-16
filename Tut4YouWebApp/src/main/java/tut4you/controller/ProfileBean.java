@@ -156,6 +156,6 @@ public class ProfileBean implements Serializable {
      * @return tutor
      */
     public Tutor findTutorEmail(String username) {
-        return tut4youapp.findTutorEmail(username);
+        return tut4youapp.findTutorByUsername(username);
     }
 }

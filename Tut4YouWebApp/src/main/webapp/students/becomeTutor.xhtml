@@ -25,6 +25,10 @@
          @author Andrew Kaichi <ahkaichi@gmail.com> -->
     <ui:define name="title">Registration</ui:define>
     <ui:define name="content">
+        <f:metadata>
+            <f:event listener="#{createRequestBean.endConversation()}"
+                     type="preRenderView"></f:event>
+        </f:metadata>
         <b:panel title="Become A Tutor" collapsible="false" look="info">
             <h:form id="becomeTutor">
                 <!-- Price Rate -->

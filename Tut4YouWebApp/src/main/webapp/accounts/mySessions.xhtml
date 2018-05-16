@@ -99,11 +99,13 @@
                                 </b:dataTableColumn>
                                 <b:dataTableColumn>
                                     <f:facet name="header">Complaint</f:facet>
-                                    <b:button value="Report Tutor" outcome="submitComplaint" rendered="#{!requestBean.checkRequestTutorEmail(req.tutor)}">
+                                    <b:button value="Report Tutor" outcome="submitComplaint" rendered="#{requestBean.isCheckRequestStudentEmail(req.student)}">
                                         <f:param name="username" value="#{req.tutor.username}" />
+                                        <f:param name="id" value="#{req.id}" />
                                     </b:button>
-                                    <b:button value="Report Student" outcome="submitComplaint" rendered="#{requestBean.checkRequestTutorEmail(req.tutor)}">
+                                    <b:button value="Report Student" outcome="submitComplaint" rendered="#{!requestBean.isCheckRequestStudentEmail(req.student)}">
                                         <f:param name="username" value="#{req.student.username}" />
+                                        <f:param name="id" value="#{req.id}" />
                                     </b:button>
                                 </b:dataTableColumn>
                                 <b:dataTableColumn>

@@ -22,6 +22,8 @@ INSERT INTO Course(subjectName,courseName) VALUES ('Computer Science','Introduct
 INSERT INTO Course(subjectName,courseName) VALUES ('Computer Science','Computer Logic Design I')
 INSERT INTO Course(subjectName,courseName) VALUES ('Computer Science','Computer Logic Design II')
 
+INSERT INTO Question(id,description,title,student_email,courseName) VALUES (1,'Solve the following using the quadratic formula: x^2 + 6x = 14','Need help understanding how to use the quadratic formula','bobby@gmail.com','Algebra')
+
 
 INSERT INTO Users(email,user_type,firstName,lastName,phoneNumber,username,university,dateJoinedAsTutor,hourlyRate,doNotDisturb,defaultZip,securityQuestion,securityAnswer,password,overallRating) VALUES ('amanda@gmail.com','Tutor','Amanda','Pan','7141234567','apan','CSULB','2018-05-09',15.00,0,'92704','What was your childhood nickname?','amanda','CD639F5ECF3514CCC33B9985B55A118727A21782C04A714AB6A7634BE91DC4B6E8BFF6456B546E382EF00057550952F019993BBE6B8D84FE09C2B961149BFA2A',2)
 INSERT INTO Users(email,user_type,firstName,lastName,phoneNumber,username,university,dateJoinedAsTutor,hourlyRate,doNotDisturb,defaultZip,securityQuestion,securityAnswer,password) VALUES ('keith@gmail.com','Tutor','Keith','Tran','7149876543','kTran','CSULB','2017-09-01',12.00,0,'92703','What was your childhood nickname?','keith','0C0BAAA4ECC4C21265E4E41B966C54B806315CDDFF946F6C8D86C352DD8E6F6B8D158F97C6DC310A82202FFC3785996A631E66D02E0CC8FC52623B74A0D646E0')

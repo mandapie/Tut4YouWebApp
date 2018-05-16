@@ -102,6 +102,9 @@ public class User implements Serializable {
     @ManyToMany(mappedBy = "students", cascade = CascadeType.ALL)
     private Collection<Group> groups;
     
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
+    private Collection<Question> questions;
+    
     @OneToMany(mappedBy = "moderator", cascade = CascadeType.ALL)
     private Collection<ModeratorApplication> moderatorApplications;
     
@@ -151,6 +154,7 @@ public class User implements Serializable {
     public void setModeratorApplication(ModeratorApplication moderatorApplication) {
         this.moderatorApplication = moderatorApplication;
     }
+
     
     /**
      * User constructor
@@ -417,6 +421,14 @@ public class User implements Serializable {
         this.requests = requests;
     }
 
+    
+    public Collection<Question> getQuestion() {
+        return questions;
+    }
+
+    public void setQuestion(Collection<Question> questions) {
+        this.questions = questions;
+    }
     /**
      * gets the groups that this user is a member of
      * @return a collection of groups that this user belongs to
@@ -464,6 +476,17 @@ public class User implements Serializable {
             this.groups = new HashSet();
         }
         this.groups.add(group);
+    }
+    
+    /**
+     * Adds a question to a user's set of questions
+     * @param questions to be added to the set
+     */
+    public void addQuestion(Question questions){
+        if (this.questions == null) {
+            this.questions = new HashSet();
+        }
+        this.questions.add(questions);
     }
 
     /**

@@ -42,7 +42,7 @@ public class Response implements Serializable {
     @ManyToOne
     private Question question;
     
-    @OneToOne
+    @ManyToOne
     private Tutor tutor;
 
     public Response() {

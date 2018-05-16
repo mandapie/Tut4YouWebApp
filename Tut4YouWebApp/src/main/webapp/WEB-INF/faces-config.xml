@@ -105,6 +105,12 @@
             <redirect/>
         </navigation-case>
         <navigation-case>
+            <from-action>#{questionBean.askNewQuestion}</from-action>
+            <from-outcome>newQuestion</from-outcome>
+            <to-view-id>/forum/forumQuestion.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
             <from-action>#{userBean.login}</from-action>
             <from-outcome>success</from-outcome>
             <to-view-id>/accounts/index.xhtml</to-view-id>

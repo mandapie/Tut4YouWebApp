@@ -125,16 +125,46 @@ public class Tut4YouApp {
     /**
      * Based on the selected course, query all the questions
      * @param courseName is course name
-     * @return List of courses
+     * @return List of questions
      */
     @RolesAllowed("tut4youapp.student")
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public List<Question> getQuestions(String courseName) {
-        TypedQuery<Question> questionQuery = em.createNamedQuery(Course.FIND_COURSE_BY_SUBJECT, Question.class);
+        TypedQuery<Question> questionQuery = em.createNamedQuery(Question.FIND_QUESTION_BY_COURSE, Question.class);
         questionQuery.setParameter("name", courseName);
         return questionQuery.getResultList();
     }
-
+    
+    /**
+     * Adds a question to the database
+     * @param question new question being added
+     * @return question 
+     */
+    @RolesAllowed("tut4youapp.student")
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public Question askNewQuestion(Question question){
+        UserBean userBean = new UserBean();
+        Course course;
+        String currentUserEmail = userBean.getEmailFromSession();
+        if (currentUserEmail == null) {
+            return null;
+        }
+        else {
+            User student = findUser(currentUserEmail);
+            if (student != null){
+                student.addQuestion(question);
+                question.setStudent(student);
+                course = question.getCourse();
+                course.addQuestion(question);
+            }
+            else{
+                return null;
+            }
+        }
+        em.persist(question);
+        em.flush();
+        return question;
+    }
     /**
      * This method can only be called by a student. This methods gets the
      * username of the current session and checks if the username is null, if so

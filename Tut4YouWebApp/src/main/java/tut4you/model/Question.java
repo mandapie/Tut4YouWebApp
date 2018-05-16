@@ -23,6 +23,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -46,23 +48,29 @@ public class Question implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
     private String description;
+    
+    @ManyToOne
+    @JoinColumn(name = "student_email", nullable = false)
     private User student;
     
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
     private Collection<Response> response;
     
     @OneToOne
+    @JoinColumn(name = "courseName", nullable = false)
     private Course course;
 
     public Question() {
     
     }
     
-    public Question(String title, String description, Collection<Response> response) {
+    public Question(User student, Course course, String title, String description, Collection<Response> response) {
+        this.student = student;
+        this.course = course;
         this.title = title;
         this.description = description;
         this.response = response;
@@ -107,7 +115,18 @@ public class Question implements Serializable {
     public void setCourse(Course course){
         this.course = course;
     }
+    
+    public User getStudent(){
+        return student;
+    }
+    
+    public void setStudent(User student){
+        this.student = student;
+    }
 
+    public void addCourse(String course){
+        this.course.setCourseName(course);
+    }
     @Override
     public int hashCode() {
         int hash = 0;

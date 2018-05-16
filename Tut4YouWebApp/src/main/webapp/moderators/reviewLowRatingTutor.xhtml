@@ -30,7 +30,7 @@
     </f:metadata>
     <ui:define name="title">Review Low Rating Tutor</ui:define>
     <ui:define name="content">
-        <h1>Complaint</h1>
+        <h1>Review Low Rating Tutor</h1>
         <h:form>
             <b:row>
                 <b:column>
@@ -58,6 +58,36 @@
                 <b:column>
                     <b:commandButton value="Close Complaint" look="primary" action="#{moderatorBean.complaintBean.closeComplaint()}"/>
                 </b:column>
+            </b:row>
+            <b:row>
+            <h:outputLabel value="Past reviews"/>
+            <p:dataScroller value="#{ratingBean.getRatingList(moderatorBean.tutor.email)}" var="rating" chunkSize="10">
+                        <div style="border-bottom:solid 1px;">
+                            <b:row>
+                                <b:column tiny-screen="3">
+                                    <h:outputLabel value="#{rating.student.firstName} #{rating.student.lastName}"/>
+                                </b:column>
+                                <b:column tiny-screen="9">
+                                    <b:row>
+                                        <b:column tiny-screen="3">
+                                            <p:rating value="#{rating.ratingValue}" readonly="true"/>
+                                        </b:column>
+                                        <b:column>
+                                            <h:outputText value="#{rating.dateRated}">
+                                                <f:convertDateTime pattern="M-d-yyyy"/>
+                                            </h:outputText>
+                                        </b:column>
+                                    </b:row>
+                                    <b:row>
+                                        <b:column>
+                                            <h:outputText value="#{rating.description}"/>
+                                        </b:column>
+                                    </b:row>
+                                </b:column>
+                            </b:row>
+                        </div>
+                        <br/>
+                    </p:dataScroller>
             </b:row>
         </h:form>
 

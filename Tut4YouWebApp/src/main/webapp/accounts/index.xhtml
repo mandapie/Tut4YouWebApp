@@ -48,7 +48,7 @@
                     </b:inputText>
                     <b:commandButton value="Update" look="primary" action="#{userBean.updateCurrentZip}"/>
                     <span/>
-                    <b:commandButton value="Do Not Update" look="danger" action="#{userBean.setCondition(false)}"/>
+                    <b:commandButton value="Do Not Update" look="danger" action="#{userBean.setDefaultToCurrentZip}"/>
                 </p:dialog>
             </b:form>
         </c:if>

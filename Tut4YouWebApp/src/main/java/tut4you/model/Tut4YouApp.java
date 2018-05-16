@@ -1294,6 +1294,21 @@ public class Tut4YouApp {
         em.flush();
         return tutor;
     }
+    /**
+     * set the current zip of tutor as the default zip
+     * @return tutor
+     */
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    @RolesAllowed("tut4youapp.tutor")
+    public Tutor setDefaultToCurrentZip() {
+        UserBean userBean = new UserBean();
+        String currentUserEmail = userBean.getEmailFromSession();
+        Tutor tutor = findTutor(currentUserEmail);
+        tutor.setCurrentZip(tutor.getDefaultZip());
+        em.merge(tutor);
+        em.flush();
+        return tutor;
+    }
 
     /**
      * retrieve list of user email

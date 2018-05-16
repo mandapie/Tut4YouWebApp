@@ -174,10 +174,11 @@ public class PaymentBean implements Serializable {
     public boolean checkCompletedStatus(String payKey) {
         if (payKey != null && !payKey.isEmpty()) {
             paymentStatus = !tut4youApp.checkCompletedStatus(payKey);
-            return paymentStatus;
+            System.out.println(paymentStatus);
         } else {
-            return true;
+            paymentStatus = true;
         }
+        return paymentStatus;
     }
 
     /**

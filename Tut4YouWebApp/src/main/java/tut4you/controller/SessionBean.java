@@ -17,6 +17,8 @@
 package tut4you.controller;
 
 import java.io.Serializable;
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedProperty;
@@ -55,6 +57,16 @@ public class SessionBean implements Serializable {
      */
     private boolean checkStartButtonState = false;
     private boolean checkEndButtonState = true;
+    
+    @PostConstruct
+    public void createSessionBean() {
+        sessionTimer = new Session();
+    }
+    
+    @PreDestroy
+    public void destroySessionBean() {
+        
+    }
 
     public Long getId() {
         return id;

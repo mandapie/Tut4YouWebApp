@@ -158,7 +158,7 @@ public class RatingBean implements Serializable {
     public void showUsername(String username) {
         this.tutor = findTutorByUsername(username);
     }
-
+    
     public Tutor findTutorByUsername(String username) {
         return tut4youApp.findTutorByUsername(username);
     }

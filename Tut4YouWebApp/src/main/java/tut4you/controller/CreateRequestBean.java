@@ -75,7 +75,16 @@ public class CreateRequestBean implements Serializable {
     private List<Tutor> temp = new ArrayList();//adds this arraylist into tutorList
     private List<String> zipCodesByRadiusList = new ArrayList();//list of zipCodesByRadius based on a ZipCode
     private Date dayOfWeek;
+    private Tutor tutor;
+    private boolean isCurrentZipNull;
 
+    public boolean isIsCurrentZipNull() {
+        return isCurrentZipNull;
+    }
+
+    public void setIsCurrentZipNull(boolean isCurrentZipNull) {
+        this.isCurrentZipNull = isCurrentZipNull;
+    }
     /**
      * RequestBean encapsulates all the functions/services involved in making a
      * request
@@ -391,12 +400,16 @@ public class CreateRequestBean implements Serializable {
         if (request != null) {
             numOfTutors = tut4youApp.getNumOfTutorsFromCourse(request.getCourse().getCourseName());
             result = "success";
-
-            for (String str : getData(zipCode.getMaxRadius(), zipCode.getCurrentZipCode())) {
-                System.out.println(str);
-                zipCodesByRadiusList = Arrays.asList(str.substring(1, str.length() - 1).split(", "));
+            zipCodesByRadiusList = tut4youApp.findZipCodeByRadius(zipCode.getId());
+            
+            if (zipCodesByRadiusList.isEmpty()) {
+                //use zip code api query 
+                for (String str : getData(zipCode.getMaxRadius(), zipCode.getCurrentZipCode())) {
+                    System.out.println(str);
+                    zipCodesByRadiusList = Arrays.asList(str.substring(1, str.length() - 1).split(", "));
+                }
             }
-  
+
             for (int i = 0; i < zipCodesByRadiusList.size(); i++) {
                 zipCodeByRadius = new ZipCodeByRadius(zipCodesByRadiusList.get(i));
                 zipCodeByRadius = tut4youApp.addZipCodeByRadius(zipCode, zipCodeByRadius);
@@ -476,6 +489,24 @@ public class CreateRequestBean implements Serializable {
      */
     public void setDayOfWeek(Date dayOfWeek) {
         this.dayOfWeek = dayOfWeek;
+    }
+    public void findTutorByUsername(String username) {
+        tutor = tut4youApp.findTutorByUsername(username);
+        if(tutor.getCurrentZip().length() == 0) {
+            isCurrentZipNull = true;
+        }
+        else {
+            isCurrentZipNull = false;
+        }
+        System.out.print("BOOLEAN: " + isCurrentZipNull);
+        System.out.println("CURRENTZIP: " + tutor.getCurrentZip());
+    }
+    public Tutor getTutor() {
+        return tutor;
+    }
+
+    public void setTutor(Tutor tutor) {
+        this.tutor = tutor;
     }
 
 }

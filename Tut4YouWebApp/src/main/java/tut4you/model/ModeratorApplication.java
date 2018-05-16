@@ -30,7 +30,7 @@ import javax.persistence.Table;
 
 /**
  *
- * @author Keith
+ * @author Keith <keithtran25@gmail.com
  */
 @Table(name = "ModeratorApplication")
 @Entity
@@ -48,9 +48,10 @@ public class ModeratorApplication implements Serializable{
     public static final String FIND_ALL_MODERATOR_APPLICATIONS = "ModeratorApplication.findAllModeratorApplications";
     
     /**
-     * JPQL query to retrieve moderator application by user email
+     * JPQL query to retrieve moderator application by user username
      */
     public static final String FIND_MODERATOR_APPLICATION_BY_UNAME = "ModeratorApplication.findModeratorApplicationByUName";
+    
     /**
      * Tells whether a moderation application is pending, accepted or canceled
      * http://tomee.apache.org/examples-trunk/jpa-enumerated/README.html
@@ -60,84 +61,148 @@ public class ModeratorApplication implements Serializable{
         ACCEPTED,
         DECLINED;
     }
-    
+    /**
+     * default constructor
+     */
     public ModeratorApplication() {
     }
-    
+    /**
+     * overloaded constructor
+     * @param resumeFilePath
+     * @param reason 
+     */
     public ModeratorApplication(String resumeFilePath, String reason) {
         this.resumeFilePath = resumeFilePath;
         this.reason = reason;
     }
+    /**
+     * primary key
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, unique = true)
     private Long id;
-    
+    /**
+     * resume file path
+     */
     private String resumeFilePath;
-    
+    /**
+     * reason for application
+     */
     private String reason;
-    
+    /**
+     * application status
+     */
     private ApplicationStatus applicationStatus;
-
+    /**
+     * get Application Status
+     * @return ApplicationStatus
+     */
     public ApplicationStatus getApplicationStatus() {
         return applicationStatus;
     }
-
+    /**
+     * set Application Status
+     * @param applicationStatus 
+     */
     public void setApplicationStatus(ApplicationStatus applicationStatus) {
         this.applicationStatus = applicationStatus;
     }
+    /**
+     * One to one relationship between moderator application and user
+     */
     @OneToOne
     private User user;
-    
+    /**
+     * many to one relationship between moderator application and moderator
+     */
     @ManyToOne
     private User moderator;
-
+    /**
+     * get moderator
+     * @return moderator
+     */
     public User getModerator() {
         return moderator;
     }
-
+    /**
+     * set moderator
+     * @param user 
+     */
     public void setModerator(User user) {
         this.moderator = user;
     }
+    /**
+     * get User
+     * @return User
+     */
     public User getUser() {
         return user;
     }
-
+    /**
+     * set user
+     * @param user 
+     */
     public void setUser(User user) {
         this.user = user;
     }
-    
+    /**
+     * get reason for application
+     * @return reason
+     */
     public String getReason() {
         return reason;
     }
-
+    /**
+     * set reason for application
+     * @param reason 
+     */
     public void setReason(String reason) {
         this.reason = reason;
     }
-
+    /**
+     * get resume file path of application
+     * @return resume file path
+     */
     public String getResumeFilePath() {
         return resumeFilePath;
     }
-
+    /**
+     * set resume file path of application
+     * @param resumeFilePath 
+     */
     public void setResumeFilePath(String resumeFilePath) {
         this.resumeFilePath = resumeFilePath;
     }
-    
+    /**
+     * get id
+     * @return id
+     */
     public Long getId() {
         return id;
     }
-
+    /**
+     * set id
+     * @param id 
+     */
     public void setId(Long id) {
         this.id = id;
     }
-
+    /**
+     * overrides hashcode method
+     * @return hash
+     */
     @Override
     public int hashCode() {
         int hash = 0;
         hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
-
+    /**
+     * overrides equals method
+     * @param object
+     * @return boolean
+     */
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
@@ -150,7 +215,10 @@ public class ModeratorApplication implements Serializable{
         }
         return true;
     }
-
+    /**
+     * overrides toString method
+     * @return string
+     */
     @Override
     public String toString() {
         return "tut4you.model.ModeratorApplication[ id=" + id + " ]";

@@ -29,7 +29,7 @@
         <b:dataTable value="#{moderatorBean.lowRatingTutorList}" var="lowRatingTutorList" id="completedTable">m
                             <b:dataTableColumn>
                                 <f:facet name="header">User</f:facet>
-                                <h:link value="#{lowRatingTutorList.firstName} #{lowRatingTutorList.lastName}" outcome="moderatorApplication" includeViewParams="true">
+                                <h:link value="#{lowRatingTutorList.firstName} #{lowRatingTutorList.lastName}" outcome="reviewLowRatingTutor" includeViewParams="true">
                                     <f:param name="username" value="#{lowRatingTutorList.username}" />
                                 </h:link>                      
                             </b:dataTableColumn>

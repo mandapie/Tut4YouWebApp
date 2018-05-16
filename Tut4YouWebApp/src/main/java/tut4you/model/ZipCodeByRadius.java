@@ -31,12 +31,13 @@ import javax.persistence.Table;
 
 /**
  *
- * @author Keith
+ * @author Keith <keithtran25@gmail.com>
  */
 @Table(name="ZipCodeByRadius")
 @Entity
 @NamedQueries({
     @NamedQuery(name = ZipCodeByRadius.FIND_ZIPCODEBYRADIUS, query = "SELECT t.zipCodeByRadius from ZipCodeByRadius t JOIN t.zipCodes r WHERE r.id = :id ")
+        
 })
 public class ZipCodeByRadius implements Serializable {
     /**
@@ -44,8 +45,12 @@ public class ZipCodeByRadius implements Serializable {
      */
     public static final String FIND_ZIPCODEBYRADIUS= "ZipCode.FindZipCodeByRadius";
     
+    //primary key of ZipCodeByRadius
     @Id
     private String zipCodeByRadius;
+    /**
+     * many to many relationship between ZipCodeByRadius and ZipCode
+     */
     @ManyToMany
     @JoinTable(
         joinColumns={
@@ -53,32 +58,52 @@ public class ZipCodeByRadius implements Serializable {
         },
         inverseJoinColumns=@JoinColumn(name="zipCode_ID"))
     private Collection<ZipCode> zipCodes;
-
+    /**
+     * default constructor
+     */
     public ZipCodeByRadius() {
     }
-
+    /**
+     * Overloaded constructor
+     * @param zipCodeByRadius 
+     */
     public ZipCodeByRadius(String zipCodeByRadius) {
         this.zipCodeByRadius = zipCodeByRadius;
     }
-    
+    /**
+     * get Zip Codes of ZipCodesByRadius Object
+     * @return 
+     */
     public Collection<ZipCode> getZipCodes() {
         return zipCodes;
     }
-
+    /**
+     * set zip codes of ZipCodeByRadius object
+     * @param zipCodes 
+     */
     public void setZipCodes(Collection<ZipCode> zipCodes) {
         this.zipCodes = zipCodes;
     }
-    
+    /**
+     * add zip code to ZipCodeByRadius object
+     * @param zipCode 
+     */
     public void addZipCode(ZipCode zipCode) {
         if (this.zipCodes == null)
             this.zipCodes = new HashSet();
         this.zipCodes.add(zipCode);
     }
-
+    /**
+     * get ZipCodeByRadius
+     * @return ZipCodeByRadius
+     */
     public String getZipCodeByRadius() {
         return zipCodeByRadius;
     }
-
+    /**
+     * set ZipCodeByRadius
+     * @param zipCodeByRadius 
+     */
     public void setZipCodeByRadius(String zipCodeByRadius) {
         this.zipCodeByRadius = zipCodeByRadius;
     }
@@ -110,6 +135,10 @@ public class ZipCodeByRadius implements Serializable {
         }
         return true;
     }
+    /**
+     * Overrides toString method
+     * @return string
+     */
     @Override
     public String toString() {
         return "tut4you.model.ZipCodeByRadius[ zipCodeByRadius: " + zipCodeByRadius ;

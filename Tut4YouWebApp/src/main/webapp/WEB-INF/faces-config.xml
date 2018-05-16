@@ -94,6 +94,10 @@
             <to-view-id>/students/submitComplaint.xhtml</to-view-id>
         </navigation-case>
         <navigation-case>
+            <from-outcome>reviewLowRatingTutor</from-outcome>
+            <to-view-id>/moderators/reviewLowRatingTutor.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
             <from-outcome>moderatorApplication</from-outcome>
             <to-view-id>/moderators/reviewApplication.xhtml</to-view-id>
         </navigation-case>

@@ -32,17 +32,14 @@
             <b:dataTable value="#{createRequestBean.tutorList}" var="tutor">
                 <b:dataTableColumn>
                     <f:facet name="header">Tutor</f:facet>
+
                     <b:column>
                         <h:link value="#{tutor.firstName} #{tutor.lastName}" outcome="tutorProfile" includeViewParams="true">
                             <f:param name="username" value="#{tutor.username}" />
                             <span></span>
-                            #{createRequestBean.findTutorByUsername(tutor.username)}
-                            <c:if test="#{createRequestBean.tutor.currentZip != null}">
-                                <b:label text="Online" severity="success"/>
-                            </c:if>
-                            <c:if test="#{createRequestBean.tutor.currentZip == null}">
-                                <b:label text="Offline" severity="danger"/>
-                            </c:if>
+                           
+                                <b:label text="Online" severity="success" rendered="#{tutor.currentZip != null}"/>
+                                <b:label text="Offline" severity="danger" rendered="#{tutor.currentZip == null}"/>
                         </h:link>
                     </b:column>
 

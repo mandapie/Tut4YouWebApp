@@ -76,7 +76,15 @@ public class CreateRequestBean implements Serializable {
     private List<String> zipCodesByRadiusList = new ArrayList();//list of zipCodesByRadius based on a ZipCode
     private Date dayOfWeek;
     private Tutor tutor;
-    
+    private boolean isCurrentZipNull;
+
+    public boolean isIsCurrentZipNull() {
+        return isCurrentZipNull;
+    }
+
+    public void setIsCurrentZipNull(boolean isCurrentZipNull) {
+        this.isCurrentZipNull = isCurrentZipNull;
+    }
     /**
      * RequestBean encapsulates all the functions/services involved in making a
      * request
@@ -484,6 +492,13 @@ public class CreateRequestBean implements Serializable {
     }
     public void findTutorByUsername(String username) {
         tutor = tut4youApp.findTutorByUsername(username);
+        if(tutor.getCurrentZip().length() == 0) {
+            isCurrentZipNull = true;
+        }
+        else {
+            isCurrentZipNull = false;
+        }
+        System.out.print("BOOLEAN: " + isCurrentZipNull);
         System.out.println("CURRENTZIP: " + tutor.getCurrentZip());
     }
     public Tutor getTutor() {

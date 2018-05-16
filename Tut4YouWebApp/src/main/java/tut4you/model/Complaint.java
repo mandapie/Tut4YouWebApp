@@ -39,24 +39,38 @@ public class Complaint implements Serializable {
     public static final String FIND_COMPLAINT_BY_ID = "Complaint.findComplaintByID";
 
     private static final long serialVersionUID = 1L;
-    
+    /**
+     * primary key of Complaint
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, unique = true)
     private Long id;
-    
+    /**
+     * title 
+     */
     private String title;
-    
+    /**
+     * details
+     */
     private String details;
-    
+    /**
+     * boolean to check if complaint has been reviewed
+     */
     private boolean isReviewed;
-    
+    /**
+     * many to one relationship between complaint and user(reported user)
+     */
     @ManyToOne
     private User reportedUser;
-    
+    /**
+     * many to one relationship between complaint and user(user submitting complaint)
+     */
     @ManyToOne
     private User user;
-    
+    /**
+     * many to one relationship between complaint and moderator
+     */
     @ManyToOne 
     private User moderator;
     /**
@@ -158,7 +172,7 @@ public class Complaint implements Serializable {
         this.details = details;
     }
     /**
-     * hashcode overrided method
+     * hashCode overrides method
      */
     @Override
     public int hashCode() {
@@ -167,7 +181,7 @@ public class Complaint implements Serializable {
         return hash;
     }
     /**
-     * overrided equals method
+     * overrides equals method
      * @param object
      * @return boolean
      */
@@ -184,7 +198,7 @@ public class Complaint implements Serializable {
         return true;
     }
     /**
-     * overrided toString method
+     * overrides toString method
      * @return string
      */
     @Override

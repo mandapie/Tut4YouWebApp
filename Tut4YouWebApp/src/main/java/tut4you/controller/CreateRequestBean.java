@@ -391,12 +391,16 @@ public class CreateRequestBean implements Serializable {
         if (request != null) {
             numOfTutors = tut4youApp.getNumOfTutorsFromCourse(request.getCourse().getCourseName());
             result = "success";
-
-            for (String str : getData(zipCode.getMaxRadius(), zipCode.getCurrentZipCode())) {
-                System.out.println(str);
-                zipCodesByRadiusList = Arrays.asList(str.substring(1, str.length() - 1).split(", "));
+            zipCodesByRadiusList = tut4youApp.findZipCodeByRadius(zipCode.getId());
+            
+            if (zipCodesByRadiusList.isEmpty()) {
+                //use zip code api query 
+                for (String str : getData(zipCode.getMaxRadius(), zipCode.getCurrentZipCode())) {
+                    System.out.println(str);
+                    zipCodesByRadiusList = Arrays.asList(str.substring(1, str.length() - 1).split(", "));
+                }
             }
-  
+
             for (int i = 0; i < zipCodesByRadiusList.size(); i++) {
                 zipCodeByRadius = new ZipCodeByRadius(zipCodesByRadiusList.get(i));
                 zipCodeByRadius = tut4youApp.addZipCodeByRadius(zipCode, zipCodeByRadius);

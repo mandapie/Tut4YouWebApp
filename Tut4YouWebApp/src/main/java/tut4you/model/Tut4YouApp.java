@@ -727,22 +727,19 @@ public class Tut4YouApp {
         query.setParameter("username", username);
         return query.getSingleResult();
         
-    }
-            
-            /**
+    }        
+    /**
      * Gets a user by finding the email in the user entity.
      *
      * @param email
      * @return user email
+     * @author Keith Tran <keithtran25@gmail.com>
      */
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-
-    public FlaggedUser
-            findflaggeduser(String email) {
+    public FlaggedUser findflaggeduser(String email) {
         return em.find(FlaggedUser.class, findUser(email).getFlaggedUser().getId());
     }
-
     /**
      * Gets a tutor by finding the email in the tutor entity.
      *
@@ -765,7 +762,7 @@ public class Tut4YouApp {
      */
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-    public Tutor findTutorEmail(String username) {
+    public Tutor findTutorByUsername(String username) {
         TypedQuery<Tutor> tutorQuery = em.createNamedQuery(Tutor.FIND_TUTOR_BY_USERNAME, Tutor.class);
         tutorQuery.setParameter("username", username);
         return tutorQuery.getSingleResult();
@@ -774,8 +771,7 @@ public class Tut4YouApp {
     /**
      * Find low rating tutors of 2 stars or lower
      *
-     * @param username
-     * @return moderator application
+     * @return Low rating tutor
      * @Keith <keithtran25@gmail.com>
      */
     @RolesAllowed("tut4youapp.moderator")
@@ -1376,13 +1372,23 @@ public class Tut4YouApp {
         }
         return zipCode;
     }
-
+    /**
+     * Find ZipCodesByRadius of a ZipCode ID
+     * @param id
+     * @return list of zip codes by radius
+     */
+    public List<String> findZipCodeByRadius(Long id) {
+        TypedQuery<String> Query = em.createNamedQuery(ZipCodeByRadius.FIND_ZIPCODEBYRADIUS, String.class);
+        Query.setParameter("id", id);
+        return Query.getResultList();
+    }
     /**
      * Add ZipCodeByRadius if it does not belong to zip code location
      *
      * @param zipCode
      * @param zipCodeByRadius
-     * @return ZipCodeByRadius Keith Tran <keithtran25@gmail.com>
+     * @return ZipCodeByRadius 
+     * @author Keith Tran <keithtran25@gmail.com>
      */
     @RolesAllowed("tut4youapp.student")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
@@ -1391,9 +1397,7 @@ public class Tut4YouApp {
         ZipCode findZipCode = em.find(ZipCode.class, zipCode.getId());
         ZipCodeByRadius zipCodeByRadiusTemp = em.find(ZipCodeByRadius.class, zipCodeByRadius.getZipCodeByRadius());
         
-        TypedQuery<String> Query = em.createNamedQuery(ZipCodeByRadius.FIND_ZIPCODEBYRADIUS, String.class);
-        Query.setParameter("id", findZipCode.getId());
-        List<String> zipCodesByRadiusList = Query.getResultList();
+        List<String> zipCodesByRadiusList = findZipCodeByRadius(findZipCode.getId());
         
         if (zipCodeByRadiusTemp != null) {
             for (int i = 0; i < zipCodesByRadiusList.size(); i++) {
@@ -1436,6 +1440,7 @@ public class Tut4YouApp {
      * @param hourlyRate
      * @param dateJoinedAsTutor
      * @param defaultZip
+     * @author Keith Tran <keithtran25@gmail.com>
      */
     @RolesAllowed("tut4youapp.student")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
@@ -1470,7 +1475,12 @@ public class Tut4YouApp {
         em.persist(tutor);
         em.flush();
     }
-    
+    /**
+     * create a new complaint
+     * @param reportedUser
+     * @param complaint 
+     * @author Keith Tran <keithtran25@gmail.com>
+     */
     @RolesAllowed("tut4youapp.student")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void createNewComplaint(User reportedUser, Complaint complaint) {
@@ -1486,7 +1496,8 @@ public class Tut4YouApp {
     }
     /**
      * Query all complaints from the database
-     * @return 
+     * @return list of complaints
+     * @author Keith Tran <keithtran25@gmail.com>
      */
     @RolesAllowed("tut4youapp.moderator")
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
@@ -1495,7 +1506,11 @@ public class Tut4YouApp {
         query.setParameter("isReviewed", false);
         return query.getResultList();
     }
-    
+    /**
+     * close complaint and set isReviewed boolean to true
+     * @param complaint 
+     * @author Keith Tran <keithtran25@gmail.com>
+     */
     @RolesAllowed("tut4youapp.moderator")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void closeComplaint(Complaint complaint) {
@@ -1509,6 +1524,12 @@ public class Tut4YouApp {
         em.merge(complaint);
         em.flush();
     }
+    /**
+     * find flagged user based on user email
+     * @param email
+     * @return flaggedUser
+     * @author Keith Tran <keithtran25@gmail.com>
+     */
     @RolesAllowed("tut4youapp.moderator")
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public FlaggedUser findFlaggedUser(String email) {
@@ -1525,7 +1546,12 @@ public class Tut4YouApp {
         
         return flaggedUser;
     }
-    
+    /**
+     * checks to see if user logging in was banned or suspended
+     * @param email
+     * @return flaggedUser
+     * @author Keith Tran <keithtran25@gmail.com>
+     */
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public FlaggedUser checkFlaggedUserLogIn(String email) {
@@ -1543,10 +1569,13 @@ public class Tut4YouApp {
         
         return flaggedUser;
     }
-    
-    
-    
-    
+    /**
+     * Flags a User
+     * @param reportedUser is the user being flagged
+     * @param dateFlagged is the date the user was flagged
+     * @param type is whether it is a suspension or ban
+     * @author Keith Tran <keithtran25@gmail.com>
+     */
     @RolesAllowed("tut4youapp.moderator")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void flagUser(User reportedUser, Date dateFlagged,String type) {
@@ -1832,6 +1861,12 @@ public class Tut4YouApp {
         String val = payment.getPaymentStatus();
         return val.equals("COMPLETED");
     }
+    /**
+     * boolean to check if complaint was submitted
+     * @param complaints
+     * @return 
+     * @author Keith Tran <keithtran25@gmail.com>
+     */
     @RolesAllowed("tut4youapp.student")
     public boolean isComplaintSubmitted(Collection<Complaint> complaints) {
         boolean isComplaintSubmitted;

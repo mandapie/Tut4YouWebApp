@@ -123,7 +123,7 @@ public class RatingBean implements Serializable {
     }
 
     public Tutor findTutorEmail(String username) {
-        return tut4youApp.findTutorEmail(username);
+        return tut4youApp.findTutorByUsername(username);
     }
 
     /**

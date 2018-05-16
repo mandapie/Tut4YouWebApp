@@ -70,15 +70,13 @@ import tut4you.model.User;
  * @author Keith Tran <Keithtran25@gmail.com>
  */
 @Named
-//@RequestScoped
 @ViewScoped
 public class ModeratorBean implements Serializable {
     private static final Logger LOGGER = Logger.getLogger("TranscriptBean");
     @Inject
     private ComplaintBean complaintBean;
-    
     @Inject
-    private FlaggedUserBean flaggedUserBean;
+    FlaggedUserBean flaggedUserBean;
 
     private UserBean userbean = new UserBean();
 
@@ -233,13 +231,7 @@ public class ModeratorBean implements Serializable {
     @PreDestroy
     public void destroyModeratorBean() {
     }
-    /**
-     * Constructor with uploaded file parameter
-     * @param file 
-     */
-    public ModeratorBean(UploadedFile file) {
-        this.file = file;
-    }
+  
     /**
      * set uploaded file
      * @param file 
@@ -303,7 +295,7 @@ public class ModeratorBean implements Serializable {
      */
     public Tutor findLowRatingTutor(String username)
     {
-        return tut4youApp.findTutorEmail(username);
+        return tut4youApp.findTutorByUsername(username);
     }
     /**
      * accept moderator application

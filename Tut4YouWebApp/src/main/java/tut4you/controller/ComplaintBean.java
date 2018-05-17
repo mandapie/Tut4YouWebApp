@@ -47,6 +47,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -69,6 +70,9 @@ public class ComplaintBean implements Serializable {
     //inject registrationBean
     @Inject
     private RegistrationBean registrationBean;
+    //id parameter
+    @ManagedProperty("#{param.id}")
+    private int id;
     //EJB
     @EJB
     private Tut4YouApp tut4youApp;
@@ -95,6 +99,37 @@ public class ComplaintBean implements Serializable {
      */
     public void setIsTutor(boolean isTutor) {
         this.isTutor = isTutor;
+    }
+    /**
+     * showComplaintID is used when passing the complaint parameter
+     * from one jsf page to another
+     * @param id 
+     */
+    public void showComplaintID(int id) {
+        complaint  = findComplaint(id);
+    }
+    /**
+     * find complaint by complaint id
+     * @param id
+     * @return complaint
+     */
+    public Complaint findComplaint(int id)
+    {
+        return tut4youApp.findComplaint(id);
+    }
+    /**
+     * get ID
+     * @return ID
+     */
+    public int getId() {
+        return id;
+    }
+    /**
+     * set ID
+     * @param id 
+     */
+    public void setId(int id) {
+        this.id = id;
     }
     /**
      * get tutor
@@ -176,30 +211,37 @@ public class ComplaintBean implements Serializable {
      * create a new complaint
      * @param user
      * @param isTutor
+     * @return 
      */
-    public void createNewComplaint(User user, boolean isTutor) {
+    public String createNewComplaint(User user, boolean isTutor) {
       
         this.isTutor = isTutor;
         complaint.setIsTutor(isTutor);
         tut4youApp.createNewComplaint(user, complaint);
+        return "success";
     }
+
     /**
      * close the complaint
+     * @return 
      */
-    public void closeComplaint() {
+    public String closeComplaint() {
         tut4youApp.closeComplaint(complaint);
+        return "viewComplaints";
     }
     /**
      * flag a reported user
      * @param email
      * @param type
+     * @return 
      * @throws ParseException 
      */
-    public void flagUser(String email, String type) throws ParseException {
+    public String flagUser(String email, String type) throws ParseException {
         Date currentDateTime = registrationBean.getCurrentDate();
         tut4youApp.closeComplaint(complaint);
-        User user = tut4youApp.findUser(email);
-        tut4youApp.flagUser(user, currentDateTime, type);
+        User flagUser = tut4youApp.findUser(email);
+        tut4youApp.flagUser(flagUser, currentDateTime, type);
+        return "viewComplaints";
     }
     /**
      * boolean checks to see if complaint has been submitted

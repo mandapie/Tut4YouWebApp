@@ -116,13 +116,13 @@ public class User implements Serializable {
     @OneToMany(mappedBy = "moderator", cascade = CascadeType.ALL)
     private Collection<ModeratorApplication> moderatorApplications;
 
-    @OneToOne
+    @OneToOne(orphanRemoval=true)
     private ModeratorApplication moderatorApplication;
 
     @ManyToMany(mappedBy = "moderators", cascade = CascadeType.ALL)
     private Collection<FlaggedUser> moderatorFlaggingUser;
 
-    @OneToOne
+    @OneToOne(orphanRemoval=true)
     private FlaggedUser flaggedUser;
 
     /**

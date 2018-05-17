@@ -22,7 +22,7 @@
         2017 Keith Tran <keithtran25@gmail.com>
         2017 Syed Haider <shayder426@gmail.com>
     -->
-    <!-- @author Andrew Kaichi <ahkaichi@gmail.com> -->
+    <!-- @author Keith Tran <keithtran25@gmail.com> -->
     <ui:define name="metadata">
         <f:metadata>
             <f:viewParam name="username" value="#{moderatorBean.username}"/>
@@ -51,16 +51,15 @@
                     </b:column>
                 </b:column>
             </b:row>
-
+            <span></span>
             <b:row>
                 <b:column>
-                    <b:commandButton value="Accept" look="primary" action="#{moderatorBean.acceptModeratorApplication(moderatorBean.moderatorApplication)}" />
+                    <b:commandButton value="Accept" look="primary" action="#{moderatorBean.acceptModeratorApplication(moderatorBean.moderatorApplication)}"/>
                 </b:column>
+                <span></span>
                 <b:column>
-                    <b:commandButton value="Deny" look="danger" action="#{moderatorBean.declineModeratorApplication(moderatorApplication)}"/>
+                    <b:commandButton value="Deny" look="danger" action="#{moderatorBean.declineModeratorApplication(moderatorBean.moderatorApplication)}"/>
                 </b:column>
-
-
             </b:row>
         </h:form>
 

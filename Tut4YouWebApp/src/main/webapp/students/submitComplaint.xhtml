@@ -24,11 +24,6 @@
     -->
     <!-- @author Amanda Pan <daikiraidemodaisuki@gmail.com> -->
     <ui:define name="metadata">
-        <f:metadata>
-            <f:viewParam name="username" value="#{complaintBean.username}"/>
-            <f:event type="preRenderView" listener="#{complaintBean.showUsername(complaintBean.username)}">
-            </f:event>
-        </f:metadata>
     </ui:define>
     <ui:define name="title">Complaint</ui:define>
     <ui:define name="content">

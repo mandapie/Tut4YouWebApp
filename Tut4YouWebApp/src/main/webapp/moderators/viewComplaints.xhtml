@@ -23,7 +23,7 @@
     <ui:define name="title">View complaints</ui:define>
     <ui:define name="content">
         <h1>View Complaints</h1>
-        <b:dataTable value="#{complaintBean.complaintList}" var="complaint" id="completedTable">m
+        <b:dataTable value="#{complaintBean.complaintList}" var="complaint" id="completedTable">
             <b:dataTableColumn>
                 <f:facet name="header">User</f:facet>
                 <h:link value="#{complaint.reportedUser.firstName} #{complaint.reportedUser.lastName}" outcome="reviewComplaint" includeViewParams="true">

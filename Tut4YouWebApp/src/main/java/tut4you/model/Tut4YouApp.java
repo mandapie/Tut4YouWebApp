@@ -1966,10 +1966,14 @@ public class Tut4YouApp {
         transcriptPathQuery.setParameter("email", currentUserEmail);
         return transcriptPathQuery.getSingleResult() == null;
     }
-
+    /**
+     * find request entity by ID
+     * @param id
+     * @return request
+     */
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-    public Request findRequestByID(Long id) {
+    public Request findRequest(Long id) {
         return em.find(Request.class, id);
     }
 }

@@ -5,7 +5,8 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:b="http://bootsfaces.net/ui"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
     <!--
         Licensed under the Academic Free License (AFL 3.0).
         http://opensource.org/licenses/AFL-3.0
@@ -29,9 +30,10 @@
         <b:panel title="Add your resume as a PDF file" collapsible="false" look="info">
             <h:form id="transcript" enctype="multipart/form-data">
                 <b:row>
+                    <p:growl id="uploadTranscript" showDetail="true" />
                     <b:column>
                         <h:outputLabel value="Reason for Applying"/>
-                        <h:inputText id="reason" required="true" requiredMessage="required" value="#{moderatorBean.reason}"/>
+                        <b:inputTextarea id="reason" required="true" requiredMessage="required" value="#{moderatorBean.reason}"/>
                     </b:column>
                     <b:column>
                         <h:outputLabel for="uploadTranscript">
@@ -41,9 +43,10 @@
                                       mode="simple"
                                       allowTypes="/(\.|\/)(gif|jpe?g|pdf)$/"
                                       fileLimit="1"
-                                      update="uploadTranscript"/>
-                        <p:growl id="uploadTranscript" showDetail="true" />
-                        <p:commandButton value="Upload" action="#{moderatorBean.uploadResume}" ajax="false" />
+                                      update="uploadTranscript"
+                                      a:onchange="if (tagName == 'INPUT') { if (value) { PF('button').enable(); } else { PF('button').disable(); } }"/>
+                        <br/>
+                        <p:commandButton widgetVar="button" value="Upload" action="#{moderatorBean.uploadResume}" ajax="false" disabled="#{facesContext.renderResponse or not facesContext.postback}"/>
                     </b:column>
                 </b:row>
             </h:form>

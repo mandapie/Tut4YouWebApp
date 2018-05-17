@@ -32,14 +32,11 @@
     <ui:define name="title">Sessions</ui:define>
     <ui:define name="content">
         <b:container fluid="true">
-            <h:panelGrid columns="1" style="text-align:center; margin-left: 34%">
-                <h1 style="font-weight:bold">My Payments </h1>
-                <p:separator />                       
-            </h:panelGrid>
+            <h1>My Payments </h1>
             <b:column>
                 <b:form>
                     <b:row>
-                        <b:panel title="My Payments" collapsible="false" look="info">
+                        <b:panel title="All Transactions" collapsible="false" look="info">
                             <b:dataTable value="#{paymentBean.paymentList}" var="pay" id="payTable">
                                 <b:dataTableColumn>
                                     <f:facet name="header">Payment ID</f:facet>

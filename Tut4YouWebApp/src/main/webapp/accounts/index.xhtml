@@ -191,7 +191,7 @@
                                         <f:param name="id" value="#{req.id}" />
                                     </b:button>
                                     <b:button style="float:right;margin-right:5px;" value="Chat with Student" outcome="chat" rendered="#{!requestBean.isCheckRequestStudentEmail(req.student)}"/>
-                                    <b:button style="float:right;" value="Chat with Tutor" outcome="chat" rendered="#{requestBean.isCheckRequestStudentEmail(req.student)}"/>
+                                    <b:button style="float:right;margin-right:15px;" value="Chat with Tutor" outcome="chat" rendered="#{requestBean.isCheckRequestStudentEmail(req.student)}"/>
                                 </b:row>
                             </ui:repeat>
                         </b:panel>

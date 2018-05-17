@@ -42,13 +42,12 @@
             </b:navbarLinks>
             <c:if test="#{userBean.isUserAuthenticated}">
                 <b:navbarLinks pull="right">
-                    <b:dropMenu value="#{userBean.user.firstName}">
+                    <b:dropMenu value="Welcome back, #{userBean.user.firstName}">
                         <b:navLink value="My Profile" outcome="/accounts/profile.xhtml"/>
                         <b:navLink value="My Sessions" href="/Tut4YouWebApp/accounts/mySessions.xhtml"/>
                         <b:navLink value="My Payments" href="/Tut4YouWebApp/accounts/myPayments.xhtml"/>
                         <c:if test="#{userBean.isTutor}">
-                            <b:navLink value="View Reviews" outcome="/accounts/tutorProfile.xhtml?username=#{userBean.user.username}">
-                            </b:navLink>
+                            <b:navLink value="View Reviews" outcome="/accounts/tutorProfile.xhtml?username=#{userBean.user.username}"/>
                             <b:navLink value="My Transcript " outcome="/tutors/transcript.xhtml">
                                 <b:iconAwesome rendered="#{userBean.submittedTranscript}" name="warning" style="color:orange;" tooltip="Please upload your transcript so that you can add courses to tutor" tooltip-position="auto"/>
                             </b:navLink>

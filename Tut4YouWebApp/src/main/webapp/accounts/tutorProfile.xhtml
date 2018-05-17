@@ -96,9 +96,9 @@
                             </b:row>
                             <b:row style="margin-bottom:5px;">
                                 <b:column>
-                                    <b:commandLink style="color:#6ba2ff;" value="Edit Rating" action="#{updateRatingBean.goToEditRatingPage(rating)}" rendered="#{profileBean.checkIfUserRated(rating.student.email)}"/>
+                                    <b:commandButton value="Edit" action="#{updateRatingBean.goToEditRatingPage(rating)}" rendered="#{profileBean.checkIfUserRated(rating.student.email)}"/>
                                     <span/>
-                                    <b:commandLink style="color:#6ba2ff;" value="Delete Rating" action="#{ratingBean.deleteRating(rating)}" rendered="#{profileBean.checkIfUserRated(rating.student.email)}"/>
+                                    <b:commandButton value="Delete" action="#{ratingBean.deleteRating(rating)}" rendered="#{profileBean.checkIfUserRated(rating.student.email)}"/>
                                 </b:column>
                             </b:row>
                         </b:column>

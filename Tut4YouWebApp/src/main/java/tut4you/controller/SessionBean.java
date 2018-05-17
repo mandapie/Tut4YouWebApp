@@ -62,11 +62,6 @@ public class SessionBean implements Serializable {
     public void createSessionBean() {
         sessionTimer = new Session();
     }
-    
-    @PreDestroy
-    public void destroySessionBean() {
-        
-    }
 
     public Long getId() {
         return id;

@@ -46,6 +46,7 @@ import java.nio.file.Paths;
 import java.util.Date;
 import java.util.Properties;
 import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -74,6 +75,7 @@ public class TranscriptBean implements Serializable {
     private Tut4YouApp tut4youApp;
     private UploadedFile file;
     private Tutor tutor;
+    private String url;
 
     public TranscriptBean() {
 
@@ -82,13 +84,19 @@ public class TranscriptBean implements Serializable {
     public TranscriptBean(UploadedFile file) {
         this.file = file;
     }
-
+    
     public void setFile(UploadedFile file) {
         this.file = file;
     }
 
     public UploadedFile getFile() {
         return file;
+    }
+    public String getURL(){
+        return url;
+    }
+    public void setURL(String url){
+        this.url = url;
     }
 
     public void uploadTranscript() throws IOException {
@@ -185,7 +193,7 @@ public class TranscriptBean implements Serializable {
         }
     }
 
-    public URL generatePresignedUrlRequest() throws FileNotFoundException, IOException {
+    public String generatePresignedUrlRequest() throws FileNotFoundException, IOException {
         String userName = userbean.getEmailFromSession();
         tutor = tut4youApp.findTutor(userName);
         String keyName = tutor.getTranscriptFilePath();
@@ -204,7 +212,8 @@ public class TranscriptBean implements Serializable {
         generatePresignedUrlRequest.setMethod(HttpMethod.GET);
         generatePresignedUrlRequest.setExpiration(expiration);
         URL s = s3.generatePresignedUrl(generatePresignedUrlRequest);
-        System.out.println(s);
-        return s;
+        this.url = s.toString();
+        System.out.println(url);
+        return "viewFile";
     }
 }

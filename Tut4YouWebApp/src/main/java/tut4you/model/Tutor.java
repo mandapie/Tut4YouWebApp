@@ -131,6 +131,8 @@ public class Tutor extends User implements Serializable {
     @OneToMany(mappedBy = "tutor", cascade = CascadeType.ALL)
     private Collection<Rating> ratings;
 
+    @OneToMany(mappedBy = "tutor", cascade = CascadeType.ALL)
+    private Collection<Responses> responses;
     /**
      * Tutor constructor
      */
@@ -404,7 +406,35 @@ public class Tutor extends User implements Serializable {
     public void setDefaultZip(String defaultZip) {
         this.defaultZip = defaultZip;
     }
+    
+    /**
+     * gets the list of responses
+     * @return responses
+     */
+    public Collection<Responses> getResponses() {
+        return responses;
+    }
 
+    /**
+     * Sets the list of responses
+     *
+     * @param responses
+     */
+    public void setResponses(Collection<Responses> responses) {
+        this.responses = responses;
+    }
+    
+    /**
+     * Adds a response to a tutor's set of responses
+     * @param responses to be added to the set
+     */
+    public void addResponses(Responses responses){
+        if (this.responses == null) {
+            this.responses = new HashSet();
+        }
+        this.responses.add(responses);
+    }
+    
     /**
      * Adds a pending request to the list
      *

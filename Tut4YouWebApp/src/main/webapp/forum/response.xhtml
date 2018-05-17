@@ -1,0 +1,85 @@
+<ui:composition template="/WEB-INF/templates/layout.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:p="http://primefaces.org/ui">
+    <!--
+        Licensed under the Academic Free License (AFL 3.0).
+        http://opensource.org/licenses/AFL-3.0
+
+        This code has been developed by a group of CSULB students working on their 
+        Computer Science senior project called Tutors4You.
+
+        Tutors4You is a web application that students can utilize to find a tutor and
+        ask them to meet at any location of their choosing. Students that struggle to understand 
+        the courses they are taking would benefit from this peer to peer tutoring service.
+
+        2017 Amanda Pan <daikiraidemodaisuki@gmail.com>
+        2017 Andrew Kaichi <ahkaichi@gmail.com>
+        2017 Keith Tran <keithtran25@gmail.com>
+        2017 Syed Haider <shayder426@gmail.com>
+    -->
+    <!-- @author Andrew Kaichi <ahkaichi@gmail.com> -->
+    <ui:define name="title">Question</ui:define>
+    <ui:define name="content">
+        <b:panel title="Fill out the following information to respond." collapsible="false" look="info">
+            <b:form>
+                <f:viewParam name="courseList" value="#{questionBean.getQuestionInfo(param['course'], param['question'])}"/>
+                <h:outputText value="Testing: #{questionBean.getQuestionInfo(param['course'], param['question'])}"/>
+                <!-- subject -->
+                <b:row>
+                    <b:column medium-screen="2">
+                        <h:outputLabel value="Course"/>
+                    </b:column>
+                    <b:column medium-screen="2">
+                        <h:outputLabel value="#{param['course']}"/>
+
+                    </b:column>
+                </b:row>
+                <b:row>    
+                    <b:column medium-screen="4">
+                        <h:outputLabel value="Enter the explanation"/>
+                        <p:inputTextarea id="explanation" placeholder="Enter a description..." 
+                                         value="#{questionBean.responses.explanation}" 
+                                         style="width:100%" rows="7" counter="display" maxlength="800" 
+                                         counterTemplate="{0} characters remaining." autoResize="false">
+                            <b:message for="explanation"/>
+                            <f:validateLength minimum="10"/>
+                        </p:inputTextarea>
+                        <h:outputText id="display"/> <!-- displays the number of characters remaining -->
+                    </b:column>
+                </b:row>
+                <!-- description -->
+                <b:row>    
+                    <b:column medium-screen="7">
+                        <h:outputLabel value="Enter the answer"/>
+                        <p:textEditor widgetVar="answer" placeholder="Enter the answer..." value="#{questionBean.responses.answer}" height="300" style="margin-bottom:10px">
+                            <f:facet name="toolbar">
+                                <span class="ql-formats">
+                                    <select class="ql-font"></select>
+                                    <select class="ql-size"></select>
+                                    <button class="ql-bold"></button>
+                                    <button class="ql-italic"></button>
+                                    <button class="ql-underline"></button>
+                                    <button class="ql-strike"></button>
+                                    <button class="ql-color"></button>
+                                    <button class="ql-background"></button>
+                                    <button class="ql-list" value="ordered"></button>
+                                    <button class="ql-list" value="bullet"></button>
+                                    <button class="ql-script" value="sub"></button>
+                                    <button class="ql-script" value="super"></button>
+                                </span>
+                            </f:facet>
+                        </p:textEditor>
+                    </b:column>
+                </b:row>
+                <b:row>
+                    <b:commandButton medium-screen="2" value="Submit" look="primary" action="#{questionBean.submitResponses}" />
+                </b:row>
+            </b:form>    
+        </b:panel>        
+        <ui:debug hotkey='x' />
+    </ui:define>
+</ui:composition>

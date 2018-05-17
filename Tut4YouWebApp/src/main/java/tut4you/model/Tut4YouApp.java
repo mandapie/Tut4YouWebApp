@@ -51,6 +51,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import javax.persistence.NoResultException;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -124,7 +125,110 @@ public class Tut4YouApp {
         courseQuery.setParameter("name", subject);
         return courseQuery.getResultList();
     }
-
+    
+    /**
+     * Based on the selected course, query all the questions
+     * @param courseName is course name
+     * @return List of questions
+     */
+    @RolesAllowed("tut4youapp.student")
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public List<Question> getQuestions(String courseName) {
+        TypedQuery<Question> questionQuery = em.createNamedQuery(Question.FIND_QUESTION_BY_COURSE, Question.class);
+        questionQuery.setParameter("name", courseName);
+        return questionQuery.getResultList();
+    }
+    
+        /**
+     * Based on the selected question, query all the responses
+     * @param questionTitle is the question's title
+     * @return List of responses
+     */
+    @PermitAll
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public List<Responses> getResponses(String questionTitle) {
+        TypedQuery<Responses> responsesQuery = em.createNamedQuery(Responses.FIND_RESPONSES_BY_QUESTION, tut4you.model.Responses.class);
+        responsesQuery.setParameter("title", questionTitle);
+        return responsesQuery.getResultList();
+    }
+    
+    @PermitAll
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public Question findQuestionTitle(String title){
+        try{
+            TypedQuery<Question> questionQuery = em.createNamedQuery(Question.FIND_QUESTION_BY_TITLE, Question.class);
+            questionQuery.setParameter("title", title);
+            return questionQuery.getSingleResult(); 
+        }
+        catch(NoResultException nre){
+            return null;
+        }
+        
+    }
+    
+    /**
+     * Adds a question to the database
+     * @param question new question being added
+     * @return question 
+     */
+    @RolesAllowed("tut4youapp.student")
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public Question askNewQuestion(Question question){
+        UserBean userBean = new UserBean();
+        Course course;
+        String currentUserEmail = userBean.getEmailFromSession();
+        if (currentUserEmail == null) {
+            return null;
+        }
+        else {
+            User student = findUser(currentUserEmail);
+            if (student != null){
+                student.addQuestion(question);
+                question.setStudent(student);
+                course = question.getCourse();
+                course.addQuestion(question);
+            }
+            else{
+                return null;
+            }
+        }
+        em.persist(question);
+        em.flush();
+        return question;
+    }
+    
+    /**
+     * Adds a question to the database
+     * @param responses new question being added
+     * @return question 
+     */
+    @RolesAllowed("tut4youapp.tutor")
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public Responses responses(Responses responses){
+        UserBean userBean = new UserBean();
+        Question question;
+        String currentUserEmail = userBean.getEmailFromSession();
+        if (currentUserEmail == null) {
+            return null;
+        }
+        else {
+            Tutor tutor = findTutor(currentUserEmail);
+            if (tutor != null){
+                tutor.addResponses(responses);
+                responses.setTutor(tutor);
+                question = responses.getQuestion();
+                question.addResponses(responses);
+                System.out.println("inside responses ejb");
+                System.out.println(question.getTitle());
+            }
+            else{
+                return null;
+            }
+        }
+        em.persist(responses);
+        em.flush();
+        return responses;
+    }
     /**
      * This method can only be called by a student. This methods gets the
      * username of the current session and checks if the username is null, if so

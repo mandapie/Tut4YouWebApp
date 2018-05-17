@@ -111,6 +111,47 @@
             <redirect/>
         </navigation-case>
         <navigation-case>
+            <from-action>#{questionBean.askNewQuestion}</from-action>
+            <from-outcome>newQuestion</from-outcome>
+            <to-view-id>/forum/viewQuestion.xhtml</to-view-id>
+            <redirect>
+                <view-param>
+                    <name>course</name>
+                    <value>#{questionBean.course.courseName}</value>
+                </view-param>
+                <view-param>
+                    <name>question</name>
+                    <value>#{questionBean.question.title}</value>
+                </view-param>
+            </redirect>
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{questionBean.submitResponses}</from-action>
+            <from-outcome>newResponse</from-outcome>
+            <to-view-id>/forum/viewQuestion.xhtml</to-view-id>
+            <redirect>
+                <view-param>
+                    <name>course</name>
+                    <value>#{questionBean.responses.question.course.courseName}</value>
+                </view-param>
+                <view-param>
+                    <name>question</name>
+                    <value>#{questionBean.responses.question.title}</value>
+                </view-param>
+            </redirect>
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{transcriptBean.generatePresignedUrlRequest}</from-action>
+            <from-outcome>viewFile</from-outcome>
+            <to-view-id>/tutors/viewTranscript.xhtml</to-view-id>
+            <redirect>
+                <view-param>
+                    <name>url</name>
+                    <value>#{transcriptBean.URL}</value>
+                </view-param>
+            </redirect>
+        </navigation-case>
+        <navigation-case>
             <from-action>#{userBean.login}</from-action>
             <from-outcome>success</from-outcome>
             <to-view-id>/accounts/index.xhtml</to-view-id>

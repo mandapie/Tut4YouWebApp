@@ -45,16 +45,25 @@ import javax.persistence.TemporalType;
 @DiscriminatorValue(value = "Tutor")
 @Entity
 @NamedQueries({
-    @NamedQuery(name = Tutor.FIND_HOURLY_RATE_BY_EMAIL, query = "SELECT t.hourlyRate FROM Tutor t WHERE t.email = :email"),
-    @NamedQuery(name = Tutor.FIND_TRANSCRIPT_PATH_BY_EMAIL, query = "SELECT t.transcriptFilePath from Tutor t WHERE t.email = :email"),
-    @NamedQuery(name = Tutor.FIND_DATE_JOINED_BY_EMAIL, query = "SELECT t.dateJoinedAsTutor FROM Tutor t WHERE t.email = :email"),
-    @NamedQuery(name = Tutor.FIND_TUTORS_BY_COURSE_DAY_TIME_DZIP, query = "SELECT t FROM Tutor t JOIN t.courses c JOIN t.availabilities a WHERE c.courseName = :coursename AND a.dayOfWeek = :dayofweek AND a.startTime <= :requestTime AND a.endTime >= :requestTime AND t.doNotDisturb = :doNotDisturb AND t.defaultZip = :zipCode AND t.currentZip IS NULL"),
-    @NamedQuery(name = Tutor.FIND_TUTORS_BY_COURSE_DAY_TIME_CZIP, query = "SELECT t FROM Tutor t JOIN t.courses c JOIN t.availabilities a WHERE c.courseName = :coursename AND a.dayOfWeek = :dayofweek AND a.startTime <= :requestTime AND a.endTime >= :requestTime AND t.doNotDisturb = :doNotDisturb AND t.currentZip = :zipCode"),
-    @NamedQuery(name = Tutor.FIND_TUTORS_BY_COURSE, query = "SELECT COUNT(t) FROM Tutor t JOIN t.courses c WHERE c.courseName = :coursename"),
-    @NamedQuery(name = Tutor.FIND_TUTORS, query = "SELECT t FROM Tutor t"),
-    @NamedQuery(name = Tutor.FIND_TUTOR_BY_USERNAME, query = "SELECT t FROM Tutor t WHERE t.username = :username"),
-    @NamedQuery(name = Tutor.FIND_LOW_RATING_TUTORS, query = "SELECT t FROM Tutor t WHERE t.overallRating <= :overallRating"),
-})
+    @NamedQuery(name = Tutor.FIND_HOURLY_RATE_BY_EMAIL, query = "SELECT t.hourlyRate FROM Tutor t WHERE t.email = :email")
+    ,
+    @NamedQuery(name = Tutor.FIND_TRANSCRIPT_PATH_BY_EMAIL, query = "SELECT t.transcriptFilePath from Tutor t WHERE t.email = :email")
+    ,
+    @NamedQuery(name = Tutor.FIND_DATE_JOINED_BY_EMAIL, query = "SELECT t.dateJoinedAsTutor FROM Tutor t WHERE t.email = :email")
+    ,
+    @NamedQuery(name = Tutor.FIND_TUTORS_BY_COURSE_DAY_TIME_DZIP, query = "SELECT t FROM Tutor t JOIN t.courses c JOIN t.availabilities a WHERE c.courseName = :coursename AND a.dayOfWeek = :dayofweek AND a.startTime <= :requestTime AND a.endTime >= :requestTime AND t.doNotDisturb = :doNotDisturb AND t.defaultZip = :zipCode AND t.currentZip IS NULL")
+    ,
+    @NamedQuery(name = Tutor.FIND_TUTORS_BY_COURSE_DAY_TIME_CZIP, query = "SELECT t FROM Tutor t JOIN t.courses c JOIN t.availabilities a WHERE c.courseName = :coursename AND a.dayOfWeek = :dayofweek AND a.startTime <= :requestTime AND a.endTime >= :requestTime AND t.doNotDisturb = :doNotDisturb AND t.currentZip = :zipCode")
+    ,
+    @NamedQuery(name = Tutor.FIND_TUTORS_BY_COURSE, query = "SELECT COUNT(t) FROM Tutor t JOIN t.courses c WHERE c.courseName = :coursename")
+    ,
+    @NamedQuery(name = Tutor.FIND_TUTORS, query = "SELECT t FROM Tutor t")
+    ,
+    @NamedQuery(name = Tutor.FIND_TUTOR_BY_USERNAME, query = "SELECT t FROM Tutor t WHERE t.username = :username")
+    ,
+    @NamedQuery(name = Tutor.FIND_LOW_RATING_TUTORS, query = "SELECT t FROM Tutor t WHERE t.overallRating <= :overallRating")
+    ,
+@NamedQuery(name = Tutor.VERIFY_ZIPCODE, query = "SELECT t FROM Tutor t WHERE t.defaultZip = :zipcode"),})
 public class Tutor extends User implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -89,6 +98,11 @@ public class Tutor extends User implements Serializable {
      * JPQL Query to obtain a list of tutors by username
      */
     public static final String FIND_TUTOR_BY_USERNAME = "Tutor.findTutorByUsername";
+    /**
+     * JPQL Query to see if zipcode is in database
+     */
+
+    public static final String VERIFY_ZIPCODE = "Tutor.verifyZipcode";
 
     @Temporal(TemporalType.DATE)
     private Date dateJoinedAsTutor;
@@ -99,7 +113,7 @@ public class Tutor extends User implements Serializable {
     private int overallRating;
     private String defaultZip;
     private String currentZip;
-    
+
     /**
      * A Tutor can tutor multiple Courses and a Course can be tutored by
      * multiple Tutors.
@@ -133,6 +147,7 @@ public class Tutor extends User implements Serializable {
 
     @OneToMany(mappedBy = "tutor", cascade = CascadeType.ALL)
     private Collection<Responses> responses;
+
     /**
      * Tutor constructor
      */
@@ -216,7 +231,7 @@ public class Tutor extends User implements Serializable {
     public void setCurrentZip(String currentZip) {
         this.currentZip = currentZip;
     }
-    
+
     public int getNumOfPeopleTutored() {
         return numOfPeopleTutored;
     }
@@ -406,9 +421,10 @@ public class Tutor extends User implements Serializable {
     public void setDefaultZip(String defaultZip) {
         this.defaultZip = defaultZip;
     }
-    
+
     /**
      * gets the list of responses
+     *
      * @return responses
      */
     public Collection<Responses> getResponses() {
@@ -423,18 +439,19 @@ public class Tutor extends User implements Serializable {
     public void setResponses(Collection<Responses> responses) {
         this.responses = responses;
     }
-    
+
     /**
      * Adds a response to a tutor's set of responses
+     *
      * @param responses to be added to the set
      */
-    public void addResponses(Responses responses){
+    public void addResponses(Responses responses) {
         if (this.responses == null) {
             this.responses = new HashSet();
         }
         this.responses.add(responses);
     }
-    
+
     /**
      * Adds a pending request to the list
      *
@@ -467,14 +484,16 @@ public class Tutor extends User implements Serializable {
     public void removePendingRequest(Request pr) {
         pendingRequests.remove(pr);
     }
-    
+
     /**
      * removes a course from the tutor
-     * @param course 
+     *
+     * @param course
      */
     public void removeCourse(Course course) {
         courses.remove(course);
     }
+
     /**
      * Adds an availability to a collection if availability is null, create new
      * HashSet
@@ -503,10 +522,9 @@ public class Tutor extends User implements Serializable {
     public void setPayments(Collection<Payment> payments) {
         this.payments = payments;
     }
-    
-     /**
-     * Add a payment to a collection if payment is null, create new
-     * HashSet
+
+    /**
+     * Add a payment to a collection if payment is null, create new HashSet
      *
      * @param payment
      */

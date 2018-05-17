@@ -38,19 +38,19 @@ import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 
-
 /**
  * Availability encapsulates information of a time frame of when a Tutor is
  * available. Only a Tutor can add an availability.
  *
  * @author Andrew Kaichi <ahkaichi@gmail.com>
- * @author Keith Tran <keithtran25@gmail.com> 
+ * @author Keith Tran <keithtran25@gmail.com>
  * @author Syed Haider <shayder426@gmail.com>
  */
-@Table(name="Availability")
+@Table(name = "Availability")
 @Entity
 @NamedQueries({
-    @NamedQuery(name = Availability.FIND_AVAILABILITY_BY_TUTOR, query = "SELECT a FROM Availability a JOIN a.tutor s WHERE s.email = :email ORDER BY CASE a.dayOfWeek WHEN 'Monday' THEN 1 WHEN 'Tuesday' THEN 2 WHEN 'Wednesday' THEN 3 WHEN 'Thursday' THEN 4 WHEN 'Friday' THEN 5 WHEN 'Saturday' THEN 6 ELSE 7 END, a.startTime ASC")
+    @NamedQuery(name = Availability.FIND_AVAILABILITY_BY_TUTOR, query = "SELECT a FROM Availability a JOIN a.tutor s WHERE s.email = :email ORDER BY CASE a.dayOfWeek WHEN 'Monday' THEN 1 WHEN 'Tuesday' THEN 2 WHEN 'Wednesday' THEN 3 WHEN 'Thursday' THEN 4 WHEN 'Friday' THEN 5 WHEN 'Saturday' THEN 6 ELSE 7 END, a.startTime ASC"),
+ @NamedQuery(name = Availability.FIND_AVAILABILITIES, query = "Select a From Availability a WHERE  a.startTime < :requestTime AND a.endTime > :requestTime AND a.dayOfWeek = :dayOfWeek")
 })
 public class Availability implements Serializable {
 
@@ -58,6 +58,11 @@ public class Availability implements Serializable {
      * JPQL Query to get all availabilities of a tutor
      */
     public static final String FIND_AVAILABILITY_BY_TUTOR = "Availability.findAvailabilityByTutor";
+    /**
+     * JPQL Query to get all availabilities based on time and day
+     */
+    public static final String FIND_AVAILABILITIES = "Availability.findAvailabilities";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, unique = true)
@@ -115,13 +120,16 @@ public class Availability implements Serializable {
 
     /**
      * Gets the day of the week
+     *
      * @return dayOfWeek
      */
     public String getDayOfWeek() {
-        return dayOfWeek;    }
+        return dayOfWeek;
+    }
 
     /**
      * Sets the day of the week
+     *
      * @param dayOfWeek
      */
     public void setDayOfWeek(String dayOfWeek) {
@@ -201,7 +209,7 @@ public class Availability implements Serializable {
         }
         return true;
     }
-    
+
     @Override
     public String toString() {
         return "tut4you.entities.Availability[ id=" + id + " ]" + "startTime= " + startTime + "endTime = " + endTime + "dayOfWeek =" + dayOfWeek;

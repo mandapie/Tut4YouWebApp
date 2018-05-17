@@ -151,11 +151,7 @@ public class QuestionBean implements Serializable{
     }
     
     public String submitResponses(){
-        System.out.println("Inside submitResponse");
-        
-        System.out.println(question);
         this.responses.setQuestion(question);
-        System.out.println(responses);
         tut4youApp.responses(responses);
         return "newResponse";
     }

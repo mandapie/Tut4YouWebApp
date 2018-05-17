@@ -59,6 +59,7 @@ import javax.faces.application.FacesMessage;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import javax.persistence.NoResultException;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
@@ -150,10 +151,16 @@ public class Tut4YouApp {
     
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-    public Question findQuestionTitle(String title) {
-        TypedQuery<Question> questionQuery = em.createNamedQuery(Question.FIND_QUESTION_BY_TITLE, Question.class);
-        questionQuery.setParameter("title", title);
-        return questionQuery.getSingleResult();
+    public Question findQuestionTitle(String title){
+        try{
+            TypedQuery<Question> questionQuery = em.createNamedQuery(Question.FIND_QUESTION_BY_TITLE, Question.class);
+            questionQuery.setParameter("title", title);
+            return questionQuery.getSingleResult(); 
+        }
+        catch(NoResultException nre){
+            return null;
+        }
+        
     }
     
     /**

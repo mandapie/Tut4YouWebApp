@@ -58,8 +58,8 @@
                                 <h:outputText value="#{responses.explanation}" style="font-size:18px;" escape="false"/>
                             </b:column>
                         </b:row>
-                        <br/>
-                        <c:if test="#{userBean.isTutor}">
+                        <c:if test="#{forumBean.isUserQuestion(param['question']) || userBean.isTutor}">
+                            <br/>
                             <b:row>
                                 <b:column medium-screen="2">
                                     <h:outputText value="Answer:" style="font-size:20px;"/>
@@ -67,8 +67,7 @@
                                 <b:column medium-screen="6">
                                     <h:outputText value="#{responses.answer}" style="font-size:18px;" escape="false"/>
                                 </b:column>
-                            </b:row>     
-                            <br/>        
+                            </b:row>            
                         </c:if>
                     </p:outputPanel>
                 </div> 
@@ -77,76 +76,74 @@
             </b:panel>            
         </b:form>
 
+        <c:if test="#{userBean.isTutor}">
+            <b:panel title="Fill out the following information to respond." collapsible="true" look="info">           
+                <b:form>
+                    <f:viewParam name="courseList" value="#{questionBean.getQuestionInfo(param['course'], param['question'])}"/>
+                    <b:row> 
+                        <b:column medium-screen="2">
+                            <h:outputLabel value="Enter the explanation:"/>
+                        </b:column>
+                        <b:column medium-screen="10"> 
+                            <p:textEditor widgetVar="explanation" placeholder="Enter the explanation..." value="#{questionBean.responses.explanation}" height="200" style="margin-bottom:10px">
+                                <f:facet name="toolbar">
+                                    <span class="ql-formats">
+                                        <select class="ql-font"></select>
+                                        <select class="ql-size"></select>
+                                        <button class="ql-bold"></button>
+                                        <button class="ql-italic"></button>
+                                        <button class="ql-underline"></button>
+                                        <button class="ql-strike"></button>
+                                        <button class="ql-color"></button>
+                                        <button class="ql-background"></button>
+                                        <button class="ql-list" value="ordered"></button>
+                                        <button class="ql-list" value="bullet"></button>
+                                        <button class="ql-script" value="sub"></button>
+                                        <button class="ql-script" value="super"></button>
+                                    </span>
+                                </f:facet>
+                            </p:textEditor>
+                        </b:column>
+                    </b:row>
+                    <!-- answer -->
+                    <b:row>
+                        <b:column medium-screen="2">
+                            <h:outputLabel value="Enter the answer:"/>
+                        </b:column>
+                        <b:column medium-screen="10">
+                            <p:textEditor widgetVar="answer" placeholder="Enter the answer..." value="#{questionBean.responses.answer}" height="200" style="margin-bottom:10px">
+                                <f:facet name="toolbar">
+                                    <span class="ql-formats">
+                                        <select class="ql-font"></select>
+                                        <select class="ql-size"></select>
+                                        <button class="ql-bold"></button>
+                                        <button class="ql-italic"></button>
+                                        <button class="ql-underline"></button>
+                                        <button class="ql-strike"></button>
+                                        <button class="ql-color"></button>
+                                        <button class="ql-background"></button>
+                                        <button class="ql-list" value="ordered"></button>
+                                        <button class="ql-list" value="bullet"></button>
+                                        <button class="ql-script" value="sub"></button>
+                                        <button class="ql-script" value="super"></button>
+                                    </span>
+                                </f:facet>
+                            </p:textEditor>
+                        </b:column>
+                    </b:row>
+                    <b:row>
+                        <b:column medium-screen="12">
+                            <b:commandButton value="Submit" look="primary" action="#{questionBean.submitResponses}" style="float:right">
+                            <f:param name="course" value="#{param['course']}"/>
+                            <f:param name="question" value="#{param['question']}"/>
+                            </b:commandButton>
+                        </b:column>    
+                    </b:row>
+                </b:form>    
+            </b:panel>    
+        </c:if>
 
-        
-        <b:panel title="Fill out the following information to respond." collapsible="false" look="info">           
-            <b:form>
-                <f:viewParam name="courseList" value="#{questionBean.getQuestionInfo(param['course'], param['question'])}"/>
-                <b:row> 
-                    <b:column medium-screen="2">
-                        <h:outputLabel value="Enter the explanation:"/>
-                    </b:column>
-                    <b:column medium-screen="5"> 
-                        <p:textEditor widgetVar="explanation" placeholder="Enter the explanation..." value="#{questionBean.responses.explanation}" height="200" style="margin-bottom:10px">
-                            <f:facet name="toolbar">
-                                <span class="ql-formats">
-                                    <select class="ql-font"></select>
-                                    <select class="ql-size"></select>
-                                    <button class="ql-bold"></button>
-                                    <button class="ql-italic"></button>
-                                    <button class="ql-underline"></button>
-                                    <button class="ql-strike"></button>
-                                    <button class="ql-color"></button>
-                                    <button class="ql-background"></button>
-                                    <button class="ql-list" value="ordered"></button>
-                                    <button class="ql-list" value="bullet"></button>
-                                    <button class="ql-script" value="sub"></button>
-                                    <button class="ql-script" value="super"></button>
-                                </span>
-                            </f:facet>
-                        </p:textEditor>
-                    </b:column>
-                </b:row>
-                <!-- answer -->
-                <b:row>
-                    <b:column medium-screen="2">
-                        <h:outputLabel value="Enter the answer:"/>
-                    </b:column>
-                    <b:column medium-screen="5">
-                        <p:textEditor widgetVar="answer" placeholder="Enter the answer..." value="#{questionBean.responses.answer}" height="300" style="margin-bottom:10px">
-                            <f:facet name="toolbar">
-                                <span class="ql-formats">
-                                    <select class="ql-font"></select>
-                                    <select class="ql-size"></select>
-                                    <button class="ql-bold"></button>
-                                    <button class="ql-italic"></button>
-                                    <button class="ql-underline"></button>
-                                    <button class="ql-strike"></button>
-                                    <button class="ql-color"></button>
-                                    <button class="ql-background"></button>
-                                    <button class="ql-list" value="ordered"></button>
-                                    <button class="ql-list" value="bullet"></button>
-                                    <button class="ql-script" value="sub"></button>
-                                    <button class="ql-script" value="super"></button>
-                                </span>
-                            </f:facet>
-                        </p:textEditor>
-                    </b:column>
-                </b:row>
-                <b:row>
-                    <b:commandButton medium-screen="2" value="Submit" look="primary" action="#{questionBean.submitResponses}">
-                        <f:param name="course" value="#{param['course']}"/>
-                        <f:param name="question" value="#{param['question']}"/>
-                    </b:commandButton>
-                </b:row>
-            </b:form>    
-        </b:panel>     
-        <b:row>
-            <b:button look="primary" value="Answer Question" outcome="response.xhtml" style="float:right;">
-                <f:param name="course" value="#{param['course']}"/>
-                <f:param name="question" value="#{param['question']}"/>
-            </b:button>
-        </b:row>
+
         <ui:debug hotkey='x' />
     </ui:define>
 </ui:composition>

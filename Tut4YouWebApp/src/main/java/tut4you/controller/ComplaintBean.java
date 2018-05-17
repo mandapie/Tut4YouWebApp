@@ -80,10 +80,11 @@ public class ComplaintBean implements Serializable {
     private User user;
     //id parameter
     @ManagedProperty("#{param.id}")
-    private int id;
+    private long id;
     //username parameter
     @ManagedProperty("#{param.username}")
     private String username;
+    //request
     private Request request;
     //tutor
     private Tutor tutor;
@@ -91,6 +92,15 @@ public class ComplaintBean implements Serializable {
     private Complaint complaint;
     //list
     private List<Complaint> complaintList = new ArrayList();
+    private boolean isTutor;
+
+    public boolean isIsTutor() {
+        return isTutor;
+    }
+
+    public void setIsTutor(boolean isTutor) {
+        this.isTutor = isTutor;
+    }
     /**
      * get request
      * @return request
@@ -154,14 +164,14 @@ public class ComplaintBean implements Serializable {
      * get ID
      * @return ID
      */
-    public int getId() {
+    public long getId() {
         return id;
     }
     /**
      * set ID
      * @param id 
      */
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
     /**
@@ -256,14 +266,19 @@ public class ComplaintBean implements Serializable {
      * @param id
      * @return request
      */
-    public Request findRequest(int id)
+    public Request findRequest(long id)
     {
-        return tut4youApp.findRequest(id);
+        return tut4youApp.findRequestByID(id);
     }
     /**
      * create a new complaint
+     * @param user
+     * @param isTutor
      */
-    public void createNewComplaint() {
+    public void createNewComplaint(User user, boolean isTutor) {
+      
+        this.isTutor = isTutor;
+        complaint.setIsTutor(isTutor);
         tut4youApp.createNewComplaint(user, complaint);
     }
     /**
@@ -292,6 +307,27 @@ public class ComplaintBean implements Serializable {
     public boolean isComplaintSubmitted(Collection<Complaint> complaints) {
         return tut4youApp.isComplaintSubmitted(complaints);
         
+    }
+    /**
+     * boolean checks to see if reported user was a tutor during that tutoring session
+     */
+    public void isReportedUserTutor() {
+        if(request.getTutor().equals(user)) {
+            isTutor = true;
+        }
+        else {
+            isTutor = false;
+        }
+        
+    }
+    
+    public String goSubmitComplaintPage(Tutor t) throws ParseException {
+        String result;
+        this.tutor = t;
+                System.out.println(tutor);
+
+        result = "writeReview";
+        return result;
     }
     /**
      * download transcript when moderators review a complaint made by a tutor

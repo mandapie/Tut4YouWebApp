@@ -4,7 +4,8 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:b="http://bootsfaces.net/ui"
-                xmlns:p="http://primefaces.org/ui">
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <!--
         Licensed under the Academic Free License (AFL 3.0).
         http://opensource.org/licenses/AFL-3.0
@@ -49,7 +50,7 @@
                 </b:row>
 
                 <b:row>
-                    <b:commandButton span="2" value="Submit" look="primary" action="#{complaintBean.createNewComplaint}" />
+                    <b:commandButton span="2" value="Submit" look="primary" action="#{complaintBean.createNewComplaint(ratingBean.user, ratingBean.isTutor)}"/>
                 </b:row>
             </b:form>
         </b:panel>

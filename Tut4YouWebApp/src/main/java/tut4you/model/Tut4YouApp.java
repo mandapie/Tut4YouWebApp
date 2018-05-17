@@ -829,7 +829,6 @@ public class Tut4YouApp {
         query.setParameter("id", id);
         return query.getSingleResult();
     }
-
     /**
      * Gets a request by finding the id in the entity.
      *
@@ -1532,7 +1531,7 @@ public class Tut4YouApp {
         String currentUserEmail = userBean.getEmailFromSession();
 
         User user = em.find(User.class, currentUserEmail);
-
+        
         complaint.setUser(user);
         complaint.setReportedUser(reportedUser);
         em.persist(complaint);
@@ -1970,7 +1969,7 @@ public class Tut4YouApp {
 
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-    public Request findRequest(Long id) {
+    public Request findRequestByID(Long id) {
         return em.find(Request.class, id);
     }
 }

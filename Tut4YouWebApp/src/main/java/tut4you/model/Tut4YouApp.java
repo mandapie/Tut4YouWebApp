@@ -544,14 +544,17 @@ public class Tut4YouApp {
     public void deleteCourse(Course course) {
         UserBean userBean = new UserBean();
         String currentUserEmail = userBean.getEmailFromSession();
-        Course toBeDeleted = em.find(Course.class,
-                course.getCourseName());
+        Course toBeDeleted = em.find(Course.class, course.getCourseName());
         if (toBeDeleted == null) {
             toBeDeleted = course;
         }
         Tutor tutor = findTutor(currentUserEmail);
+        Course groupCourse = em.find(Course.class, course.getCourseName());
+        tutor.removeCourse(course);
+        groupCourse.removeTutor(tutor);
         em.merge(tutor);
-        em.remove(toBeDeleted);
+        em.merge(groupCourse);
+        em.flush();
     }
 
     /**

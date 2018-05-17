@@ -437,7 +437,14 @@ public class Tutor extends User implements Serializable {
     public void removePendingRequest(Request pr) {
         pendingRequests.remove(pr);
     }
-
+    
+    /**
+     * removes a course from the tutor
+     * @param course 
+     */
+    public void removeCourse(Course course) {
+        courses.remove(course);
+    }
     /**
      * Adds an availability to a collection if availability is null, create new
      * HashSet

@@ -355,6 +355,13 @@ public class Tut4YouApp {
         courseTutorQueryC.setParameter("requestTime", time, TemporalType.TIME);
         courseTutorQueryC.setParameter("doNotDisturb", false);
         courseTutorQueryC.setParameter("zipCode", zipCode);
+        //print outs to test
+        System.out.println("ZIPCODE: "+ zipCode);
+        System.out.println("COURSENAME: "+ course);
+        System.out.println("DAYOFWEEK: "+ dayOfWeek);
+        System.out.println("REQUESTTIME: "+ time);
+        
+        
         List<Tutor> allAvailableTutors = new ArrayList();
         allAvailableTutors.addAll(courseTutorQueryD.getResultList());
         for (Tutor x : courseTutorQueryC.getResultList()) {

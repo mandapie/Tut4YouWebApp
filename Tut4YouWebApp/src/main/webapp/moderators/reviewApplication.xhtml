@@ -47,7 +47,7 @@
                 <b:column>
                     <h:outputLabel value="Resume "/>
                     <b:column>
-                        <p:commandButton value="Download Resume" action="#{moderatorBean.downloadResume}" ajax="false" />
+                        <p:commandButton value="View Resume" action="#{moderatorBean.generatePresignedUrlRequest}" ajax="false" />
                     </b:column>
                 </b:column>
             </b:row>

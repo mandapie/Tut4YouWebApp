@@ -208,12 +208,12 @@ public class TranscriptBean implements Serializable {
         long msec = expiration.getTime();
         msec += 1000 * 60 * 60; //expires in 1 hour.
         expiration.setTime(msec);
+        //source:https://docs.aws.amazon.com/AWSJavaSDK/latest/javadoc/com/amazonaws/services/s3/model/GeneratePresignedUrlRequest.html
         GeneratePresignedUrlRequest generatePresignedUrlRequest = new GeneratePresignedUrlRequest(bucketName, keyName);
         generatePresignedUrlRequest.setMethod(HttpMethod.GET);
         generatePresignedUrlRequest.setExpiration(expiration);
         URL s = s3.generatePresignedUrl(generatePresignedUrlRequest);
         this.url = s.toString();
-        System.out.println(url);
         return "viewFile";
     }
 }

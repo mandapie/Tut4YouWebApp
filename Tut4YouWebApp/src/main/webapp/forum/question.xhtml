@@ -24,52 +24,68 @@
     <!-- @author Andrew Kaichi <ahkaichi@gmail.com> -->
     <ui:define name="title">Question</ui:define>
     <ui:define name="content">
-        <b:panel title="Fill out the following information to ask a question on the forum." collapsible="false" look="info">
-            <b:form>
-                <f:viewParam name="courseList" value="#{questionBean.getCourseList(param['subject'], param['course'])}"/>
-                <!-- subject -->
-                <b:row>
-                    <b:column medium-screen="2">
-                        <h:outputLabel value="Course"/>
-                    </b:column>
-                    <b:column medium-screen="2">
-                        <h:outputLabel value="#{param['course']}"/>
+        <b:row>
+            <b:button look="danger" value="Back to Questions" outcome="forumQuestion.xhtml" style="float:left;">
+                <f:param name="subject" value="#{param['subject']}"/>
+                <f:param name="course" value="#{param['course']}"/>
+            </b:button>
+        </b:row>
+        <br/>
+        <b:row>
+            <b:panel title="Fill out the following information to ask a question on the forum." collapsible="false" look="info">
+                <b:form>
+                    <f:viewParam name="courseList" value="#{questionBean.getCourseList(param['subject'], param['course'])}"/>
+                    <!-- subject -->
+                    <b:row>
+                        <b:column medium-screen="2">
+                            <h:outputLabel value="Course:"/>
+                        </b:column>
+                        <b:column medium-screen="2">
+                            <h:outputLabel value="#{param['course']}"/>
 
-                    </b:column>
-                </b:row>
-                <!-- Title -->
-                <b:row>
-                    <b:column medium-screen="2">
-                        <h:outputLabel value="Title"/>
-                    </b:column>
-                    <b:column medium-screen="4">
-                        <b:inputText id="tt" placeholder="Enter the Title of your question" required="true" requiredMessage="required" value="#{questionBean.question.title}">
-                            <b:message for="tt"/>
-                        </b:inputText>
-                    </b:column>
-                </b:row>
+                        </b:column>
+                    </b:row>
+                    <!-- Title -->
+                    <b:row>
+                        <b:column medium-screen="2">
+                            <h:outputLabel value="Title:"/>
+                        </b:column>
+                        <b:column medium-screen="4">
+                            <b:inputText id="tt" placeholder="Enter the Title of your question" required="true" requiredMessage="required" value="#{questionBean.question.title}">
+                                <b:message for="tt"/>
+                            </b:inputText>
+                        </b:column>
+                    </b:row>
+
+                    <!-- description -->
+                    <b:row>
+                        <b:column medium-screen="2">
+                            <h:outputLabel value="Enter the question you need help with:"/>
+                        </b:column>
+                        <b:column medium-screen="6">
+                            <p:textEditor widgetVar="explanation" placeholder="Enter the question..." value="#{questionBean.question.description}" height="400" style="margin-bottom:10px">
+                                    <f:facet name="toolbar">
+                                        <span class="ql-formats">
+                                            <button class="ql-bold"></button>
+                                            <button class="ql-italic"></button>
+                                            <button class="ql-underline"></button>
+                                            <button class="ql-strike"></button>
+                                            <button class="ql-list" value="ordered"></button>
+                                            <button class="ql-list" value="bullet"></button>
+                                            <button class="ql-script" value="sub"></button>
+                                            <button class="ql-script" value="super"></button>
+                                        </span>
+                                    </f:facet>
+                                </p:textEditor>
+                        </b:column>
+                    </b:row>
+                    <b:row>
+                        <b:commandButton medium-screen="2" value="Submit" look="primary" action="#{questionBean.askNewQuestion}" />
+                    </b:row>
+                </b:form>
+            </b:panel>
+        </b:row>
                 
-                <!-- description -->
-                <b:row>
-                    <b:column medium-screen="2">
-                        <h:outputLabel value="Enter the question you need help"/>
-                    </b:column>
-                    <b:column medium-screen="4">
-                        <p:inputTextarea id="question" placeholder="Enter a description..." 
-                                 value="#{questionBean.question.description}" 
-                                 style="width:100%" rows="7" counter="display" maxlength="800" 
-                                 counterTemplate="{0} characters remaining." autoResize="false">
-                            <b:message for="question"/>
-                            <f:validateLength minimum="10"/>
-                        </p:inputTextarea>
-                        <h:outputText id="display"/> <!-- displays the number of characters remaining -->
-                    </b:column>
-                </b:row>
-                <b:row>
-                    <b:commandButton medium-screen="2" value="Submit" look="primary" action="#{questionBean.askNewQuestion}" />
-                </b:row>
-            </b:form>
-        </b:panel>        
         <ui:debug hotkey='x' />
     </ui:define>
 </ui:composition>

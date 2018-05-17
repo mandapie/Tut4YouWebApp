@@ -18,6 +18,7 @@ package tut4you.controller;
 
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.AmazonServiceException;
+import com.amazonaws.HttpMethod;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
@@ -25,6 +26,7 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.AccessControlList;
+import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.GroupGrantee;
 import com.amazonaws.services.s3.model.ObjectMetadata;
@@ -34,6 +36,7 @@ import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
@@ -99,6 +102,7 @@ public class ModeratorBean implements Serializable {
     private Tutor tutor;
     //User object
     private User user;
+    private String url;
     
     /**
      * get ComplaintBean
@@ -113,6 +117,21 @@ public class ModeratorBean implements Serializable {
      */
     public void setComplaintBean(ComplaintBean complaintBean) {
         this.complaintBean = complaintBean;
+    }
+    
+     /**
+     * gets url
+     * @return url
+     */
+    public String getURL(){
+        return url;
+    }
+    /**
+     * set url
+     * @param url 
+     */
+    public void setURL(String url){
+        this.url = url;
     }
     /**
      * gets list of tutors with ratings at or below a 2.0, 
@@ -322,6 +341,38 @@ public class ModeratorBean implements Serializable {
     public String declineModeratorApplication(ModeratorApplication moderatorApplication) {
         tut4youApp.declineModeratorApplication(moderatorApplication);
         return "viewModeratorApplications";
+    }
+    public String generatePresignedUrlRequest() throws FileNotFoundException, IOException {
+        user = tut4youApp.findUserByUsername(username);
+        String keyName = user.getModeratorApplication().getResumeFilePath();
+        System.out.println(keyName);
+        System.out.println(user.getUsername());
+        String worked = "";
+        if (keyName == null){
+                FacesMessage message = new FacesMessage("No resume found");
+                FacesContext.getCurrentInstance().addMessage(null, message); 
+                worked = "noViewFile";
+        } else {
+            Properties prop = new Properties();
+            InputStream propstream = new FileInputStream(getServletContext().getRealPath("WEB-INF/s3.properties"));
+            prop.load(propstream);
+            AWSCredentials credentials = new BasicAWSCredentials(prop.getProperty("AWSAccessKeyId"), prop.getProperty("AWSSecretKey"));
+            String bucketName = prop.getProperty("bucketName");
+            // source: https://stackoverflow.com/questions/4bucketName1951978/amazons3clientcredentials-is-deprecated
+            AmazonS3 s3 = AmazonS3ClientBuilder.standard().withRegion(Regions.US_WEST_1).withCredentials(new AWSStaticCredentialsProvider(credentials)).build();
+            Date expiration = new Date();
+            long msec = expiration.getTime();
+            msec += 1000 * 60 * 60; //expires in 1 hour.
+            expiration.setTime(msec);
+            GeneratePresignedUrlRequest generatePresignedUrlRequest = new GeneratePresignedUrlRequest(bucketName, keyName);
+            generatePresignedUrlRequest.setMethod(HttpMethod.GET);
+            generatePresignedUrlRequest.setExpiration(expiration);
+            URL s = s3.generatePresignedUrl(generatePresignedUrlRequest);
+            this.url = s.toString();
+            worked = "viewResume";
+            
+        }
+        return worked;
     }
     /**
      * download resume from S3

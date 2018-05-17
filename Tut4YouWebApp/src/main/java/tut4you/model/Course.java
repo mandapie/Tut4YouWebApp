@@ -138,6 +138,14 @@ public class Course implements Serializable {
         }
         this.tutors.add(tutor);
     }
+    
+    /**
+     * removes tutor from the collection
+     * @param tutor 
+     */
+    public void removeTutor(Tutor tutor) {
+        tutors.remove(tutor);
+    }
 
     @Override
     public boolean equals(Object object) {

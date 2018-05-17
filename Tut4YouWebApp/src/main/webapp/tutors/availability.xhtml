@@ -9,7 +9,6 @@
          @author Andrew Kaichi <ahkaichi@gmail.com> 
          @author Syed Haider <shayder426@gmail.com> -->
     <ui:define name="title">Availability</ui:define>
-    
     <ui:define name="content">
         <h:panelGrid columns="1" style="text-align:center; margin-left: 40%">
             <h1 style="font-weight:bold">My Availability</h1>
@@ -17,7 +16,6 @@
         </h:panelGrid>
         <b:panel title="Enter Your Availability" collapsible="false" look="info">
             <b:form id="availabilityID">
-
                 <b:column span="4">
                     <b:row>
                         <!-- Drop-down menu display Monday-Sunday -->
@@ -28,8 +26,7 @@
                             value="#{availabilityBean.availability.dayOfWeek}"
                             required="true"
                             binding="#{day}"
-                            requiredMessage="required"
-                            >
+                            requiredMessage="required">
                             <f:selectItem itemLabel="Select One..." itemValue="" noSelectionOption="true"/>
                             <f:selectItem itemValue="Monday"/>
                             <f:selectItem itemValue="Tuesday"/>

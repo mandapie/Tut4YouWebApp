@@ -3,7 +3,8 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
-                xmlns:b="http://bootsfaces.net/ui">
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:p="http://primefaces.org/ui">
     <!--
         Licensed under the Academic Free License (AFL 3.0).
         http://opensource.org/licenses/AFL-3.0
@@ -27,6 +28,11 @@
         <b:panel title="Add a new course" collapsible="false" look="info">
             <b:form id="addNewCourseForm">
                 <!-- Choosing the subject of the course -->
+                <p:dialog header="Submitted!" widgetVar="dlg1" minHeight="40" visible="#{addCourseBean.addNewCourse}" closable="false" modal="true" >
+                    <h:outputText value="Do you want to add another course?" />
+                    <p:button value="Yes" outcome="/tutors/addNewCourse.xhtml" />
+                    <p:button value="No" outcome="/accounts/index.xhtml"/>
+                </p:dialog>
                 <b:row>
                     <b:column medium-screen="2">
                         <h:outputLabel value="Subject"/>
@@ -52,7 +58,7 @@
                 </b:row>
                 <!-- Add new course into database -->
                 <b:row>
-                    <b:commandButton span="2" value="Submit" look="primary" action="#{addCourseBean.addNewCourse}" />
+                    <b:commandButton span="2" value="Submit" look="primary" action="#{addCourseBean.addNewCourse}" oncomplete="if (#{courseBean.addNewCourse}){PF('dlg1').show()}"/>
                 </b:row>
             </b:form>
         </b:panel>

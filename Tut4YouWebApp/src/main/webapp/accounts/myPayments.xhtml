@@ -23,11 +23,13 @@
         2017 Syed Haider <shayder426@gmail.com>
     -->
     <!-- @author Amanda Pan <daikiraidemodaisuki@gmail.com> -->
+    <ui:define name="metadata">
+        <script src="https://www.paypalobjects.com/js/external/apdg.js" type="text/javascript"></script>
+        <script type="text/javascript" charset="utf-8">
+            var dgFlowMini = new PAYPAL.apps.DGFlowMini({trigger: 'submitBtn'});
+        </script> 
+    </ui:define>
     <ui:define name="title">Sessions</ui:define>
-    <script src="https://www.paypalobjects.com/js/external/apdg.js" type="text/javascript"></script>
-    <script type="text/javascript" charset="utf-8">
-        var dgFlowMini = new PAYPAL.apps.DGFlowMini({trigger: 'submitBtn'});
-    </script>
     <ui:define name="content">
         <b:container fluid="true">
             <h:panelGrid columns="1" style="text-align:center; margin-left: 34%">

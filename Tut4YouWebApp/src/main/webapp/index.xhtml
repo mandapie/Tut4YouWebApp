@@ -22,12 +22,13 @@
         2017 Syed Haider <shayder426@gmail.com>
     -->
     <!-- @author Amanda Pan <daikiraidemodaisuki@gmail.com> -->
+    <ui:define name="metadata">
+        <f:metadata>
+            <f:event listener="#{createRequestBean.endConversation()}" type="preRenderView"></f:event>
+        </f:metadata>
+    </ui:define>
     <ui:define name="title">Home</ui:define>
     <ui:define name="content">
-        <f:metadata>
-            <f:event listener="#{createRequestBean.endConversation()}"
-                     type="preRenderView"></f:event>
-        </f:metadata>
         <b:jumbotron>
             <b:container>
                 <h1>Welcome to Tut4You!</h1>

@@ -23,12 +23,14 @@
         2017 Syed Haider <shayder426@gmail.com>
     -->
     <!-- @author Amanda Pan <daikiraidemodaisuki@gmail.com> -->
-    <ui:define name="title">Dashboard</ui:define>
-    <ui:define name="content">
+    <ui:define name="metadata">
         <f:metadata>
             <f:event listener="#{createRequestBean.endConversation()}" type="preRenderView"></f:event>
             <f:event listener="#{ratingBean.endConversation()}" type="preRenderView"></f:event>
         </f:metadata>
+    </ui:define>
+    <ui:define name="title">Dashboard</ui:define>
+    <ui:define name="content">
         <b:row>
             <h1>Dashboard</h1>
             <b:form>
@@ -145,17 +147,17 @@
                                 </b:dataTable>
                             </b:tab>
                             <c:choose>
-                                <c:when test="#{userBean.submittedTranscript}">
-                                    <b:tab title="Courses" disabled="true" tooltip="Please upload your transcript so that you can add courses to tutor"></b:tab>
+                                <c:when test="">
+                                    <b:tab title="Courses" disabled="#{userBean.submittedTranscript}" tooltip="Please upload your transcript so that you can add courses to tutor"></b:tab>
                                 </c:when>
                                 <c:otherwise>
                                     <b:tab title="Courses">
                                         <br/>
                                         <b:button style="font-weight:bold;font-size:20px;" look="primary" value="Add Courses" outcome="/tutors/addCourse.xhtml"/>
-                                        <b:dataTable value="#{courseBean.courseList}" var="course">
+                                        <b:dataTable value="#{courseBean.tutorCourses}" var="course">
                                             <b:dataTableColumn>
                                                 <f:facet name="header">Courses You Have Taken</f:facet>
-                                                <h:outputLabel value="#{course.courseName}"/>
+                                                <h:outputText value="#{course.courseName}"/>
                                             </b:dataTableColumn>
                                             <b:dataTableColumn>
                                                 <f:facet name="header">Action</f:facet>

@@ -16,6 +16,7 @@ import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.net.ssl.HttpsURLConnection;
 /**
+ * recaptcha wrapper
  * source: http://chillyfacts.com/add-recaptcha-i-m-not-a-robot-in-java-websites/
  * @author Jinu
  * Modified by Amanda

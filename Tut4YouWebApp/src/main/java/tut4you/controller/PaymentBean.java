@@ -113,7 +113,6 @@ public class PaymentBean implements Serializable {
      * @return paymentList - list of payments
      */
     public List<Payment> getPaymentList() {
-        System.out.println("Just got called from the bean");
         paymentList = tut4youApp.getPaymentList();
         return paymentList;
     }
@@ -189,7 +188,6 @@ public class PaymentBean implements Serializable {
     public void payForTutoringSession(Request request) {
         String payKey;
         this.session = request.getSession();
-        System.out.println(session);
         this.tutor = request.getTutor();
         String email = tutor.getEmail();
         double hourlyRate = tutor.getHourlyRate();
@@ -207,5 +205,4 @@ public class PaymentBean implements Serializable {
             Logger.getLogger(PaymentBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
 }

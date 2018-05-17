@@ -53,11 +53,19 @@ public class UpdateRatingBean implements Serializable {
         rating = new Rating();
     }
 
+    /**
+     * get student name
+     * @return 
+     */
     public String getStudentName() {
         studentName = rating.getStudent().getFirstName() + rating.getStudent().getLastName();
         return studentName;
     }
 
+    /**
+     * set student name
+     * @param studentName 
+     */
     public void setStudentName(String studentName) {
         this.studentName = studentName;
     }
@@ -80,10 +88,18 @@ public class UpdateRatingBean implements Serializable {
         this.rating = rating;
     }
 
+    /**
+     * get tutor
+     * @return 
+     */
     public Tutor getTutor() {
         return tutor;
     }
 
+    /** set tutor
+     * 
+     * @param tutor 
+     */
     public void setTutor(Tutor tutor) {
         this.tutor = tutor;
     }
@@ -91,7 +107,7 @@ public class UpdateRatingBean implements Serializable {
     /**
      * Updates the current availability of the tutor
      *
-     * @param avail
+     * @param r
      * @return
      * @throws java.text.ParseException
      */

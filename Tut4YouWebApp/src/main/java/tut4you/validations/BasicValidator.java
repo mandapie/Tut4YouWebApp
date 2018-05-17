@@ -184,6 +184,12 @@ public class BasicValidator {
         }
     }
 
+    /**
+     * rating cannot be 0
+     * @param context
+     * @param component
+     * @param value 
+     */
     public void validateRating(FacesContext context, UIComponent component, Object value) {
         int rating = (int) value;
         if (rating <= 0) {

@@ -65,13 +65,16 @@ public class QuestionBean implements Serializable{
     public Question getQuestion(){
         return newQuestion;
     }
-     /**
-      * Sets the question the be asked
-      * @param newQuestion 
-      */
+
+    /**
+     * Sets the question the be asked
+     *
+     * @param newQuestion
+     */
     public void setQuestion(Question newQuestion){
         this.newQuestion = newQuestion;
     }
+    
     /**
      * gets a list of courses
      * @return courseList
@@ -79,6 +82,7 @@ public class QuestionBean implements Serializable{
     public List<Course> getCourseList(){
         return courseList;
     }
+    
     /**
      * sets a list of courses
      * @param courseList list to be set
@@ -86,6 +90,7 @@ public class QuestionBean implements Serializable{
     public void setCourseList(List<Course> courseList) {
         this.courseList = courseList;
     }
+    
     /**
      * gets a list of questions
      * @return questionList
@@ -93,6 +98,7 @@ public class QuestionBean implements Serializable{
     public List<Question> getQuestionList(){
         return questionList;
     }
+    
     /**
      * sets a list of questions
      * @param questionList list to be set
@@ -100,6 +106,7 @@ public class QuestionBean implements Serializable{
     public void setQuestionList(List<Question> questionList) {
         this.questionList = questionList;
     }
+    
     /**
      * gets the student asking the question
      * @return student
@@ -115,6 +122,7 @@ public class QuestionBean implements Serializable{
     public void setStudent(User student){
         this.student = student;
     }
+    
     /**
      * gets a course
      * @return course
@@ -122,6 +130,7 @@ public class QuestionBean implements Serializable{
     public Course getCourse(){
         return course;
     }
+    
     /**
      * sets a course
      * @param course to be set
@@ -129,6 +138,7 @@ public class QuestionBean implements Serializable{
     public void setCourse(Course course){
         this.course = course;
     }
+    
     /**
      * gets a response
      * @return responses
@@ -136,6 +146,7 @@ public class QuestionBean implements Serializable{
     public Responses getResponses(){
         return responses;
     }
+    
     /**
      * sets a response
      * @param responses to be set
@@ -143,6 +154,7 @@ public class QuestionBean implements Serializable{
     public void setResponse(Responses responses){
         this.responses = responses;
     }
+    
     /**
      * updates courseList based on the subject 
      * and gets the course if it equals the courseName
@@ -156,16 +168,16 @@ public class QuestionBean implements Serializable{
                 this.course = courseList.get(i);
             }
         }
-        
     }
+    
     /**
      * returns a question based on the title
      * @param title name of the question
      */
     public void getQuestionTitle(String title){
         this.question = tut4youApp.findQuestionTitle(title);
-        //System.out.println(question.getTitle());
     }
+    
     /**
      * returns a question list based on the course name
      * and checks to see if the title matches any questions
@@ -179,8 +191,8 @@ public class QuestionBean implements Serializable{
                 this.question = questionList.get(i);
             }
         }
-
     }
+    
     /**
      * Adds a new question to the database
      * @return newQuestion

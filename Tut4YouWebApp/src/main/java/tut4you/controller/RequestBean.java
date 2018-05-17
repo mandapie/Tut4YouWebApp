@@ -75,38 +75,70 @@ public class RequestBean implements Serializable {
         this.request = request;
     }
     
+    /**
+     * get list of pending requests
+     * @return 
+     */
     public List<Request> getPendingRequests() {
         pendingRequests = tut4youapp.getActiveRequest();
         return pendingRequests;
     }
 
+    /**
+     * sets list of pending requests
+     * @param pendingRequests 
+     */
     public void setPendingRequests(List<Request> pendingRequests) {
         this.pendingRequests = pendingRequests;
     }
     
+    /**
+     * gets list of accepted requests
+     * @return 
+     */
     public List<Request> getAcceptedRequests() {
         acceptedRequests = tut4youapp.getAcceptedRequestList();
         return acceptedRequests;
     }
 
+    /**
+     * sets list of accepted requests
+     * @param acceptedRequests 
+     */
     public void setAcceptedRequests(List<Request> acceptedRequests) {
         this.acceptedRequests = acceptedRequests;
     }
 
+    /**
+     * gets lists of complete requests
+     * @return 
+     */
     public List<Request> getCompletedRequests() {
         completedRequests = tut4youapp.getCompletedRequests();
         return completedRequests;
     }
 
+    /**
+     * sets list of completed requests
+     * @param completedRequests 
+     */
     public void setCompletedRequests(List<Request> completedRequests) {
         this.completedRequests = completedRequests;
     }
     
+    /**
+     * gets list of declined requests
+     * @return 
+     */
     public List<Request> getDeclinedRequests() {
         declinedRequests = tut4youapp.getDeclinedRequest();
         return declinedRequests;
     }
 
+    /**
+     * sets list of declined requests
+     * @param declinedRequests 
+     */
     public void setDeclinedRequests(List<Request> declinedRequests) {
         this.declinedRequests = declinedRequests;
     }
@@ -141,6 +173,11 @@ public class RequestBean implements Serializable {
         return "chat";
     }
     
+    /**
+     * check if current user is a student of the request
+     * @param user
+     * @return 
+     */
     public boolean isCheckRequestStudentEmail(User user) {
         String currentUserEmail = userbean.getEmailFromSession();
         return user.getEmail().equals(currentUserEmail);

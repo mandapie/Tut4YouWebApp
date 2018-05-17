@@ -25,7 +25,6 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import tut4you.model.FlaggedUser;
 import tut4you.model.Tut4YouApp;
-import tut4you.model.User;
 
 
 /**
@@ -35,38 +34,12 @@ import tut4you.model.User;
 @Named
 @ViewScoped
 public class FlaggedUserBean implements Serializable {
-    /**
-     * flaggedUser Object
-     */
-    private FlaggedUser flaggedUser;
-    /**
-     * EJB
-     */
+        
     @EJB
     private Tut4YouApp tut4youApp;
-    /**
-     * get flagged User
-     * @return flaggedUser
-     */
-    public FlaggedUser getFlaggedUser() {
-        return flaggedUser;
-    }
-    /**
-     * set flagged user
-     * @param flaggedUser 
-     */
-    public void setFlaggedUser(FlaggedUser flaggedUser) {
-        this.flaggedUser = flaggedUser;
-    }
-    /**
-     * find flagged user based off email
-     * @param email
-     * @return flagged User
-     */
-    public FlaggedUser findFlaggedUser(String email) {
-        flaggedUser = tut4youApp.findFlaggedUser(email);
-        return flaggedUser;
-    }
+    
+    private FlaggedUser flaggedUser;
+    
     /**
      * Creates an instance of the flagUserBean
      */
@@ -82,6 +55,33 @@ public class FlaggedUserBean implements Serializable {
     public void destroyFlaggedUserBean() {
         
     }
+    
+    /**
+     * get flagged User
+     * @return flaggedUser
+     */
+    public FlaggedUser getFlaggedUser() {
+        return flaggedUser;
+    }
+    
+    /**
+     * set flagged user
+     * @param flaggedUser 
+     */
+    public void setFlaggedUser(FlaggedUser flaggedUser) {
+        this.flaggedUser = flaggedUser;
+    }
+    
+    /**
+     * find flagged user based off email
+     * @param email
+     * @return flagged User
+     */
+    public FlaggedUser findFlaggedUser(String email) {
+        flaggedUser = tut4youApp.findFlaggedUser(email);
+        return flaggedUser;
+    }
+    
     /**
      * checks the time that the user was flagged and the length in time since being flagged
      * @param logInTime
@@ -101,7 +101,6 @@ public class FlaggedUserBean implements Serializable {
         else if(count == 3 && minutes < 5) {
             return true;
         }
-        
         else if(count >= 4) {
             return true;
         }
@@ -109,5 +108,4 @@ public class FlaggedUserBean implements Serializable {
             return false;
         }
     }
-    
 }

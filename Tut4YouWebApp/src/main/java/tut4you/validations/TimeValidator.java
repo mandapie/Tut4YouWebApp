@@ -16,8 +16,9 @@ import javax.inject.Named;
 import tut4you.model.Availability;
 
 /**
- *
+ * validates availability times
  * @author Syed Haider
+ * modified by Amanda
  */
 @Named
 @RequestScoped
@@ -27,6 +28,15 @@ public class TimeValidator {
         
     }
     
+    /**
+     * validate specific cases of availability times:
+     * no duplicate availabilities
+     * no overlapping availabilities
+     * no over lapping start time/end time
+     * @param context
+     * @param component
+     * @param value 
+     */
     public void validateTime(FacesContext context, UIComponent component, Object value) {
         Date startTime = (Date) component.getAttributes().get("startTime");
         Date endTime = (Date) value;

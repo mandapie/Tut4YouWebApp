@@ -44,7 +44,7 @@ import okhttp3.Response;
 import tut4you.model.*;
 
 /**
- * Binds creating a request inputs to the EJB.
+ * Binds creating a creates request inputs to the EJB.
  *
  * @author Keith Tran <keithtran25@gmail.com>
  */
@@ -78,13 +78,6 @@ public class CreateRequestBean implements Serializable {
     private Tutor tutor;
     private boolean isCurrentZipNull;
 
-    public boolean isIsCurrentZipNull() {
-        return isCurrentZipNull;
-    }
-
-    public void setIsCurrentZipNull(boolean isCurrentZipNull) {
-        this.isCurrentZipNull = isCurrentZipNull;
-    }
     /**
      * RequestBean encapsulates all the functions/services involved in making a
      * request
@@ -100,6 +93,7 @@ public class CreateRequestBean implements Serializable {
         initConversation();
         
     }
+    
     /**
      * initialize the conversation scope
      */
@@ -108,6 +102,7 @@ public class CreateRequestBean implements Serializable {
             conversation.begin();
         }
     }
+    
     /**
      * End the conversation scope
      */
@@ -117,6 +112,7 @@ public class CreateRequestBean implements Serializable {
             conversation.end();
         }
     }
+    
     /**
      * get ZipCodeByRadius
      * @return ZipCodeByRadius
@@ -124,6 +120,7 @@ public class CreateRequestBean implements Serializable {
     public ZipCodeByRadius getZipCodeByRadius() {
         return zipCodeByRadius;
     }
+    
     /**
      * set ZipCodeByRadius
      * @param zipCodeByRadius 
@@ -131,7 +128,28 @@ public class CreateRequestBean implements Serializable {
     public void setZipCodeByRadius(ZipCodeByRadius zipCodeByRadius) {
         this.zipCodeByRadius = zipCodeByRadius;
     }
+    
+    /**
+     * gets if current zip id null
+     * @return 
+     */
+    public boolean isIsCurrentZipNull() {
+        return isCurrentZipNull;
+    }
 
+    /**
+     * sets if current zip id null
+     * @param isCurrentZipNull 
+     */
+    public void setIsCurrentZipNull(boolean isCurrentZipNull) {
+        this.isCurrentZipNull = isCurrentZipNull;
+    }
+
+    /**
+     * get current time
+     * @return currentTime
+     * @throws ParseException 
+     */
     public Date getCurrentTime() throws ParseException {
         String stringCurrentTime = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
         SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
@@ -149,6 +167,7 @@ public class CreateRequestBean implements Serializable {
         String currentDay = str.substring(0, 1).toUpperCase() + str.substring(1);
         return currentDay;
     }
+    
     /**
      * Get ZipCode
      * @return ZipCode
@@ -156,6 +175,7 @@ public class CreateRequestBean implements Serializable {
     public ZipCode getZipCode() {
         return zipCode;
     }
+    
     /**
      * Set ZipCode
      * @param zipCode 
@@ -181,6 +201,7 @@ public class CreateRequestBean implements Serializable {
     public void setRequest(Request request) {
         this.request = request;
     }
+    
     /**
      * get zip codes by Radius
      *
@@ -191,6 +212,10 @@ public class CreateRequestBean implements Serializable {
         return zipCodesByRadiusList;
     }
 
+    /**
+     * sets zip codes by Radius
+     * @param zipCodesByRadiusList 
+     */
     public void setZipCodesByRadiusList(List<String> zipCodesByRadiusList) {
         this.zipCodesByRadiusList = zipCodesByRadiusList;
     }
@@ -342,12 +367,52 @@ public class CreateRequestBean implements Serializable {
         courseList = c;
     }
 
+    /**
+     * gets list of available tutors
+     * @return 
+     */
     public List<Tutor> getTutorList() {
         return tutorList;
     }
 
+    /**
+     * sets list of avaliable tutors
+     * @param c 
+     */
     public void setTutorList(List<Tutor> c) {
         tutorList = c;
+    }
+    
+    /**
+     * get day of week
+     * @return dayOfWeek
+     */
+    public Date getDayOfWeek() {
+        return dayOfWeek;
+    }
+    
+    /**
+     * set day of week
+     * @param dayOfWeek 
+     */
+    public void setDayOfWeek(Date dayOfWeek) {
+        this.dayOfWeek = dayOfWeek;
+    }
+    
+    /**
+     * get tutor
+     * @return 
+     */
+    public Tutor getTutor() {
+        return tutor;
+    }
+
+    /**
+     * set tutor
+     * @param tutor 
+     */
+    public void setTutor(Tutor tutor) {
+        this.tutor = tutor;
     }
 
     /**
@@ -386,7 +451,6 @@ public class CreateRequestBean implements Serializable {
             if (zipCodesByRadiusList.isEmpty()) {
                 //use zip code api query 
                 for (String str : getData(zipCode.getMaxRadius(), zipCode.getCurrentZipCode())) {
-                    System.out.println(str);
                     zipCodesByRadiusList = Arrays.asList(str.substring(1, str.length() - 1).split(", "));
                 }
             }
@@ -396,9 +460,7 @@ public class CreateRequestBean implements Serializable {
                 zipCodeByRadius = tut4youApp.addZipCodeByRadius(zipCode, zipCodeByRadius);
                 temp = new ArrayList();
                 temp = tut4youApp.getTutorsFromCourse(request.getCourse().getCourseName(), request.getDayOfWeek(), request.getSessionTime(), false, zipCodesByRadiusList.get(i));
-                tutorList.addAll(temp);
-                System.out.println("Zip code " + i + ": " + zipCodesByRadiusList.get(i));
-                System.out.println("temp " + i + ": " + temp);  
+                tutorList.addAll(temp); 
             }
             if(tutorList.contains(tut4youApp.findCurrentTutor())) {
                 tutorList.remove(tut4youApp.findCurrentTutor());
@@ -457,20 +519,11 @@ public class CreateRequestBean implements Serializable {
             Arrays.toString(zipCodeAPI.getDataList())
         };
     }
-    /**
-     * get day of week
-     * @return dayOfWeek
+    
+    /** 
+     * find current zip. If it is null set isCurrentZipNull to true, else false. 
+     * @param username 
      */
-    public Date getDayOfWeek() {
-        return dayOfWeek;
-    }
-    /**
-     * set day of week
-     * @param dayOfWeek 
-     */
-    public void setDayOfWeek(Date dayOfWeek) {
-        this.dayOfWeek = dayOfWeek;
-    }
     public void findTutorByUsername(String username) {
         tutor = tut4youApp.findTutorByUsername(username);
         if(tutor.getCurrentZip().length() == 0) {
@@ -479,14 +532,5 @@ public class CreateRequestBean implements Serializable {
         else {
             isCurrentZipNull = false;
         }
-        System.out.print("BOOLEAN: " + isCurrentZipNull);
-        System.out.println("CURRENTZIP: " + tutor.getCurrentZip());
-    }
-    public Tutor getTutor() {
-        return tutor;
-    }
-
-    public void setTutor(Tutor tutor) {
-        this.tutor = tutor;
     }
 }

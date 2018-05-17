@@ -40,7 +40,6 @@ public class NotifyBean implements Serializable {
 
     @EJB
     private Tut4YouApp tut4youApp;
-
     private Request request;
     private List<Request> pendingRequestList;
     private int numofNotif;

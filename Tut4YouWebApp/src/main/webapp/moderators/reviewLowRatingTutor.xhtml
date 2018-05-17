@@ -23,15 +23,14 @@
         2017 Syed Haider <shayder426@gmail.com>
     -->
     <!-- @author Andrew Kaichi <ahkaichi@gmail.com> -->
-    <f:metadata>
-        <f:viewParam name="username" value="#{moderatorBean.username}"/>
-        <f:event type="preRenderView" listener="#{moderatorBean.showLowRatingTutorUsername(moderatorBean.username)}">
-        </f:event>
-        <f:event listener="#{ratingBean.initConversation()}"
-                 type="preRenderView"></f:event>
-
-
-    </f:metadata>
+    <ui:define name="metadata">
+        <f:metadata>
+            <f:viewParam name="username" value="#{moderatorBean.username}"/>
+            <f:event type="preRenderView" listener="#{moderatorBean.showLowRatingTutorUsername(moderatorBean.username)}">
+            </f:event>
+            <f:event listener="#{ratingBean.initConversation()}" type="preRenderView"></f:event>
+        </f:metadata>
+    </ui:define>
     <ui:define name="title">Review Low Rating Tutor</ui:define>
     <ui:define name="content">
         <h1>Review Low Rating Tutor</h1>

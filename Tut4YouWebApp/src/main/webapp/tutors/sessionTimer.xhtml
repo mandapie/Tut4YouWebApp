@@ -23,10 +23,12 @@
         2017 Syed Haider <shayder426@gmail.com>
     -->
     <!-- @author Syed Haider <shayder426@gmail.com> -->
-    <f:metadata>
-        <f:viewParam name="id" value="#{sessionBean.id}"/>
-        <f:event listener="#{sessionBean.showRequestId(sessionBean.id)}" type="preRenderView"/>
-    </f:metadata>
+    <ui:define name="metadata">
+        <f:metadata>
+            <f:viewParam name="id" value="#{sessionBean.id}"/>
+            <f:event listener="#{sessionBean.showRequestId(sessionBean.id)}" type="preRenderView"/>
+        </f:metadata>
+    </ui:define>
     <ui:define name="title">Session</ui:define>  
     <ui:define name="content">
         <h:form id="securityId">

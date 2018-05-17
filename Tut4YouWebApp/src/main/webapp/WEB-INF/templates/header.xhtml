@@ -42,47 +42,25 @@
             </b:navbarLinks>
             <c:if test="#{userBean.isUserAuthenticated}">
                 <b:navbarLinks pull="right">
-                    <c:choose>
-                        <c:when test="#{userBean.submittedTranscript}">
-                            <b:dropMenu value="My Account" iconAwesome="warning" iconAlign="right" style="color:orange;">
-                                <b:navLink value="My Profile" outcome="/accounts/profile.xhtml"/>
-                                <b:navLink value="My Sessions" href="/Tut4YouWebApp/accounts/mySessions.xhtml"/>
-                                <b:navLink value="My Payments" href="/Tut4YouWebApp/accounts/myPayments.xhtml"/>
-                                <c:if test="#{userBean.isTutor}">
-                                    <b:navLink value="View Reviews" outcome="tutorProfile" includeViewParams="true">
-                                        <f:param name="username" value="#{userBean.user.username}"/>
-                                    </b:navLink>
-                                    <b:navLink value="My Transcript " outcome="/tutors/transcript.xhtml">
-                                        <b:iconAwesome rendered="#{userBean.submittedTranscript}" name="warning" style="color:orange;" tooltip="Please upload your transcript so that you can add courses to tutor" tooltip-position="auto"/>
-                                    </b:navLink>
-                                </c:if>
-                                <b:navLink></b:navLink>
-                                <c:if test="#{!(userBean.isTutor)}">
-                                    <b:navLink value="Become Tutor" outcome="/students/becomeTutor.xhtml"/>
-                                </c:if>
-                            </b:dropMenu>
-                        </c:when>
-                        <c:otherwise>
-                            <b:dropMenu value="My Account">
-                                <b:navLink value="My Profile" outcome="/accounts/profile.xhtml"/>
-                                <b:navLink value="My Sessions" outcome="/accounts/mySessions.xhtml"/>
-                                <b:navLink value="My Payments" outcome="/accounts/myPayments.xhtml"/>
-                                <c:if test="#{userBean.isTutor}">
-                                    <b:navLink value="View Reviews" outcome="tutorProfile" includeViewParams="true">
-                                        <f:param name="username" value="#{userBean.user.username}" />
-                                    </b:navLink>
-                                    <b:navLink value="My Transcript " outcome="/tutors/uploadTranscript.xhtml"/>
-                                </c:if>
-                                <b:navLink></b:navLink>
-                                <c:if test="#{!(userBean.isTutor)}">
-                                    <b:navLink value="Become Tutor" outcome="/students/tutorApplication.xhtml"/>
-                                </c:if>
-                                <c:if test="#{!(userBean.isModerator)}">
-                                    <b:navLink value="Become Tutor" outcome="/students/moderatorApplication.xhtml"/>
-                                </c:if>
-                            </b:dropMenu>
-                        </c:otherwise>
-                    </c:choose>
+                    <b:dropMenu value="#{userBean.user.firstName}">
+                        <b:navLink value="My Profile" outcome="/accounts/profile.xhtml"/>
+                        <b:navLink value="My Sessions" href="/Tut4YouWebApp/accounts/mySessions.xhtml"/>
+                        <b:navLink value="My Payments" href="/Tut4YouWebApp/accounts/myPayments.xhtml"/>
+                        <c:if test="#{userBean.isTutor}">
+                            <b:navLink value="View Reviews" outcome="/accounts/tutorProfile.xhtml?username=#{userBean.user.username}">
+                            </b:navLink>
+                            <b:navLink value="My Transcript " outcome="/tutors/transcript.xhtml">
+                                <b:iconAwesome rendered="#{userBean.submittedTranscript}" name="warning" style="color:orange;" tooltip="Please upload your transcript so that you can add courses to tutor" tooltip-position="auto"/>
+                            </b:navLink>
+                        </c:if>
+                        <b:navLink></b:navLink>
+                        <c:if test="#{!(userBean.isTutor)}">
+                            <b:navLink value="Become a Tutor" outcome="/accounts/tutorApplication.xhtml"/>
+                        </c:if>
+                        <c:if test="#{!(userBean.isModerator)}">
+                            <b:navLink value="Become a Moderator" outcome="/accounts/moderatorApplication.xhtml"/>
+                        </c:if>
+                    </b:dropMenu>
                     <b:form styleClass="navbar-form navbar-right">
                         <b:commandButton action="#{userBean.logout}" value="Sign Out" look="success" iconAlign="right">
                             <f:actionListener binding="#{createRequestBean.endConversation()}"/>

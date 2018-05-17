@@ -37,8 +37,8 @@
                 <p:dialog header="Request Declined" widgetVar="modalID" minHeight="40" visible="#{requestBean.declinedRequests.size() != 0}" closable="false">
                     <ui:repeat var="re" value="#{requestBean.declinedRequests}">
                         <p>Your request with the description: #{re.description} has been declined</p>
-                        <p:commandButton value="Dismiss" style="width:100%" action="#{requestBean.cancelRequest(re)}" oncomplete="PF('modalID').hide();"/>
                     </ui:repeat>
+                    <p:commandButton value="Dismiss" action="#{requestBean.cancelRequest(re)}" oncomplete="PF('modalID').hide();"/>
                 </p:dialog>
             </b:form>
             <c:if test="#{userBean.isTutor}">
@@ -186,10 +186,13 @@
                                 </h:outputText>
                                 <br/>
                                 <h:outputText value="#{req.description}"/>
-                                <b:button style="float:right;" value="Start Session" outcome="sessionTimer" rendered="#{!requestBean.isCheckRequestStudentEmail(req.student)}">
-                                    <f:param name="id" value="#{req.id}" />
-                                </b:button>
-
+                                <b:row>
+                                    <b:button style="float:right;margin-right:15px;" value="Start Session" look="primary" outcome="sessionTimer" rendered="#{!requestBean.isCheckRequestStudentEmail(req.student)}">
+                                        <f:param name="id" value="#{req.id}" />
+                                    </b:button>
+                                    <b:button style="float:right;margin-right:5px;" value="Chat with Student" outcome="chat" rendered="#{!requestBean.isCheckRequestStudentEmail(req.student)}"/>
+                                    <b:button style="float:right;" value="Chat with Tutor" outcome="chat" rendered="#{requestBean.isCheckRequestStudentEmail(req.student)}"/>
+                                </b:row>
                             </ui:repeat>
                         </b:panel>
                     </b:row>

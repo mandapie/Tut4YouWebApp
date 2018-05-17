@@ -131,6 +131,10 @@
             <to-view-id>/forum/viewQuestion.xhtml</to-view-id>
             <redirect>
                 <view-param>
+                    <name>subject</name>
+                    <value>#{questionBean.responses.question.course.subject.subjectName}</value>
+                </view-param>
+                <view-param>
                     <name>course</name>
                     <value>#{questionBean.responses.question.course.courseName}</value>
                 </view-param>

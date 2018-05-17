@@ -40,7 +40,7 @@
                         <b:column medium-screen="2">
                             <h:outputLabel value="Course:"/>
                         </b:column>
-                        <b:column medium-screen="2">
+                        <b:column medium-screen="4">
                             <h:outputLabel value="#{param['course']}"/>
 
                         </b:column>
@@ -56,7 +56,6 @@
                             </b:inputText>
                         </b:column>
                     </b:row>
-
                     <!-- description -->
                     <b:row>
                         <b:column medium-screen="2">
@@ -64,28 +63,15 @@
                         </b:column>
                         <b:column medium-screen="6">
                             <p:textEditor widgetVar="explanation" placeholder="Enter the question..." value="#{questionBean.question.description}" height="400" style="margin-bottom:10px">
-                                    <f:facet name="toolbar">
-                                        <span class="ql-formats">
-                                            <button class="ql-bold"></button>
-                                            <button class="ql-italic"></button>
-                                            <button class="ql-underline"></button>
-                                            <button class="ql-strike"></button>
-                                            <button class="ql-list" value="ordered"></button>
-                                            <button class="ql-list" value="bullet"></button>
-                                            <button class="ql-script" value="sub"></button>
-                                            <button class="ql-script" value="super"></button>
-                                        </span>
-                                    </f:facet>
-                                </p:textEditor>
+                            </p:textEditor>
                         </b:column>
                     </b:row>
                     <b:row>
-                        <b:commandButton medium-screen="2" value="Submit" look="primary" action="#{questionBean.askNewQuestion}" />
+                        <b:commandButton offset="2" medium-screen="2" value="Submit" look="primary" action="#{questionBean.askNewQuestion}" />
                     </b:row>
                 </b:form>
             </b:panel>
         </b:row>
-                
         <ui:debug hotkey='x' />
     </ui:define>
 </ui:composition>

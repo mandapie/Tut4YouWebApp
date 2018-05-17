@@ -1,8 +1,3 @@
-
-
-
-
-
 /*
  * Licensed under the Academic Free License (AFL 3.0).
  *     http://opensource.org/licenses/AFL-3.0
@@ -23,15 +18,10 @@ package tut4you.controller;
 
 import java.io.Serializable;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
-import javax.faces.view.ViewScoped;
 import tut4you.model.*;
 
 /**
@@ -134,5 +124,4 @@ public class UpdateRatingBean implements Serializable {
         result = "editRating";
         return result;
     }
-
 }

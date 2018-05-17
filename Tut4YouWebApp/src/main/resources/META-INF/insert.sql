@@ -115,6 +115,7 @@ INSERT INTO Availability(dayOfWeek,endTime,startTime,tutor_email) VALUES ('Monda
 INSERT INTO Availability(dayOfWeek,endTime,startTime,tutor_email) VALUES ('Monday','06:59:00','05:00:00','amanda@gmail.com')
 INSERT INTO Availability(dayOfWeek,endTime,startTime,tutor_email) VALUES ('Tuesday','04:59:00','04:00:00','amanda@gmail.com')
 INSERT INTO Availability(dayOfWeek,endTime,startTime,tutor_email) VALUES ('Tuesday','06:59:00','05:00:00','amanda@gmail.com')
+INSERT INTO Availability(dayOfWeek,endTime,startTime,tutor_email) VALUES ('Thursday','23:59:00','01:00:00','amanda@gmail.com')
 INSERT INTO Availability(dayOfWeek,endTime,startTime,tutor_email) VALUES ('Friday','23:00:00','02:00:00','amanda@gmail.com')
 INSERT INTO Availability(dayOfWeek,endTime,startTime,tutor_email) VALUES ('Saturday','23:00:00','02:00:00','amanda@gmail.com')
 INSERT INTO Availability(dayOfWeek,endTime,startTime,tutor_email) VALUES ('Sunday','23:00:00','02:00:00','amanda@gmail.com')

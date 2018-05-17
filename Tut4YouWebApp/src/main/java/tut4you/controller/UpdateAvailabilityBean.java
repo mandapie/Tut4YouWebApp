@@ -27,7 +27,6 @@ import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import tut4you.exception.AvailabilityExistsException;
 import tut4you.model.*;
 import tut4you.model.Tut4YouApp;
 
@@ -49,9 +48,9 @@ public class UpdateAvailabilityBean implements Serializable {
 
     private Availability availability;
     @Temporal(TemporalType.TIME)
-    private java.util.Date startTime;
+    private Date startTime;
     @Temporal(TemporalType.TIME)
-    private java.util.Date endTime;
+    private Date endTime;
     private List<Availability> availabilityList = new ArrayList();
 
     /**
@@ -93,7 +92,7 @@ public class UpdateAvailabilityBean implements Serializable {
      *
      * @param startTime
      */
-    public void setStartTime(java.util.Date startTime) {
+    public void setStartTime(Date startTime) {
         this.startTime = startTime;
     }
 
@@ -134,7 +133,7 @@ public class UpdateAvailabilityBean implements Serializable {
      * @throws java.text.ParseException
      */
     public String updateAvailability(Availability avail) throws ParseException {
-        String result = "updatedAvailability";
+        String result = "success";
         this.availability = avail;
         availability.setStartTime(avail.getStartTime());
         availability.setEndTime(avail.getEndTime());

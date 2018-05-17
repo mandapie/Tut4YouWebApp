@@ -50,7 +50,7 @@ import java.util.Date;
 @Table(name="Availability")
 @Entity
 @NamedQueries({
-    @NamedQuery(name = Availability.FIND_AVAILABILITY_BY_TUTOR, query = "SELECT a FROM Availability a JOIN a.tutor s WHERE s.email = :email")
+    @NamedQuery(name = Availability.FIND_AVAILABILITY_BY_TUTOR, query = "SELECT a FROM Availability a JOIN a.tutor s WHERE s.email = :email ORDER BY CASE a.dayOfWeek WHEN 'Monday' THEN 1 WHEN 'Tuesday' THEN 2 WHEN 'Wednesday' THEN 3 WHEN 'Thursday' THEN 4 WHEN 'Friday' THEN 5 WHEN 'Saturday' THEN 6 ELSE 7 END, a.startTime ASC")
 })
 public class Availability implements Serializable {
 
@@ -68,7 +68,7 @@ public class Availability implements Serializable {
     private java.util.Date startTime;
     @Temporal(TemporalType.TIME)
     private java.util.Date endTime;
-    private boolean editable;
+
     /**
      * Multiple availabilities can be added by a Tutor
      */
@@ -111,23 +111,6 @@ public class Availability implements Serializable {
      */
     public void setId(Long id) {
         this.id = id;
-    }
-
-    /**
-     * Gets the state of Editable
-     *
-     * @return editable
-     */
-    public boolean isEditable() {
-        return editable;
-    }
-
-    /**
-     * Sets the state of Editable
-     * @param editable 
-     */
-    public void setEditable(boolean editable) {
-        this.editable = editable;
     }
 
     /**
@@ -218,39 +201,7 @@ public class Availability implements Serializable {
         }
         return true;
     }
-
-    public void compare() {
-        List<String> dates = Arrays.asList(new String[]{
-            "Thursday",
-            "Saturday",
-            "Monday",
-            "Saturday"
-        });
-        Comparator<String> dateComparator = new Comparator<String>() {
-            @Override
-            public int compare(String s1, String s2) {
-                try {
-                    SimpleDateFormat format = new SimpleDateFormat("EEE");
-                    Date d1 = format.parse(s1);
-                    Date d2 = format.parse(s2);
-                    if (d1.equals(d2)) {
-                        return s1.substring(s1.indexOf(" ") + 1).compareTo(s2.substring(s2.indexOf(" ") + 1));
-                    } else {
-                        Calendar cal1 = Calendar.getInstance();
-                        Calendar cal2 = Calendar.getInstance();
-                        cal1.setTime(d1);
-                        cal2.setTime(d2);
-                        return cal1.get(Calendar.DAY_OF_WEEK) - cal2.get(Calendar.DAY_OF_WEEK);
-                    }
-                } catch (ParseException pe) {
-                    throw new RuntimeException(pe);
-                }
-            }
-        };
-        Collections.sort(dates, dateComparator);
-        System.out.println(dates);
-    }
-
+    
     @Override
     public String toString() {
         return "tut4you.entities.Availability[ id=" + id + " ]" + "startTime= " + startTime + "endTime = " + endTime + "dayOfWeek =" + dayOfWeek;

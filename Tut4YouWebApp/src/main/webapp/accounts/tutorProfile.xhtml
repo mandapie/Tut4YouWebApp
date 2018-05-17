@@ -25,12 +25,10 @@
     <!-- @author Amanda Pan <daikiraidemodaisuki@gmail.com> -->
     <ui:define name="metadata">
         <f:metadata>
-            <f:event listener="#{createRequestBean.initConversation()}" type="preRenderView"></f:event>
-            <f:event listener="#{ratingBean.initConversation()}" type="preRenderView"></f:event>
-        </f:metadata>
-        <f:metadata>
             <f:viewParam name="username" value="#{profileBean.username}"/>
             <f:event listener="#{profileBean.showUsername(profileBean.username)}" type="preRenderView"/>
+            <f:event listener="#{createRequestBean.initConversation()}" type="preRenderView"></f:event>
+            <f:event listener="#{ratingBean.initConversation()}" type="preRenderView"></f:event>
         </f:metadata>
     </ui:define>
     <ui:define name="title">Tutor's Profile Page</ui:define>
@@ -98,9 +96,9 @@
                             </b:row>
                             <b:row style="margin-bottom:5px;">
                                 <b:column>
-                                    <b:commandLink style="color:#6ba2ff;" value="Edit Rating" action="#{updateRatingBean.goToEditRatingPage(rating)}" rendered="#{profileBean.checkIfUserRated(rating.student.email)}"/>
+                                    <b:commandButton value="Edit" action="#{updateRatingBean.goToEditRatingPage(rating)}" rendered="#{profileBean.checkIfUserRated(rating.student.email)}"/>
                                     <span/>
-                                    <b:commandLink style="color:#6ba2ff;" value="Delete Rating" action="#{ratingBean.deleteRating(rating)}" rendered="#{profileBean.checkIfUserRated(rating.student.email)}"/>
+                                    <b:commandButton value="Delete" action="#{ratingBean.deleteRating(rating)}" rendered="#{profileBean.checkIfUserRated(rating.student.email)}"/>
                                 </b:column>
                             </b:row>
                         </b:column>

@@ -17,10 +17,6 @@
             <redirect/>
         </navigation-case>
         <navigation-case>
-            <from-outcome>updatedAvailability</from-outcome>
-            <to-view-id>/tutors/updatedAvailSuccess.xhtml</to-view-id>
-        </navigation-case>
-        <navigation-case>
             <from-outcome>viewModeratorApplications</from-outcome>
             <to-view-id>/moderators/viewModeratorApplications.xhtml</to-view-id>
             <redirect/>
@@ -47,16 +43,6 @@
             <from-outcome>sessionCompleted</from-outcome>
             <to-view-id>/tutors/sessionCompleted.xhtml</to-view-id>
             <redirect/>
-        </navigation-case>
-        <navigation-case>
-            <from-action>#{addCourseBean.addCourse}</from-action>
-            <from-outcome>addCourse</from-outcome>
-            <to-view-id>/tutors/addCourse.xhtml</to-view-id>
-        </navigation-case>
-        <navigation-case>
-            <from-action>#{addNewCourseBean.addNewCourse}</from-action>
-            <from-outcome>addNewCourse</from-outcome>
-            <to-view-id>/tutors/addNewCourse.xhtml</to-view-id>
         </navigation-case>
         <navigation-case>
             <from-action>#{createRequestBean.createNewRequest}</from-action>

@@ -432,9 +432,11 @@ public class ModeratorBean implements Serializable {
     }
     /**
      * upload resume to S3
+     * @return result
      * @throws IOException 
      */
-    public void uploadResume() throws IOException {
+    public String uploadResume() throws IOException {
+        String result;
         Properties prop = new Properties();
         InputStream propstream = new FileInputStream(getServletContext().getRealPath("WEB-INF/s3.properties"));
         prop.load(propstream);
@@ -454,7 +456,7 @@ public class ModeratorBean implements Serializable {
         try {
             String userName = userbean.getEmailFromSession();
             user = tut4youApp.findUser(userName);
-            String resumeName = user.getUsername()+"RESUME";
+            String resumeName = user.getUsername();
             String filePath = "resume/";
             String keyName = filePath.concat(resumeName.concat(".pdf"));
             
@@ -469,8 +471,8 @@ public class ModeratorBean implements Serializable {
                 FacesMessage message = new FacesMessage("Succesful", file.getFileName() + " is uploaded.");
                 FacesContext.getCurrentInstance().addMessage(null, message);
                 tut4youApp.addResumeFileLocation(keyName, reason);
-                
             }
+            result = "success";
             System.out.println("Uploaded successfully!");
         } catch (AmazonServiceException ase) {
             System.out.println("Caught an AmazonServiceException, which means your request made it to Amazon S3, but was "
@@ -480,9 +482,12 @@ public class ModeratorBean implements Serializable {
             System.out.println("AWS Error Code:  " + ase.getErrorCode());
             System.out.println("Error Type:    " + ase.getErrorType());
             System.out.println("Request ID:    " + ase.getRequestId());
+            result = "failure";
         } catch (AmazonClientException ace) {
             System.out.println("Caught an AmazonClientException, which means the client encountered an internal error while "
                     + "trying to communicate with S3, such as not being able to access the network.");
+            result = "failure";
         }
+        return result;
     }
 }

@@ -93,7 +93,7 @@ public class User implements Serializable {
     /**
      * A user can submit multiple Requests
      */
-    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval=true)
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
     private Collection<Request> requests;
     /**
      * A user can submit multiple Ratings
@@ -116,13 +116,13 @@ public class User implements Serializable {
     @OneToMany(mappedBy = "moderator", cascade = CascadeType.ALL)
     private Collection<ModeratorApplication> moderatorApplications;
 
-    @OneToOne
+    @OneToOne(orphanRemoval=true)
     private ModeratorApplication moderatorApplication;
 
     @ManyToMany(mappedBy = "moderators", cascade = CascadeType.ALL)
     private Collection<FlaggedUser> moderatorFlaggingUser;
 
-    @OneToOne
+    @OneToOne(orphanRemoval=true)
     private FlaggedUser flaggedUser;
 
     /**

@@ -57,7 +57,7 @@
                             <b:navLink disabled="true" value="Become a Tutor" outcome="/accounts/tutorApplication.xhtml"/>
                         </c:if>
                         <c:if test="#{!(userBean.isModerator)}">
-                            <b:navLink value="Become a Moderator" outcome="/accounts/moderatorApplication.xhtml"/>
+                            <b:navLink value="Become a Moderator" outcome="/accounts/moderatorApplication.xhtml" rendered="#{userBean.user.moderatorApplication == null}"/>
                         </c:if>
                     </b:dropMenu>
                     <b:form styleClass="navbar-form navbar-right">

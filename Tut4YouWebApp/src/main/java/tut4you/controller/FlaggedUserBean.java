@@ -17,49 +17,52 @@
 package tut4you.controller;
 
 import java.io.Serializable;
-import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.ejb.EJB;
-import javax.faces.bean.ManagedProperty;
-
 import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
 import javax.inject.Named;
-import tut4you.model.Complaint;
 import tut4you.model.FlaggedUser;
-
 import tut4you.model.Tut4YouApp;
-import tut4you.model.Tutor;
 import tut4you.model.User;
 
 
 /**
- * FlaggedUserBean
+ * FlaggedUserBean flags a user
  * @author Keith Tran <keithtran25@gmail.com>
  */
 @Named
-//@RequestScoped
 @ViewScoped
 public class FlaggedUserBean implements Serializable {
-    
+    /**
+     * flaggedUser Object
+     */
     private FlaggedUser flaggedUser;
-
+    /**
+     * EJB
+     */
     @EJB
     private Tut4YouApp tut4youApp;
-    
-    private User user;
-    
+    /**
+     * get flagged User
+     * @return flaggedUser
+     */
     public FlaggedUser getFlaggedUser() {
         return flaggedUser;
     }
-
+    /**
+     * set flagged user
+     * @param flaggedUser 
+     */
     public void setFlaggedUser(FlaggedUser flaggedUser) {
         this.flaggedUser = flaggedUser;
     }
+    /**
+     * find flagged user based off email
+     * @param email
+     * @return flagged User
+     */
     public FlaggedUser findFlaggedUser(String email) {
         flaggedUser = tut4youApp.findFlaggedUser(email);
         return flaggedUser;
@@ -79,6 +82,12 @@ public class FlaggedUserBean implements Serializable {
     public void destroyFlaggedUserBean() {
         
     }
+    /**
+     * checks the time that the user was flagged and the length in time since being flagged
+     * @param logInTime
+     * @param flaggedUser
+     * @return boolean
+     */
     public boolean checkIfSuspended(Date logInTime, FlaggedUser flaggedUser) {
         double diff = logInTime.getTime() - flaggedUser.getDateFlagged().getTime();
         double minutes = (diff / 1000) / 60;

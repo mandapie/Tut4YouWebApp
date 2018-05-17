@@ -23,8 +23,12 @@
         2017 Syed Haider <shayder426@gmail.com>
     -->
     <!-- @author Amanda Pan <daikiraidemodaisuki@gmail.com> -->
+    <!-- @author Keith Tran <keithtran25@gmail.com> -->
     <ui:define name="title">Tutors Notified</ui:define>
     <ui:define name="content">
+        <f:metadata>
+            <f:event listener="#{createRequestBean.initConversation()}" type="preRenderView"></f:event>
+        </f:metadata>
         <h1>Tutors Teaching the Course</h1>
         <p>The number of tutors that may help you with is: #{createRequestBean.numOfTutors}</p>
         <h1>Tutors Available</h1>

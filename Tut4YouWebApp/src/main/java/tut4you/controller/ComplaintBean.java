@@ -18,6 +18,7 @@ package tut4you.controller;
 
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.AmazonServiceException;
+import com.amazonaws.HttpMethod;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
@@ -25,6 +26,7 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.AccessControlList;
+import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.GroupGrantee;
 import com.amazonaws.services.s3.model.Permission;
@@ -32,9 +34,11 @@ import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
+import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.ParseException;
@@ -47,6 +51,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -58,17 +63,21 @@ import tut4you.model.Tut4YouApp;
 import tut4you.model.Tutor;
 import tut4you.model.User;
 
-
 /**
  * bean that handles moderators reviewing complaints and creating complaints
+ *
  * @author Keith Tran <keithtran25@gmail.com>
  */
 @Named
 @ViewScoped
 public class ComplaintBean implements Serializable {
+
     //inject registrationBean
     @Inject
     private RegistrationBean registrationBean;
+    //id parameter
+    @ManagedProperty("#{param.id}")
+    private int id;
     //EJB
     @EJB
     private Tut4YouApp tut4youApp;
@@ -82,36 +91,91 @@ public class ComplaintBean implements Serializable {
     private List<Complaint> complaintList = new ArrayList();
     //boolean isTutor
     private boolean isTutor;
+    private String complaintURL;
+    
+    public String getURL(){
+        return complaintURL;
+    }
+    public void setURL(String complaintURL){
+        this.complaintURL = complaintURL;
+    }
     /**
      * boolean to check if user was a tutor in the complaint
+     *
      * @return isTutor
      */
     public boolean isIsTutor() {
         return isTutor;
     }
+
     /**
      * set isTutor
-     * @param isTutor 
+     *
+     * @param isTutor
      */
     public void setIsTutor(boolean isTutor) {
         this.isTutor = isTutor;
     }
+
+    /**
+     * showComplaintID is used when passing the complaint parameter from one jsf
+     * page to another
+     *
+     * @param id
+     */
+    public void showComplaintID(int id) {
+        complaint = findComplaint(id);
+    }
+
+    /**
+     * find complaint by complaint id
+     *
+     * @param id
+     * @return complaint
+     */
+    public Complaint findComplaint(int id) {
+        return tut4youApp.findComplaint(id);
+    }
+
+    /**
+     * get ID
+     *
+     * @return ID
+     */
+    public int getId() {
+        return id;
+    }
+
+    /**
+     * set ID
+     *
+     * @param id
+     */
+    public void setId(int id) {
+        this.id = id;
+    }
+    
     /**
      * get tutor
+     *
      * @return tutor
      */
     public Tutor getTutor() {
         return tutor;
     }
+
     /**
      * set tutor
-     * @param tutor 
+     *
+     * @param tutor
      */
     public void setTutor(Tutor tutor) {
         this.tutor = tutor;
     }
+
     /**
      * get list of complaints
+     *
      * @return complaintLIst
      */
     public List<Complaint> getComplaintList() {
@@ -120,41 +184,52 @@ public class ComplaintBean implements Serializable {
         }
         return complaintList;
     }
+
     /**
      * set list of complaints
-     * @param complaintList 
+     *
+     * @param complaintList
      */
     public void setComplaintList(List<Complaint> complaintList) {
         this.complaintList = complaintList;
     }
+
     /**
      * get User
+     *
      * @return user
      */
     public User getUser() {
         return user;
     }
+
     /**
      * set user
-     * @param user 
+     *
+     * @param user
      */
     public void setUser(User user) {
         this.user = user;
     }
+
     /**
      * get complaint
+     *
      * @return complaint
      */
     public Complaint getComplaint() {
         return complaint;
     }
+
     /**
      * set complaint
-     * @param complaint 
+     *
+     * @param complaint
      */
     public void setComplaint(Complaint complaint) {
         this.complaint = complaint;
     }
+
     /**
      * Creates an instance of the courseBean
      */
@@ -162,66 +237,114 @@ public class ComplaintBean implements Serializable {
     public void createComplaintBean() {
         complaint = new Complaint();
         complaint.setIsReviewed(false);
-        
+
     }
+
     /**
      * Destroys an instance of the courseBean
      */
     @PreDestroy
     public void destroyComplaintBean() {
     }
-    
-    
+
     /**
      * create a new complaint
+     *
      * @param user
      * @param isTutor
+     * @return string
      */
-    public void createNewComplaint(User user, boolean isTutor) {
-      
+    public String createNewComplaint(User user, boolean isTutor) {
         this.isTutor = isTutor;
         complaint.setIsTutor(isTutor);
         tut4youApp.createNewComplaint(user, complaint);
+        return "success";
     }
+
     /**
      * close the complaint
+     *
+     * @return string
      */
-    public void closeComplaint() {
+    public String closeComplaint() {
         tut4youApp.closeComplaint(complaint);
+        return "viewComplaints";
     }
+
     /**
      * flag a reported user
+     *
      * @param email
      * @param type
-     * @throws ParseException 
+     * @return string for outcome
+     * @throws ParseException
      */
-    public void flagUser(String email, String type) throws ParseException {
+    public String flagUser(String email, String type) throws ParseException {
         Date currentDateTime = registrationBean.getCurrentDate();
         tut4youApp.closeComplaint(complaint);
-        User user = tut4youApp.findUser(email);
-        tut4youApp.flagUser(user, currentDateTime, type);
+        User flagUser = tut4youApp.findUser(email);
+        tut4youApp.flagUser(flagUser, currentDateTime, type);
+        return "viewComplaints";
     }
+
     /**
      * boolean checks to see if complaint has been submitted
+     *
      * @param complaints
      * @return complaints
      */
     public boolean isComplaintSubmitted(Collection<Complaint> complaints) {
         return tut4youApp.isComplaintSubmitted(complaints);
-        
+
     }
     /**
+    * method used for viewing transcript
+    * @return string
+    */
+    public String generateSignedURLTranscript(String userName) throws FileNotFoundException, IOException {
+        tutor = tut4youApp.findTutorByUsername(userName);
+        String keyName = tutor.getTranscriptFilePath();
+        String worked = "";
+        if (keyName == null) {
+            FacesMessage message = new FacesMessage("No transcript uploaded yet! Please upload a transcript.");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            worked = "noViewFile";
+        } else {
+            Properties prop = new Properties();
+            InputStream propstream = new FileInputStream(getServletContext().getRealPath("WEB-INF/s3.properties"));
+            prop.load(propstream);
+            AWSCredentials credentials = new BasicAWSCredentials(prop.getProperty("AWSAccessKeyId"), prop.getProperty("AWSSecretKey"));
+            String bucketName = prop.getProperty("bucketName");
+            // source: https://stackoverflow.com/questions/4bucketName1951978/amazons3clientcredentials-is-deprecated
+            AmazonS3 s3 = AmazonS3ClientBuilder.standard().withRegion(Regions.US_WEST_1).withCredentials(new AWSStaticCredentialsProvider(credentials)).build();
+            Date expiration = new Date();
+            long msec = expiration.getTime();
+            msec += 1000 * 60 * 60; //expires in 1 hour.
+            expiration.setTime(msec);
+            GeneratePresignedUrlRequest generatePresignedUrlRequest = new GeneratePresignedUrlRequest(bucketName, keyName);
+            generatePresignedUrlRequest.setMethod(HttpMethod.GET);
+            generatePresignedUrlRequest.setExpiration(expiration);
+            URL s = s3.generatePresignedUrl(generatePresignedUrlRequest);
+            this.complaintURL = s.toString();
+            worked = "viewTranscript";
+
+        }
+        return worked;
+    }
+
+    /**
      * download transcript when moderators review a complaint made by a tutor
+     *
      * @param username
-     * @throws IOException 
+     * @throws IOException
      */
     public void downloadTranscript(String username) throws IOException {
         Properties prop = new Properties();
         InputStream propstream = new FileInputStream(getServletContext().getRealPath("WEB-INF/s3.properties"));
         prop.load(propstream);
         AWSCredentials credentials = new BasicAWSCredentials(
-                    prop.getProperty("AWSAccessKeyId"),
-                    prop.getProperty("AWSSecretKey"));
+                prop.getProperty("AWSAccessKeyId"),
+                prop.getProperty("AWSSecretKey"));
         String bucketName = prop.getProperty("bucketName");
 
         //Taken from: https://stackoverflow.com/questions/4bucketName1951978/amazons3clientcredentials-is-deprecated
@@ -230,13 +353,12 @@ public class ComplaintBean implements Serializable {
         acl.grantPermission(GroupGrantee.AllUsers, Permission.Write);
         try {
             tutor = tut4youApp.findTutorByUsername(username);
-       
-                 String keyName = tutor.getTranscriptFilePath();
-            if (keyName == null){
+
+            String keyName = tutor.getTranscriptFilePath();
+            if (keyName == null) {
                 FacesMessage message = new FacesMessage("No transcript uploaded yet! Please upload a transcript.");
-                FacesContext.getCurrentInstance().addMessage(null, message); 
-            }
-            else {
+                FacesContext.getCurrentInstance().addMessage(null, message);
+            } else {
                 String transcriptName = tutor.getUsername();
 
                 S3Object s3Object = s3.getObject(new GetObjectRequest(bucketName, keyName));
@@ -254,7 +376,7 @@ public class ComplaintBean implements Serializable {
                 FacesMessage message = new FacesMessage("Succesfully downloaded file to: " + path + "/" + file);
                 FacesContext.getCurrentInstance().addMessage(null, message);
                 stream.close();
-            }     
+            }
         } catch (AmazonServiceException ase) {
             System.out.println("Caught an AmazonServiceException, which means your request made it to Amazon S3, but was "
                     + "rejected with an error response for some reason.");

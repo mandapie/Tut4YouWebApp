@@ -17,6 +17,16 @@
             <redirect/>
         </navigation-case>
         <navigation-case>
+            <from-outcome>viewModeratorApplications</from-outcome>
+            <to-view-id>/moderators/viewModeratorApplications.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>viewLowRatingTutors</from-outcome>
+            <to-view-id>/moderators/viewLowRatingTutors.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
             <from-outcome>writeReview</from-outcome>
             <to-view-id>/students/writeReview.xhtml</to-view-id>
             <redirect/>
@@ -70,6 +80,10 @@
             <to-view-id>/moderators/reviewComplaint.xhtml</to-view-id>
         </navigation-case>
         <navigation-case>
+            <from-outcome>viewComplaints</from-outcome>
+            <to-view-id>/moderators/viewComplaints.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
             <from-outcome>submitComplaint</from-outcome>
             <to-view-id>/students/submitComplaint.xhtml</to-view-id>
         </navigation-case>
@@ -117,6 +131,10 @@
             <to-view-id>/forum/viewQuestion.xhtml</to-view-id>
             <redirect>
                 <view-param>
+                    <name>subject</name>
+                    <value>#{questionBean.responses.question.course.subject.subjectName}</value>
+                </view-param>
+                <view-param>
                     <name>course</name>
                     <value>#{questionBean.responses.question.course.courseName}</value>
                 </view-param>
@@ -134,6 +152,51 @@
                 <view-param>
                     <name>url</name>
                     <value>#{transcriptBean.URL}</value>
+                </view-param>
+            </redirect>
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{complaintBean.generateSignedURLTranscript(complaintBean.complaint.reportedUser.username)}</from-action>
+            <from-outcome>viewTranscript</from-outcome>
+            <to-view-id>/moderators/viewFiles.xhtml</to-view-id>
+            <redirect>
+                <view-param>
+                    <name>file</name>
+                    <value>Transcript</value>
+                </view-param>
+                <view-param>
+                    <name>url</name>
+                    <value>#{complaintBean.URL}</value>
+                </view-param>
+            </redirect>
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{moderatorBean.complaintBean.generateSignedURLTranscript(moderatorBean.tutor.username)}</from-action>
+            <from-outcome>viewTranscript</from-outcome>
+            <to-view-id>/moderators/viewFiles.xhtml</to-view-id>
+            <redirect>
+                <view-param>
+                    <name>file</name>
+                    <value>Transcript</value>
+                </view-param>
+                <view-param>
+                    <name>url</name>
+                    <value>#{complaintBean.URL}</value>
+                </view-param>
+            </redirect>
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{moderatorBean.generatePresignedUrlRequest}</from-action>
+            <from-outcome>viewResume</from-outcome>
+            <to-view-id>/moderators/viewFiles.xhtml</to-view-id>
+            <redirect>
+                <view-param>
+                    <name>file</name>
+                    <value>Resume</value>
+                </view-param>
+                <view-param>
+                    <name>url</name>
+                    <value>#{moderatorBean.URL}</value>
                 </view-param>
             </redirect>
         </navigation-case>

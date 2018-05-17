@@ -24,23 +24,29 @@
     <!-- @author Andrew Kaichi <ahkaichi@gmail.com> -->
     <ui:define name="title">Forum</ui:define>
     <ui:define name="content">
-        <b:panel title="Select the course that you have questions about" collapsible="false" look="info">
-            <div style="max-height:100%;overflow:auto;margin-bottom:15px;">
-                <b:form>
-                    <f:viewParam name="courseList" value="#{forumBean.changeSubject(param['subject'])}"/>
-                  <ui:repeat value="#{forumBean.courseList}" var="course">
-                    <div style="border-bottom:solid 1px;padding:15px;">
-                        <b:button value="#{course.courseName}" style="font-size:180%;" look="link" outcome="forumQuestion.xhtml">
-                            <f:param name="subject" value="#{param['subject']}"/>
-                            <f:param name="course" value="#{course.courseName}"/>    
-                        </b:button>
-                        <span/>
-                    <br/>
-                    </div>
-                </ui:repeat>  
-                </b:form>     
-            </div>
-        </b:panel>        
+        <b:row>
+            <b:button look="danger" value="Back to Subjects" outcome="index.xhtml" style="float:left;"/>
+        </b:row>
+        <br/>
+        <b:row>
+            <b:panel title="Select the course that you have questions about" collapsible="false" look="info">
+                <div style="max-height:100%;overflow:auto;margin-bottom:15px;">
+                    <b:form>
+                        <f:viewParam name="courseList" value="#{forumBean.changeSubject(param['subject'])}"/>
+                        <ui:repeat value="#{forumBean.courseList}" var="course">
+                            <div style="border-bottom:solid 1px;padding:15px;">
+                                <b:button value="#{course.courseName}" style="font-size:180%;" look="link" outcome="forumQuestion.xhtml">
+                                    <f:param name="subject" value="#{param['subject']}"/>
+                                    <f:param name="course" value="#{course.courseName}"/>    
+                                </b:button>
+                                <span/>
+                                <br/>
+                            </div>
+                        </ui:repeat>  
+                    </b:form>     
+                </div>
+            </b:panel>   
+        </b:row>     
         <ui:debug hotkey='x' />
     </ui:define>
 </ui:composition>

@@ -25,28 +25,36 @@
     <ui:define name="title">Forum</ui:define>
     <ui:define name="content">
         <b:row>
+            <b:button look="danger" value="Back to Courses" outcome="forumCourse.xhtml" style="float:left;">
+                <f:param name="subject" value="#{param['subject']}"/>
+            </b:button>
             <b:button look="primary" value="Ask a New Question" outcome="question.xhtml" style="float:right;">
                 <f:param name="subject" value="#{param['subject']}"/>
                 <f:param name="course" value="#{param['course']}"/>
             </b:button>
         </b:row>
-        <b:panel title="Select a question you'd like to view" collapsible="false" look="info">
-            <div style="max-height:400px;overflow:auto;margin-bottom:15px;">
-                <b:form>
-                    <f:viewParam name="questionList" value="#{forumBean.changeCourse(param['course'])}"/>
-                  <ui:repeat value="#{forumBean.questionList}" var="question">
-                    <div style="border-bottom:solid 1px;padding:15px;">
-                        <b:button value="#{question.title}" style="font-size:20px;" look="link" outcome="viewQuestion.xhtml">
-                            <f:param name="course" value="#{param['course']}"/>
-                            <f:param name="question" value="#{question.title}"/> 
-                        </b:button>
-                        <span/>
-                    <br/>
-                    </div>
-                </ui:repeat>  
-                </b:form>     
-            </div>
-        </b:panel>        
+        <br/>
+        <b:row>
+            <b:panel title="Select a question you'd like to view" collapsible="false" look="info">
+                <div style="max-height:1000px;overflow:auto;margin-bottom:15px;">
+                    <b:form>
+                        <f:viewParam name="questionList" value="#{forumBean.changeCourse(param['course'])}"/>
+                        <ui:repeat value="#{forumBean.questionList}" var="question">
+                            <div style="border-bottom:solid 1px;padding:15px;">
+                                <b:button value="#{question.title}" style="font-size:20px;" look="link" outcome="viewQuestion.xhtml">
+                                    <f:param name="subject" value="#{param['subject']}"/>
+                                    <f:param name="course" value="#{param['course']}"/>
+                                    <f:param name="question" value="#{question.title}"/> 
+                                </b:button>
+                                <span/>
+                                <br/>
+                            </div>
+                        </ui:repeat>  
+                    </b:form>     
+                </div>
+            </b:panel> 
+        </b:row>
+
         <ui:debug hotkey='x' />
     </ui:define>
 </ui:composition>

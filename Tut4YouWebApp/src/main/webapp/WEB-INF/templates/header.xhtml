@@ -55,7 +55,7 @@
                         </c:if>
                         <b:navLink></b:navLink>
                         <c:if test="#{!(userBean.isTutor)}">
-                            <b:navLink value="Become a Tutor" outcome="/accounts/tutorApplication.xhtml"/>
+                            <b:navLink disabled="true" value="Become a Tutor" outcome="/accounts/tutorApplication.xhtml"/>
                         </c:if>
                         <c:if test="#{!(userBean.isModerator)}">
                             <b:navLink value="Become a Moderator" outcome="/accounts/moderatorApplication.xhtml"/>

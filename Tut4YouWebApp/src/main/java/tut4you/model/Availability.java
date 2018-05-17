@@ -50,7 +50,8 @@ import java.util.Date;
 @Table(name="Availability")
 @Entity
 @NamedQueries({
-    @NamedQuery(name = Availability.FIND_AVAILABILITY_BY_TUTOR, query = "SELECT a FROM Availability a JOIN a.tutor s WHERE s.email = :email ORDER BY CASE a.dayOfWeek WHEN 'Monday' THEN 1 WHEN 'Tuesday' THEN 2 WHEN 'Wednesday' THEN 3 WHEN 'Thursday' THEN 4 WHEN 'Friday' THEN 5 WHEN 'Saturday' THEN 6 ELSE 7 END, a.startTime ASC")
+    @NamedQuery(name = Availability.FIND_AVAILABILITY_BY_TUTOR, query = "SELECT a FROM Availability a JOIN a.tutor s WHERE s.email = :email ORDER BY CASE a.dayOfWeek WHEN 'Monday' THEN 1 WHEN 'Tuesday' THEN 2 WHEN 'Wednesday' THEN 3 WHEN 'Thursday' THEN 4 WHEN 'Friday' THEN 5 WHEN 'Saturday' THEN 6 ELSE 7 END, a.startTime ASC"),
+    @NamedQuery(name = Availability.FIND_AVAILABILITIES, query = "Select a From Availability a WHERE  a.startTime < :requestTime AND a.endTime > :requestTime AND a.dayOfWeek = :dayOfWeek")
 })
 public class Availability implements Serializable {
 
@@ -58,6 +59,9 @@ public class Availability implements Serializable {
      * JPQL Query to get all availabilities of a tutor
      */
     public static final String FIND_AVAILABILITY_BY_TUTOR = "Availability.findAvailabilityByTutor";
+    /**+     * JPQL Query to get all availabilities based on time and day
+     */
+    public static final String FIND_AVAILABILITIES = "Availability.findAvailabilities";
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, unique = true)

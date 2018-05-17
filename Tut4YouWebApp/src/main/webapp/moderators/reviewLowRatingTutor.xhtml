@@ -23,46 +23,74 @@
         2017 Syed Haider <shayder426@gmail.com>
     -->
     <!-- @author Andrew Kaichi <ahkaichi@gmail.com> -->
-    <f:metadata>
-        <f:viewParam name="id" value="#{complaintBean.id}"/>
-        <f:event type="preRenderView" listener="#{complaintBean.showID(complaintBean.id)}">
-        </f:event>
-    </f:metadata>
-    <ui:define name="title">Review Complaint</ui:define>
+    <ui:define name="metadata">
+        <f:metadata>
+            <f:viewParam name="username" value="#{moderatorBean.username}"/>
+            <f:event type="preRenderView" listener="#{moderatorBean.showLowRatingTutorUsername(moderatorBean.username)}">
+            </f:event>
+            <f:event listener="#{ratingBean.initConversation()}" type="preRenderView"></f:event>
+        </f:metadata>
+    </ui:define>
+    <ui:define name="title">Review Low Rating Tutor</ui:define>
     <ui:define name="content">
-        <h1>Complaint</h1>
+        <h1>Review Low Rating Tutor</h1>
         <h:form>
             <b:row>
                 <b:column>
-                    <h:outputLabel value=" Reported User UserName: "/>
-                    <h:outputText value="#{complaintBean.complaint.reportedUser.username}"/>
+                    <h:outputLabel value="UserName: "/>
+                    <h:outputText value="#{moderatorBean.tutor.username}"/>
                 </b:column>
                 <b:column>
-                    <h:outputLabel value="Title"/>
-                    <h:outputText value="#{complaintBean.complaint.title}"/>
+                    <h:outputLabel value="Overall Rating: "/>
+                    <h:outputText value="#{moderatorBean.tutor.overallRating}"/>
                 </b:column>
                 <b:column>
-                    <h:outputLabel value="Description"/>
-                    <h:outputText value="#{complaintBean.complaint.details}"/>
-                </b:column>
-            </b:row>
-            <b:row>
-                <b:column>
-                    <b:commandButton value="Suspend User" look="danger" action="#{complaintBean.flagUser()}" />
-                </b:column>
-                <b:column>
-                    <b:commandButton value="Close Complaint" look="primary" action="#{complaintBean.closeComplaint()}"/>
-                </b:column>
-            </b:row>
-            <b:row>
-                <c:if test="#{complaintBean.complaint.reportedUser.groups.contains('tut4youapp.tutor')}" >
+                    <h:outputLabel value="Transcript "/>
                     <b:column>
-                        <h:outputLabel value="Transcript "/>
-                        <b:column>
-                            <p:commandButton value="Download Transcript" action="#{complaintBean.downloadTranscript}" ajax="false" />
-                        </b:column>
+                        <p:commandButton value="Download Transcript" action="#{moderatorBean.complaintBean.downloadTranscript(moderatorBean.tutor.username)}" ajax="false" />
                     </b:column>
-                </c:if>
+                </b:column>
+            </b:row>
+            <b:row>
+                <b:column>
+                    <b:commandButton value="Suspend User" look="danger" action="#{moderatorBean.complaintBean.flagUser(moderatorBean.tutor.email,'suspend')}" />
+                </b:column>
+                <b:column>
+                    <b:commandButton value="Ban User" look="danger" action="#{moderatorBean.complaintBean.flagUser(moderatorBean.tutor.email,'ban')}" />
+                </b:column>
+                <b:column>
+                    <b:commandButton value="Close Complaint" look="primary" action="#{moderatorBean.complaintBean.closeComplaint()}"/>
+                </b:column>
+            </b:row>
+            <b:row>
+                <h:outputLabel value="Past reviews"/>
+                <p:dataScroller value="#{ratingBean.getRatingList(moderatorBean.tutor.email)}" var="rating" chunkSize="10">
+                    <div style="border-bottom:solid 1px;">
+                        <b:row>
+                            <b:column tiny-screen="3">
+                                <h:outputLabel value="#{rating.student.firstName} #{rating.student.lastName}"/>
+                            </b:column>
+                            <b:column tiny-screen="9">
+                                <b:row>
+                                    <b:column tiny-screen="3">
+                                        <p:rating value="#{rating.ratingValue}" readonly="true"/>
+                                    </b:column>
+                                    <b:column>
+                                        <h:outputText value="#{rating.dateRated}">
+                                            <f:convertDateTime pattern="M-d-yyyy"/>
+                                        </h:outputText>
+                                    </b:column>
+                                </b:row>
+                                <b:row>
+                                    <b:column>
+                                        <h:outputText value="#{rating.description}"/>
+                                    </b:column>
+                                </b:row>
+                            </b:column>
+                        </b:row>
+                    </div>
+                    <br/>
+                </p:dataScroller>
             </b:row>
         </h:form>
 

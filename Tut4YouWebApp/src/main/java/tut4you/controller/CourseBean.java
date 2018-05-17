@@ -54,12 +54,14 @@ public class CourseBean implements Serializable {
     private List<Subject> subjectList = new ArrayList();
     private List<Course> courseList = new ArrayList();
     private List<Course> tutorCourses = new ArrayList();
+    private boolean addNewCourse;
 
     /**
      * Creates an instance of the courseBean
      */
     @PostConstruct
     public void createCourseBean() {
+        addNewCourse = false;
         course = new Course();
     }
     
@@ -153,7 +155,15 @@ public class CourseBean implements Serializable {
     public void setCourseList(List<Course> courseList) {
         this.courseList = courseList;
     }
+    
+    public boolean isAddNewCourse() {
+        return addNewCourse;
+    }
 
+    public void setAddNewCourse(boolean addNewCourse) {
+        this.addNewCourse = addNewCourse;
+    }
+    
     /**
      * Change the subject of the course
      */
@@ -165,25 +175,25 @@ public class CourseBean implements Serializable {
      * Adds a new course to the tutor
      * @return course
      */
-    public String addCourse() {
-        String result = "failure";
+    public void addCourse() {
         try {
             course = tut4youApp.addCourse(course);
             if (this.course != null) {
-                result = "success";
+                addNewCourse = true;
             }
         }
         catch (CourseExistsException see) {
             FacesContext.getCurrentInstance().addMessage("addCourseForm:courses", new FacesMessage("You have already taken this course."));
-            result = "addCourse";
         }
         catch (Exception e) {
             LOGGER.log(Level.SEVERE, null, e);
-            result = "failure";
         }
-        return result;
     }
     
+    /**
+     * fixed delete course
+     * @param course 
+     */
     public void deleteCourse(Course course) {
         tut4youApp.deleteCourse(course);
     }

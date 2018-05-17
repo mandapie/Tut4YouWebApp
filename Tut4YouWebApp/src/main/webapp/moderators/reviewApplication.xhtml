@@ -23,11 +23,13 @@
         2017 Syed Haider <shayder426@gmail.com>
     -->
     <!-- @author Andrew Kaichi <ahkaichi@gmail.com> -->
-    <f:metadata>
-        <f:viewParam name="username" value="#{moderatorBean.username}"/>
-        <f:event type="preRenderView" listener="#{moderatorBean.showUsername(moderatorBean.username)}">
-        </f:event>
-    </f:metadata>
+    <ui:define name="metadata">
+        <f:metadata>
+            <f:viewParam name="username" value="#{moderatorBean.username}"/>
+            <f:event type="preRenderView" listener="#{moderatorBean.showUsername(moderatorBean.username)}">
+            </f:event>
+        </f:metadata>
+    </ui:define>
     <ui:define name="title">Apply To Become a Moderator</ui:define>
     <ui:define name="content">
         <h1>Review Application</h1>

@@ -6,7 +6,7 @@
         jdbcDriver=com.mysql.jdbc.Driver
         jtaManaged=true
         initialSize=1
-        password=tut4youapp
+        password=tutors4you
         userName=tut4you
         jdbcUrl=jdbc:mysql://tomee-mysqldb.cz14lgoxj0jq.us-east-2.rds.amazonaws.com:3306/tut4youDB
     </Resource>-->

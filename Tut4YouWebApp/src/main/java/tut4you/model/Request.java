@@ -45,14 +45,11 @@ import javax.persistence.TemporalType;
  */
 @Table(name = "Request")
 @NamedQueries({
-  
-    @NamedQuery(name = Request.FIND_REQUESTS_BY_USER, query = "SELECT r FROM Request r  JOIN r.student s WHERE s.email = :email"),
-    
-    @NamedQuery(name = Request.FIND_REQUEST_BY_EMAIL, query = "SELECT r from Request r JOIN r.student s WHERE s.email = :student_email AND r.status = :status ORDER BY r.id DESC")
-    ,
-    @NamedQuery(name = Request.FIND_REQUEST_BY_TUTOR_EMAIL, query = "SELECT r from Request r JOIN r.tutor s WHERE s.email = :tutor_email AND r.status = :status ORDER BY r.id DESC")
-    ,
-    @NamedQuery(name = Request.FIND_REQUESTS_BY_TUTOR, query = "SELECT r FROM Request r JOIN r.availableTutors t WHERE t.email = :email ORDER BY r.id DESC")
+    @NamedQuery(name = Request.FIND_REQUESTS_BY_USER, query = "SELECT r FROM Request r JOIN r.student s WHERE s.email = :email ORDER BY CASE r.dayOfWeek WHEN 'Monday' THEN 1 WHEN 'Tuesday' THEN 2 WHEN 'Wednesday' THEN 3 WHEN 'Thursday' THEN 4 WHEN 'Friday' THEN 5 WHEN 'Saturday' THEN 6 ELSE 7 END, r.sessionTime ASC"),
+    @NamedQuery(name = Request.FIND_REQUEST_BY_EMAIL, query = "SELECT r from Request r JOIN r.student s WHERE s.email = :student_email AND r.status = :status ORDER BY CASE r.dayOfWeek WHEN 'Monday' THEN 1 WHEN 'Tuesday' THEN 2 WHEN 'Wednesday' THEN 3 WHEN 'Thursday' THEN 4 WHEN 'Friday' THEN 5 WHEN 'Saturday' THEN 6 ELSE 7 END, r.sessionTime ASC"),
+    @NamedQuery(name = Request.FIND_REQUEST_BY_TUTOR_EMAIL, query = "SELECT r from Request r JOIN r.tutor s WHERE s.email = :tutor_email AND r.status = :status ORDER BY CASE r.dayOfWeek WHEN 'Monday' THEN 1 WHEN 'Tuesday' THEN 2 WHEN 'Wednesday' THEN 3 WHEN 'Thursday' THEN 4 WHEN 'Friday' THEN 5 WHEN 'Saturday' THEN 6 ELSE 7 END, r.sessionTime ASC"),
+    @NamedQuery(name = Request.FIND_REQUESTS_BY_TUTOR, query = "SELECT r FROM Request r JOIN r.availableTutors t WHERE t.email = :email ORDER BY CASE r.dayOfWeek WHEN 'Monday' THEN 1 WHEN 'Tuesday' THEN 2 WHEN 'Wednesday' THEN 3 WHEN 'Thursday' THEN 4 WHEN 'Friday' THEN 5 WHEN 'Saturday' THEN 6 ELSE 7 END, r.sessionTime ASC"),
+    @NamedQuery(name = Request.FIND_REQUEST_BY_ID, query = "SELECT r FROM Request r WHERE r.id = :id")
 })
 @Entity
 public class Request implements Serializable {
@@ -64,11 +61,11 @@ public class Request implements Serializable {
      * http://tomee.apache.org/examples-trunk/jpa-enumerated/README.html
      */
     public enum Status {
-        PENDING,
-        ACCEPTED,
-        CANCELLED,
-        DECLINED,
-        COMPLETED;
+        PENDING, //0
+        ACCEPTED, //1
+        CANCELLED, //2
+        DECLINED, //3
+        COMPLETED; //4
     }
 
     /**
@@ -87,6 +84,10 @@ public class Request implements Serializable {
      * JPQL Query to find requests made by a user
      */
     public static final String FIND_REQUESTS_BY_USER = "Request.findRequestsByUser";
+    /**
+     * JPQL Query to find request by ID
+     */
+    public static final String FIND_REQUEST_BY_ID = "Request.findRequestsByID";
 
     /**
      * Primary key is generated uniquely
@@ -95,7 +96,6 @@ public class Request implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, unique = true)
     private Long id;
-
     /**
      * Multiple requests can be submitted by a student
      */
@@ -125,14 +125,12 @@ public class Request implements Serializable {
     private Collection<Tutor> availableTutors;
     @OneToOne
     private Tutor tutor;
-
     @OneToOne
     private Session session;
-
     private String description;
     private String dayOfWeek;
     @Temporal(TemporalType.TIME)
-    private Date currentTime;
+    private Date sessionTime;
     private Status status;
     private float lengthOfSession;
 
@@ -156,14 +154,20 @@ public class Request implements Serializable {
         this.student = student;
         this.description = description;
         this.status = status;
-        this.currentTime = currentTime;
+        this.sessionTime = currentTime;
         this.lengthOfSession = lengthOfSession;
     }
-
+    /**
+     * get session
+     * @return 
+     */
     public Session getSession() {
         return session;
     }
-
+    /**
+     * set session
+     * @param session 
+     */
     public void setSession(Session session) {
         this.session = session;
     }
@@ -223,21 +227,21 @@ public class Request implements Serializable {
     }
 
     /**
-     * get currentTime
+     * get sessionTime
      *
      * @return currenTime
      */
-    public Date getCurrentTime() {
-        return currentTime;
+    public Date getSessionTime() {
+        return sessionTime;
     }
 
     /**
-     * set currentTime
+     * set sessionTime
      *
-     * @param currentTime
+     * @param sessionTime
      */
-    public void setCurrentTime(Date currentTime) {
-        this.currentTime = currentTime;
+    public void setSessionTime(Date sessionTime) {
+        this.sessionTime = sessionTime;
 
     }
 
@@ -426,7 +430,6 @@ public class Request implements Serializable {
      */
     @Override
     public String toString() {
-        return "tut4you.model.Request[ id=" + id + " course=" + course + " description=" + description + " dayOfWeek=" + dayOfWeek + " currentTime= " + currentTime + " ]";
+        return "tut4you.model.Request[ id=" + id + " course=" + course + " description=" + description + " dayOfWeek=" + dayOfWeek + " currentTime= " + sessionTime + " ]";
     }
-
 }

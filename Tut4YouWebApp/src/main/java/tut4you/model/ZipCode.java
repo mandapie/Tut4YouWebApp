@@ -34,7 +34,7 @@ import javax.persistence.Table;
 
 /**
  *
- * @author Keith
+ * @author Keith <keithtran25@gmail.com>
  */
 @Table(name="ZipCode")
 @Entity
@@ -58,11 +58,19 @@ public class ZipCode implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, unique = true)
     private Long id;
+    /**
+     * One to many relationship between ZipCode and Request
+     */
     @OneToMany(mappedBy="zipCode",cascade=CascadeType.ALL)
     private Collection<Request> requests;
+    /**
+     * many to many relationship between ZipCode and ZipCodeByRadius
+     */
     @ManyToMany(mappedBy="zipCodes")
     private Collection<ZipCodeByRadius> zipCodesByRadius;    
+    //current zip code
     private String currentZipCode;
+    //max radius
     private int maxRadius;
     
     /**
@@ -106,32 +114,54 @@ public class ZipCode implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
-
+    /**
+     * get the zip codes by the radius of the zip code object
+     * @return zipCodesByRadius
+     */
     public Collection<ZipCodeByRadius> getZipCodesByRadius() {
         return zipCodesByRadius;
     }
-
+    /**
+     * set zipCodesByRadius
+     * @param zipCodesByRadius 
+     */
     public void setZipCodesByRadius(Collection<ZipCodeByRadius> zipCodesByRadius) {
         this.zipCodesByRadius = zipCodesByRadius;
     }
-    
+    /**
+     * add zip code by radius to the zip code object
+     * @param zipCodeByRadius 
+     */
     public void addZipCodeByRadius(ZipCodeByRadius zipCodeByRadius) {
         if (this.zipCodesByRadius == null)
             this.zipCodesByRadius = new HashSet();
         this.zipCodesByRadius.add(zipCodeByRadius);
     }
+    /**
+     * get max radius
+     * @return maxRadius
+     */
     public int getMaxRadius() {
         return maxRadius;
     }
-
+    /**
+     * set max radius
+     * @param maxRadius 
+     */
     public void setMaxRadius(int maxRadius) {
         this.maxRadius = maxRadius;
     }
-    
+    /**
+     * get current zip code
+     * @return currentZipCode
+     */
     public String getCurrentZipCode() {
         return currentZipCode;
     }
-
+    /**
+     * set current zip code
+     * @param currentZipCode 
+     */
     public void setCurrentZipCode(String currentZipCode) {
         this.currentZipCode = currentZipCode;
     }
@@ -188,6 +218,10 @@ public class ZipCode implements Serializable {
         }
         return true;
     }
+    /**
+     * override toString method
+     * @return string
+     */
     @Override
     public String toString() {
         return "tut4you.model.ZipCode[ id=" + id + " zipCode=" + currentZipCode + " maxRad=" + maxRadius ;

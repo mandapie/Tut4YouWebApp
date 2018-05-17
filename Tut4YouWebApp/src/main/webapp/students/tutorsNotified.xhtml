@@ -3,7 +3,9 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
-                xmlns:b="http://bootsfaces.net/ui">
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <!--
         Licensed under the Academic Free License (AFL 3.0).
         http://opensource.org/licenses/AFL-3.0
@@ -22,18 +24,22 @@
     -->
     <!-- @author Amanda Pan <daikiraidemodaisuki@gmail.com> -->
     <ui:define name="title">Tutors Notified</ui:define>
-    <ui:define name="metadata"/>
     <ui:define name="content">
         <h1>Tutors Teaching the Course</h1>
-        <p>The number of tutors that may help you with is: #{requestBean.numOfTutors}</p>
+        <p>The number of tutors that may help you with is: #{createRequestBean.numOfTutors}</p>
         <h1>Tutors Available</h1>
         <h:form>
             <b:dataTable value="#{createRequestBean.tutorList}" var="tutor">
                 <b:dataTableColumn>
                     <f:facet name="header">Tutor</f:facet>
-                    <h:link value="#{tutor.firstName} #{tutor.lastName}" outcome="tutorProfile" includeViewParams="true">
-                        <f:param name="username" value="#{tutor.username}" />
-                    </h:link>
+                    <b:column>
+                        <h:link value="#{tutor.firstName} #{tutor.lastName}" outcome="tutorProfile" includeViewParams="true">
+                            <f:param name="username" value="#{tutor.username}" />
+                            <span></span>
+                            <b:label text="Online" severity="success" rendered="#{tutor.currentZip != null}"/>
+                            <b:label text="Offline" severity="danger" rendered="#{tutor.currentZip == null}"/>
+                        </h:link>
+                    </b:column>
                 </b:dataTableColumn>
                 <b:dataTableColumn>
                     <f:facet name="header">Request</f:facet>
@@ -41,7 +47,7 @@
                     </b:commandButton>
                 </b:dataTableColumn>
             </b:dataTable>
-            <b:button style="width:100%"  value="Return to Dashboard" look="info"  outcome="/accounts/index.xhtml"/>
+            <b:button style="width:100%" value="Return to Dashboard" look="info"  outcome="/accounts/index.xhtml"/>
         </h:form>
         <ui:debug hotkey='x' />
     </ui:define>

@@ -108,11 +108,10 @@ public class UpdateRatingBean implements Serializable {
     public String updateRating(Rating r) throws ParseException {
         String result = "failure";
         this.rating = r;
-        Date date = new Date();
+     /*   Date date = new Date();
         rating.setRatingValue(r.getRatingValue());
         rating.setDescription(r.getDescription());
-        rating.setDateRated(date);
-        System.out.println("SWAG: " + r.getRatingValue() + r.getDescription());
+        rating.setDateRated(date);*/
         tut4youApp.updateRating(rating, rating.getDescription(), rating.getRatingValue());
         if (rating != null) {
             result = "success";
@@ -131,6 +130,7 @@ public class UpdateRatingBean implements Serializable {
     public String goToEditRatingPage(Rating r) throws ParseException {
         String result;
         rating = r;
+        System.out.println(rating);
         result = "editRating";
         return result;
     }

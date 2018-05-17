@@ -17,11 +17,13 @@
 package tut4you.controller;
 
 import java.io.Serializable;
-import java.util.Date;
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.ejb.EJB;
-import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import tut4you.model.Request;
 import tut4you.model.Session;
@@ -34,33 +36,49 @@ import tut4you.model.User;
  * @author Syed Haider <shayder426@gmail.com>
  */
 @Named
-@SessionScoped
+@ViewScoped
 public class SessionBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @EJB
-    private Tut4YouApp tut4youApp;
-
-    private String email;
-    private boolean checkAnswer;
+    private Tut4YouApp tut4youapp;
+    @ManagedProperty("#{param.id}")
+    private Long id; //requestId
     private Request request;
+    private boolean correctAnswer;
     private Session sessionTimer;
     private String securityAnswer;
     private String securityQuestion;
     private User student;
-    private SessionBean sessionBean;
     /**
-     * This will check if the "Start Button"
-     * on the "sessionTimer.xhtml" page has 
-     * been clicked.
+     * This will check if the "Start Button" on the "sessionTimer.xhtml" page
+     * has been clicked.
      */
     private boolean checkStartButtonState = false;
     private boolean checkEndButtonState = true;
+    
+    @PostConstruct
+    public void createSessionBean() {
+        sessionTimer = new Session();
+    }
+    
+    @PreDestroy
+    public void destroySessionBean() {
+        
+    }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+    
     /**
      * Gets checkStartButtonState
-     * 
+     *
      * @return true if start button is clicked
      */
     public boolean isCheckStartButtonState() {
@@ -69,7 +87,7 @@ public class SessionBean implements Serializable {
 
     /**
      * Sets checkStartButtonState to true or false
-     * 
+     *
      * @param checkStartButtonState true if clicked
      */
     public void setCheckStartButtonState(boolean checkStartButtonState) {
@@ -78,7 +96,7 @@ public class SessionBean implements Serializable {
 
     /**
      * Gets checkEndButtonState
-     * 
+     *
      * @return true if button is clicked
      */
     public boolean isCheckEndButtonState() {
@@ -94,9 +112,9 @@ public class SessionBean implements Serializable {
         this.checkEndButtonState = checkEndButtonState;
     }
 
-
     /**
      * Gets the student of the session
+     *
      * @return student - student of session
      */
     public User getStudent() {
@@ -105,7 +123,6 @@ public class SessionBean implements Serializable {
 
     /**
      * Sets the student of the session
-     * 
      *
      * @param student - student of session
      */
@@ -124,7 +141,7 @@ public class SessionBean implements Serializable {
 
     /**
      * Sets the security answer
-     * 
+     *
      * @param securityAnswer
      */
     public void setSecurityAnswer(String securityAnswer) {
@@ -186,31 +203,30 @@ public class SessionBean implements Serializable {
     }
 
     /**
-     * Gets checkAnswer (true if security answer is correct)
+     * Gets correctAnswer (true if security answer is correct)
      *
-     * @return checkAnswer true if email is the same
+     * @return correctAnswer true if email is the same
      */
-    public boolean isCheckAnswer() {
-        return checkAnswer;
+    public boolean isCorrectAnswer() {
+        return correctAnswer;
     }
 
     /**
-     * Sets the checkAnswer attribute to true or false depending on if the
-     * security answer is equivalent
+     * Sets the correctAnswer attribute to true or false depending on if the
+ security answer is equivalent
      *
-     * @param checkAnswer
+     * @param correctAnswer
      */
-    public void setCheckAnswer(boolean checkAnswer) {
-        this.checkAnswer = checkAnswer;
+    public void setCorrectAnswer(boolean correctAnswer) {
+        this.correctAnswer = correctAnswer;
     }
-
 
     /**
      * This will set the start session time of the session
      *
      */
     public void startTutorSession() {
-        sessionTimer = tut4youApp.startSessionTime(request, sessionTimer);
+        sessionTimer = tut4youapp.startSessionTime(request, sessionTimer);
         checkStartButtonState = true;
         checkEndButtonState = false;
     }
@@ -218,32 +234,25 @@ public class SessionBean implements Serializable {
     /**
      * This ends the tutoring session and sets the request to be a complete
      * status
-     *     */
-    
+     *
+     * @return 
+     */
     public String endTutorSession() {
-        return tut4youApp.endSessionTime(request, sessionTimer);
+        return tut4youapp.endSessionTime(request, sessionTimer);
     }
-
-
 
     /**
      *
-     * This checks to see if the securityAnswer answers
-     * the security question
-     * 
-     * @param answer the answer inputted
-     * @return true if answer is correct
+     * This checks to see if the securityAnswer answers the security question
      */
-    public boolean checkAnswer(String answer) {
+    public void checkAnswer() {
         String email = request.getStudent().getEmail();
-        checkAnswer = tut4youApp.checkAnswer(answer, email);
-        if (!checkAnswer) {
-            FacesMessage message = new FacesMessage("Answer is false. Try again.");
+        correctAnswer = tut4youapp.checkAnswer(securityAnswer, email);
+        if (!correctAnswer) {
+            FacesMessage message = new FacesMessage("Incorrect Answer","Try again.");
             FacesContext.getCurrentInstance().addMessage(null, message);
         }
-        return checkAnswer;
     }
-
 
     /**
      * This will forward the tutor to the session timer page to start the
@@ -262,12 +271,15 @@ public class SessionBean implements Serializable {
     }
 
     /**
-     * This displays when a tutor will click
-     * "Start Session" on the sessionTimer.xhtml page
+     * This displays when a tutor will click "Start Session" on the
+     * sessionTimer.xhtml page
      */
     public void showGrowlStartMessage() {
         FacesContext context = FacesContext.getCurrentInstance();
         context.addMessage(null, new FacesMessage("Successful!", "You started your session!"));
     }
 
+    public void showRequestId(Long id) {
+        request = tut4youapp.findRequest(id);
+    }
 }

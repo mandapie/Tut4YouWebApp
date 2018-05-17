@@ -51,12 +51,16 @@ import javax.persistence.Table;
 @DiscriminatorValue(value = "Student")
 
 @NamedQueries({
-    @NamedQuery(name = User.FIND_USER_EMAILS, query = "SELECT t.email FROM User t"),
-    @NamedQuery(name = User.FIND_USER_USERNAMES, query = "SELECT t.username FROM User t"),
-    @NamedQuery(name = User.FIND_USER_BY_EMAIL, query = "SELECT u FROM User u WHERE u.email = :email"),
+    @NamedQuery(name = User.FIND_USER_EMAILS, query = "SELECT t.email FROM User t")
+    ,
+    @NamedQuery(name = User.FIND_USER_USERNAMES, query = "SELECT t.username FROM User t")
+    ,
+    @NamedQuery(name = User.FIND_USER_BY_EMAIL, query = "SELECT u FROM User u WHERE u.email = :email")
+    ,
     @NamedQuery(name = User.FIND_USER_BY_UNAME, query = "SELECT u FROM User u WHERE u.username = :username")
 })
 public class User implements Serializable {
+
     /**
      * JPQL Query to obtain a list of users email
      */
@@ -65,13 +69,13 @@ public class User implements Serializable {
      * JPQL Query to obtain a list of users username
      */
     public static final String FIND_USER_USERNAMES = "Tutor.FindUserUsernames";
-     /**
+    /**
      * JPQL Query to obtain the user by rating
      */
     public static final String FIND_USER_BY_RATING = "User.FindUserByRating";
     public static final String FIND_USER_BY_EMAIL = "User.FindUserByEmail";
     public static final String FIND_USER_BY_UNAME = "User.FindUserByUName";
-    
+
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -85,7 +89,7 @@ public class User implements Serializable {
     private String password;
     private String university;
     private String securityQuestion;
-    private String securityAnswer;    
+    private String securityAnswer;
     /**
      * A user can submit multiple Requests
      */
@@ -101,37 +105,46 @@ public class User implements Serializable {
      */
     @ManyToMany(mappedBy = "students", cascade = CascadeType.ALL)
     private Collection<Group> groups;
+
     /**
      * One to many with relationship with question.
      * One student can ask many questions
      */
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
     private Collection<Question> questions;
-    
+
     @OneToMany(mappedBy = "moderator", cascade = CascadeType.ALL)
     private Collection<ModeratorApplication> moderatorApplications;
-    
+
     @OneToOne
     private ModeratorApplication moderatorApplication;
-    
+
     @ManyToMany(mappedBy = "moderators", cascade = CascadeType.ALL)
     private Collection<FlaggedUser> moderatorFlaggingUser;
 
-    @OneToOne 
+    @OneToOne
     private FlaggedUser flaggedUser;
-    
+
+    /**
+     * A user can send multiple payments
+     */
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
+    private Collection<Payment> payments;
+
     @OneToMany(mappedBy = "moderator", cascade = CascadeType.ALL)
     private Collection<Complaint> moderatorComplaint;
-    
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Collection<Complaint> userComplaint;
-    
+
     @OneToMany(mappedBy = "reportedUser", cascade = CascadeType.ALL)
     private Collection<Complaint> reportedUserComplaint;
+
     public ModeratorApplication getModeratorApplication() {
         return moderatorApplication;
     }
-     public Collection<Complaint> getModeratorComplaint() {
+
+    public Collection<Complaint> getModeratorComplaint() {
         return moderatorComplaint;
     }
 
@@ -154,11 +167,11 @@ public class User implements Serializable {
     public void setReportedUserComplaint(Collection<Complaint> reportedUserComplaint) {
         this.reportedUserComplaint = reportedUserComplaint;
     }
+
     public void setModeratorApplication(ModeratorApplication moderatorApplication) {
         this.moderatorApplication = moderatorApplication;
     }
 
-    
     /**
      * User constructor
      */
@@ -167,6 +180,7 @@ public class User implements Serializable {
 
     /**
      * Copy constructor
+     *
      * @param user
      */
     public User(User user) {
@@ -183,6 +197,7 @@ public class User implements Serializable {
 
     /**
      * User overloaded constructor
+     *
      * @param email
      * @param firstName
      * @param lastName
@@ -204,7 +219,7 @@ public class User implements Serializable {
         this.securityQuestion = securityQuestion;
         this.securityAnswer = securityAnswer;
     }
-    
+
     public Collection<FlaggedUser> getModeratorFlaggingUser() {
         return moderatorFlaggingUser;
     }
@@ -212,13 +227,14 @@ public class User implements Serializable {
     public void setModeratorFlaggingUser(Collection<FlaggedUser> moderatorFlaggingUser) {
         this.moderatorFlaggingUser = moderatorFlaggingUser;
     }
+
     public void addModeratorFlaggingUser(FlaggedUser moderatorFlaggingUser) {
         if (this.moderatorFlaggingUser == null) {
             this.moderatorFlaggingUser = new HashSet();
         }
         this.moderatorFlaggingUser.add(moderatorFlaggingUser);
     }
-    
+
     public Collection<ModeratorApplication> getModeratorApplications() {
         return moderatorApplications;
     }
@@ -226,30 +242,35 @@ public class User implements Serializable {
     public void setModeratorApplications(Collection<ModeratorApplication> moderatorApplications) {
         this.moderatorApplications = moderatorApplications;
     }
-    
+
     public void addModeratorApplication(ModeratorApplication moderatorApplication) {
         if (this.moderatorApplications == null) {
             this.moderatorApplications = new HashSet();
         }
         this.moderatorApplications.add(moderatorApplication);
     }
-    
+
     /**
      * get the flagged user
+     *
      * @return flaggedUser
      */
     public FlaggedUser getFlaggedUser() {
         return flaggedUser;
     }
+
     /**
      * set the flagged user
-     * @param flaggedUser 
+     *
+     * @param flaggedUser
      */
     public void setFlaggedUser(FlaggedUser flaggedUser) {
         this.flaggedUser = flaggedUser;
     }
+
     /**
      * Gets the email of a user
+     *
      * @return the email
      */
     public String getEmail() {
@@ -258,6 +279,7 @@ public class User implements Serializable {
 
     /**
      * Sets the email of a user
+     *
      * @param email
      */
     public void setEmail(String email) {
@@ -266,6 +288,7 @@ public class User implements Serializable {
 
     /**
      * Gets the first name of a user
+     *
      * @return first name
      */
     public String getFirstName() {
@@ -274,6 +297,7 @@ public class User implements Serializable {
 
     /**
      * Sets the first name of a user
+     *
      * @param firstName
      */
     public void setFirstName(String firstName) {
@@ -282,6 +306,7 @@ public class User implements Serializable {
 
     /**
      * Gets the last name of a student
+     *
      * @return the last name
      */
     public String getLastName() {
@@ -290,6 +315,7 @@ public class User implements Serializable {
 
     /**
      * Sets the last name of a user
+     *
      * @param lastName
      */
     public void setLastName(String lastName) {
@@ -298,6 +324,7 @@ public class User implements Serializable {
 
     /**
      * Gets the username of a user
+     *
      * @return username
      */
     public String getUsername() {
@@ -306,6 +333,7 @@ public class User implements Serializable {
 
     /**
      * Sets the username of a user
+     *
      * @param username
      */
     public void setUsername(String username) {
@@ -314,6 +342,7 @@ public class User implements Serializable {
 
     /**
      * Gets the phone number of a user
+     *
      * @return phone number
      */
     public String getPhoneNumber() {
@@ -322,6 +351,7 @@ public class User implements Serializable {
 
     /**
      * Sets the phone number of a user
+     *
      * @param phoneNumber
      */
     public void setPhoneNumber(String phoneNumber) {
@@ -330,6 +360,7 @@ public class User implements Serializable {
 
     /**
      * Gets the password of a user
+     *
      * @return password
      */
     public String getPassword() {
@@ -338,6 +369,7 @@ public class User implements Serializable {
 
     /**
      * Sets the password of a user
+     *
      * @param password
      */
     public void setPassword(String password) {
@@ -346,6 +378,7 @@ public class User implements Serializable {
 
     /**
      * gets the university of the user
+     *
      * @return university
      */
     public String getUniversity() {
@@ -354,6 +387,7 @@ public class User implements Serializable {
 
     /**
      * gets the university of the user
+     *
      * @param university
      */
     public void setUniversity(String university) {
@@ -362,6 +396,7 @@ public class User implements Serializable {
 
     /**
      * gets the security question
+     *
      * @return securityQuestion
      */
     public String getSecurityQuestion() {
@@ -370,7 +405,8 @@ public class User implements Serializable {
 
     /**
      * sets the security question
-     * @param securityQuestion 
+     *
+     * @param securityQuestion
      */
     public void setSecurityQuestion(String securityQuestion) {
         this.securityQuestion = securityQuestion;
@@ -378,6 +414,7 @@ public class User implements Serializable {
 
     /**
      * gets the security answer
+     *
      * @return securityAnswer
      */
     public String getSecurityAnswer() {
@@ -386,7 +423,8 @@ public class User implements Serializable {
 
     /**
      * gets the security answer
-     * @param securityAnswer 
+     *
+     * @param securityAnswer
      */
     public void setSecurityAnswer(String securityAnswer) {
         this.securityAnswer = securityAnswer;
@@ -394,6 +432,7 @@ public class User implements Serializable {
 
     /**
      * get a list of ratings
+     *
      * @return list of ratings
      */
     public Collection<Rating> getRatings() {
@@ -402,14 +441,16 @@ public class User implements Serializable {
 
     /**
      * sets a list of ratings
-     * @param ratings 
+     *
+     * @param ratings
      */
     public void setRatings(Collection<Rating> ratings) {
         this.ratings = ratings;
     }
-    
+
     /**
      * Gets the collection requests submitted by a user
+     *
      * @return collection of Requests
      */
     public Collection<Request> getRequests() {
@@ -418,6 +459,7 @@ public class User implements Serializable {
 
     /**
      * Sets the collection requests submitted by a user
+     *
      * @param requests
      */
     public void setRequests(Collection<Request> requests) {
@@ -440,6 +482,7 @@ public class User implements Serializable {
     }
     /**
      * gets the groups that this user is a member of
+     *
      * @return a collection of groups that this user belongs to
      */
     public Collection<Group> getGroups() {
@@ -448,14 +491,37 @@ public class User implements Serializable {
 
     /**
      * sets the groups that this user belongs to
+     *
      * @param groups is the collection of groups that this user is a member of
      */
     public void setGroups(Collection<Group> groups) {
         this.groups = groups;
     }
 
+    public Collection<Payment> getPayments() {
+        return payments;
+    }
+
+    public void setPayments(Collection<Payment> payments) {
+        this.payments = payments;
+    }
+      /**
+     * Adds a payment  to the collection of Payments
+     *
+     * @param payments
+     */
+    public void addPayment(Payment payment) {
+        if (this.payments == null) {
+            this.payments = new HashSet();
+        }
+        this.payments.add(payment);
+    }
+
+    
+
     /**
      * Adds a request submitted to the collection of Requests
+     *
      * @param request
      */
     public void addRequest(Request request) {
@@ -467,6 +533,7 @@ public class User implements Serializable {
 
     /**
      * Adds a rating submitted to the collection of Rating
+     *
      * @param rating
      */
     public void addRating(Rating rating) {
@@ -478,6 +545,7 @@ public class User implements Serializable {
 
     /**
      * Add a group to the user's set of groups
+     *
      * @param group to be added
      */
     public void addGroup(Group group) {
@@ -500,6 +568,7 @@ public class User implements Serializable {
 
     /**
      * determines whether or not the information for this user is valid
+     *
      * @param confirmPassword the password to be confirmed
      * @return <code>true</code> if this user has valid information;
      * <code>false</code> otherwise
@@ -514,6 +583,7 @@ public class User implements Serializable {
     /**
      * gets the user type from the discriminator column
      * https://stackoverflow.com/questions/15208793/getting-the-value-of-the-discriminator-column
+     *
      * @return the user type
      */
     public String getDecriminatorValue() {
@@ -522,6 +592,7 @@ public class User implements Serializable {
 
     /**
      * Override hashCode
+     *
      * @return hash
      */
     @Override
@@ -533,6 +604,7 @@ public class User implements Serializable {
 
     /**
      * Overrides the equals method
+     *
      * @param object
      * @return true if object is User, else false
      */
@@ -551,11 +623,11 @@ public class User implements Serializable {
 
     /**
      * Override toString
+     *
      * @return User attributes
      */
     @Override
     public String toString() {
-        return "tut4you.model.User[ id=" + email + " first name=" + firstName + " last name=" + lastName + " username=" + username + " phone number=" + phoneNumber  + " ]";
+        return "tut4you.model.User[ id=" + email + " first name=" + firstName + " last name=" + lastName + " username=" + username + " phone number=" + phoneNumber + " ]";
     }
 }
-

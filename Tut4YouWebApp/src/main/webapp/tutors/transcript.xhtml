@@ -5,7 +5,8 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:b="http://bootsfaces.net/ui"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
     <!--
         Licensed under the Academic Free License (AFL 3.0).
         http://opensource.org/licenses/AFL-3.0
@@ -20,41 +21,42 @@
         2017 Syed Haider <shayder426@gmail.com>
     -->
     <!-- @author Andrew Kaichi <ahkaichi@gmail.com> -->
+    <ui:define name="metadata">
+        <f:metadata>
+            <f:event listener="#{createRequestBean.endConversation()}" type="preRenderView"></f:event>
+        </f:metadata>
+    </ui:define>
     <ui:define name="title">Transcript</ui:define>
     <ui:define name="content">
-        <f:metadata>
-            <f:event listener="#{createRequestBean.endConversation()}"
-                     type="preRenderView"></f:event>
-        </f:metadata>
         <h1>Your Transcript</h1>
         <b:panel title="Select what you would like to do." collapsible="false" look="info">
-            <h:form id="transcript" enctype="multipart/form-data">
-                
-                <b:row>
-                    <b:column>
-                        <h:outputLabel for="uploadTranscript">
-                            Upload Your Transcript
-                        </h:outputLabel>
+            <h:form id="transcript" prependId="false" enctype="multipart/form-data">
+                <p:growl id="uploadTranscript" showDetail="true" />
+                <b:column medium-screen="half">
+                    <b:row>
+                        <h:outputLabel value="Upload Your Transcript"/>
+                    </b:row>
+                    <b:row>
                         <p:fileUpload value="#{transcriptBean.file}"
                                       mode="simple"
                                       allowTypes="/(\.|\/)(gif|jpe?g|pdf)$/"
                                       fileLimit="1"
-                                      update="uploadTranscript"/>
-                        <p:growl id="uploadTranscript" showDetail="true" />
-                        <br></br>
-                        <p:commandButton value="Upload" action="#{transcriptBean.uploadTranscript}" ajax="false" />
-                    </b:column>
-                </b:row>
-                <b:row> 
-                    <b:column>
-                        <br></br>
-                        <h:outputLabel for="downloadTranscript">
-                            Download Your Transcript
-                        </h:outputLabel>
-                        <br></br>
-                        <p:commandButton value="Download Transcript" action="#{transcriptBean.downloadTranscript}" ajax="false" />
-                    </b:column>
-                </b:row>
+                                      update="uploadTranscript"
+                                      a:onchange="if (tagName == 'INPUT') { if (!!value) PF('button').enable(); else PF('button').disable(); }"/>
+                    </b:row>
+                    <b:row style="margin-top:10px;">
+                        <p:commandButton widgetVar="button" value="Upload" action="#{transcriptBean.uploadTranscript}" ajax="false" disabled="#{facesContext.renderResponse or not facesContext.postback}"/>
+                    </b:row>
+                    <br/>
+                </b:column>
+                <b:column medium-screen="half">
+                    <b:row>
+                        <h:outputLabel value="Download Your Transcript"/>
+                    </b:row>
+                    <b:row>
+                        <p:commandButton value="Download" action="#{transcriptBean.downloadTranscript}" ajax="false" />
+                    </b:row>
+                </b:column>
             </h:form>
         </b:panel>
         <ui:debug hotkey='x'/>

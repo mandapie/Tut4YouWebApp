@@ -25,10 +25,6 @@
     <!-- @author Amanda Pan <daikiraidemodaisuki@gmail.com> -->
     <ui:define name="title">Profile</ui:define>
     <ui:define name="content">
-        <f:metadata>
-            <f:event listener="#{createRequestBean.endConversation()}"
-                     type="preRenderView"></f:event>
-        </f:metadata>
         <h1>Personal Information</h1>
         <b:row>
             <b:button look="primary" value="Edit Profile" href="/Tut4YouWebApp/accounts/editProfile.xhtml" style="float:right;"/>

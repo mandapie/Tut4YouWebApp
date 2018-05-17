@@ -22,36 +22,54 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.ejb.EJB;
-import javax.enterprise.context.SessionScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import tut4you.model.Payment;
+import tut4you.model.Request;
 import tut4you.model.Session;
 import tut4you.model.Tut4YouApp;
 import tut4you.model.Tutor;
 
 /**
- * Payments are made to tutors
- * by students. This class binds the payment
- * inputs to the EJB.
+ * Payments are made to tutors by students. This class binds the payment inputs
+ * to the EJB.
  *
  * @author Syed Haider<shayder426@gmail.com>
  */
 @Named
-@SessionScoped
+@ViewScoped
 public class PaymentBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
     private Payment payment;
     private List<Payment> paymentList = new ArrayList(); //list of payments
     private Tutor tutor;
+    private Request request;
     private Session session;
     private boolean paymentStatus;
 
     @EJB
     private Tut4YouApp tut4youApp;
+
+    /**
+     * Creates an instance of the sessionBean
+     */
+    @PostConstruct
+    public void createSessionBean() {
+        payment = new Payment();
+    }
+
+    /**
+     * Destroys an instance of the sessionBean
+     */
+    @PreDestroy
+    public void destroySessionBean() {
+    }
 
     /**
      * Gets the tutor of a session involved with a payment
@@ -95,6 +113,7 @@ public class PaymentBean implements Serializable {
      * @return paymentList - list of payments
      */
     public List<Payment> getPaymentList() {
+        System.out.println("Just got called from the bean");
         paymentList = tut4youApp.getPaymentList();
         return paymentList;
     }
@@ -126,7 +145,7 @@ public class PaymentBean implements Serializable {
         this.session = session;
     }
 
-     /**
+    /**
      * Gets the paymentStatus
      *
      * @return paymentStatus - true if payment is completed
@@ -137,7 +156,7 @@ public class PaymentBean implements Serializable {
 
     /**
      * Sets the paymentStatus
-     * 
+     *
      * @param paymentStatus - true if payment is completed
      */
     public void setTransactionStatus(boolean paymentStatus) {
@@ -154,10 +173,10 @@ public class PaymentBean implements Serializable {
     public boolean checkCompletedStatus(String payKey) {
         if (payKey != null && !payKey.isEmpty()) {
             paymentStatus = !tut4youApp.checkCompletedStatus(payKey);
-            return paymentStatus;
         } else {
-            return true;
+            paymentStatus = true;
         }
+        return paymentStatus;
     }
 
     /**
@@ -165,19 +184,23 @@ public class PaymentBean implements Serializable {
      * Sessions" page. Student will be redirected to Paypal to pay for the
      * tutoring session.
      *
-     * @param tutor the tutor getting paid
-     * @param session the session for which the tutor is getting paid
+     * @param request the completed request in the tutoring session
      */
-    public void payForTutoringSession(Tutor tutor, Session session) {
+    public void payForTutoringSession(Request request) {
         String payKey;
+        this.session = request.getSession();
+        System.out.println(session);
+        this.tutor = request.getTutor();
         String email = tutor.getEmail();
         double hourlyRate = tutor.getHourlyRate();
-        this.tutor = tutor;
-        payKey = tut4youApp.generatePayKey(email, hourlyRate);
+        payKey = tut4youApp.generatePayKey(email, hourlyRate, session.getElapsedTimeOfSession());
+        
         //This redirects the user to an external website (paypal's payment sandbox URL)
         ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
         String url = "https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_ap-payment&paykey=" + payKey;
-        payment = tut4youApp.createPayment(payKey, session, tutor);
+        
+        //Creates the payment in the database
+        payment = tut4youApp.createPayment(payKey, session, request);
         try {
             externalContext.redirect(url);
         } catch (IOException ex) {

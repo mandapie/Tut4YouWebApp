@@ -170,6 +170,14 @@ public class Course implements Serializable {
         }
         this.question.add(question);
     }
+    /**
+     * removes tutor from the collection
+     * @param tutor 
+     */
+    public void removeTutor(Tutor tutor) {
+        tutors.remove(tutor);
+
+    }
 
     @Override
     public boolean equals(Object object) {

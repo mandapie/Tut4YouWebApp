@@ -23,6 +23,11 @@
     -->
     <!-- @author Amanda Pan <daikiraidemodaisuki@gmail.com> 
          @author Andrew Kaichi <ahkaichi@gmail.com> -->
+    <ui:define name="metadata">
+        <f:metadata>
+            <f:event listener="#{createRequestBean.endConversation()}" type="preRenderView"></f:event>
+        </f:metadata>
+    </ui:define>
     <ui:define name="title">Registration</ui:define>
     <ui:define name="content">
         <b:panel title="Become A Tutor" collapsible="false" look="info">

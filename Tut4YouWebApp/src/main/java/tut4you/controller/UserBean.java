@@ -18,6 +18,7 @@ package tut4you.controller;
 
 import java.io.Serializable;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -53,8 +54,8 @@ public class UserBean implements Serializable {
 
     private static final Logger LOGGER = Logger.getLogger("UserBean");
     
-    @Inject
-    private RequestBean requestBean;
+//    @Inject
+//    private RequestBean requestBean;
     @EJB
     private Tut4YouApp tut4youapp;
 
@@ -85,6 +86,7 @@ public class UserBean implements Serializable {
     @PreDestroy
     public void destroyUserBean() {
     }
+    
     public FlaggedUser getFlaggedUser() {
         return flaggedUser;
     }
@@ -270,10 +272,30 @@ public class UserBean implements Serializable {
         }
         return isTutor;
     }
+    
+    /**
+     * Determine if current authenticated user has the role of moderator
+     *
+     * @return
+     */
+    public boolean isIsModerator() {
+        boolean isModerator = false;
+        if (this.isIsUserAuthenticated()) {
+            FacesContext context = FacesContext.getCurrentInstance();
+            HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+            isModerator = request.isUserInRole("tut4youapp.moderator");
+        }
+        return isModerator;
+    }
+    
+    public boolean isSubmittedTranscript() {
+        return tut4youapp.hasSubmittedTranscript();
+    }
 
     /**
      * login method to check user is a registered user who is
      * @return result
+     * @throws java.text.ParseException
      */
     public String login() throws ParseException {
         FacesContext context = FacesContext.getCurrentInstance();
@@ -293,7 +315,24 @@ public class UserBean implements Serializable {
                     return "login";
                 }
                 if(checkIfSuspended(getCurrentDate()) == true) {
-                    context.addMessage("login:pass", new FacesMessage("User is currently suspended"));
+                    int count = flaggedUser.getCount();
+                    Date date = flaggedUser.getDateFlagged();
+                    SimpleDateFormat sdf = new SimpleDateFormat("hh:mm");
+                    String dateFlagged = sdf.format(date);
+                    String suspensionLength = null;
+                    if(count == 1) {
+                        suspensionLength = "User was suspended for 1 minute at " + dateFlagged;
+                    }
+                    else if(count == 2) {
+                        suspensionLength = "User was suspended for 3 minutes at " + dateFlagged;
+                    }
+                    else if(count == 3) {
+                        suspensionLength = "User was suspended for 5 minutes at " + dateFlagged;
+                    }
+                    else if(count >= 4) {
+                        suspensionLength = "User has been banned";
+                    }
+                    context.addMessage("login:pass", new FacesMessage(suspensionLength));
                     return "login";
                 }
                 request.login(email, pass); //log user in
@@ -356,6 +395,15 @@ public class UserBean implements Serializable {
             condition = false;
         }
     }
+    /**
+     * set the default zip to current if user declines to update their current zip location
+     */
+    public void setDefaultToCurrentZip() {
+        Tutor tutor = tut4youapp.setDefaultToCurrentZip();
+        if (tutor.getCurrentZip() != null) {
+            condition = false;
+        }
+    }
 
     /**
      * Updates a User's information
@@ -388,51 +436,42 @@ public class UserBean implements Serializable {
     /**
      * confirms if the user entered the correct password and if so allows them
      * to change their password
-     * @param oldPassword
-     * @param newPassword
      * @return
      */
-    public String changePassword(String oldPassword, String newPassword) {
+    public String changePassword() {
         FacesContext context = FacesContext.getCurrentInstance();
         String confirmPassword = tut4you.controller.HashPassword.getSHA512Digest(oldPassword);
         String result;
-
         String currentPassword = user.getPassword();
-
         if (confirmPassword.equalsIgnoreCase(currentPassword)) {
             tut4youapp.changePassword(tut4you.controller.HashPassword.getSHA512Digest(newPassword));
-            context.addMessage(null, new FacesMessage("Successful", "Password successfully changed"));
+            context.addMessage(null, new FacesMessage("Success","You have successfully changed your password"));
             result = "updateProfile";
         } else {
-            context.addMessage(null, new FacesMessage("Failed", "Password entered does not match your current password"));
-            result = "failure";
+            context.addMessage(null, new FacesMessage("Incorrect Password","Password entered does not match your current password"));
+            result = "changePassword";
         }
         return result;
     }
+    
     public boolean checkIfSuspended(Date logInTime) {
         flaggedUser = findFlaggedUser(email);
-        if(flaggedUser != null) {
-        double diff = logInTime.getTime() - flaggedUser.getDateFlagged().getTime();
-        double minutes = (diff / 1000) / 60;
-        int count = flaggedUser.getCount();
-        if(count == 1 && minutes < 1) {
-            return true;
-        }
-        else if(count == 2 && minutes < 3) {
-            return true;
-        }
-        else if(count == 3 && minutes < 5) {
-            return true;
-        }
-        
-        else if(count == 4) {
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-        else {
+        if (flaggedUser != null) {
+            double diff = logInTime.getTime() - flaggedUser.getDateFlagged().getTime();
+            double minutes = (diff / 1000) / 60;
+            int count = flaggedUser.getCount();
+            if (count == 1 && minutes < 1) {
+                return true;
+            } else if (count == 2 && minutes < 3) {
+                return true;
+            } else if (count == 3 && minutes < 5) {
+                return true;
+            } else if (count == 4) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
             return false;
         }
     }
@@ -440,5 +479,4 @@ public class UserBean implements Serializable {
         flaggedUser = tut4youapp.checkFlaggedUserLogIn(email);
         return flaggedUser;
     }
-
 }

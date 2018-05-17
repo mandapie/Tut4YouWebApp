@@ -73,7 +73,15 @@ public class User implements Serializable {
      * JPQL Query to obtain the user by rating
      */
     public static final String FIND_USER_BY_RATING = "User.FindUserByRating";
+
+    /**
+     *JPQL Query to obtain the user by email
+     */
     public static final String FIND_USER_BY_EMAIL = "User.FindUserByEmail";
+
+    /**
+     *JPQL Query to obtain the user by username
+     */
     public static final String FIND_USER_BY_UNAME = "User.FindUserByUName";
 
     private static final long serialVersionUID = 1L;
@@ -256,15 +264,27 @@ public class User implements Serializable {
         this.securityQuestion = securityQuestion;
         this.securityAnswer = securityAnswer;
     }
-
+    
+    /**
+     * gets collection of flagged users
+     * @return moderatorFlaggingUser
+     */
     public Collection<FlaggedUser> getModeratorFlaggingUser() {
         return moderatorFlaggingUser;
     }
 
+    /**
+     *  sets a user to a collection of flagged user
+     * @param moderatorFlaggingUser
+     */
     public void setModeratorFlaggingUser(Collection<FlaggedUser> moderatorFlaggingUser) {
         this.moderatorFlaggingUser = moderatorFlaggingUser;
     }
 
+    /**
+     *  sets a flagged user
+     * @param moderatorFlaggingUser
+     */
     public void addModeratorFlaggingUser(FlaggedUser moderatorFlaggingUser) {
         if (this.moderatorFlaggingUser == null) {
             this.moderatorFlaggingUser = new HashSet();
@@ -272,14 +292,26 @@ public class User implements Serializable {
         this.moderatorFlaggingUser.add(moderatorFlaggingUser);
     }
 
+    /**
+     *gets a collection of moderator applications
+     * @return
+     */
     public Collection<ModeratorApplication> getModeratorApplications() {
         return moderatorApplications;
     }
 
+    /**
+     *sets moderator application to a collection of moderator applications
+     * @param moderatorApplications
+     */
     public void setModeratorApplications(Collection<ModeratorApplication> moderatorApplications) {
         this.moderatorApplications = moderatorApplications;
     }
 
+    /**
+     * add moderator application to a hash set
+     * @param moderatorApplication
+     */
     public void addModeratorApplication(ModeratorApplication moderatorApplication) {
         if (this.moderatorApplications == null) {
             this.moderatorApplications = new HashSet();
@@ -535,17 +567,25 @@ public class User implements Serializable {
         this.groups = groups;
     }
 
+    /**
+     * get payments
+     * @return payments
+     */
     public Collection<Payment> getPayments() {
         return payments;
     }
 
+    /**
+     * set payments
+     * @param payments
+     */
     public void setPayments(Collection<Payment> payments) {
         this.payments = payments;
     }
       /**
      * Adds a payment  to the collection of Payments
      *
-     * @param payments
+     * @param payment
      */
     public void addPayment(Payment payment) {
         if (this.payments == null) {

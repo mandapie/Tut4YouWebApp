@@ -31,14 +31,25 @@ import tut4you.model.Message;
  * @author Micha Kops
  */
 public class ChatMessageDecoder implements Decoder.Text<Message> {
+    /**
+     * overridden init method
+     * @param config 
+     */
     @Override
     public void init(final EndpointConfig config) {
     }
-
+    /**
+     * overridden destroy method
+     */
     @Override
     public void destroy() {
     }
-
+    /**
+     * overridden decode method
+     * @param textMessage
+     * @return
+     * @throws DecodeException 
+     */
     @Override
     public Message decode(final String textMessage) throws DecodeException {
         Message chatMessage = new Message();
@@ -48,7 +59,11 @@ public class ChatMessageDecoder implements Decoder.Text<Message> {
         chatMessage.setDateSent(new Date());
         return chatMessage;
     }
-
+    /**
+     * overridden willDecode method
+     * @param s
+     * @return true
+     */
     @Override
     public boolean willDecode(final String s) {
         return true;

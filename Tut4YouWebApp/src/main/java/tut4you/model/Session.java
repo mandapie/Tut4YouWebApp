@@ -38,11 +38,17 @@ public class Session implements Serializable {
 
     @OneToOne
     private Payment payment;
-
+    /**
+     * gets a payment
+     * @return payment
+     */
     public Payment getPayment() {
         return payment;
     }
-
+    /**
+     * sets a payment
+     * @param payment payment to be set
+     */
     public void setPayment(Payment payment) {
         this.payment = payment;
     }

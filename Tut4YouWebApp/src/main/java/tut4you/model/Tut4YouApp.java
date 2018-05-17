@@ -151,7 +151,11 @@ public class Tut4YouApp {
         responsesQuery.setParameter("title", questionTitle);
         return responsesQuery.getResultList();
     }
-    
+    /**
+     * finds a question based on the question title
+     * @param title
+     * @return 
+     */
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public Question findQuestionTitle(String title){
@@ -537,7 +541,7 @@ public class Tut4YouApp {
     /**
      * Tutors are able to view pending requests.
      *
-     * @return
+     * @return a list of tutors pending requests
      */
     @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
@@ -817,11 +821,15 @@ public class Tut4YouApp {
      */
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-
     public User findUser(String email) {
         return em.find(User.class, email);
     }
-
+    
+    /**
+     * finds a user based on their username
+     * @param username
+     * @return 
+     */
     public User findUserByUsername(String username) {
         TypedQuery<User> query = em.createNamedQuery(User.FIND_USER_BY_UNAME, User.class);
         query.setParameter("username", username);
@@ -1192,9 +1200,9 @@ public class Tut4YouApp {
     }
 
     /**
-     *
-     * @param answer
-     * @param email
+     * checks a security answer
+     * @param answer checks the answer
+     * @param email 
      * @return
      */
     public boolean checkAnswer(String answer, String email) {
@@ -1242,8 +1250,8 @@ public class Tut4YouApp {
     }
 
     /**
-     *
-     * @param transcriptFileLocation
+     * Adds a transcript file location into the database
+     * @param transcriptFileLocation location of the file
      */
     @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
@@ -1255,7 +1263,11 @@ public class Tut4YouApp {
         em.merge(tutor);
         em.flush();
     }
-
+    /**
+     * Adds a resume file path to the database
+     * @param resumeFilePath filepath
+     * @param reason reason for applying
+     */
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void addResumeFileLocation(String resumeFilePath, String reason
@@ -1351,7 +1363,7 @@ public class Tut4YouApp {
     }
 
     /**
-     *
+     * Updates a user info
      * @param updateUser
      * @param hr
      */
@@ -1372,7 +1384,7 @@ public class Tut4YouApp {
     }
 
     /**
-     *
+     *  Allows users to change their password
      * @param newPassword
      */
     @PermitAll
@@ -1438,7 +1450,7 @@ public class Tut4YouApp {
     }
 
     /**
-     *
+     *  gets the tutors hourly rate based on their email
      * @return
      */
     @PermitAll
@@ -1452,7 +1464,7 @@ public class Tut4YouApp {
     }
 
     /**
-     *
+     * gets the date a tutor joined using an email
      * @return
      */
     @PermitAll
@@ -2067,7 +2079,10 @@ public class Tut4YouApp {
         }
         return isComplaintSubmitted;
     }
-
+    /**
+     * checks if a user has submitted a transcript
+     * @return null
+     */
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public boolean hasSubmittedTranscript() {

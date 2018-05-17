@@ -149,14 +149,21 @@ public class Responses implements Serializable {
     public void setQuestion(Question question){
         this.question = question;
     }
-
+    /**
+     * overridden hashCode method
+     * @return 
+     */
     @Override
     public int hashCode() {
         int hash = 0;
         hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
-
+    /**
+     * overrides equals method
+     * @param object
+     * @return true or false
+     */
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
@@ -169,7 +176,10 @@ public class Responses implements Serializable {
         }
         return true;
     }
-
+    /**
+     * overrides default tostring
+     * @return 
+     */
     @Override
     public String toString() {
         return "tut4you.model.Responses[ id=" + id + " ]";

@@ -57,7 +57,9 @@ public class SessionBean implements Serializable {
      */
     private boolean checkStartButtonState = false;
     private boolean checkEndButtonState = true;
-    
+    /**
+     * post construct
+     */
     @PostConstruct
     public void createSessionBean() {
         sessionTimer = new Session();

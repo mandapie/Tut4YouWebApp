@@ -178,7 +178,11 @@ public class Course implements Serializable {
         tutors.remove(tutor);
 
     }
-
+    /**
+     * overrides equals method
+     * @param object
+     * @return true or false
+     */
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
@@ -191,7 +195,10 @@ public class Course implements Serializable {
         }
         return true;
     }
-
+    /**
+     * overrides default tostring
+     * @return 
+     */
     @Override
     public String toString() {
         return "tut4you.model.Course[ id=" + courseName + " ]";

@@ -76,29 +76,56 @@ public class TranscriptBean implements Serializable {
     private UploadedFile file;
     private Tutor tutor;
     private String url;
-
+    /**
+     * default constructor
+     */
     public TranscriptBean() {
 
     }
-
+    /**
+     * constructor
+     * @param file 
+     */
     public TranscriptBean(UploadedFile file) {
         this.file = file;
     }
     
+    /**
+     *sets file
+     * @param file
+     */
     public void setFile(UploadedFile file) {
         this.file = file;
     }
 
+    /**
+     *gets file
+     * @return file
+     */
     public UploadedFile getFile() {
         return file;
     }
+
+    /**
+     *gets url
+     * @return url
+     */
     public String getURL(){
         return url;
     }
+
+    /**
+     *sets url
+     * @param url
+     */
     public void setURL(String url){
         this.url = url;
     }
 
+    /**
+     *uploads a transcript to s3 
+     * @throws IOException
+     */
     public void uploadTranscript() throws IOException {
         Properties prop = new Properties();
         InputStream propstream = new FileInputStream(getServletContext().getRealPath("WEB-INF/s3.properties"));
@@ -147,6 +174,10 @@ public class TranscriptBean implements Serializable {
         }
     }
 
+    /**
+     * downloads a transcript from s3
+     * @throws IOException
+     */
     public void downloadTranscript() throws IOException {
         Properties prop = new Properties();
         InputStream propstream = new FileInputStream(getServletContext().getRealPath("WEB-INF/s3.properties"));
@@ -193,6 +224,12 @@ public class TranscriptBean implements Serializable {
         }
     }
 
+    /**
+     * generates a secure url to view s3 file
+     * @return viewFile
+     * @throws FileNotFoundException
+     * @throws IOException
+     */
     public String generatePresignedUrlRequest() throws FileNotFoundException, IOException {
         String userName = userbean.getEmailFromSession();
         tutor = tut4youApp.findTutor(userName);

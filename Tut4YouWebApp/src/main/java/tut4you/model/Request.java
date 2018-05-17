@@ -123,8 +123,14 @@ public class Request implements Serializable {
             },
             inverseJoinColumns = @JoinColumn(name = "email"))
     private Collection<Tutor> availableTutors;
+    /**
+     * one to one relationship with tutor
+     */
     @OneToOne
     private Tutor tutor;
+    /**
+     * one to one relationship with session
+     */
     @OneToOne
     private Session session;
     private String description;
@@ -391,7 +397,10 @@ public class Request implements Serializable {
     public void removeAvailableTutor(Tutor at) {
         availableTutors.remove(at);
     }
-    
+    /**
+     * removes all available tutors at collection ats
+     * @param ats 
+     */
     public void removeAllAvailableTutor(Collection<Tutor> ats) {
         availableTutors.removeAll(ats);
     }

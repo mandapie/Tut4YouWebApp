@@ -84,51 +84,100 @@ public class UserBean implements Serializable {
     public void destroyUserBean() {
     }
     
+    /**
+     *gets a flagged user
+     * @return flagged user
+     */
     public FlaggedUser getFlaggedUser() {
         return flaggedUser;
     }
 
+    /**
+     *sets a flagged user
+     * @param flaggedUser
+     */
     public void setFlaggedUser(FlaggedUser flaggedUser) {
         this.flaggedUser = flaggedUser;
     }
+
+    /**
+     *gets an hourly rate
+     * @return hourly rate
+     */
     public double getHourlyRate() {
         hourlyRate = tut4youapp.getHourlyRate();
         return hourlyRate;
     }
 
+    /**
+     *sets an hourly rate
+     * @param hourlyRate
+     */
     public void setHourlyRate(double hourlyRate) {
         this.hourlyRate = hourlyRate;
     }
 
+    /**
+     *gets an hourly rate
+     * @return
+     */
     public String gethRate() {
         hRate = Double.toString(hourlyRate);
         return hRate;
     }
 
+    /**
+     *set an hourly rate
+     * @param hRate
+     */
     public void sethRate(String hRate) {
         this.hRate = hRate;
     }
 
+    /**
+     *gets the current zip
+     * @return
+     */
     public String getCurrentZip() {
         return currentZip;
     }
 
+    /**
+     *sets the current zip
+     * @param currentZip
+     */
     public void setCurrentZip(String currentZip) {
         this.currentZip = currentZip;
     }
     
+    /**
+     *gets a email
+     * @return email
+     */
     public String getEmail() {
         return email;
     }
 
+    /**
+     *sets an email
+     * @param email
+     */
     public void setEmail(String email) {
         this.email = email;
     }
 
+    /**
+     *gets a password
+     * @return pass
+     */
     public String getPass() {
         return pass;
     }
 
+    /**
+     *sets a password
+     * @param pass
+     */
     public void setPass(String pass) {
         this.pass = pass;
     }
@@ -285,6 +334,10 @@ public class UserBean implements Serializable {
         return isModerator;
     }
     
+    /**
+     *gets if a user has submitted a transcript
+     * @return true or false
+     */
     public boolean isSubmittedTranscript() {
         return tut4youapp.hasSubmittedTranscript();
     }
@@ -451,6 +504,11 @@ public class UserBean implements Serializable {
         return result;
     }
     
+    /**
+     *Checks if a user is suspended
+     * @param logInTime
+     * @return true or false
+     */
     public boolean checkIfSuspended(Date logInTime) {
         flaggedUser = findFlaggedUser(email);
         if (flaggedUser != null) {
@@ -472,6 +530,12 @@ public class UserBean implements Serializable {
             return false;
         }
     }
+
+    /**
+     *finds a flagged user based of their email
+     * @param email
+     * @return
+     */
     public FlaggedUser findFlaggedUser(String email) {
         flaggedUser = tut4youapp.checkFlaggedUserLogIn(email);
         return flaggedUser;

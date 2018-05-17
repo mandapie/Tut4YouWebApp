@@ -236,11 +236,17 @@ public class Payment implements Serializable {
         this.tutor = tutor;
     }
 
-    
+    /**
+     * gets a student
+     * @return student
+     */
     public User getStudent() {
         return student;
     }
-
+    /**
+     * sets a student
+     * @param student to be set
+     */
     public void setStudent(User student) {
         this.student = student;
     }

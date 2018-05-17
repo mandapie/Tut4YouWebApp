@@ -44,54 +44,91 @@ public class Message implements Serializable {
     private User user;
     private String sender;
     private String message;
-    
+    /**
+     * gets the id
+     * @return id
+     */
     public Long getId() {
         return id;
     }
-
+    /**
+     * sets the id
+     * @param id to be set
+     */
     public void setId(Long id) {
         this.id = id;
     }
-    
+    /**
+     * gets the date sent
+     * @return dateSent
+     */
     public Date getDateSent() {
         return dateSent;
     }   
- 
+    /**
+     * sets the date sent
+     * @param dateSent 
+     */
     public void setDateSent(Date dateSent) {
         this.dateSent = dateSent;
     }
- 
+    /**
+     * gets a message
+     * @return message
+     */
     public String getMessage() {
         return message;
     }
- 
+    /**
+     * sets a message
+     * @param message to be set
+     */
     public void setMessage(String message) {
         this.message = message;
     }
- 
+    /**
+     * gets a user
+     * @return user
+     */
     public User getUser() {
         return user;
     }
- 
+    /**
+     * sets a user
+     * @param user to be set
+     */
     public void setUser(User user) {
         this.user = user;
     }
-    
+    /**
+     * gets sender
+     * @return sender
+     */
     public String getSender() {
         return sender;
     }
-
+    /**
+     * set a sender
+     * @param sender to be set
+     */
     public void setSender(String sender) {
         this.sender = sender;
     }
-
+    /**
+     * overridden hashcode
+     * @return hash
+     */
     @Override
     public int hashCode() {
         int hash = 0;
         hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
-
+    /**
+     * overridden equals method
+     * @param object
+     * @return true or false
+     */
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
@@ -104,7 +141,10 @@ public class Message implements Serializable {
         }
         return true;
     }
-
+    /**
+     * overridden tostring method
+     * @return 
+     */
     @Override
     public String toString() {
         return "tut4you.model.Messenger[ id=" + id + " ]";

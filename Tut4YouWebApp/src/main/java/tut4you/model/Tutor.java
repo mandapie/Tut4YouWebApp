@@ -130,7 +130,9 @@ public class Tutor extends User implements Serializable {
      */
     @OneToMany(mappedBy = "tutor", cascade = CascadeType.ALL)
     private Collection<Rating> ratings;
-
+    /**
+     * One tutor can post many responses
+     */
     @OneToMany(mappedBy = "tutor", cascade = CascadeType.ALL)
     private Collection<Responses> responses;
     /**
@@ -208,27 +210,45 @@ public class Tutor extends User implements Serializable {
         this.defaultZip = defaultZip;
         this.currentZip = currentZip;
     }
-
+    /**
+     * gets the current zip
+     * @return current zip
+     */
     public String getCurrentZip() {
         return currentZip;
     }
-
+    /**
+     * sets the current zip
+     * @param currentZip 
+     */
     public void setCurrentZip(String currentZip) {
         this.currentZip = currentZip;
     }
-    
+    /**
+     * gets the number of people tutored
+     * @return numOfPeopleTutored
+     */
     public int getNumOfPeopleTutored() {
         return numOfPeopleTutored;
     }
-
+    /**
+     * sets number of people tutored
+     * @param numOfPeopleTutored 
+     */
     public void setNumOfPeopleTutored(int numOfPeopleTutored) {
         this.numOfPeopleTutored = numOfPeopleTutored;
     }
-
+    /**
+     * gets overall rating
+     * @return overallRating
+     */
     public int getOverallRating() {
         return overallRating;
     }
-
+    /**
+     * sets overall rating
+     * @param overallRating 
+     */
     public void setOverallRating(int overallRating) {
         this.overallRating = overallRating;
     }
@@ -240,11 +260,18 @@ public class Tutor extends User implements Serializable {
 //    public void setTutorRatings(Collection<Rating> ratings) {
 //        
 //    }
+    /**
+     * Overridden get ratings
+     * @return ratings
+     */
     @Override
     public Collection<Rating> getRatings() {
         return ratings;
     }
-
+    /**
+     * overridden set ratings
+     * @param ratings 
+     */
     @Override
     public void setRatings(Collection<Rating> ratings) {
         this.ratings = ratings;
@@ -487,19 +514,31 @@ public class Tutor extends User implements Serializable {
         }
         this.availabilities.add(availability);
     }
-
+    /**
+     * gets the transcript file path
+     * @return transcript file path
+     */
     public String getTranscriptFilePath() {
         return transcriptFilePath;
     }
-
+    /**
+     * sets the transcript file path
+     * @param transcriptFileLocation 
+     */
     public void setTrancriptFileLocation(String transcriptFileLocation) {
         this.transcriptFilePath = transcriptFileLocation;
     }
-
+    /**
+     * gets a collection of payments
+     * @return 
+     */
     public Collection<Payment> getPayments() {
         return payments;
     }
-
+    /**
+     * sets a collection of payments
+     * @param payments 
+     */
     public void setPayments(Collection<Payment> payments) {
         this.payments = payments;
     }

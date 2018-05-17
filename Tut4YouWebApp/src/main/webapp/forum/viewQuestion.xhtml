@@ -25,123 +25,156 @@
     <!-- @author Andrew Kaichi <ahkaichi@gmail.com> -->
     <ui:define name="title">View Question</ui:define>
     <ui:define name="content">
-        <b:form>
-            <b:panel title="Question:" collapsible="false" look="info">
-                <f:viewParam name="questionList" value="#{forumBean.getQuestionInfo(param['course'], param['question'])}"/>
-                <!-- Question -->
-                <b:row>
-                    <b:column medium-screen="10">
-                        <h2>Student: #{forumBean.question.student.username}</h2>
-                        <h2>Question: #{forumBean.question.title}</h2>
-                        <h3>Description: #{forumBean.question.description}</h3>
-                    </b:column>   
-                </b:row>
-                <b:panel title="Responses:">
-            <f:viewParam name="responseList" value="#{forumBean.getResponses(param['question'])}"/>
-            <ui:repeat value="#{forumBean.responseList}" var="responses">
-                <div style="border-bottom:solid 1px;padding:15px;">
-                    <p:outputPanel id="display">
-                        <b:row>
+        <b:row>
+            <b:button look="danger" value="Back to Questions" outcome="forumQuestion.xhtml" style="float:left;">
+                <f:param name="subject" value="#{param['subject']}"/>
+                <f:param name="course" value="#{param['course']}"/>
+            </b:button>
+        </b:row>
+        <br/>
+        <b:row>
+            <b:form>
+                <b:panel title="Question:" collapsible="false" look="info">
+                    <f:viewParam name="questionList" value="#{forumBean.getQuestionInfo(param['course'], param['question'])}"/>
+                    <!-- Question -->
+                    <b:row>
+                        <b:column>
+                            <p:outputPanel id="question">
+                                <b:row>
+                                    <b:column medium-screen="2">
+                                        <h:outputText value="Username:" style="font-size:20px;"/>
+                                    </b:column>
+                                    <b:column medium-screen="7">
+                                        <h:outputText value="#{forumBean.question.student.username}" style="font-size:18px;"/>
+                                    </b:column>
+                                </b:row>
+                                <b:row>
+                                    <b:column medium-screen="2">
+                                        <h:outputText value="Question:" style="font-size:20px;"/>
+                                    </b:column>
+                                    <b:column medium-screen="7">
+                                        <h:outputText value="#{forumBean.question.title}" style="font-size:18px;"/>
+                                    </b:column>
+                                </b:row>
+                                <b:row>
+                                    <b:column medium-screen="2">
+                                        <h:outputText value="Description:" style="font-size:20px;"/>
+                                    </b:column>
+                                    <b:column medium-screen="7">
+                                        <h:outputText value="#{forumBean.question.description}" style="font-size:18px;" escape="false"/>
+                                    </b:column>
+                                </b:row>
+                            </p:outputPanel>
+                        </b:column>
+
+
+                    </b:row>
+                    <b:panel title="Responses:">
+                        <f:viewParam name="responseList" value="#{forumBean.getResponses(param['question'])}"/>
+                        <ui:repeat value="#{forumBean.responseList}" var="responses">
+                            <div style="border-bottom:solid 1px;padding:15px;">
+                                <p:outputPanel id="display">
+                                    <b:row>
+                                        <b:column medium-screen="2">
+                                            <h:outputText value="Tutor Username:" style="font-size:20px;"/>
+                                        </b:column>
+                                        <b:column medium-screen="5">
+                                            <h:outputText value="#{responses.tutor.username}" style="font-size:18px;"/>
+                                        </b:column>
+                                    </b:row>   
+                                    <br/>
+                                    <b:row>
+                                        <b:column medium-screen="2">
+                                            <h:outputText value="Explanation:" style="font-size:20px;"/>
+                                        </b:column>
+                                        <b:column medium-screen="6">
+                                            <h:outputText value="#{responses.explanation}" style="font-size:18px;" escape="false"/>
+                                        </b:column>
+                                    </b:row>
+                                    <c:if test="#{forumBean.isUserQuestion(param['question']) || userBean.isTutor}">
+                                        <br/>
+                                        <b:row>
+                                            <b:column medium-screen="2">
+                                                <h:outputText value="Answer:" style="font-size:20px;"/>
+                                            </b:column>
+                                            <b:column medium-screen="6">
+                                                <h:outputText value="#{responses.answer}" style="font-size:18px;" escape="false"/>
+                                            </b:column>
+                                        </b:row>            
+                                    </c:if>
+                                </p:outputPanel>
+                            </div> 
+                        </ui:repeat> 
+                    </b:panel>
+                </b:panel>            
+            </b:form> 
+        </b:row>
+
+        <b:row>
+            <c:if test="#{userBean.isTutor}">
+                <b:panel title="Fill out the following information to respond." collapsible="true" look="info">           
+                    <b:form>
+                        <f:viewParam name="courseList" value="#{questionBean.getQuestionInfo(param['course'], param['question'])}"/>
+                        <b:row> 
                             <b:column medium-screen="2">
-                                <h:outputText value="Tutor Username:" style="font-size:20px;"/>
+                                <h:outputLabel value="Enter the explanation:"/>
                             </b:column>
-                            <b:column medium-screen="5">
-                                <h:outputText value="#{responses.tutor.username}" style="font-size:18px;"/>
-                            </b:column>
-                        </b:row>   
-                        <br/>
-                        <b:row>
-                            <b:column medium-screen="2">
-                                <h:outputText value="Explanation:" style="font-size:20px;"/>
-                            </b:column>
-                            <b:column medium-screen="6">
-                                <h:outputText value="#{responses.explanation}" style="font-size:18px;" escape="false"/>
+                            <b:column medium-screen="10"> 
+                                <p:textEditor widgetVar="explanation" placeholder="Enter the explanation..." value="#{questionBean.responses.explanation}" height="200" style="margin-bottom:10px">
+                                    <f:facet name="toolbar">
+                                        <span class="ql-formats">
+                                            <select class="ql-font"></select>
+                                            <select class="ql-size"></select>
+                                            <button class="ql-bold"></button>
+                                            <button class="ql-italic"></button>
+                                            <button class="ql-underline"></button>
+                                            <button class="ql-strike"></button>
+                                            <button class="ql-list" value="ordered"></button>
+                                            <button class="ql-list" value="bullet"></button>
+                                            <button class="ql-script" value="sub"></button>
+                                            <button class="ql-script" value="super"></button>
+                                        </span>
+                                    </f:facet>
+                                </p:textEditor>
                             </b:column>
                         </b:row>
-                        <c:if test="#{forumBean.isUserQuestion(param['question']) || userBean.isTutor}">
-                            <br/>
-                            <b:row>
-                                <b:column medium-screen="2">
-                                    <h:outputText value="Answer:" style="font-size:20px;"/>
-                                </b:column>
-                                <b:column medium-screen="6">
-                                    <h:outputText value="#{responses.answer}" style="font-size:18px;" escape="false"/>
-                                </b:column>
-                            </b:row>            
-                        </c:if>
-                    </p:outputPanel>
-                </div> 
-            </ui:repeat> 
-        </b:panel>
-            </b:panel>            
-        </b:form>
+                        <!-- answer -->
+                        <b:row>
+                            <b:column medium-screen="2">
+                                <h:outputLabel value="Enter the answer:"/>
+                            </b:column>
+                            <b:column medium-screen="10">
+                                <p:textEditor widgetVar="answer" placeholder="Enter the answer..." value="#{questionBean.responses.answer}" height="200" style="margin-bottom:10px">
+                                    <f:facet name="toolbar">
+                                        <span class="ql-formats">
+                                            <select class="ql-font"></select>
+                                            <select class="ql-size"></select>
+                                            <button class="ql-bold"></button>
+                                            <button class="ql-italic"></button>
+                                            <button class="ql-underline"></button>
+                                            <button class="ql-strike"></button>
+                                            <button class="ql-list" value="ordered"></button>
+                                            <button class="ql-list" value="bullet"></button>
+                                            <button class="ql-script" value="sub"></button>
+                                            <button class="ql-script" value="super"></button>
+                                        </span>
+                                    </f:facet>
+                                </p:textEditor>
+                            </b:column>
+                        </b:row>
+                        <b:row>
+                            <b:column medium-screen="12">
+                                <b:commandButton value="Submit" look="primary" action="#{questionBean.submitResponses}" style="float:right">
+                                    <f:param name="course" value="#{param['course']}"/>
+                                    <f:param name="question" value="#{param['question']}"/>
+                                </b:commandButton>
+                            </b:column>    
+                        </b:row>
+                    </b:form>    
+                </b:panel>    
+            </c:if>  
+        </b:row>
 
-        <c:if test="#{userBean.isTutor}">
-            <b:panel title="Fill out the following information to respond." collapsible="true" look="info">           
-                <b:form>
-                    <f:viewParam name="courseList" value="#{questionBean.getQuestionInfo(param['course'], param['question'])}"/>
-                    <b:row> 
-                        <b:column medium-screen="2">
-                            <h:outputLabel value="Enter the explanation:"/>
-                        </b:column>
-                        <b:column medium-screen="10"> 
-                            <p:textEditor widgetVar="explanation" placeholder="Enter the explanation..." value="#{questionBean.responses.explanation}" height="200" style="margin-bottom:10px">
-                                <f:facet name="toolbar">
-                                    <span class="ql-formats">
-                                        <select class="ql-font"></select>
-                                        <select class="ql-size"></select>
-                                        <button class="ql-bold"></button>
-                                        <button class="ql-italic"></button>
-                                        <button class="ql-underline"></button>
-                                        <button class="ql-strike"></button>
-                                        <button class="ql-color"></button>
-                                        <button class="ql-background"></button>
-                                        <button class="ql-list" value="ordered"></button>
-                                        <button class="ql-list" value="bullet"></button>
-                                        <button class="ql-script" value="sub"></button>
-                                        <button class="ql-script" value="super"></button>
-                                    </span>
-                                </f:facet>
-                            </p:textEditor>
-                        </b:column>
-                    </b:row>
-                    <!-- answer -->
-                    <b:row>
-                        <b:column medium-screen="2">
-                            <h:outputLabel value="Enter the answer:"/>
-                        </b:column>
-                        <b:column medium-screen="10">
-                            <p:textEditor widgetVar="answer" placeholder="Enter the answer..." value="#{questionBean.responses.answer}" height="200" style="margin-bottom:10px">
-                                <f:facet name="toolbar">
-                                    <span class="ql-formats">
-                                        <select class="ql-font"></select>
-                                        <select class="ql-size"></select>
-                                        <button class="ql-bold"></button>
-                                        <button class="ql-italic"></button>
-                                        <button class="ql-underline"></button>
-                                        <button class="ql-strike"></button>
-                                        <button class="ql-color"></button>
-                                        <button class="ql-background"></button>
-                                        <button class="ql-list" value="ordered"></button>
-                                        <button class="ql-list" value="bullet"></button>
-                                        <button class="ql-script" value="sub"></button>
-                                        <button class="ql-script" value="super"></button>
-                                    </span>
-                                </f:facet>
-                            </p:textEditor>
-                        </b:column>
-                    </b:row>
-                    <b:row>
-                        <b:column medium-screen="12">
-                            <b:commandButton value="Submit" look="primary" action="#{questionBean.submitResponses}" style="float:right">
-                            <f:param name="course" value="#{param['course']}"/>
-                            <f:param name="question" value="#{param['question']}"/>
-                            </b:commandButton>
-                        </b:column>    
-                    </b:row>
-                </b:form>    
-            </b:panel>    
-        </c:if>
 
 
         <ui:debug hotkey='x' />

@@ -24,21 +24,27 @@
     <!-- @author Andrew Kaichi <ahkaichi@gmail.com> -->
     <ui:define name="title">Forum</ui:define>
     <ui:define name="content">
-        <b:panel title="Welcome to the Tut4You Forum" collapsible="false" look="info">
-            <div style="max-height:100%;overflow:auto;margin-bottom:15px;">
-                <b:form>
-                  <ui:repeat value="#{forumBean.subjectList}" var="subject">
-                    <div style="border-bottom:solid 1px;padding:15px;">
-                        <b:button value="#{subject.subjectName}" style="font-size:180%;" look="link" outcome="forumCourse.xhtml">
-                            <f:param name="subject" value="#{subject.subjectName}"/>
-                        </b:button>
-                        <span/>
-                    <br/>
-                    </div>
-                </ui:repeat>  
-                </b:form>     
-            </div>
-        </b:panel>        
+        <b:row>
+            <b:button look="danger" value="Back to Dashboard" outcome="/accounts/index.xhtml" style="float:left;"/>
+        </b:row>
+        <br/>
+        <b:row>
+            <b:panel title="Welcome to the Tut4You Forum" collapsible="false" look="info">
+                <div style="max-height:100%;overflow:auto;margin-bottom:15px;">
+                    <b:form>
+                        <ui:repeat value="#{forumBean.subjectList}" var="subject">
+                            <div style="border-bottom:solid 1px;padding:15px;">
+                                <b:button value="#{subject.subjectName}" style="font-size:180%;" look="link" outcome="forumCourse.xhtml">
+                                    <f:param name="subject" value="#{subject.subjectName}"/>
+                                </b:button>
+                                <span/>
+                                <br/>
+                            </div>
+                        </ui:repeat>  
+                    </b:form>     
+                </div>
+            </b:panel> 
+        </b:row>              
         <ui:debug hotkey='x' />
     </ui:define>
 </ui:composition>

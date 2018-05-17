@@ -218,8 +218,6 @@ public class Tut4YouApp {
                 responses.setTutor(tutor);
                 question = responses.getQuestion();
                 question.addResponses(responses);
-                System.out.println("inside responses ejb");
-                System.out.println(question.getTitle());
             }
             else{
                 return null;

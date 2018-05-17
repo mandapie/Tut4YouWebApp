@@ -213,7 +213,6 @@ public class TranscriptBean implements Serializable {
         generatePresignedUrlRequest.setExpiration(expiration);
         URL s = s3.generatePresignedUrl(generatePresignedUrlRequest);
         this.url = s.toString();
-        System.out.println(url);
         return "viewFile";
     }
 }

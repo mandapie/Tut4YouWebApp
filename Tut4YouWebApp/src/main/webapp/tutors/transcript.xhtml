@@ -51,10 +51,10 @@
                 </b:column>
                 <b:column medium-screen="half">
                     <b:row>
-                        <h:outputLabel value="Download Your Transcript"/>
+                        <h:outputLabel value="View Your Transcript"/>
                     </b:row>
                     <b:row>
-                        <p:commandButton value="Download" action="#{transcriptBean.downloadTranscript}" ajax="false" />
+                        <p:commandButton value="View" action="#{transcriptBean.generatePresignedUrlRequest}" ajax="false" />
                     </b:row>
                 </b:column>
             </h:form>

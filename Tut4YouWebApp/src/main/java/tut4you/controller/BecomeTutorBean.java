@@ -36,10 +36,8 @@ import javax.inject.Named;
 import tut4you.model.*;
 
 /**
- * UserBean checks if a user is authenticated.
- * @author Alvaro Monge <alvaro.monge@csulb.edu>
- * Modified by Amanda Pan <daikiraidemodaisuki@gmail.com>
- * Modified by Andrew Kaichi <ahkaichi@gmail.com>
+ * BecomeTutorBean allows user to become tutor
+ * @author Keith Tran <keithtran25@gmail.com>
  */
 @Named
 @ViewScoped
@@ -69,27 +67,45 @@ public class BecomeTutorBean implements Serializable {
     @PreDestroy
     public void destroyBecomeTutorBean() {
     }
-    
+    /**
+     * get hourly rate
+     * @return 
+     */
     public String getHourlyRate() {
         return hourlyRate;
     }
-
+    /**
+     * set hourly rate
+     * @param hourlyRate 
+     */
     public void setHourlyRate(String hourlyRate) {
         this.hourlyRate = hourlyRate;
     }
-
+    /**
+     * get default zip
+     * @return 
+     */
     public String getDefaultZip() {
         return defaultZip;
     }
-
+    /**
+     * set default zip
+     * @param defaultZip 
+     */
     public void setDefaultZip(String defaultZip) {
         this.defaultZip = defaultZip;
     }
-
+    /**
+     * get joined date as tutor
+     * @return 
+     */
     public Date getJoinedDateAsTutor() {
         return joinedDateAsTutor;
     }
-
+    /**
+     * set joined date as tutor
+     * @param joinedDateAsTutor 
+     */
     public void setJoinedDateAsTutor(Date joinedDateAsTutor) {
         this.joinedDateAsTutor = joinedDateAsTutor;
     }

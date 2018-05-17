@@ -22,7 +22,7 @@
         2017 Keith Tran <keithtran25@gmail.com>
         2017 Syed Haider <shayder426@gmail.com>
     -->
-    <!-- @author Andrew Kaichi <ahkaichi@gmail.com> -->
+    <!-- @author Keith Tran <keithtran25@gmail.com> -->
     <ui:define name="metadata">
         <f:metadata>
             <f:viewParam name="username" value="#{moderatorBean.username}"/>
@@ -45,23 +45,21 @@
                     <h:outputText value="#{moderatorBean.tutor.overallRating}"/>
                 </b:column>
                 <b:column>
-                    <h:outputLabel value="Transcript "/>
+               
                     <b:column>
                         <p:commandButton value="View Transcript" action="#{moderatorBean.complaintBean.generateSignedURLTranscript(moderatorBean.tutor.username)}" ajax="false" />
                     </b:column>
                 </b:column>
+                <span></span>
             </b:row>
             <b:row>
-                <b:column>
-                    <b:commandButton value="Suspend User" look="danger" action="#{moderatorBean.complaintBean.flagUser(moderatorBean.tutor.email,'suspend')}" />
-                </b:column>
-                <b:column>
-                    <b:commandButton value="Ban User" look="danger" action="#{moderatorBean.complaintBean.flagUser(moderatorBean.tutor.email,'ban')}" />
-                </b:column>
-                <b:column>
-                    <b:commandButton value="Close Complaint" look="primary" action="#{moderatorBean.complaintBean.closeComplaint()}"/>
-                </b:column>
+                    <b:commandButton value="Suspend User" look="danger" action="#{moderatorBean.viewLowRatingTutors()}" actionListener="#{moderatorBean.complaintBean.flagUser(moderatorBean.tutor.email,'suspend')}" />
+                <span></span>
+                    <b:commandButton value="Ban User" look="danger" action="#{moderatorBean.viewLowRatingTutors()}" actionListener="#{moderatorBean.complaintBean.flagUser(moderatorBean.tutor.email,'ban')}" />
+                <span></span>
+                    <b:commandButton value="Close Complaint" look="primary" action="#{moderatorBean.viewLowRatingTutors()}" actionListener="#{moderatorBean.complaintBean.flagUser(moderatorBean.tutor.email,'dismiss')}"/>
             </b:row>
+            <span></span>
             <b:row>
                 <h:outputLabel value="Past reviews"/>
                 <p:dataScroller value="#{ratingBean.getRatingList(moderatorBean.tutor.email)}" var="rating" chunkSize="10">

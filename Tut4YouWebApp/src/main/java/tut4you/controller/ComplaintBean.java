@@ -156,6 +156,37 @@ public class ComplaintBean implements Serializable {
     }
 
     /**
+     * showComplaintID is used when passing the complaint parameter
+     * from one jsf page to another
+     * @param id 
+     */
+    public void showComplaintID(int id) {
+        complaint  = findComplaint(id);
+    }
+    /**
+     * find complaint by complaint id
+     * @param id
+     * @return complaint
+     */
+    public Complaint findComplaint(int id)
+    {
+        return tut4youApp.findComplaint(id);
+    }
+    /**
+     * get ID
+     * @return ID
+     */
+    public int getId() {
+        return id;
+    }
+    /**
+     * set ID
+     * @param id 
+     */
+    public void setId(int id) {
+        this.id = id;
+    }
+    /**
      * get tutor
      *
      * @return tutor
@@ -252,10 +283,9 @@ public class ComplaintBean implements Serializable {
      *
      * @param user
      * @param isTutor
-     * @return
+     * @return string
      */
     public String createNewComplaint(User user, boolean isTutor) {
-
         this.isTutor = isTutor;
         complaint.setIsTutor(isTutor);
         tut4youApp.createNewComplaint(user, complaint);
@@ -265,7 +295,7 @@ public class ComplaintBean implements Serializable {
     /**
      * close the complaint
      *
-     * @return
+     * @return string
      */
     public String closeComplaint() {
         tut4youApp.closeComplaint(complaint);
@@ -277,7 +307,7 @@ public class ComplaintBean implements Serializable {
      *
      * @param email
      * @param type
-     * @return
+     * @return string for outcome
      * @throws ParseException
      */
     public String flagUser(String email, String type) throws ParseException {
@@ -298,7 +328,10 @@ public class ComplaintBean implements Serializable {
         return tut4youApp.isComplaintSubmitted(complaints);
 
     }
-
+    /**
+    * method used for viewing transcript
+    * @return string
+    */
     public String generateSignedURLTranscript(String userName) throws FileNotFoundException, IOException {
         tutor = tut4youApp.findTutorByUsername(userName);
         String keyName = tutor.getTranscriptFilePath();

@@ -1315,7 +1315,6 @@ public class Tut4YouApp {
      * moderator
      *
      * @param moderatorApplication
-     * @param moderator
      */
     @RolesAllowed("tut4youapp.moderator")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
@@ -1323,10 +1322,18 @@ public class Tut4YouApp {
         UserBean userBean = new UserBean();
         String currentUserEmail = userBean.getEmailFromSession();
         User moderator = findUser(currentUserEmail);
-        moderatorApplication.setModerator(moderator);
-        moderatorApplication.setApplicationStatus(ModeratorApplication.ApplicationStatus.DECLINED);
-        em.merge(moderatorApplication);
-        em.flush();
+        User user = em.find(User.class, moderatorApplication.getUser().getEmail());
+        
+        ModeratorApplication moderatorApplicationClone = em.find(ModeratorApplication.class, moderatorApplication.getId());
+        moderatorApplicationClone.setModerator(moderator);
+        moderator.addModeratorApplication(moderatorApplicationClone);
+        moderatorApplicationClone.setApplicationStatus(ModeratorApplication.ApplicationStatus.DECLINED);
+        
+        moderatorApplicationClone.setUser(user);
+        user.setModeratorApplication(moderatorApplicationClone);
+        
+        em.merge(moderatorApplicationClone);
+        em.merge(user);
 
     }
 
@@ -1596,12 +1603,25 @@ public class Tut4YouApp {
         requestQuery.setParameter("email", clone.getEmail());
         clone.setRequests(null);
         List<Request> requestsClone = requestQuery.getResultList();
-
+//        for(int i = 0; i < requestsClone.size(); i++) {
+//            Request request = requestsClone.get(i);
+//            request.setStudent(null);
+//            
+//        }
+//        if(!requestsClone.isEmpty()) {
+//            em.remove(requestsClone);
+//        }
         em.remove(clone);
         em.flush();
         Group group = em.find(Group.class, "tut4youapp.student");
         if (group == null) {
             group = new Group("tut4youapp.student");
+        }
+        for(int i = 0; i < requestsClone.size(); i++) {
+            System.out.println("PRINT: "+requestsClone.get(i));
+            clone.addRequest(requestsClone.get(i));
+            requestsClone.get(i).setStudent(clone);
+            em.persist(requestsClone.get(i));
         }
         Tutor tutor = new Tutor(clone);
         tutor.addGroup(group); //Add user a student role
@@ -1612,10 +1632,14 @@ public class Tut4YouApp {
         tutor.setDateJoinedAsTutor(dateJoinedAsTutor);
         tutor.setHourlyRate(hourlyRate);
         tutor.setDefaultZip(defaultZip);
-
-        tutor.setRequests(requestsClone);
-
         em.persist(tutor);
+        em.flush();
+        for(int i = 0; i < requestsClone.size(); i++) {
+            tutor.addRequest(requestsClone.get(i));
+            requestsClone.get(i).setStudent(tutor);
+            em.persist(requestsClone.get(i));
+        }
+       
         em.flush();
     }
 
@@ -1738,6 +1762,9 @@ public class Tut4YouApp {
         int count = 1;
         if (type.equals("ban")) {
             count = 4;
+        }
+        if(type.equals("dismiss")) {
+            count = 0;
         }
 
         User moderator = em.find(User.class, currentUserEmail);

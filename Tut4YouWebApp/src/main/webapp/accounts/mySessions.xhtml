@@ -9,14 +9,11 @@
     <!--
         Licensed under the Academic Free License (AFL 3.0).
         http://opensource.org/licenses/AFL-3.0
-
         This code has been developed by a group of CSULB students working on their 
         Computer Science senior project called Tutors4You.
-
         Tutors4You is a web application that students can utilize to find a tutor and
         ask them to meet at any location of their choosing. Students that struggle to understand 
         the courses they are taking would benefit from this peer to peer tutoring service.
-
         2017 Amanda Pan <daikiraidemodaisuki@gmail.com>
         2017 Andrew Kaichi <ahkaichi@gmail.com>
         2017 Keith Tran <keithtran25@gmail.com>
@@ -94,14 +91,9 @@
                     </b:dataTableColumn>
                     <b:dataTableColumn>
                         <f:facet name="header">Action</f:facet>
-                        <b:button value="Report Tutor" outcome="submitComplaint" rendered="#{requestBean.isCheckRequestStudentEmail(req.student)}">
-                            <f:param name="username" value="#{req.tutor.username}" />
-                            <f:param name="id" value="#{req.id}" />
-                        </b:button>
-                        <b:button value="Report Student" outcome="submitComplaint" rendered="#{!requestBean.isCheckRequestStudentEmail(req.student)}">
-                            <f:param name="username" value="#{req.student.username}" />
-                            <f:param name="id" value="#{req.id}" />
-                        </b:button>
+                        <b:commandButton value="Report Tutor" action="#{ratingBean.goToSubmitComplaintPage(req.tutor, true)}" rendered="#{requestBean.isCheckRequestStudentEmail(req.student)}"/>
+                        <b:commandButton value="Report Student" action="#{ratingBean.goToSubmitComplaintPage(req.student, false)}" rendered="#{!requestBean.isCheckRequestStudentEmail(req.student)}"/>
+                      
                         <b:commandButton icon="paypal" value="Pay Tutor" look="primary" action="#{paymentBean.payForTutoringSession(req)}" rendered="#{requestBean.isCheckRequestStudentEmail(req.student) and paymentBean.checkCompletedStatus(req.session.payment.payKey)}"/>
                     </b:dataTableColumn>
                 </b:dataTable>

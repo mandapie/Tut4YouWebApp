@@ -22,12 +22,13 @@
         2017 Syed Haider <shayder426@gmail.com>
     -->
     <!-- @author Amanda Pan <daikiraidemodaisuki@gmail.com> -->
+    <ui:define name="metadata">
+        <f:metadata>
+            <f:event listener="#{createRequestBean.initConversation()}" type="preRenderView"></f:event>
+        </f:metadata>
+    </ui:define>
     <ui:define name="title">Request</ui:define>
     <ui:define name="content">
-        <f:metadata>
-        <f:event listener="#{createRequestBean.initConversation()}"
-    type="preRenderView"></f:event>
-            </f:metadata>
         <b:panel title="Select the following choices to request for a tutor" collapsible="false" look="info">
             <b:form>
                 <!-- subject -->
@@ -63,9 +64,9 @@
                     </b:column>
                     <b:column medium-screen="4">
                         <p:inputTextarea id="dt" placeholder="Enter a short description..." 
-                                 value="#{createRequestBean.request.description}" 
-                                 style="width:100%" rows="7" counter="display" maxlength="300" 
-                                 counterTemplate="{0} characters remaining." autoResize="false">
+                                         value="#{createRequestBean.request.description}" 
+                                         style="width:100%" rows="7" counter="display" maxlength="300" 
+                                         counterTemplate="{0} characters remaining." autoResize="false">
                             <b:message for="dt"/>
                             <f:validateLength minimum="10"/>
                         </p:inputTextarea>
@@ -129,7 +130,7 @@
                         </b:inputText>
                     </b:column>
                     <b:row>
-                        
+
                     </b:row>
                     <b:column medium-screen="2">
                         <h:outputLabel value="Travel Distance"/>
@@ -149,7 +150,7 @@
                 </b:row>
                 <b:row>
                     <b:commandButton medium-screen="2" value="Submit" look="primary" action="#{createRequestBean.createNewRequest}">
-                </b:commandButton>
+                    </b:commandButton>
                 </b:row>
             </b:form>
         </b:panel>        

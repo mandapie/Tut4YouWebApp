@@ -27,6 +27,11 @@
         <h1>Add Course</h1>
         <b:panel title="Add a course" collapsible="false" look="info">
             <b:form id="addCourseForm">
+                <p:dialog header="Submitted!" widgetVar="dlg1" minHeight="40" visible="#{courseBean.addNewCourse}" closable="false" modal="true" >
+                    <h:outputText value="Do you want to add another course?" />
+                    <p:button value="Yes" outcome="/tutors/addCourse.xhtml" />
+                    <p:button value="No" outcome="/accounts/index.xhtml"/>
+                </p:dialog>
                 <b:row>
                     <b:column medium-screen="2">
                         <h:outputLabel value="Subject"/>
@@ -68,16 +73,8 @@
                     </b:container>
                 </b:row>
                 <b:row>
-                    <b:commandButton span="2" value="Submit" look="primary" action="#{courseBean.addCourse}" />
+                    <b:commandButton span="2" look="primary" value="Submit" action="#{courseBean.addCourse}" oncomplete="if (#{courseBean.addNewCourse}){PF('dlg1').show()}"/>
                 </b:row>
-                <!-- Adds to availability in -->
-                <p:dialog header="Submitted!" widgetVar="dlg1" id="modalID" minHeight="40" visible="#{availabilityBean.addNewCourse}" closable="false" modal="true" >
-                    <h:outputText value="Do you want to add another course?" />
-                    <p:button value="Yes" outcome="/tutors/addCourse.xhtml" />
-                    <p:button value="No"  outcome="/accounts/index.xhtml"/>
-                </p:dialog>
-                <b:commandButton value="Submit" style="width:100%" action="#{courseBean.addCourse}" oncomplete="if (#{courseBean.addNewCourse}){PF('dlg1').show()}" update="courseId">
-                </b:commandButton>
             </b:form>
         </b:panel>
         <ui:debug hotkey='x'/>

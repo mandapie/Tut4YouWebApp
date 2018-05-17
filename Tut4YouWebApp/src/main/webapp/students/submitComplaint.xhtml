@@ -24,9 +24,12 @@
     -->
     <!-- @author Amanda Pan <daikiraidemodaisuki@gmail.com> -->
     <ui:define name="metadata">
+        <f:metadata>
+            <f:viewParam name="username" value="#{complaintBean.username}"/>
+            <f:event type="preRenderView" listener="#{complaintBean.showUsername(complaintBean.username)}">
+            </f:event>
+        </f:metadata>
     </ui:define>
-    
-    
     <ui:define name="title">Complaint</ui:define>
     <ui:define name="content">
         <b:panel title="Submit a complaint" collapsible="false" look="info">
@@ -36,16 +39,16 @@
                     <h:inputText value="#{complaintBean.complaint.title}"/>
                 </b:row>
                 <b:row>
-                <h:outputLabel value="Details:"/>
-                <p:inputTextarea required="true" label="Details: (300 characters max)" 
-                                 placeholder="Enter a short description..." 
-                                 value="#{complaintBean.complaint.details}" 
-                                 rows="5" cols="60" counter="display" maxlength="300" 
-                                 counterTemplate="{0} characters remaining." autoResize="false" />
-                <br/>
-                <h:outputText id="display" style="font-weight:bold"/>
+                    <h:outputLabel value="Details:"/>
+                    <p:inputTextarea required="true" label="Details: (300 characters max)" 
+                                     placeholder="Enter a short description..." 
+                                     value="#{complaintBean.complaint.details}" 
+                                     rows="5" cols="60" counter="display" maxlength="300" 
+                                     counterTemplate="{0} characters remaining." autoResize="false" />
+                    <br/>
+                    <h:outputText id="display" style="font-weight:bold"/>
                 </b:row>
-                
+
                 <b:row>
                     <b:commandButton span="2" value="Submit" look="primary" action="#{complaintBean.createNewComplaint(ratingBean.user, ratingBean.isTutor)}"/>
                 </b:row>

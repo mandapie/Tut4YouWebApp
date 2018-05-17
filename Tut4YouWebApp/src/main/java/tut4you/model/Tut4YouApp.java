@@ -544,14 +544,17 @@ public class Tut4YouApp {
     public void deleteCourse(Course course) {
         UserBean userBean = new UserBean();
         String currentUserEmail = userBean.getEmailFromSession();
-        Course toBeDeleted = em.find(Course.class,
-                course.getCourseName());
+        Course toBeDeleted = em.find(Course.class, course.getCourseName());
         if (toBeDeleted == null) {
             toBeDeleted = course;
         }
         Tutor tutor = findTutor(currentUserEmail);
+        Course groupCourse = em.find(Course.class, course.getCourseName());
+        tutor.removeCourse(course);
+        groupCourse.removeTutor(tutor);
         em.merge(tutor);
-        em.remove(toBeDeleted);
+        em.merge(groupCourse);
+        em.flush();
     }
 
     /**
@@ -823,6 +826,20 @@ public class Tut4YouApp {
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public Complaint findComplaint(int id) {
         TypedQuery<Complaint> query = em.createNamedQuery(Complaint.FIND_COMPLAINT_BY_ID, Complaint.class);
+        query.setParameter("id", id);
+        return query.getSingleResult();
+    }
+    /**
+     * Gets a request by finding the id in the entity.
+     *
+     * @param id
+     * @return moderator application
+     * @Keith <keithtran25@gmail.com>
+     */
+    @RolesAllowed("tut4youapp.moderator")
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public Request findRequest(int id) {
+        TypedQuery<Request> query = em.createNamedQuery(Request.FIND_REQUEST_BY_ID, Request.class);
         query.setParameter("id", id);
         return query.getSingleResult();
     }

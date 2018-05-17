@@ -112,62 +112,99 @@ public class User implements Serializable {
      */
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
     private Collection<Question> questions;
-
+    /**
+     * one to many relationship between moderator and moderator applications
+     */
     @OneToMany(mappedBy = "moderator", cascade = CascadeType.ALL)
     private Collection<ModeratorApplication> moderatorApplications;
-
-    @OneToOne(orphanRemoval=true)
+    /**
+     * one to one between user and moderator application
+     */
+    @OneToOne
     private ModeratorApplication moderatorApplication;
-
+    /**
+     * many to many between moderators and moderator flagging user
+     */
     @ManyToMany(mappedBy = "moderators", cascade = CascadeType.ALL)
     private Collection<FlaggedUser> moderatorFlaggingUser;
-
-    @OneToOne(orphanRemoval=true)
+    /**
+     * one to one between user and flaggedUser
+     */
+    @OneToOne
     private FlaggedUser flaggedUser;
-
     /**
      * A user can send multiple payments
      */
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
     private Collection<Payment> payments;
-
+    /**
+     * one to many between moderator and complaint
+     */
     @OneToMany(mappedBy = "moderator", cascade = CascadeType.ALL)
     private Collection<Complaint> moderatorComplaint;
-
+    /**
+     * one to many between user submitting complaint and complaint
+     */
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Collection<Complaint> userComplaint;
-
+    /**
+     * one to many between reported user and complaints
+     */
     @OneToMany(mappedBy = "reportedUser", cascade = CascadeType.ALL)
     private Collection<Complaint> reportedUserComplaint;
-
+    /**
+     * get moderator application
+     * @return moderator application
+     */
     public ModeratorApplication getModeratorApplication() {
         return moderatorApplication;
     }
-
+    /**
+     * get moderator complaint
+     * @return moderator complaint
+     */
     public Collection<Complaint> getModeratorComplaint() {
         return moderatorComplaint;
     }
-
+    /**
+     * set moderator complaint
+     * @param moderatorComplaint 
+     */
     public void setModeratorComplaint(Collection<Complaint> moderatorComplaint) {
         this.moderatorComplaint = moderatorComplaint;
     }
-
+    /**
+     * get User Complaint
+     * @return 
+     */
     public Collection<Complaint> getUserComplaint() {
         return userComplaint;
     }
-
+    /**
+     * set user Complaint
+     * @param userComplaint 
+     */
     public void setUserComplaint(Collection<Complaint> userComplaint) {
         this.userComplaint = userComplaint;
-    }
-
+    }   
+    /**
+     * get reported user complaints
+     * @return collection of complaints
+     */
     public Collection<Complaint> getReportedUserComplaint() {
         return reportedUserComplaint;
     }
-
+    /**
+     * set reported user complaints
+     * @param reportedUserComplaint 
+     */
     public void setReportedUserComplaint(Collection<Complaint> reportedUserComplaint) {
         this.reportedUserComplaint = reportedUserComplaint;
     }
-
+    /**
+     * set moderator application
+     * @param moderatorApplication 
+     */
     public void setModeratorApplication(ModeratorApplication moderatorApplication) {
         this.moderatorApplication = moderatorApplication;
     }

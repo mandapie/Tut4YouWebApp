@@ -154,38 +154,6 @@ public class ComplaintBean implements Serializable {
     public void setId(int id) {
         this.id = id;
     }
-
-    /**
-     * showComplaintID is used when passing the complaint parameter
-     * from one jsf page to another
-     * @param id 
-     */
-    public void showComplaintID(int id) {
-        complaint  = findComplaint(id);
-    }
-    /**
-     * find complaint by complaint id
-     * @param id
-     * @return complaint
-     */
-    public Complaint findComplaint(int id)
-    {
-        return tut4youApp.findComplaint(id);
-    }
-    /**
-     * get ID
-     * @return ID
-     */
-    public int getId() {
-        return id;
-    }
-    /**
-     * set ID
-     * @param id 
-     */
-    public void setId(int id) {
-        this.id = id;
-    }
     /**
      * get tutor
      *

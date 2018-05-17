@@ -32,12 +32,7 @@
         <b:row>
             <h1>Dashboard</h1>
             <b:form>
-                <p:dialog header="Request Declined" widgetVar="modalID" minHeight="40" visible="#{requestBean.declinedRequests.size() != 0}" closable="false">
-                    <ui:repeat var="re" value="#{requestBean.declinedRequests}">
-                        <p>Your request with the description: #{re.description} has been declined</p>
-                        <p:commandButton value="Dismiss" style="width:100%" action="#{requestBean.cancelRequest(re)}" oncomplete="PF('modalID').hide();"/>
-                    </ui:repeat>
-                </p:dialog>
+                
             </b:form>
             <c:if test="#{userBean.isTutor}">
                 <c:if test="#{userBean.condition}">#{userBean.updateCurrentZip()}</c:if>

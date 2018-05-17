@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import tut4you.model.*;
@@ -42,7 +43,7 @@ public class ForumBean implements Serializable{
     @EJB
     private Tut4YouApp tut4youApp;
     private Question question;
-    private Response response;
+    private Responses responses;
     private Subject subject;
     private Course course;
     private User student;
@@ -50,6 +51,7 @@ public class ForumBean implements Serializable{
     private List<Subject> subjectList = new ArrayList();
     private List<Course> courseList = new ArrayList();
     private List<Question> questionList = new ArrayList();
+    private List<Responses> responseList = new ArrayList();
     
     public Subject getSubject(){
         return subject;
@@ -77,6 +79,14 @@ public class ForumBean implements Serializable{
         this.courseList = courseList;
     }
     
+    public List<Responses> getResponseList(){
+        return responseList;
+    }
+    
+    public void setResponseList(List<Responses> responseList) {
+        this.responseList = responseList;
+    }
+    
     
     public List<Question> getQuestionList(){
         return questionList;
@@ -92,5 +102,48 @@ public class ForumBean implements Serializable{
     
     public void changeCourse(String name) {
         questionList = tut4youApp.getQuestions(name);
+    }
+    
+    public Question getQuestion(){
+        return question;
+    }
+    
+    public void setQuestion(Question question){
+        this.question = question;
+    }
+    
+    public Responses getResponses(){
+        return responses;
+    }
+    
+    public void setResponse(Responses responses){
+        this.responses = responses;
+    }
+    
+    public void getResponses(String questionTitle) {
+        responseList = tut4youApp.getResponses(questionTitle);
+    }
+    
+    public String getQuestionTitle(String title){
+        question = tut4youApp.findQuestionTitle(title);
+        return question.getStudent().getUsername();
+    }
+    
+    public Question getQuestionInfo(String courseName, String title) {
+        questionList = tut4youApp.getQuestions(courseName);
+        for (int i = 0; i < questionList.size(); i++) {
+            if (questionList.get(i).getTitle().equals(title)) {
+                this.question = questionList.get(i);
+            }
+        }
+        return question;
+
+    }
+    
+    public String submitResponses(){
+        System.out.println("Inside submitResponse");
+        this.responses.setQuestion(question);
+        tut4youApp.responses(responses);
+        return "newResponse";
     }
 }

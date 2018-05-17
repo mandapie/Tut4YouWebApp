@@ -1,16 +1,73 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        <title>TODO supply a title</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    </head>
-    <body>
-        <div>TODO write content</div>
-    </body>
-</html>
+<ui:composition template="/WEB-INF/templates/layout.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <!--
+        Licensed under the Academic Free License (AFL 3.0).
+        http://opensource.org/licenses/AFL-3.0
+
+        This code has been developed by a group of CSULB students working on their 
+        Computer Science senior project called Tutors4You.
+
+        Tutors4You is a web application that students can utilize to find a tutor and
+        ask them to meet at any location of their choosing. Students that struggle to understand 
+        the courses they are taking would benefit from this peer to peer tutoring service.
+
+        2017 Amanda Pan <daikiraidemodaisuki@gmail.com>
+        2017 Andrew Kaichi <ahkaichi@gmail.com>
+        2017 Keith Tran <keithtran25@gmail.com>
+        2017 Syed Haider <shayder426@gmail.com>
+    -->
+    <!-- @author Andrew Kaichi <ahkaichi@gmail.com> -->
+    <ui:define name="title">View Question</ui:define>
+    <ui:define name="content">
+        <f:viewParam name="questionList" value="#{forumBean.getQuestionTitle(param['question'])}"/>
+        <b:panel title="User: #{forumBean.question.student.username}" collapsible="false" look="info">
+            <f:viewParam name="questionList" value="#{forumBean.getQuestionInfo(param['course'], param['question'])}"/>
+                <!-- Question -->
+                <b:row>
+                    <b:column medium-screen="10">
+                        <h2>Question: #{forumBean.question.title}</h2>
+                        <h3>Description: #{forumBean.question.description}</h3>
+                    </b:column>   
+                </b:row>              
+        </b:panel>
+        
+        <b:panel title="Responses:">
+            <f:viewParam name="responseList" value="#{forumBean.getResponses(param['question'])}"/>
+            <ui:repeat value="#{forumBean.responseList}" var="responses">
+                <div style="border-bottom:solid 1px;padding:15px;">
+                    <h:outputText value="Tutor Username:" style="font-size:20px;"/>
+                    <br/>
+                    <h:outputText value="#{responses.tutor.username}" style="font-size:18px;"/>
+                    <br/>
+                    <h:outputText value="Explanation:" style="font-size:20px;"/>
+                    <br/>
+                    <h:outputText value="#{responses.explanation}" style="font-size:18px;"/>
+                    <br/>
+                    
+                    <c:if test="#{userBean.isTutor}">
+                        <h:outputText value="Answer:" style="font-size:20px;"/>
+                        <br/>
+                        <h:outputText value="#{responses.answer}" style="font-size:18px;"/>
+                    </c:if>
+                    
+                    <span/>
+                    
+                    <span/>
+                </div>
+            </ui:repeat> 
+        </b:panel>
+        <b:row>
+            <b:button look="primary" value="Answer Question" outcome="response.xhtml" style="float:right;">
+                <f:param name="course" value="#{param['course']}"/>
+                <f:param name="question" value="#{param['question']}"/>
+            </b:button>
+        </b:row>
+        <ui:debug hotkey='x' />
+    </ui:define>
+</ui:composition>

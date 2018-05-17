@@ -135,6 +135,27 @@ public class Tut4YouApp {
         return questionQuery.getResultList();
     }
     
+        /**
+     * Based on the selected question, query all the responses
+     * @param questionTitle is the question's title
+     * @return List of responses
+     */
+    @PermitAll
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public List<Responses> getResponses(String questionTitle) {
+        TypedQuery<Responses> responsesQuery = em.createNamedQuery(Responses.FIND_RESPONSES_BY_QUESTION, tut4you.model.Responses.class);
+        responsesQuery.setParameter("title", questionTitle);
+        return responsesQuery.getResultList();
+    }
+    
+    @PermitAll
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public Question findQuestionTitle(String title) {
+        TypedQuery<Question> questionQuery = em.createNamedQuery(Question.FIND_QUESTION_BY_TITLE, Question.class);
+        questionQuery.setParameter("title", title);
+        return questionQuery.getSingleResult();
+    }
+    
     /**
      * Adds a question to the database
      * @param question new question being added
@@ -164,6 +185,39 @@ public class Tut4YouApp {
         em.persist(question);
         em.flush();
         return question;
+    }
+    
+    /**
+     * Adds a question to the database
+     * @param responses new question being added
+     * @return question 
+     */
+    @RolesAllowed("tut4youapp.tutor")
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public Responses responses(Responses responses){
+        UserBean userBean = new UserBean();
+        Question question;
+        String currentUserEmail = userBean.getEmailFromSession();
+        if (currentUserEmail == null) {
+            return null;
+        }
+        else {
+            Tutor tutor = findTutor(currentUserEmail);
+            if (tutor != null){
+                tutor.addResponses(responses);
+                responses.setTutor(tutor);
+                question = responses.getQuestion();
+                question.addResponses(responses);
+                System.out.println("inside responses ejb");
+                System.out.println(question.getTitle());
+            }
+            else{
+                return null;
+            }
+        }
+        em.persist(responses);
+        em.flush();
+        return responses;
     }
     /**
      * This method can only be called by a student. This methods gets the

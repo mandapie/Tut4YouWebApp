@@ -18,6 +18,7 @@ package tut4you.model;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.HashSet;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -38,13 +39,18 @@ import javax.persistence.Table;
 @Table(name = "Question")
 @Entity
 @NamedQueries({
-    @NamedQuery(name = Question.FIND_QUESTION_BY_COURSE, query = "SELECT q FROM Question q JOIN q.course c WHERE c.courseName = :name")
+    @NamedQuery(name = Question.FIND_QUESTION_BY_COURSE, query = "SELECT q FROM Question q JOIN q.course c WHERE c.courseName = :name"),
+    @NamedQuery(name = Question.FIND_QUESTION_BY_TITLE, query = "SELECT q FROM Question q WHERE q.title = :title")
 })
 public class Question implements Serializable {
     /**
      * JPQL Query to find questions by their course name
      */
     public static final String FIND_QUESTION_BY_COURSE = "Question.findQuestionByCourse";
+    /**
+     * JPQL Query to find questions by their title
+     */
+    public static final String FIND_QUESTION_BY_TITLE = "Question.findQuestionByTitle";
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -58,7 +64,7 @@ public class Question implements Serializable {
     private User student;
     
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
-    private Collection<Response> response;
+    private Collection<Responses> responses;
     
     @OneToOne
     @JoinColumn(name = "courseName", nullable = false)
@@ -68,12 +74,12 @@ public class Question implements Serializable {
     
     }
     
-    public Question(User student, Course course, String title, String description, Collection<Response> response) {
+    public Question(User student, Course course, String title, String description, Collection<Responses> responses) {
         this.student = student;
         this.course = course;
         this.title = title;
         this.description = description;
-        this.response = response;
+        this.responses = responses;
     }
     
     public Long getId() {
@@ -100,12 +106,12 @@ public class Question implements Serializable {
         this.description = description;
     }
     
-    public Collection<Response> getResponse(){
-        return response;
+    public Collection<Responses> getResponses(){
+        return responses;
     }
     
-    public void setResponse(Collection<Response> response){
-        this.response = response;
+    public void setResponse(Collection<Responses> responses){
+        this.responses = responses;
     }
     
     public Course getCourse(){
@@ -126,6 +132,17 @@ public class Question implements Serializable {
 
     public void addCourse(String course){
         this.course.setCourseName(course);
+    }
+    
+     /**
+     * adds a response to a collection of responses
+     * @param response 
+     */
+    public void addResponses(Responses responses) {
+        if (this.responses == null) {
+            this.responses = new HashSet();
+        }
+        this.responses.add(responses);
     }
     @Override
     public int hashCode() {

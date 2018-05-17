@@ -22,7 +22,7 @@ INSERT INTO Course(subjectName,courseName) VALUES ('Computer Science','Introduct
 INSERT INTO Course(subjectName,courseName) VALUES ('Computer Science','Computer Logic Design I')
 INSERT INTO Course(subjectName,courseName) VALUES ('Computer Science','Computer Logic Design II')
 
-INSERT INTO Question(id,description,title,student_email,courseName) VALUES (1,'Solve the following using the quadratic formula: x^2 + 6x = 14','Need help understanding how to use the quadratic formula','bobby@gmail.com','Algebra')
+INSERT INTO Question(description,title,student_email,courseName) VALUES ('Solve the following using the quadratic formula: x^2 + 6x = 14','Need help understanding how to use the quadratic formula','evan@gmail.com','Algebra')
 
 
 INSERT INTO Users(email,user_type,firstName,lastName,phoneNumber,username,university,dateJoinedAsTutor,hourlyRate,doNotDisturb,defaultZip,securityQuestion,securityAnswer,password,overallRating) VALUES ('amanda@gmail.com','Tutor','Amanda','Pan','7141234567','apan','CSULB','2018-05-09',15.00,0,'92704','What was your childhood nickname?','amanda','CD639F5ECF3514CCC33B9985B55A118727A21782C04A714AB6A7634BE91DC4B6E8BFF6456B546E382EF00057550952F019993BBE6B8D84FE09C2B961149BFA2A',2)

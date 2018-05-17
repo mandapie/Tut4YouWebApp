@@ -44,13 +44,17 @@ public class QuestionBean implements Serializable{
     private Tut4YouApp tut4youApp;
     
     private Question newQuestion;
+    private Question question;
+    private Responses responses;
     private User student;
     private List<Course> courseList = new ArrayList();
+    private List<Question> questionList = new ArrayList();
     private Course course;
     
     @PostConstruct
     public void QuestionBean(){
         newQuestion = new Question();
+        responses = new Responses();
     }
     
     /**
@@ -74,6 +78,14 @@ public class QuestionBean implements Serializable{
     
     public void setCourseList(List<Course> courseList) {
         this.courseList = courseList;
+    }
+    
+    public List<Question> getQuestionList(){
+        return questionList;
+    }
+    
+    public void setQuestionList(List<Question> questionList) {
+        this.questionList = questionList;
     }
     /**
      * gets the student asking the question
@@ -99,6 +111,14 @@ public class QuestionBean implements Serializable{
         this.course = course;
     }
     
+    public Responses getResponses(){
+        return responses;
+    }
+    
+    public void setResponse(Responses responses){
+        this.responses = responses;
+    }
+    
     public void getCourseList(String subjectName, String courseName) {
         courseList = tut4youApp.getCourses(subjectName);
         for (int i = 0; i < courseList.size(); i++){
@@ -109,10 +129,35 @@ public class QuestionBean implements Serializable{
         
     }
     
+    public void getQuestionTitle(String title){
+        this.question = tut4youApp.findQuestionTitle(title);
+        System.out.println(question.getTitle());
+    }
+
+    public void getQuestionInfo(String courseName, String title) {
+        questionList = tut4youApp.getQuestions(courseName);
+        for (int i = 0; i < questionList.size(); i++) {
+            if (questionList.get(i).getTitle().equals(title)) {
+                this.question = questionList.get(i);
+            }
+        }
+
+    }
+
     public String askNewQuestion(){
         this.newQuestion.setCourse(course);
         //course.;
         tut4youApp.askNewQuestion(newQuestion);
         return "newQuestion";
+    }
+    
+    public String submitResponses(){
+        System.out.println("Inside submitResponse");
+        
+        System.out.println(question);
+        this.responses.setQuestion(question);
+        System.out.println(responses);
+        tut4youApp.responses(responses);
+        return "newResponse";
     }
 }

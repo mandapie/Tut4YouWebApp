@@ -23,18 +23,30 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 /**
  *
  * @author Andrew Kaichi <ahkaichi@gmail.com>
  */
+@Table(name = "Responses")
+@NamedQueries({
+    @NamedQuery(name = Responses.FIND_RESPONSES_BY_QUESTION, query = "SELECT r FROM Responses r JOIN r.question q WHERE q.title = :title")
+})
 @Entity
-public class Response implements Serializable {
+public class Responses implements Serializable {
 
+    /**
+     * JPQL Query to find Requests by user email
+     */
+    public static final String FIND_RESPONSES_BY_QUESTION = "Responses.findResponsesByQuestion";
+    
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String explanation;
     private String answer;
@@ -45,11 +57,11 @@ public class Response implements Serializable {
     @ManyToOne
     private Tutor tutor;
 
-    public Response() {
+    public Responses() {
     
     }
     
-    public Response(String explanation, String answer, Tutor tutor) {
+    public Responses(String explanation, String answer, Tutor tutor) {
         this.explanation = explanation;
         this.answer = answer;
         this.tutor = tutor;
@@ -105,10 +117,10 @@ public class Response implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Response)) {
+        if (!(object instanceof Responses)) {
             return false;
         }
-        Response other = (Response) object;
+        Responses other = (Responses) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -117,7 +129,7 @@ public class Response implements Serializable {
 
     @Override
     public String toString() {
-        return "tut4you.model.Response[ id=" + id + " ]";
+        return "tut4you.model.Responses[ id=" + id + " ]";
     }
     
 }

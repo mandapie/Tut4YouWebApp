@@ -99,10 +99,18 @@ public class AddCourseBean implements Serializable {
         this.course = course;
     }
 
+    /**
+     * gets boolean attribute to ask tutors if they want to add more courses
+     * @return addNewCourse
+     */
     public boolean isAddNewCourse() {
         return addNewCourse;
     }
 
+    /**
+     * sets boolean attribute for modal to show to ask if they want to add more courses
+     * @param addNewCourse 
+     */
     public void setAddNewCourse(boolean addNewCourse) {
         this.addNewCourse = addNewCourse;
     }
@@ -128,7 +136,6 @@ public class AddCourseBean implements Serializable {
 
     /**
      * Adds course to the tutor's course list
-     * @return success if the course was added successfully
      */
     public void addNewCourse() {
         try {

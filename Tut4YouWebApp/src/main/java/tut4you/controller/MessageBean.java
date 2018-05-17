@@ -37,22 +37,6 @@ public class MessageBean implements Serializable {
     Tut4YouApp tut4youapp;
     private User user;
     private Message message;
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Message getMessage() {
-        return message;
-    }
-
-    public void setMessage(Message message) {
-        this.message = message;
-    }
     
     /**
      * Creates a new instance of MessageBean
@@ -60,6 +44,42 @@ public class MessageBean implements Serializable {
     public MessageBean() {
     }
     
+    /**
+     * gets the user
+     * @return 
+     */
+    public User getUser() {
+        return user;
+    }
+
+    /**
+     * sets the user
+     * @param user 
+     */
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    /**
+     * gets the message
+     * @return 
+     */
+    public Message getMessage() {
+        return message;
+    }
+
+    /**
+     * sets the message
+     * @param message 
+     */
+    public void setMessage(Message message) {
+        this.message = message;
+    }
+    
+    /**
+     * sets the timestamp and send message
+     * @return 
+     */
     public Message sendMessage() {
         this.message.setDateSent(new Date(System.currentTimeMillis()));
         return message;

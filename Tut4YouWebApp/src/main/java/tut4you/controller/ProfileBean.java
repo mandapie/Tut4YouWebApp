@@ -28,9 +28,7 @@ import javax.inject.Inject;
 import tut4you.model.*;
 
 /**
- * Payments are made to tutors
- * by students. This class binds the payment
- * inputs to the EJB.
+ * Shows information of specific tutors including rating
  *
  * @author Amanda Pan<shayder426@gmail.com>
  * modifid by Syed Haider<shayder426@gmail.com>

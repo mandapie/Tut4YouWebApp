@@ -63,10 +63,18 @@ public class SessionBean implements Serializable {
         sessionTimer = new Session();
     }
 
+    /**
+     * get id
+     * @return 
+     */
     public Long getId() {
         return id;
     }
 
+    /** set id
+     * 
+     * @param id 
+     */
     public void setId(Long id) {
         this.id = id;
     }
@@ -207,8 +215,7 @@ public class SessionBean implements Serializable {
     }
 
     /**
-     * Sets the correctAnswer attribute to true or false depending on if the
- security answer is equivalent
+     * Sets the correctAnswer attribute to true or false depending on if the security answer is equivalent
      *
      * @param correctAnswer
      */
@@ -274,6 +281,10 @@ public class SessionBean implements Serializable {
         context.addMessage(null, new FacesMessage("Successful!", "You started your session!"));
     }
 
+    /**
+     * set request based on id
+     * @param id 
+     */
     public void showRequestId(Long id) {
         request = tut4youapp.findRequest(id);
     }

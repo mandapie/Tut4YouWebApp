@@ -42,7 +42,7 @@
                                       allowTypes="/(\.|\/)(gif|jpe?g|pdf)$/"
                                       fileLimit="1"
                                       update="uploadTranscript"
-                                      a:onchange="if (tagName == 'INPUT') { if (value) { PF('button').enable(); PF('button2').enable(); } else { PF('button').disable(); PF('button2').enable(); }}"/>
+                                      a:onchange="if (tagName == 'INPUT') { if (value) { PF('button').enable(); } else { PF('button').disable(); }}"/>
                     </b:row>
                     <b:row style="margin-top:10px;">
                         <p:commandButton widgetVar="button" value="Upload" action="#{transcriptBean.uploadTranscript}" ajax="false" disabled="#{facesContext.renderResponse or not facesContext.postback}"/>
@@ -54,7 +54,7 @@
                         <h:outputLabel value="View Your Transcript"/>
                     </b:row>
                     <b:row>
-                        <p:commandButton widgetVar="button2" value="View" action="#{transcriptBean.generatePresignedUrlRequest}" ajax="false" disabled="#{facesContext.renderResponse or not facesContext.postback}"/>
+                        <p:commandButton value="View" action="#{transcriptBean.generatePresignedUrlRequest}" ajax="false"/>
                     </b:row>
                 </b:column>
             </h:form>

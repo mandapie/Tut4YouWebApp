@@ -33,7 +33,6 @@ import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -54,8 +53,6 @@ public class UserBean implements Serializable {
 
     private static final Logger LOGGER = Logger.getLogger("UserBean");
     
-//    @Inject
-//    private RequestBean requestBean;
     @EJB
     private Tut4YouApp tut4youapp;
 

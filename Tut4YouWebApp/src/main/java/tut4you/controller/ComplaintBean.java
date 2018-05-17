@@ -72,33 +72,53 @@ import tut4you.model.User;
 @ViewScoped
 public class ComplaintBean implements Serializable {
 
-    //inject registrationBean
     @Inject
     private RegistrationBean registrationBean;
-    //id parameter
+    
     @ManagedProperty("#{param.id}")
-    private int id;
-    //EJB
+    private int id; //id parameter
     @EJB
     private Tut4YouApp tut4youApp;
-    //User
     private User user;
-    //tutor
     private Tutor tutor;
-    //complaint
     private Complaint complaint;
-    //list
     private List<Complaint> complaintList = new ArrayList();
-    //boolean isTutor
     private boolean isTutor;
     private String complaintURL;
     
+    /**
+     * Creates an instance of the courseBean
+     */
+    @PostConstruct
+    public void createComplaintBean() {
+        complaint = new Complaint();
+        complaint.setIsReviewed(false);
+
+    }
+
+    /**
+     * Destroys an instance of the courseBean
+     */
+    @PreDestroy
+    public void destroyComplaintBean() {
+    }
+    
+    /**
+     * get complaint url
+     * @return 
+     */
     public String getURL(){
         return complaintURL;
     }
+    
+    /**
+     * set complaint url
+     * @param complaintURL 
+     */
     public void setURL(String complaintURL){
         this.complaintURL = complaintURL;
     }
+    
     /**
      * boolean to check if user was a tutor in the complaint
      *
@@ -231,23 +251,6 @@ public class ComplaintBean implements Serializable {
     }
 
     /**
-     * Creates an instance of the courseBean
-     */
-    @PostConstruct
-    public void createComplaintBean() {
-        complaint = new Complaint();
-        complaint.setIsReviewed(false);
-
-    }
-
-    /**
-     * Destroys an instance of the courseBean
-     */
-    @PreDestroy
-    public void destroyComplaintBean() {
-    }
-
-    /**
      * create a new complaint
      *
      * @param user
@@ -299,7 +302,9 @@ public class ComplaintBean implements Serializable {
     }
     /**
     * method used for viewing transcript
+     * @param userName
     * @return string
+     * @throws java.io.FileNotFoundException
     */
     public String generateSignedURLTranscript(String userName) throws FileNotFoundException, IOException {
         tutor = tut4youApp.findTutorByUsername(userName);

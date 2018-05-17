@@ -29,7 +29,7 @@ import tut4you.model.*;
  * Connects the users to be in a chat.
  * source: https://netbeans.org/kb/docs/javaee/maven-websocketapi.html#createendpoint
  *         http://www.hascode.com/2013/08/creating-a-chat-application-using-java-ee-7-websockets-and-glassfish-4/
- * @author Amanda
+ * @author Amanda Pan <daikiraidemodaisuki@gmail.com>
  */
 @ApplicationScoped
 @DeclareRoles({"tut4youapp.student"})
@@ -45,14 +45,26 @@ public class WSEndpoint {
     private Message message;
     private static Set<Session> userSessions = Collections.synchronizedSet(new HashSet<Session>());
 
+    /**
+     * get message
+     * @return 
+     */
     public Message getMessage() {
         return message;
     }
 
+    /**
+     * set message
+     * @param message 
+     */
     public void setMessage(Message message) {
         this.message = message;
     }
     
+    /**
+     * open connection
+     * @param session 
+     */
     @OnOpen
     public void onOpen(Session session) {
         LOGGER.log(Level.INFO, "Open Connection ..." + session.getId());
@@ -61,17 +73,30 @@ public class WSEndpoint {
         }
     }
 
+    /**
+     * close connection
+     * @param session 
+     */
     @OnClose
     public void onClose(Session session) {
         LOGGER.log(Level.INFO, "Close Connection ...");
         userSessions.remove(session);
     }
 
+    /**
+     * throw error
+     * @param e 
+     */
     @OnError
     public void onError(Throwable e) {
         e.printStackTrace();
     }
 
+    /**
+     * on message event, all users within the session will receive message
+     * @param message
+     * @param session 
+     */
     @OnMessage
     public void onMessage(Message message, Session session) {
         try {

@@ -21,10 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
-import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
-import javax.servlet.http.HttpServletRequest;
 import tut4you.model.*;
 
 
@@ -58,7 +56,7 @@ public class ForumBean implements Serializable{
     }
     
     /**
-     * 
+     * sets the subject
      * @param subject 
      */
     public void setSubject(Subject subject){
@@ -123,6 +121,7 @@ public class ForumBean implements Serializable{
     public List<Question> getQuestionList(){
         return questionList;
     }
+    
     /**
      * sets a list of questions
      * @param questionList list being set
@@ -138,6 +137,7 @@ public class ForumBean implements Serializable{
     public void changeSubject(String name) {
         courseList = tut4youApp.getCourses(name);
     }
+    
     /**
      * changes the questionList based off the course name
      * @param name course name being passed in
@@ -145,6 +145,7 @@ public class ForumBean implements Serializable{
     public void changeCourse(String name) {
         questionList = tut4youApp.getQuestions(name);
     }
+    
     /**
      * gets a question
      * @return question
@@ -152,6 +153,7 @@ public class ForumBean implements Serializable{
     public Question getQuestion(){
         return question;
     }
+    
     /**
      * sets a question
      * @param question to be set
@@ -159,6 +161,7 @@ public class ForumBean implements Serializable{
     public void setQuestion(Question question){
         this.question = question;
     }
+    
     /**
      * gets a response
      * @return responses
@@ -166,6 +169,7 @@ public class ForumBean implements Serializable{
     public Responses getResponses(){
         return responses;
     }
+    
     /**
      * sets a response
      * @param responses to be set
@@ -173,6 +177,7 @@ public class ForumBean implements Serializable{
     public void setResponse(Responses responses){
         this.responses = responses;
     }
+    
     /**
      * Updates response list based off the question title
      * @param questionTitle name of the question
@@ -180,6 +185,7 @@ public class ForumBean implements Serializable{
     public void getResponses(String questionTitle) {
         responseList = tut4youApp.getResponses(questionTitle);
     }
+    
     /**
      * gets the username of whoever asked the question
      * @param title name of the question
@@ -189,6 +195,7 @@ public class ForumBean implements Serializable{
         question = tut4youApp.findQuestionTitle(title);
         return question.getStudent().getUsername();
     }
+    
     /**
      * gets a question object depending on the courseName and question title
      * @param courseName name of the course
@@ -203,7 +210,6 @@ public class ForumBean implements Serializable{
             }
         }
         return question;
-
     }
     
     /**
@@ -231,11 +237,7 @@ public class ForumBean implements Serializable{
                     isUserQuestion = true;
                 }
             }
-
         }
-
         return isUserQuestion;
     }
-
-
 }

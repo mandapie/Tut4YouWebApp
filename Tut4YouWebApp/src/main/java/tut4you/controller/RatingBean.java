@@ -30,11 +30,7 @@ import javax.enterprise.context.ConversationScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
-import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import okhttp3.OkHttpClient;
 import tut4you.model.*;
 
 /**
@@ -95,41 +91,84 @@ public class RatingBean implements Serializable {
             conversation.end();
         }
     }
+    
+    /**
+     * gets isTutor
+     * @return 
+     */
     public boolean isIsTutor() {
         return isTutor;
     }
 
+    /**
+     * sets isTutor
+     * @param isTutor 
+     */
     public void setIsTutor(boolean isTutor) {
         this.isTutor = isTutor;
     }
+    
+    /**
+     * gets user
+     * @return 
+     */
     public User getUser() {
         return user;
     }
 
+    /**
+     * sets user
+     * @param user 
+     */
     public void setUser(User user) {
         this.user = user;
     }
+    
+    /**
+     * gets request
+     * @return 
+     */
     public Request getRequest() {
         return request;
     }
 
+    /**
+     * sets request
+     * @param request 
+     */
     public void setRequest(Request request) {
         this.request = request;
     }
 
+    /**
+     * gets username
+     * @return 
+     */
     public String getUsername() {
         return username;
     }
 
+    /**
+     * sets username
+     * @param username 
+     */
     public void setUsername(String username) {
         this.username = username;
     }
 
+    /**
+     * gets student name
+     * @return 
+     */
     public String getStudentName() {
         studentName = rating.getStudent().getFirstName() + rating.getStudent().getLastName();
         return studentName;
     }
 
+    /**
+     * sets student name
+     * @param studentName 
+     */
     public void setStudentName(String studentName) {
         this.studentName = studentName;
     }
@@ -152,31 +191,58 @@ public class RatingBean implements Serializable {
         this.rating = rating;
     }
 
+    /**
+     * gets tutor
+     * @return 
+     */
     public Tutor getTutor() {
         return tutor;
     }
 
+    /**
+     * sets tutor
+     * @param tutor 
+     */
     public void setTutor(Tutor tutor) {
         this.tutor = tutor;
     }
 
+    /**
+     * gets list of tutor
+     * @return 
+     */
     public List<Tutor> getTutorList() {
         return tut4youApp.getTutorsList();
     }
 
+    /**
+     * sets tutor list
+     * @param c 
+     */
     public void setTutorList(List<Tutor> c) {
         tutorList = c;
     }
 
+    /**
+     * method to go to write a review page
+     * @param t
+     * @return
+     * @throws ParseException 
+     */
     public String goToWriteReviewPage(Tutor t) throws ParseException {
         String result;
         this.tutor = t;
-                System.out.println(tutor);
-
         result = "writeReview";
         return result;
     }
     
+    /**
+     * method to go to submit a complaint page
+     * @param user
+     * @param isTutor
+     * @return
+     * @throws ParseException 
+     */
     public String goToSubmitComplaintPage(User user, boolean isTutor) throws ParseException {
         String result;
         this.user = user;
@@ -185,11 +251,20 @@ public class RatingBean implements Serializable {
         result = "submitComplaint";
         return result;
     }
-
+    
+    /**
+     * set tutor based by finding the username
+     * @param username 
+     */
     public void showUsername(String username) {
         this.tutor = findTutorByUsername(username);
     }
     
+    /**
+     * find tutor by username
+     * @param username
+     * @return 
+     */
     public Tutor findTutorByUsername(String username) {
         return tut4youApp.findTutorByUsername(username);
     }
@@ -207,6 +282,11 @@ public class RatingBean implements Serializable {
         return date;
     }
 
+    /**
+     * create a new rating
+     * @return
+     * @throws ParseException 
+     */
     public String createNewRating() throws ParseException {
         String result = "success";
         if (rating.getRatingValue() <= 0) {
@@ -228,7 +308,11 @@ public class RatingBean implements Serializable {
         tut4youApp.deleteRating(rating);
         tut4youApp.updateAverageRating(rating.getTutor().getEmail());
     }
-
+    
+    /**
+     * get list of requests
+     * @return 
+     */
     public List<Request> getRequestList() {
         requestList = tut4youApp.getCompletedRequests();
         return requestList;
@@ -244,5 +328,4 @@ public class RatingBean implements Serializable {
         ratingList = tut4youApp.getRatingList(email);
         return ratingList;
     }
-
 }

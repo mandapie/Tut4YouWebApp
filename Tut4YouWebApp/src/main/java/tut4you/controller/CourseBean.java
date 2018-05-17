@@ -156,10 +156,18 @@ public class CourseBean implements Serializable {
         this.courseList = courseList;
     }
     
+    /**
+     * gets the boolean for modal to pop up
+     * @return 
+     */
     public boolean isAddNewCourse() {
         return addNewCourse;
     }
 
+    /**
+     * sets the boolean for modal to pop up
+     * @param addNewCourse 
+     */
     public void setAddNewCourse(boolean addNewCourse) {
         this.addNewCourse = addNewCourse;
     }
@@ -173,7 +181,6 @@ public class CourseBean implements Serializable {
 
     /**
      * Adds a new course to the tutor
-     * @return course
      */
     public void addCourse() {
         try {

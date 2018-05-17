@@ -60,14 +60,6 @@ public class RegistrationBean implements Serializable {
     private Boolean isStudent;
     private String defaultZip;
     private Date joinedDateAsTutor;
-
-    public Tut4YouApp getTut4youApp() {
-        return tut4youApp;
-    }
-
-    public void setTut4youApp(Tut4YouApp tut4youApp) {
-        this.tut4youApp = tut4youApp;
-    }
     
     /**
      * Creates a new instance of Registration

@@ -54,6 +54,7 @@ public class BecomeTutorBean implements Serializable {
     private String hourlyRate;
     private String defaultZip;
     private Date joinedDateAsTutor;
+   
     /**
      * Creates a new instance of UserIdentity
      */
@@ -67,6 +68,7 @@ public class BecomeTutorBean implements Serializable {
     @PreDestroy
     public void destroyBecomeTutorBean() {
     }
+    
     /**
      * get hourly rate
      * @return 
@@ -74,6 +76,7 @@ public class BecomeTutorBean implements Serializable {
     public String getHourlyRate() {
         return hourlyRate;
     }
+    
     /**
      * set hourly rate
      * @param hourlyRate 
@@ -81,6 +84,8 @@ public class BecomeTutorBean implements Serializable {
     public void setHourlyRate(String hourlyRate) {
         this.hourlyRate = hourlyRate;
     }
+    
+    
     /**
      * get default zip
      * @return 
@@ -88,6 +93,7 @@ public class BecomeTutorBean implements Serializable {
     public String getDefaultZip() {
         return defaultZip;
     }
+    
     /**
      * set default zip
      * @param defaultZip 
@@ -102,6 +108,7 @@ public class BecomeTutorBean implements Serializable {
     public Date getJoinedDateAsTutor() {
         return joinedDateAsTutor;
     }
+    
     /**
      * set joined date as tutor
      * @param joinedDateAsTutor 
@@ -118,6 +125,7 @@ public class BecomeTutorBean implements Serializable {
     public String getCurrentZip() {
         return currentZip;
     }
+    
     /**
      * set current zip
      *
@@ -139,6 +147,7 @@ public class BecomeTutorBean implements Serializable {
         Date time = Date.from(instant);
         return time;
     }
+    
     /**
      * Allows student to become a tutor as well
      * @throws ParseException 
@@ -151,9 +160,12 @@ public class BecomeTutorBean implements Serializable {
         joinedDateAsTutor = getCurrentDate();
         tut4youapp.becomeTutor(pr, joinedDateAsTutor, defaultZip);
     }
+    
+    /**
+     * add message success message to growl
+     */
     public void showGrowlMessage() {
         FacesContext context = FacesContext.getCurrentInstance();
         context.addMessage(null, new FacesMessage("Successful!", "you will have access to all tutor features the next time you log in"));
     }
-
 }

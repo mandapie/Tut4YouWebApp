@@ -54,6 +54,7 @@ import javax.persistence.TemporalType;
     @NamedQuery(name = Tutor.FIND_TUTORS, query = "SELECT t FROM Tutor t"),
     @NamedQuery(name = Tutor.FIND_TUTOR_BY_USERNAME, query = "SELECT t FROM Tutor t WHERE t.username = :username"),
     @NamedQuery(name = Tutor.FIND_LOW_RATING_TUTORS, query = "SELECT t FROM Tutor t WHERE t.overallRating <= :overallRating"),
+    @NamedQuery(name = Tutor.VERIFY_ZIPCODE, query = "SELECT t FROM Tutor t WHERE t.defaultZip = :zipcode")
 })
 public class Tutor extends User implements Serializable {
 
@@ -69,7 +70,11 @@ public class Tutor extends User implements Serializable {
     public static final String FIND_DATE_JOINED_BY_EMAIL = "Tutor.findDateJoinedByEmail";
     public static final String FIND_LOW_RATING_TUTORS = "Tutor.findLowRatingTutors";
     public static final String FIND_TRANSCRIPT_PATH_BY_EMAIL = "Tutor.findTranscriptPathByEmail";
+    /**
+     * JPQL Query to see if zipcode is in database
+     */
 
+    public static final String VERIFY_ZIPCODE = "Tutor.verifyZipcode";
     /**
      * JPQL Query to obtain a list of tutors who taught a specific course and is
      * available

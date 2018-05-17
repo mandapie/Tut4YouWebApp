@@ -42,7 +42,9 @@ import javax.persistence.Table;
 @Entity
 @NamedQueries({
     @NamedQuery(name = Course.FIND_COURSE_BY_SUBJECT, query = "SELECT c FROM Course c JOIN c.subject s WHERE s.subjectName = :name"),
-    @NamedQuery(name = Course.FIND_COURSES_BY_TUTOR, query = "SELECT c FROM Course c JOIN c.tutors t WHERE t.email = :email")
+    @NamedQuery(name = Course.FIND_COURSES_BY_TUTOR, query = "SELECT c FROM Course c JOIN c.tutors t WHERE t.email = :email"),
+    @NamedQuery(name = Course.VERIFY_COURSE, query = "SELECT c from Course C WHERE c.courseName = :courseName"),
+    @NamedQuery(name = Course.FIND_COURSES_BY_USERNAME, query = "SELECT c FROM Course C JOIN c.tutors t WHERE t.username = :username")
 })
 public class Course implements Serializable {  
     /**
@@ -53,6 +55,15 @@ public class Course implements Serializable {
      * JPQL Query to find courses by tutor
      */
     public static final String FIND_COURSES_BY_TUTOR = "Tutor.findCoursesByTutor";
+    /**
+    * JPQL Query to find courses by username
+     */
+    public static final String FIND_COURSES_BY_USERNAME = "Tutor.findCoursesByUsername";
+
+    /**
+     * JPQL Query to verify course exists
+     */
+    public static final String VERIFY_COURSE = "Tutor.verifyCourse";
 
     @Id
     private String courseName;

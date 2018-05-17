@@ -57,11 +57,6 @@ public class RequestBean implements Serializable {
     public void createRequestBean() {
         request = new Request();
     }
-    
-    @PreDestroy
-    public void destroyRequestBean() {
-        
-    }
 
     /**
      * Gets the Request entity

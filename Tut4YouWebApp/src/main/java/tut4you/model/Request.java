@@ -391,6 +391,10 @@ public class Request implements Serializable {
     public void removeAvailableTutor(Tutor at) {
         availableTutors.remove(at);
     }
+    
+    public void removeAllAvailableTutor(Collection<Tutor> ats) {
+        availableTutors.removeAll(ats);
+    }
 
     /**
      * Override hashCode

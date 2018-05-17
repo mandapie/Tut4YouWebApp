@@ -372,25 +372,18 @@ public class Tut4YouApp {
      *
      * @param r
      */
-    @PermitAll
+    @RolesAllowed("tut4youapp.student")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void cancelRequest(Request r) {
-        Request pendingRequest = em.find(Request.class,
-                r.getId());
-        r.setStatus(Request.Status.CANCELLED);
-        if (r.getTutor() == null) {
-            em.merge(r);
-            //em.remove(r);
-            em.flush();
-        } else if (r.getTutor() != null) {
-            Tutor tutor = r.getTutor();
-            tutor.removePendingRequest(pendingRequest);
-            pendingRequest.removeAvailableTutor(tutor);
-            em.merge(r);
-            //em.remove(r); 
-            em.merge(tutor);
-            em.flush();
+        Request pendingRequest = em.find(Request.class, r.getId());
+        pendingRequest.setStatus(Request.Status.CANCELLED);
+        for (Tutor t : pendingRequest.getAvailableTutors()) {
+            t.removePendingRequest(pendingRequest);
+            em.merge(t);
         }
+        pendingRequest.removeAllAvailableTutor(r.getAvailableTutors());
+        em.merge(pendingRequest);
+        em.flush();
     }
 
     /**
@@ -398,23 +391,17 @@ public class Tut4YouApp {
      *
      * @param r
      */
-    @PermitAll
+    @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void declineRequest(Request r) {
-        Request pendingRequest = em.find(Request.class,
-                r.getId());
+        Request pendingRequest = em.find(Request.class, r.getId());
         r.setStatus(Request.Status.DECLINED);
-        if (r.getTutor() == null) {
-            em.merge(r);
-            em.flush();
-        } else if (r.getTutor() != null) {
-            Tutor tutor = r.getTutor();
-            tutor.removePendingRequest(pendingRequest);
-            pendingRequest.removeAvailableTutor(tutor);
-            em.merge(r);
-            em.merge(tutor);
-            em.flush();
-        }
+        Tutor tutor = r.getTutor();
+        tutor.removePendingRequest(pendingRequest);
+        pendingRequest.removeAvailableTutor(tutor);
+        em.merge(r);
+        em.merge(tutor);
+        em.flush();
     }
 
     /**

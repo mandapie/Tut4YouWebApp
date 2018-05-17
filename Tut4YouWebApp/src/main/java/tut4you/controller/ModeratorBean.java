@@ -116,7 +116,8 @@ public class ModeratorBean implements Serializable {
     }
     /**
      * gets list of tutors with ratings at or below a 2.0, 
-     * and removes tutors from the list that have been flagged before in the past 5 minutes
+     * and removes tutors from the list that have been flagged before in the past 5 minutes,
+     * or if tutor has less than 2 reviews
      * @return tutor list
      * @throws ParseException 
      */
@@ -125,21 +126,28 @@ public class ModeratorBean implements Serializable {
         lowRatingTutorList = tut4youApp.findLowRatingTutors();
         for(int i = 0; i < lowRatingTutorList.size(); i++) {
             FlaggedUser flaggedUser = flaggedUserBean.findFlaggedUser(lowRatingTutorList.get(i).getEmail());
-            
-            if(flaggedUser.getUser() == null) {  
-                System.out.print("EHEHEHHEHEHE");
+            Tutor lowRatingTutor = tut4youApp.findTutor(lowRatingTutorList.get(i).getEmail());
+           //if user has never been flagged before, remove user from list
+            if( lowRatingTutorList.get(i).getRatings().size() < 2) {
+                lowRatingTutorList.remove(lowRatingTutorList.get(i));
             }
-            
             else {
                 double timeDifference = currentDate.getTime() - flaggedUser.getDateFlagged().getTime();
                 double minutes = (timeDifference / 1000) / 60;
-                System.out.println("MINUTES: "+ minutes);
+                System.out.println("MINUTES: "+minutes);
+                //if time since last suspension has been less than 5 min,
+                //or tutor has not been banned yet, remove 
+                //tutor from low rating tutor list
                 if(minutes < 5 || flaggedUser.getCount() >= 4) {
                     lowRatingTutorList.remove(lowRatingTutorList.get(i));
                 }
             }
+            
         }
         return lowRatingTutorList;
+    }
+    public String viewLowRatingTutors() {
+        return "viewLowRatingTutors";
     }
     /**
      * set low rating tutor list
@@ -300,16 +308,20 @@ public class ModeratorBean implements Serializable {
     /**
      * accept moderator application
      * @param moderatorApplication 
+     * @return  outcome string
      */
-    public void acceptModeratorApplication(ModeratorApplication moderatorApplication) {
+    public String acceptModeratorApplication(ModeratorApplication moderatorApplication) {
         tut4youApp.acceptModeratorApplication(moderatorApplication);
+        return "viewModeratorApplications";
     }
     /**
      * decline moderator application
      * @param moderatorApplication 
+     * @return  outcome string
      */
-    public void declineModeratorApplication(ModeratorApplication moderatorApplication) {
+    public String declineModeratorApplication(ModeratorApplication moderatorApplication) {
         tut4youApp.declineModeratorApplication(moderatorApplication);
+        return "viewModeratorApplications";
     }
     /**
      * download resume from S3

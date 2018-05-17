@@ -22,7 +22,7 @@
         2017 Keith Tran <keithtran25@gmail.com>
         2017 Syed Haider <shayder426@gmail.com>
     -->
-    <!-- @author Andrew Kaichi <ahkaichi@gmail.com> -->
+    <!-- @author Keith Tran <keithtran25@gmail.com> -->
     <ui:define name="metadata">
         <f:metadata>
             <f:viewParam name="id" value="#{complaintBean.id}"/>
@@ -56,9 +56,11 @@
                 <b:column>
                     <b:commandButton value="Suspend User" look="danger" action="#{complaintBean.flagUser(complaintBean.complaint.reportedUser.email,'suspend')}" />
                 </b:column>
+                <span></span>
                 <b:column>
                     <b:commandButton value="Ban User" look="danger" action="#{complaintBean.flagUser(complaintBean.complaint.reportedUser.email,'ban')}" />
                 </b:column>
+                <span></span>
                 <b:column>
                     <b:commandButton value="Close Complaint" look="primary" action="#{complaintBean.closeComplaint()}"/>
                 </b:column>

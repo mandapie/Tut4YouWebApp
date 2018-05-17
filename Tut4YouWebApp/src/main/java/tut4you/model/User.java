@@ -93,7 +93,7 @@ public class User implements Serializable {
     /**
      * A user can submit multiple Requests
      */
-    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval=true)
     private Collection<Request> requests;
     /**
      * A user can submit multiple Ratings

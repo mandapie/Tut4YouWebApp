@@ -22,8 +22,6 @@ INSERT INTO Course(subjectName,courseName) VALUES ('Computer Science','Introduct
 INSERT INTO Course(subjectName,courseName) VALUES ('Computer Science','Computer Logic Design I')
 INSERT INTO Course(subjectName,courseName) VALUES ('Computer Science','Computer Logic Design II')
 
-
-INSERT INTO Users(email,user_type,firstName,lastName,phoneNumber,username,university,dateJoinedAsTutor,hourlyRate,doNotDisturb,defaultZip,securityQuestion,securityAnswer,password,overallRating) VALUES ('amanda@gmail.com','Tutor','Amanda','Pan','7141234567','apan','CSULB','2018-05-09',15.00,0,'92704','What was your childhood nickname?','amanda','CD639F5ECF3514CCC33B9985B55A118727A21782C04A714AB6A7634BE91DC4B6E8BFF6456B546E382EF00057550952F019993BBE6B8D84FE09C2B961149BFA2A',2)
 INSERT INTO Users(email,user_type,firstName,lastName,phoneNumber,username,university,dateJoinedAsTutor,hourlyRate,doNotDisturb,defaultZip,securityQuestion,securityAnswer,overallRating,password) VALUES ('amanda@gmail.com','Tutor','Amanda','Pan','7141234567','apan','CSULB','2018-05-09',15.00,0,'92704','What was your childhood nickname?','amanda',2,'CD639F5ECF3514CCC33B9985B55A118727A21782C04A714AB6A7634BE91DC4B6E8BFF6456B546E382EF00057550952F019993BBE6B8D84FE09C2B961149BFA2A')
 INSERT INTO Users(email,user_type,firstName,lastName,phoneNumber,username,university,dateJoinedAsTutor,hourlyRate,doNotDisturb,defaultZip,securityQuestion,securityAnswer,password) VALUES ('keith@gmail.com','Tutor','Keith','Tran','7149876543','kTran','CSULB','2017-09-01',12.00,0,'92703','What was your childhood nickname?','keith','0C0BAAA4ECC4C21265E4E41B966C54B806315CDDFF946F6C8D86C352DD8E6F6B8D158F97C6DC310A82202FFC3785996A631E66D02E0CC8FC52623B74A0D646E0')
 INSERT INTO Users(email,user_type,firstName,lastName,phoneNumber,username,university,dateJoinedAsTutor,hourlyRate,doNotDisturb,defaultZip,securityQuestion,securityAnswer,password) VALUES ('syed@gmail.com','Tutor','Syed','Haider','5621123400','sHaider','CSULB','2017-09-01',12.50,0,'90801','What was your childhood nickname?','syed','E82C6184E06670CE275027FE9177D95C85E81AA04160FA6095924F514FEE43C3150F14D65EDC4D4ECD105D5E69C9A5B3A5CC7ECCA10C5EE9B80A25863FEA1E08')
@@ -112,22 +110,15 @@ INSERT INTO Request(student_email,course_courseName,description,status,dayOfWeek
 INSERT INTO Request(student_email,course_courseName,description,status,dayOfWeek,sessionTime,lengthOfSession) VALUES ('keith@gmail.com','Computer Security','Need help with encrypting texts in C++',0,'Monday','12:30:00',3)
 INSERT INTO Request(student_email,course_courseName,description,status,dayOfWeek,sessionTime,lengthOfSession) VALUES ('daniel@gmail.com','Computer Security','Difference between DDos and Dos and Direct-access Attacs',0,'Monday','12:30:00',3)
 
-INSERT INTO Request(student_email,tutor_email,course_courseName,description,status,dayOfWeek,sessionTime,lengthOfSession) VALUES ('evan@gmail.com','keith@gmail.com','General Biology I','Photosynthesis process',4,'Monday','12:30:00',1)
-INSERT INTO Request(student_email,tutor_email,course_courseName,description,status,dayOfWeek,sessionTime,lengthOfSession) VALUES ('amanda@gmail.com','keith@gmail.com','General Biology I','Photosynthesis process',4,'Monday','12:30:00',1)
-INSERT INTO Request(student_email,tutor_email,course_courseName,description,status,dayOfWeek,sessionTime,lengthOfSession) VALUES ('keith@gmail.com','amanda@gmail.com','General Biology I','Photosynthesis process',4,'Monday','12:30:00',1)
-
 INSERT INTO Availability(dayOfWeek,endTime,startTime,tutor_email) VALUES ('Monday','03:59:00','02:00:00','amanda@gmail.com')
 INSERT INTO Availability(dayOfWeek,endTime,startTime,tutor_email) VALUES ('Monday','04:59:00','04:00:00','amanda@gmail.com')
 INSERT INTO Availability(dayOfWeek,endTime,startTime,tutor_email) VALUES ('Monday','06:59:00','05:00:00','amanda@gmail.com')
 INSERT INTO Availability(dayOfWeek,endTime,startTime,tutor_email) VALUES ('Tuesday','04:59:00','04:00:00','amanda@gmail.com')
 INSERT INTO Availability(dayOfWeek,endTime,startTime,tutor_email) VALUES ('Tuesday','06:59:00','05:00:00','amanda@gmail.com')
-INSERT INTO Availability(dayOfWeek,endTime,startTime,tutor_email) VALUES ('Thursday','23:59:00','12:00:00','amanda@gmail.com')
-INSERT INTO Availability(dayOfWeek,endTime,startTime,tutor_email) VALUES ('Wednesday','23:59:00','00:00:00','amanda@gmail.com')
 INSERT INTO Availability(dayOfWeek,endTime,startTime,tutor_email) VALUES ('Friday','23:00:00','02:00:00','amanda@gmail.com')
 INSERT INTO Availability(dayOfWeek,endTime,startTime,tutor_email) VALUES ('Saturday','23:00:00','02:00:00','amanda@gmail.com')
 INSERT INTO Availability(dayOfWeek,endTime,startTime,tutor_email) VALUES ('Sunday','23:00:00','02:00:00','amanda@gmail.com')
 INSERT INTO Availability(dayOfWeek,endTime,startTime,tutor_email) VALUES ('Wednesday','23:00:00','00:00:00','andrew@gmail.com')
-INSERT INTO Availability(dayOfWeek,endTime,startTime,tutor_email) VALUES ('Wednesday','23:00:00','02:00:00','andrew@gmail.com')
 INSERT INTO Availability(dayOfWeek,endTime,startTime,tutor_email) VALUES ('Monday','15:00:00','02:00:00','andrew@gmail.com')
 INSERT INTO Availability(dayOfWeek,endTime,startTime,tutor_email) VALUES ('Sunday','23:00:00','02:00:00','keith@gmail.com')
 INSERT INTO Availability(dayOfWeek,endTime,startTime,tutor_email) VALUES ('Sunday','23:00:00','02:00:00','syed@gmail.com')

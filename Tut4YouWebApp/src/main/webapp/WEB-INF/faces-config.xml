@@ -17,10 +17,6 @@
             <redirect/>
         </navigation-case>
         <navigation-case>
-            <from-outcome>updatedAvailability</from-outcome>
-            <to-view-id>/tutors/updatedAvailSuccess.xhtml</to-view-id>
-        </navigation-case>
-        <navigation-case>
             <from-outcome>writeReview</from-outcome>
             <to-view-id>/students/writeReview.xhtml</to-view-id>
             <redirect/>

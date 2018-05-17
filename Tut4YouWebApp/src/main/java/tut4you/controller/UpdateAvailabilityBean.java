@@ -133,7 +133,7 @@ public class UpdateAvailabilityBean implements Serializable {
      * @throws java.text.ParseException
      */
     public String updateAvailability(Availability avail) throws ParseException {
-        String result = "updatedAvailability";
+        String result = "success";
         this.availability = avail;
         availability.setStartTime(avail.getStartTime());
         availability.setEndTime(avail.getEndTime());

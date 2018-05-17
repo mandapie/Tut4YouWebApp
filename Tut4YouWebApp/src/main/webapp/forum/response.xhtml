@@ -24,7 +24,7 @@
     <!-- @author Andrew Kaichi <ahkaichi@gmail.com> -->
     <ui:define name="title">Question</ui:define>
     <ui:define name="content">
-        <b:panel title="Fill out the following information to ask a question on the forum." collapsible="false" look="info">
+        <b:panel title="Fill out the following information to respond." collapsible="false" look="info">
             <b:form>
                 <f:viewParam name="courseList" value="#{questionBean.getQuestionInfo(param['course'], param['question'])}"/>
                 <h:outputText value="Testing: #{questionBean.getQuestionInfo(param['course'], param['question'])}"/>
@@ -53,16 +53,26 @@
                 </b:row>
                 <!-- description -->
                 <b:row>    
-                    <b:column medium-screen="4">
+                    <b:column medium-screen="7">
                         <h:outputLabel value="Enter the answer"/>
-                        <p:inputTextarea id="answer" placeholder="Enter the answer..." 
-                                         value="#{questionBean.responses.answer}" 
-                                         style="width:100%" rows="7" counter="display" maxlength="800" 
-                                         counterTemplate="{0} characters remaining." autoResize="false">
-                            <b:message for="answer"/>
-                            <f:validateLength minimum="10"/>
-                        </p:inputTextarea>
-                        <h:outputText id="check"/> <!-- displays the number of characters remaining -->
+                        <p:textEditor widgetVar="answer" placeholder="Enter the answer..." value="#{questionBean.responses.answer}" height="300" style="margin-bottom:10px">
+                            <f:facet name="toolbar">
+                                <span class="ql-formats">
+                                    <select class="ql-font"></select>
+                                    <select class="ql-size"></select>
+                                    <button class="ql-bold"></button>
+                                    <button class="ql-italic"></button>
+                                    <button class="ql-underline"></button>
+                                    <button class="ql-strike"></button>
+                                    <button class="ql-color"></button>
+                                    <button class="ql-background"></button>
+                                    <button class="ql-list" value="ordered"></button>
+                                    <button class="ql-list" value="bullet"></button>
+                                    <button class="ql-script" value="sub"></button>
+                                    <button class="ql-script" value="super"></button>
+                                </span>
+                            </f:facet>
+                        </p:textEditor>
                     </b:column>
                 </b:row>
                 <b:row>

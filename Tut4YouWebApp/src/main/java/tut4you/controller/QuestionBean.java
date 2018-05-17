@@ -146,7 +146,6 @@ public class QuestionBean implements Serializable{
 
     public String askNewQuestion(){
         this.newQuestion.setCourse(course);
-        //course.;
         tut4youApp.askNewQuestion(newQuestion);
         return "newQuestion";
     }

@@ -107,14 +107,32 @@
         <navigation-case>
             <from-action>#{questionBean.askNewQuestion}</from-action>
             <from-outcome>newQuestion</from-outcome>
-            <to-view-id>/forum/forumQuestion.xhtml</to-view-id>
-            <redirect/>
+            <to-view-id>/forum/viewQuestion.xhtml</to-view-id>
+            <redirect>
+                <view-param>
+                    <name>course</name>
+                    <value>#{questionBean.course.courseName}</value>
+                </view-param>
+                <view-param>
+                    <name>question</name>
+                    <value>#{questionBean.question.title}</value>
+                </view-param>
+            </redirect>
         </navigation-case>
         <navigation-case>
-            <from-action>#{questionBean.submitResponse}</from-action>
+            <from-action>#{questionBean.submitResponses}</from-action>
             <from-outcome>newResponse</from-outcome>
-            <to-view-id>/forum/index.xhtml</to-view-id>
-            <redirect/>
+            <to-view-id>/forum/viewQuestion.xhtml</to-view-id>
+            <redirect>
+                <view-param>
+                    <name>course</name>
+                    <value>#{questionBean.responses.question.course.courseName}</value>
+                </view-param>
+                <view-param>
+                    <name>question</name>
+                    <value>#{questionBean.responses.question.title}</value>
+                </view-param>
+            </redirect>
         </navigation-case>
         <navigation-case>
             <from-action>#{userBean.login}</from-action>

@@ -26,7 +26,7 @@
     <ui:define name="title">Apply To Become a Moderator</ui:define>
     <ui:define name="content">
         <h1>View Moderator Applications</h1>
-        <b:dataTable value="#{moderatorBean.moderatorApplicationList}" var="moderatorApplication" id="completedTable">m
+        <b:dataTable value="#{moderatorBean.moderatorApplicationList}" var="moderatorApplication" id="completedTable">
                             <b:dataTableColumn>
                                 <f:facet name="header">User</f:facet>
                                 <h:link value="#{moderatorApplication.user.firstName} #{moderatorApplication.user.lastName}" outcome="moderatorApplication" includeViewParams="true">

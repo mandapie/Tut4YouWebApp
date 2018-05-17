@@ -19,6 +19,7 @@ package tut4you.model;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -27,6 +28,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -54,7 +56,11 @@ public class Course implements Serializable {
 
     @Id
     private String courseName;
-
+    /**
+     * One to Many relationship a Course can be associated with many questions
+     */
+    @OneToMany(mappedBy = "course", cascade = {CascadeType.ALL})
+    private Collection<Question> question;
     /**
      * Many to One relationship Course can only be set to one Subject Subject
      * can be set to many Courses
@@ -140,11 +146,37 @@ public class Course implements Serializable {
     }
     
     /**
+     * gets a collection of questions
+     * @return questions
+     */
+    public Collection<Question> getQuestion() {
+        return question;
+    }
+
+    /**
+     * Sets a collection of questions to a question
+     * @param question 
+     */
+    public void setQuestion(Collection<Question> question) {
+        this.question = question;
+    }
+    /**
+     * adds a question to a collection of questions
+     * @param question 
+     */
+    public void addQuestion(Question question) {
+        if (this.question == null) {
+            this.question = new HashSet();
+        }
+        this.question.add(question);
+    }
+    /**
      * removes tutor from the collection
      * @param tutor 
      */
     public void removeTutor(Tutor tutor) {
         tutors.remove(tutor);
+
     }
 
     @Override

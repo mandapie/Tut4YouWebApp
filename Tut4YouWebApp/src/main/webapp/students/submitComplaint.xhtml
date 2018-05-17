@@ -4,7 +4,8 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:b="http://bootsfaces.net/ui"
-                xmlns:p="http://primefaces.org/ui">
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <!--
         Licensed under the Academic Free License (AFL 3.0).
         http://opensource.org/licenses/AFL-3.0
@@ -23,11 +24,6 @@
     -->
     <!-- @author Amanda Pan <daikiraidemodaisuki@gmail.com> -->
     <ui:define name="metadata">
-        <f:metadata>
-            <f:viewParam name="username" value="#{complaintBean.username}"/>
-            <f:event type="preRenderView" listener="#{complaintBean.showUsername(complaintBean.username)}">
-            </f:event>
-        </f:metadata>
     </ui:define>
     <ui:define name="title">Complaint</ui:define>
     <ui:define name="content">
@@ -49,7 +45,7 @@
                 </b:row>
 
                 <b:row>
-                    <b:commandButton span="2" value="Submit" look="primary" action="#{complaintBean.createNewComplaint}" />
+                    <b:commandButton span="2" value="Submit" look="primary" action="#{complaintBean.createNewComplaint(ratingBean.user, ratingBean.isTutor)}"/>
                 </b:row>
             </b:form>
         </b:panel>

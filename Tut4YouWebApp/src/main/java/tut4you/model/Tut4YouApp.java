@@ -88,13 +88,7 @@ public class Tut4YouApp {
 
     private static final Logger LOGGER = Logger.getLogger("Tut4YouApp");
 
-    /* @POST
-    @Consumes(javax.ws.rs.core.MediaType.APPLICATION_JSON)
-    public Response createBook(Rating rating) {
-        em.persist(rating);
-        URI bookUri = uriInfo.getAbsolutePathBuilder().path(rating.getId().toString()).build();
-        return Response.created(bookUri).build();
-    }*/
+
     /**
      * Query all subjects from the database
      *

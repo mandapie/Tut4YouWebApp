@@ -16,6 +16,7 @@
  */
 package tut4you.model;
 
+import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
@@ -484,8 +485,9 @@ public class User implements Serializable {
     public void setPayments(Collection<Payment> payments) {
         this.payments = payments;
     }
-      /**
-     * Adds a payment  to the collection of Payments
+
+    /**
+     * Adds a payment to the collection of Payments
      *
      * @param payments
      */
@@ -495,8 +497,6 @@ public class User implements Serializable {
         }
         this.payments.add(payment);
     }
-
-    
 
     /**
      * Adds a request submitted to the collection of Requests

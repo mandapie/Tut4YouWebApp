@@ -16,6 +16,9 @@
  */
 package tut4you.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -38,26 +41,33 @@ import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 
-
 /**
  * Availability encapsulates information of a time frame of when a Tutor is
  * available. Only a Tutor can add an availability.
  *
  * @author Andrew Kaichi <ahkaichi@gmail.com>
- * @author Keith Tran <keithtran25@gmail.com> 
+ * @author Keith Tran <keithtran25@gmail.com>
  * @author Syed Haider <shayder426@gmail.com>
  */
-@Table(name="Availability")
+@Table(name = "Availability")
 @Entity
 @NamedQueries({
-    @NamedQuery(name = Availability.FIND_AVAILABILITY_BY_TUTOR, query = "SELECT a FROM Availability a JOIN a.tutor s WHERE s.email = :email")
+    @NamedQuery(name = Availability.FIND_AVAILABILITY_BY_TUTOR, query = "SELECT a FROM Availability a JOIN a.tutor s WHERE s.email = :email"),
+        @NamedQuery(name = Availability.FIND_AVAILABILITIES, query = "Select a From Availability a WHERE  a.startTime < :requestTime AND a.endTime > :requestTime AND a.dayOfWeek = :dayOfWeek")
 })
 public class Availability implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     /**
      * JPQL Query to get all availabilities of a tutor
      */
     public static final String FIND_AVAILABILITY_BY_TUTOR = "Availability.findAvailabilityByTutor";
+       /**
+     * JPQL Query to get all availabilities
+     */
+    public static final String FIND_AVAILABILITIES = "Availability.findAvailabilities";
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, unique = true)
@@ -68,7 +78,6 @@ public class Availability implements Serializable {
     private java.util.Date startTime;
     @Temporal(TemporalType.TIME)
     private java.util.Date endTime;
-    private boolean editable;
     /**
      * Multiple availabilities can be added by a Tutor
      */
@@ -114,31 +123,17 @@ public class Availability implements Serializable {
     }
 
     /**
-     * Gets the state of Editable
-     *
-     * @return editable
-     */
-    public boolean isEditable() {
-        return editable;
-    }
-
-    /**
-     * Sets the state of Editable
-     * @param editable 
-     */
-    public void setEditable(boolean editable) {
-        this.editable = editable;
-    }
-
-    /**
      * Gets the day of the week
+     *
      * @return dayOfWeek
      */
     public String getDayOfWeek() {
-        return dayOfWeek;    }
+        return dayOfWeek;
+    }
 
     /**
      * Sets the day of the week
+     *
      * @param dayOfWeek
      */
     public void setDayOfWeek(String dayOfWeek) {
@@ -217,38 +212,6 @@ public class Availability implements Serializable {
             return false;
         }
         return true;
-    }
-
-    public void compare() {
-        List<String> dates = Arrays.asList(new String[]{
-            "Thursday",
-            "Saturday",
-            "Monday",
-            "Saturday"
-        });
-        Comparator<String> dateComparator = new Comparator<String>() {
-            @Override
-            public int compare(String s1, String s2) {
-                try {
-                    SimpleDateFormat format = new SimpleDateFormat("EEE");
-                    Date d1 = format.parse(s1);
-                    Date d2 = format.parse(s2);
-                    if (d1.equals(d2)) {
-                        return s1.substring(s1.indexOf(" ") + 1).compareTo(s2.substring(s2.indexOf(" ") + 1));
-                    } else {
-                        Calendar cal1 = Calendar.getInstance();
-                        Calendar cal2 = Calendar.getInstance();
-                        cal1.setTime(d1);
-                        cal2.setTime(d2);
-                        return cal1.get(Calendar.DAY_OF_WEEK) - cal2.get(Calendar.DAY_OF_WEEK);
-                    }
-                } catch (ParseException pe) {
-                    throw new RuntimeException(pe);
-                }
-            }
-        };
-        Collections.sort(dates, dateComparator);
-        System.out.println(dates);
     }
 
     @Override

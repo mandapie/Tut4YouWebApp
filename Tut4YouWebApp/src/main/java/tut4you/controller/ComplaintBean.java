@@ -47,17 +47,13 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
-
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.apache.commons.io.FileUtils;
 import static org.omnifaces.util.Faces.getServletContext;
 import tut4you.model.Complaint;
-import tut4you.model.Request;
-
 import tut4you.model.Tut4YouApp;
 import tut4you.model.Tutor;
 import tut4you.model.User;
@@ -78,32 +74,27 @@ public class ComplaintBean implements Serializable {
     private Tut4YouApp tut4youApp;
     //User
     private User user;
-    //id parameter
-    @ManagedProperty("#{param.id}")
-    private int id;
-    //username parameter
-    @ManagedProperty("#{param.username}")
-    private String username;
-    private Request request;
     //tutor
     private Tutor tutor;
     //complaint
     private Complaint complaint;
     //list
     private List<Complaint> complaintList = new ArrayList();
+    //boolean isTutor
+    private boolean isTutor;
     /**
-     * get request
-     * @return request
+     * boolean to check if user was a tutor in the complaint
+     * @return isTutor
      */
-    public Request getRequest() {
-        return request;
+    public boolean isIsTutor() {
+        return isTutor;
     }
     /**
-     * set request
-     * @param request 
+     * set isTutor
+     * @param isTutor 
      */
-    public void setRequest(Request request) {
-        this.request = request;
+    public void setIsTutor(boolean isTutor) {
+        this.isTutor = isTutor;
     }
     /**
      * get tutor
@@ -118,20 +109,6 @@ public class ComplaintBean implements Serializable {
      */
     public void setTutor(Tutor tutor) {
         this.tutor = tutor;
-    }
-    /**
-     * get Username
-     * @return username
-     */
-    public String getUsername() {
-        return username;
-    }
-    /**
-     * set Username
-     * @param username 
-     */
-    public void setUsername(String username) {
-        this.username = username;
     }
     /**
      * get list of complaints
@@ -149,20 +126,6 @@ public class ComplaintBean implements Serializable {
      */
     public void setComplaintList(List<Complaint> complaintList) {
         this.complaintList = complaintList;
-    }
-    /**
-     * get ID
-     * @return ID
-     */
-    public int getId() {
-        return id;
-    }
-    /**
-     * set ID
-     * @param id 
-     */
-    public void setId(int id) {
-        this.id = id;
     }
     /**
      * get User
@@ -208,62 +171,16 @@ public class ComplaintBean implements Serializable {
     public void destroyComplaintBean() {
     }
     
-    /**
-     * showComplaintID is used when passing the complaint parameter
-     * from one jsf page to another
-     * @param id 
-     */
-    public void showComplaintID(int id) {
-        complaint  = findComplaint(id);
-    }
-    /**
-     * showRequestID is used to pass the request param from one
-     * jsf page to another
-     * @param id 
-     */
-    public void showRequestID(int id) {
-        request = findRequest(id);
-    }
-    /**
-     * showUserName is used to pass the user from one jsf 
-     * page to another
-     * @param username 
-     */
-    public void showUsername(String username) {
-        User findUser = findUserByUsername(username);
-        user = tut4youApp.findUser(findUser.getEmail());
-    }
-    /**
-     * find user by username
-     * @param username
-     * @return user
-     */
-    public User findUserByUsername(String username)
-    {
-        return tut4youApp.findUserByUsername(username);
-    }
-    /**
-     * find complaint by complaint id
-     * @param id
-     * @return complaint
-     */
-    public Complaint findComplaint(int id)
-    {
-        return tut4youApp.findComplaint(id);
-    }
-    /**
-     * find request by request id
-     * @param id
-     * @return request
-     */
-    public Request findRequest(int id)
-    {
-        return tut4youApp.findRequest(id);
-    }
+    
     /**
      * create a new complaint
+     * @param user
+     * @param isTutor
      */
-    public void createNewComplaint() {
+    public void createNewComplaint(User user, boolean isTutor) {
+      
+        this.isTutor = isTutor;
+        complaint.setIsTutor(isTutor);
         tut4youApp.createNewComplaint(user, complaint);
     }
     /**

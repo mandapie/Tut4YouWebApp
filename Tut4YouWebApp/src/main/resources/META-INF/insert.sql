@@ -112,6 +112,10 @@ INSERT INTO Request(student_email,course_courseName,description,status,dayOfWeek
 INSERT INTO Request(student_email,course_courseName,description,status,dayOfWeek,sessionTime,lengthOfSession) VALUES ('keith@gmail.com','Computer Security','Need help with encrypting texts in C++',0,'Monday','12:30:00',3)
 INSERT INTO Request(student_email,course_courseName,description,status,dayOfWeek,sessionTime,lengthOfSession) VALUES ('daniel@gmail.com','Computer Security','Difference between DDos and Dos and Direct-access Attacs',0,'Monday','12:30:00',3)
 
+INSERT INTO Request(student_email,tutor_email,course_courseName,description,status,dayOfWeek,sessionTime,lengthOfSession) VALUES ('evan@gmail.com','keith@gmail.com','General Biology I','Photosynthesis process',4,'Monday','12:30:00',1)
+INSERT INTO Request(student_email,tutor_email,course_courseName,description,status,dayOfWeek,sessionTime,lengthOfSession) VALUES ('amanda@gmail.com','keith@gmail.com','General Biology I','Photosynthesis process',4,'Monday','12:30:00',1)
+INSERT INTO Request(student_email,tutor_email,course_courseName,description,status,dayOfWeek,sessionTime,lengthOfSession) VALUES ('keith@gmail.com','amanda@gmail.com','General Biology I','Photosynthesis process',4,'Monday','12:30:00',1)
+
 INSERT INTO Availability(dayOfWeek,endTime,startTime,tutor_email) VALUES ('Monday','03:59:00','02:00:00','amanda@gmail.com')
 INSERT INTO Availability(dayOfWeek,endTime,startTime,tutor_email) VALUES ('Monday','04:59:00','04:00:00','amanda@gmail.com')
 INSERT INTO Availability(dayOfWeek,endTime,startTime,tutor_email) VALUES ('Monday','06:59:00','05:00:00','amanda@gmail.com')

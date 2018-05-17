@@ -52,15 +52,16 @@ public class RatingBean implements Serializable {
 
     @EJB
     private Tut4YouApp tut4youApp;
-
+    private Request request;
     private Rating rating;
+    private User user;
     private Tutor tutor; //the tutor who accepts te rating
     private String studentName;
     private String username;
     private List<Tutor> tutorList = new ArrayList(); //list of available tutors
     private List<Rating> ratingList = new ArrayList(); //list of ratings
     private List<Request> requestList = new ArrayList(); //list of completed requests
-    
+    private boolean isTutor;
     private @Inject
     Conversation conversation;
 
@@ -93,6 +94,27 @@ public class RatingBean implements Serializable {
         if (!conversation.isTransient()) {
             conversation.end();
         }
+    }
+    public boolean isIsTutor() {
+        return isTutor;
+    }
+
+    public void setIsTutor(boolean isTutor) {
+        this.isTutor = isTutor;
+    }
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+    public Request getRequest() {
+        return request;
+    }
+
+    public void setRequest(Request request) {
+        this.request = request;
     }
 
     public String getUsername() {
@@ -152,6 +174,15 @@ public class RatingBean implements Serializable {
                 System.out.println(tutor);
 
         result = "writeReview";
+        return result;
+    }
+    
+    public String goToSubmitComplaintPage(User user, boolean isTutor) throws ParseException {
+        String result;
+        this.user = user;
+        this.isTutor = isTutor;
+
+        result = "submitComplaint";
         return result;
     }
 

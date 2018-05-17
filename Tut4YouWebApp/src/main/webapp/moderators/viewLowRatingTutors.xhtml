@@ -26,7 +26,7 @@
     <ui:define name="title">View Low Rating Tutors</ui:define>
     <ui:define name="content">
         <h1>View Low Rating Tutors</h1>
-        <b:dataTable value="#{moderatorBean.lowRatingTutorList}" var="lowRatingTutorList" id="completedTable">m
+        <b:dataTable value="#{moderatorBean.lowRatingTutorList}" var="lowRatingTutorList" id="completedTable">
                             <b:dataTableColumn>
                                 <f:facet name="header">User</f:facet>
                                 <h:link value="#{lowRatingTutorList.firstName} #{lowRatingTutorList.lastName}" outcome="reviewLowRatingTutor" includeViewParams="true">

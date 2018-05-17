@@ -933,7 +933,6 @@ public class Tut4YouApp {
         query.setParameter("id", id);
         return query.getSingleResult();
     }
-
     /**
      * Gets a request by finding the id in the entity.
      *
@@ -1636,7 +1635,7 @@ public class Tut4YouApp {
         String currentUserEmail = userBean.getEmailFromSession();
 
         User user = em.find(User.class, currentUserEmail);
-
+        
         complaint.setUser(user);
         complaint.setReportedUser(reportedUser);
         em.persist(complaint);
@@ -2071,7 +2070,11 @@ public class Tut4YouApp {
         transcriptPathQuery.setParameter("email", currentUserEmail);
         return transcriptPathQuery.getSingleResult() == null;
     }
-
+    /**
+     * find request entity by ID
+     * @param id
+     * @return request
+     */
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public Request findRequest(Long id) {

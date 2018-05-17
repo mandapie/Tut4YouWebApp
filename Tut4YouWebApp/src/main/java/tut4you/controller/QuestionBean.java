@@ -22,15 +22,13 @@ import java.util.List;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.enterprise.context.RequestScoped;
-import javax.enterprise.context.SessionScoped;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import tut4you.model.*;
 
 
 /**
- *
+ * Adds new questions and responses to the database
  * @author Andrew Kaichi <ahkaichi@gmail.com>
  */
 @Named
@@ -51,6 +49,9 @@ public class QuestionBean implements Serializable{
     private List<Question> questionList = new ArrayList();
     private Course course;
     
+    /**
+     * Creates a new instance of questionIdentity
+     */
     @PostConstruct
     public void QuestionBean(){
         newQuestion = new Question();
@@ -71,19 +72,31 @@ public class QuestionBean implements Serializable{
     public void setQuestion(Question newQuestion){
         this.newQuestion = newQuestion;
     }
-    
+    /**
+     * gets a list of courses
+     * @return courseList
+     */
     public List<Course> getCourseList(){
         return courseList;
     }
-    
+    /**
+     * sets a list of courses
+     * @param courseList list to be set
+     */
     public void setCourseList(List<Course> courseList) {
         this.courseList = courseList;
     }
-    
+    /**
+     * gets a list of questions
+     * @return questionList
+     */
     public List<Question> getQuestionList(){
         return questionList;
     }
-    
+    /**
+     * sets a list of questions
+     * @param questionList list to be set
+     */
     public void setQuestionList(List<Question> questionList) {
         this.questionList = questionList;
     }
@@ -97,28 +110,45 @@ public class QuestionBean implements Serializable{
     
     /**
      * Sets the student to the question
-     * @param student 
+     * @param student to be set
      */
     public void setStudent(User student){
         this.student = student;
     }
-    
+    /**
+     * gets a course
+     * @return course
+     */
     public Course getCourse(){
         return course;
     }
-    
+    /**
+     * sets a course
+     * @param course to be set
+     */
     public void setCourse(Course course){
         this.course = course;
     }
-    
+    /**
+     * gets a response
+     * @return responses
+     */
     public Responses getResponses(){
         return responses;
     }
-    
+    /**
+     * sets a response
+     * @param responses to be set
+     */
     public void setResponse(Responses responses){
         this.responses = responses;
     }
-    
+    /**
+     * updates courseList based on the subject 
+     * and gets the course if it equals the courseName
+     * @param subjectName subject name to update the course list
+     * @param courseName course name to compare with course names in the list
+     */
     public void getCourseList(String subjectName, String courseName) {
         courseList = tut4youApp.getCourses(subjectName);
         for (int i = 0; i < courseList.size(); i++){
@@ -128,12 +158,20 @@ public class QuestionBean implements Serializable{
         }
         
     }
-    
+    /**
+     * returns a question based on the title
+     * @param title name of the question
+     */
     public void getQuestionTitle(String title){
         this.question = tut4youApp.findQuestionTitle(title);
-        System.out.println(question.getTitle());
+        //System.out.println(question.getTitle());
     }
-
+    /**
+     * returns a question list based on the course name
+     * and checks to see if the title matches any questions
+     * @param courseName name of the course
+     * @param title name of the question
+     */
     public void getQuestionInfo(String courseName, String title) {
         questionList = tut4youApp.getQuestions(courseName);
         for (int i = 0; i < questionList.size(); i++) {
@@ -143,13 +181,20 @@ public class QuestionBean implements Serializable{
         }
 
     }
-
+    /**
+     * Adds a new question to the database
+     * @return newQuestion
+     */
     public String askNewQuestion(){
         this.newQuestion.setCourse(course);
         tut4youApp.askNewQuestion(newQuestion);
         return "newQuestion";
     }
     
+    /**
+     * Adds a new response to the database
+     * @return newResponse
+     */
     public String submitResponses(){
         this.responses.setQuestion(question);
         tut4youApp.responses(responses);

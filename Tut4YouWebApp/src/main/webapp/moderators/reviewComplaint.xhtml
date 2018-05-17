@@ -46,6 +46,10 @@
                     <h:outputText value="#{complaintBean.complaint.details}"/>
                 </b:column>
             </b:row>
+            <span></span>
+            <b:row>
+                <p:commandButton value="Download Transcript" action="#{complaintBean.downloadTranscript(complaintBean.complaint.reportedUser.username)}" rendered="#{complaintBean.complaint.isTutor}" ajax="false" />
+            </b:row>
             <b:row>
                 <b:column>
                     <b:commandButton value="Suspend User" look="danger" action="#{complaintBean.flagUser(complaintBean.complaint.reportedUser.email,'suspend')}" />
@@ -57,16 +61,7 @@
                     <b:commandButton value="Close Complaint" look="primary" action="#{complaintBean.closeComplaint()}"/>
                 </b:column>
             </b:row>
-            <b:row>
-                <c:if test="#{complaintBean.complaint.reportedUser.groups.contains('tut4youapp.tutor')}" >
-                    <b:column>
-                        <h:outputLabel value="Transcript "/>
-                        <b:column>
-                            <p:commandButton value="Download Transcript" action="#{complaintBean.downloadTranscript(complaintBean.complaint.reportedUser.username)}" ajax="false" />
-                        </b:column>
-                    </b:column>
-                </c:if>
-            </b:row>
+            
         </h:form>
 
         <ui:debug hotkey='x'/>

@@ -280,6 +280,6 @@ public class SessionBean implements Serializable {
     }
 
     public void showRequestId(Long id) {
-        request = tut4youapp.findRequest(id);
+        request = tut4youapp.findRequestByID(id);
     }
 }

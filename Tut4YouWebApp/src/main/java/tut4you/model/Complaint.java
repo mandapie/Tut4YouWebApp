@@ -14,7 +14,6 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 /**
@@ -59,6 +58,10 @@ public class Complaint implements Serializable {
      */
     private boolean isReviewed;
     /**
+     * boolean to check if reported user was a tutor during that request
+     */
+    private boolean isTutor;
+    /**
      * many to one relationship between complaint and user(reported user)
      */
     @ManyToOne
@@ -88,8 +91,22 @@ public class Complaint implements Serializable {
         this.moderator = moderator;
     }
     /**
+     * boolean get for isTutor
+     * @return boolean
+     */
+    public boolean isIsTutor() {
+        return isTutor;
+    }
+    /**
+     * set boolean isTutor
+     * @param isTutor 
+     */
+    public void setIsTutor(boolean isTutor) {
+        this.isTutor = isTutor;
+    }
+    /**
      * boolean get for isReviewed
-     * @return 
+     * @return boolean
      */
     public boolean isIsReviewed() {
         return isReviewed;

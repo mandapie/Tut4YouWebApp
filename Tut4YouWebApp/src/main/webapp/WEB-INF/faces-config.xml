@@ -152,6 +152,51 @@
             </redirect>
         </navigation-case>
         <navigation-case>
+            <from-action>#{complaintBean.generateSignedURLTranscript(complaintBean.complaint.reportedUser.username)}</from-action>
+            <from-outcome>viewTranscript</from-outcome>
+            <to-view-id>/moderators/viewFiles.xhtml</to-view-id>
+            <redirect>
+                <view-param>
+                    <name>file</name>
+                    <value>Transcript</value>
+                </view-param>
+                <view-param>
+                    <name>url</name>
+                    <value>#{complaintBean.URL}</value>
+                </view-param>
+            </redirect>
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{moderatorBean.complaintBean.generateSignedURLTranscript(moderatorBean.tutor.username)}</from-action>
+            <from-outcome>viewTranscript</from-outcome>
+            <to-view-id>/moderators/viewFiles.xhtml</to-view-id>
+            <redirect>
+                <view-param>
+                    <name>file</name>
+                    <value>Transcript</value>
+                </view-param>
+                <view-param>
+                    <name>url</name>
+                    <value>#{complaintBean.URL}</value>
+                </view-param>
+            </redirect>
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{moderatorBean.generatePresignedUrlRequest}</from-action>
+            <from-outcome>viewResume</from-outcome>
+            <to-view-id>/moderators/viewFiles.xhtml</to-view-id>
+            <redirect>
+                <view-param>
+                    <name>file</name>
+                    <value>Resume</value>
+                </view-param>
+                <view-param>
+                    <name>url</name>
+                    <value>#{moderatorBean.URL}</value>
+                </view-param>
+            </redirect>
+        </navigation-case>
+        <navigation-case>
             <from-action>#{userBean.login}</from-action>
             <from-outcome>success</from-outcome>
             <to-view-id>/accounts/index.xhtml</to-view-id>

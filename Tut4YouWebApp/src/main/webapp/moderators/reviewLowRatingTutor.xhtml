@@ -47,7 +47,7 @@
                 <b:column>
                     <h:outputLabel value="Transcript "/>
                     <b:column>
-                        <p:commandButton value="Download Transcript" action="#{moderatorBean.complaintBean.downloadTranscript(moderatorBean.tutor.username)}" ajax="false" />
+                        <p:commandButton value="View Transcript" action="#{moderatorBean.complaintBean.generateSignedURLTranscript(moderatorBean.tutor.username)}" ajax="false" />
                     </b:column>
                 </b:column>
             </b:row>

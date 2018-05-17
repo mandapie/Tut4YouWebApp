@@ -29,7 +29,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 /**
- *
+ * Responses are the answers to the questions on the forum
  * @author Andrew Kaichi <ahkaichi@gmail.com>
  */
 @Table(name = "Responses")
@@ -40,7 +40,7 @@ import javax.persistence.Table;
 public class Responses implements Serializable {
 
     /**
-     * JPQL Query to find Requests by user email
+     * JPQL Query to find Response by question
      */
     public static final String FIND_RESPONSES_BY_QUESTION = "Responses.findResponsesByQuestion";
     
@@ -50,59 +50,102 @@ public class Responses implements Serializable {
     private Long id;
     private String explanation;
     private String answer;
-    
+    /**
+     * Many to one with question.
+     * There can be many responses to one question
+     */
     @ManyToOne
     private Question question;
-    
+    /**
+     * Many to one with tutor.
+     * There can be many responses from one tutor
+     */
     @ManyToOne
     private Tutor tutor;
-
+    /**
+     * default responses constructor
+     */
     public Responses() {
     
     }
-    
+    /**
+     * responses constructor
+     * @param explanation response explanation
+     * @param answer response answer
+     * @param tutor tutor who responded
+     */
     public Responses(String explanation, String answer, Tutor tutor) {
         this.explanation = explanation;
         this.answer = answer;
         this.tutor = tutor;
     }
-    
+    /**
+     * gets the id
+     * @return id
+     */
     public Long getId() {
         return id;
     }
-
+    /**
+     * set the id
+     * @param id id to be set
+     */
     public void setId(Long id) {
         this.id = id;
     }
-    
+    /**
+     * gets the explanation
+     * @return explanation
+     */
     public String getExplanation() {
         return explanation;
     }
-    
+    /**
+     * sets the explanation
+     * @param explanation explanation to be set
+     */
     public void setExplanation(String explanation) {
         this.explanation = explanation;
     }
-    
+    /**
+     * gets the answer
+     * @return answer
+     */
     public String getAnswer() {
         return answer;
     }
-    
+    /**
+     * sets the answer
+     * @param answer to be set
+     */
     public void setAnswer(String answer){
         this.answer = answer;
     }
-    
+    /**
+     * gets the tutor
+     * @return tutor
+     */
     public Tutor getTutor(){
         return tutor;
     }
-    
+    /**
+     * sets the tutor
+     * @param tutor to be set
+     */
     public void setTutor(Tutor tutor){
         this.tutor = tutor;
     }
-    
+    /**
+     * gets the question
+     * @return question
+     */
     public Question getQuestion(){
         return question;
     }
-    
+    /**
+     * sets a question
+     * @param question to be set
+     */
     public void setQuestion(Question question){
         this.question = question;
     }

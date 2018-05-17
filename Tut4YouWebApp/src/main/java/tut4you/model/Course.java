@@ -56,7 +56,9 @@ public class Course implements Serializable {
 
     @Id
     private String courseName;
-
+    /**
+     * One to Many relationship a Course can be associated with many questions
+     */
     @OneToMany(mappedBy = "course", cascade = {CascadeType.ALL})
     private Collection<Question> question;
     /**

@@ -101,7 +101,10 @@ public class User implements Serializable {
      */
     @ManyToMany(mappedBy = "students", cascade = CascadeType.ALL)
     private Collection<Group> groups;
-    
+    /**
+     * One to many with relationship with question.
+     * One student can ask many questions
+     */
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
     private Collection<Question> questions;
     
@@ -421,11 +424,17 @@ public class User implements Serializable {
         this.requests = requests;
     }
 
-    
+    /**
+     * gets a collection of questions
+     * @return questions
+     */
     public Collection<Question> getQuestion() {
         return questions;
     }
-
+    /**
+     * sets a collection of questions
+     * @param questions collection to be set
+     */
     public void setQuestion(Collection<Question> questions) {
         this.questions = questions;
     }

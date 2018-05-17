@@ -33,7 +33,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 /**
- *
+ * A question the question a user asks when they post to the forum
  * @author Andrew Kaichi <ahkaichi@gmail.com>
  */
 @Table(name = "Question")
@@ -58,22 +58,41 @@ public class Question implements Serializable {
     private Long id;
     private String title;
     private String description;
-    
+    /**
+     * Many to one relationship with student.
+     * Many questions can be asked by one student
+     */
     @ManyToOne
     @JoinColumn(name = "student_email", nullable = false)
     private User student;
-    
+    /**
+     * One to many relationship with response.
+     * One question can have many responses
+     */
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
     private Collection<Responses> responses;
-    
+    /**
+     * One to one relationship with course.
+     * One question only has one course
+     */
     @OneToOne
     @JoinColumn(name = "courseName", nullable = false)
     private Course course;
 
+    /**
+     * default question constructor
+     */
     public Question() {
     
     }
-    
+    /**
+     * question constructor
+     * @param student student who asks the question
+     * @param course course the question is for
+     * @param title name of the question
+     * @param description description of the question
+     * @param responses collection of responses
+     */
     public Question(User student, Course course, String title, String description, Collection<Responses> responses) {
         this.student = student;
         this.course = course;
@@ -81,62 +100,101 @@ public class Question implements Serializable {
         this.description = description;
         this.responses = responses;
     }
-    
+    /**
+     * gets the id
+     * @return id
+     */
     public Long getId() {
         return id;
     }
-
+    /**
+     * sets the id
+     * @param id to be set
+     */
     public void setId(Long id) {
         this.id = id;
     }
-    
+    /**
+     * gets the title
+     * @return title
+     */
     public String getTitle() {
         return title;
     }
-    
+    /**
+     * sets the title
+     * @param title title to be set
+     */
     public void setTitle(String title) {
         this.title = title;
     }
-    
+    /**
+     * gets the description
+     * @return description
+     */
     public String getDescription() {
         return description;
     }
-    
+    /**
+     * sets the description
+     * @param description to be set
+     */
     public void setDescription(String description){
         this.description = description;
     }
-    
+    /**
+     * gets a collection of responses
+     * @return responses
+     */
     public Collection<Responses> getResponses(){
         return responses;
     }
-    
+    /**
+     * sets a collection of responses
+     * @param responses to be set
+     */
     public void setResponse(Collection<Responses> responses){
         this.responses = responses;
     }
-    
+    /**
+     * gets a course
+     * @return course
+     */
     public Course getCourse(){
         return course;
     }
-    
+    /**
+     * sets a course
+     * @param course to be set
+     */
     public void setCourse(Course course){
         this.course = course;
     }
-    
+    /**
+     * gets a student
+     * @return student
+     */
     public User getStudent(){
         return student;
     }
-    
+    /**
+     * sets a student
+     * @param student to be set
+     */
     public void setStudent(User student){
         this.student = student;
     }
-
+    /**
+     * adds a course
+     * @param course name of the course to be added
+     */
     public void addCourse(String course){
         this.course.setCourseName(course);
     }
     
      /**
      * adds a response to a collection of responses
-     * @param response 
+     * @param responses 
      */
     public void addResponses(Responses responses) {
         if (this.responses == null) {
@@ -144,6 +202,7 @@ public class Question implements Serializable {
         }
         this.responses.add(responses);
     }
+    
     @Override
     public int hashCode() {
         int hash = 0;

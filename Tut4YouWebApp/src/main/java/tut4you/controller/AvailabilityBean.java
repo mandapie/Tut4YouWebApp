@@ -154,21 +154,6 @@ public class AvailabilityBean implements Serializable {
             FacesContext.getCurrentInstance().addMessage("addAvailabilityForm:availability", new FacesMessage("You have already set this availability."));
         }
     }
-
-    /**
-     * Updates the current availability of the tutor
-     * @param avail the availability of the tutor
-     * @return goes to home page if successful
-     * @throws java.text.ParseException
-     */
-    public String updateAvailability(Availability avail) throws ParseException {
-        String result = "updatedAvailability";
-        this.availability = avail;
-        availability.setStartTime(avail.getStartTime());
-        availability.setEndTime(avail.getEndTime());
-        tut4youApp.updateAvailability(availability, avail.getStartTime(), avail.getEndTime());
-        return result;
-    }
     
     /**
      * Delete the availability from the tutor
@@ -177,18 +162,5 @@ public class AvailabilityBean implements Serializable {
      */
     public void deleteAvailability(Availability avail) throws ParseException {
         tut4youApp.deleteAvailability(avail);
-    }
-
-    /**
-     * Goes to the edit availability page
-     * @param avail the availability to be edited
-     * @return the webpage of edit availability
-     * @throws ParseException
-     */
-    public String goToEditAvailabilityPage(Availability avail) throws ParseException {
-        String result;
-        availability = avail;
-        result = "editAvailability";
-        return result;
     }
 }

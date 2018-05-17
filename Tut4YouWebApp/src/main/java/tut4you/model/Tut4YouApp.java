@@ -688,14 +688,10 @@ public class Tut4YouApp {
     @RolesAllowed("tut4youapp.tutor")
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void deleteAvailability(Availability availability) {
-        UserBean userBean = new UserBean();
-        String currentUserEmail = userBean.getEmailFromSession();
         Availability toBeDeleted = em.find(Availability.class, availability.getId());
         if (toBeDeleted == null) {
             toBeDeleted = availability;
         }
-        Tutor tutor = findTutor(currentUserEmail);
-        em.merge(tutor);
         em.remove(toBeDeleted);
     }
 

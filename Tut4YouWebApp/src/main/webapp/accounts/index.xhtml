@@ -106,7 +106,7 @@
                                             <br/>
                                             <h:outputText value="#{req.description}"/>
                                             <b:commandButton style="float:right;margin:0 2px;" value="Accept" look="success" action="#{requestBean.setTutorToRequest(req)}"/>
-                                            <b:commandButton style="float:right;margin:0 2px;" value="Delete" look="danger" action="#{requestBean.declineRequest(req)}"/>
+                                            <b:commandButton style="float:right;margin:0 2px;" value="Decline" look="danger" action="#{requestBean.declineRequest(req)}"/>
                                         </div>
                                     </ui:repeat>
                                 </div>
@@ -147,13 +147,13 @@
                                 </b:dataTable>
                             </b:tab>
                             <c:choose>
-                                <c:when test="">
-                                    <b:tab title="Courses" disabled="#{userBean.submittedTranscript}" tooltip="Please upload your transcript so that you can add courses to tutor"></b:tab>
+                                <c:when test="#{userBean.submittedTranscript}">
+                                    <b:tab title="Courses" disabled="true" tooltip="Please upload your transcript so that you can add courses to tutor"></b:tab>
                                 </c:when>
                                 <c:otherwise>
                                     <b:tab title="Courses">
                                         <br/>
-                                        <b:button style="font-weight:bold;font-size:20px;" look="primary" value="Add Courses" outcome="/tutors/addCourse.xhtml"/>
+                                        <b:button style="font-weight:bold;font-size:20px;" look="primary" value="Add Course" outcome="/tutors/addCourse.xhtml"/>
                                         <b:dataTable value="#{courseBean.tutorCourses}" var="course">
                                             <b:dataTableColumn>
                                                 <f:facet name="header">Courses You Have Taken</f:facet>

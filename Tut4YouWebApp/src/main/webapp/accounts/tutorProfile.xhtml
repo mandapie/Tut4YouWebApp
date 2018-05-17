@@ -27,7 +27,6 @@
         <f:metadata>
             <f:viewParam name="username" value="#{profileBean.username}"/>
             <f:event listener="#{profileBean.showUsername(profileBean.username)}" type="preRenderView"/>
-            <f:event listener="#{createRequestBean.endConversation()}" type="preRenderView"/>
         </f:metadata>
     </ui:define>
     <ui:define name="title">Tutor's Profile Page</ui:define>

@@ -10,23 +10,20 @@
          @author Syed Haider <shayder426@gmail.com> -->
     <ui:define name="title">Availability</ui:define>
     <ui:define name="content">
-        <h:panelGrid columns="1" style="text-align:center; margin-left: 40%">
-            <h1 style="font-weight:bold">My Availability</h1>
-            <p:separator />                       
-        </h:panelGrid>
+        <h1>Add Availability</h1>
         <b:panel title="Enter Your Availability" collapsible="false" look="info">
             <b:form id="availabilityID">
                 <b:column span="4">
                     <b:row>
+                        <p:dialog header="Submitted!" widgetVar="dlg1" id="modalID" minHeight="40" visible="#{availabilityBean.addNewAvailability}" closable="false" modal="true" >
+                            <h:outputText value="Do you want to add another availability?" />
+                            <p:button value="Yes" outcome="/tutors/availability.xhtml"/>
+                            <p:button value="No" outcome="/accounts/index.xhtml"/>
+                        </p:dialog>
                         <!-- Drop-down menu display Monday-Sunday -->
                         <h:outputLabel value="Select a day:"/>
                         <b:message for="dayOfWeek"/>
-                        <b:selectOneMenu                           
-                            id="dayOfWeek"
-                            value="#{availabilityBean.availability.dayOfWeek}"
-                            required="true"
-                            binding="#{day}"
-                            requiredMessage="required">
+                        <b:selectOneMenu id="dayOfWeek" value="#{availabilityBean.availability.dayOfWeek}" required="true" binding="#{day}" requiredMessage="required">
                             <f:selectItem itemLabel="Select One..." itemValue="" noSelectionOption="true"/>
                             <f:selectItem itemValue="Monday"/>
                             <f:selectItem itemValue="Tuesday"/>
@@ -38,39 +35,22 @@
                         </b:selectOneMenu>
                         <!-- Start Time -->
                         <h:outputLabel value="Start Time:"/>
-                        <b:inputText type="time" id="startTime"
-                                     value="#{availabilityBean.startTime}"
-                                     binding="#{availTime}"
-                                     required="true"
-                                     requiredMessage="required">
+                        <b:inputText type="time" id="startTime" value="#{availabilityBean.startTime}" binding="#{startTime}" required="true" requiredMessage="required">
                             <f:convertDateTime type="time" pattern="HH:mm" dateStyle="full"/>
                             <b:message for="startTime"/>
                         </b:inputText>
-
                         <!-- End Time -->
                         <h:outputLabel value="End Time:" />
-                        <b:inputText type="time" id="endTime"
-                                     value="#{availabilityBean.endTime}"
-                                     required="true"
-                                     requiredMessage="required">
+                        <b:inputText type="time" id="endTime" value="#{availabilityBean.endTime}" binding="#{endTime}" required="true" requiredMessage="required" validator="#{timeValidator.validateTime}">
                             <f:convertDateTime type="time" pattern="HH:mm" dateStyle="full"/>
                             <b:message for="endTime"/>
-                            <f:validator validatorId="timeValidator" />
-                            <f:attribute name="AvailabilityList" value="#{availabilityBean.availabilityList}"/>
-                            <f:attribute name="otherValue" value="#{availTime.value}" />
+                            <f:attribute name="availabilityList" value="#{availabilityBean.availabilityList}"/>
+                            <f:attribute name="startTime" value="#{startTime.value}" />
                             <f:attribute name="day" value="#{day.value}"/>
-                        </b:inputText>         
-                        <!-- Adds to availability in -->
-                        <p:dialog header="Submitted!" widgetVar="dlg1" id="modalID" minHeight="40" visible="#{availabilityBean.addNewAvailability}" closable="false" modal="true" >
-                            <h:outputText value="Do you want to add another availability?" />
-                            <p:button value="Yes" outcome="/tutors/availability.xhtml" />
-                            <p:button value="No"  outcome="/accounts/index.xhtml"/>
-                        </p:dialog>
-                        <b:commandButton value="Add Availability" style="width:100%" action="#{availabilityBean.addAvailability}" oncomplete="if (#{availabilityBean.addNewAvailability}){PF('dlg1').show()}" update="availabilityID">
-                        </b:commandButton>
+                        </b:inputText>      
+                        <b:commandButton value="Add Availability" style="width:100%" action="#{availabilityBean.addAvailability}" oncomplete="if (#{availabilityBean.addNewAvailability}){PF('dlg1').show()}"/>                    </b:row>
                     </b:row>
                 </b:column>
-
                 <b:column span="8">
                     <h:outputLabel value="Your current availabilities"/>
                     <b:dataTable value="#{availabilityBean.availabilityList}" var="avail" id="availabilityTable">
@@ -79,20 +59,17 @@
                             <h:outputText value="#{avail.dayOfWeek}"/>
                         </b:dataTableColumn>
                         <b:dataTableColumn>
-                            <f:facet name="header">Start Time</f:facet>
+                            <f:facet name="header">Time</f:facet>
                             <h:outputText value="#{avail.startTime}">                        
-                                <f:convertDateTime pattern="hh:mm a"></f:convertDateTime>
+                                <f:convertDateTime pattern="hh:mm a"/>
                             </h:outputText>
-                        </b:dataTableColumn>
-                        <b:dataTableColumn>
-                            <f:facet name="header">End Time</f:facet>
+                            <h:outputText value=" - "/>
                             <h:outputText value="#{avail.endTime}">                        
-                                <f:convertDateTime pattern="hh:mm a"></f:convertDateTime>
+                                <f:convertDateTime pattern="hh:mm a"/>
                             </h:outputText>
                         </b:dataTableColumn>
-                    </b:dataTable>  
+                    </b:dataTable>
                 </b:column>
-
             </b:form>
         </b:panel>
         <ui:debug hotkey='x'/>

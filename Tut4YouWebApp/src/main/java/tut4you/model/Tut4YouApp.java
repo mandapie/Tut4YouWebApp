@@ -1813,8 +1813,8 @@ public class Tut4YouApp {
             rec.setAmount(amount);
             rec.setEmail(email);
             receiver.add(rec);
-            String returnUrl = "http://localhost:8080/Tut4YouWebApp/accounts/myPayments.xhtml";
-            String cancelUrl = "http://localhost:8080/Tut4YouWebApp/accounts/index.xhtml";
+            String returnUrl = "http://18.221.187.5:8080/Tut4YouWebApp/accounts/myPayments.xhtml";
+            String cancelUrl = "http://18.221.187.5:8080/Tut4YouWebApp/accounts/index.xhtml";
             String currencyCode = "USD";
             ReceiverList receiverlst = new ReceiverList(receiver);
             payRequest.setReceiverList(receiverlst);

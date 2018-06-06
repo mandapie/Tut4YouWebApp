@@ -1791,6 +1791,7 @@ public class Tut4YouApp {
     /**
      * When a student clicks "Pay Now", it generates a paykey from the Pay
      * response.
+     * source: https://github.com/paypal/adaptivepayments-sdk-java
      *
      * @param email - receiver of the payment
      * @param hourlyRate - hourly rate the tutor charges
@@ -1806,9 +1807,6 @@ public class Tut4YouApp {
             env.setErrorLanguage("en_US");
             List<Receiver> receiver = new ArrayList<>();
             Receiver rec = new Receiver();
-            /**
-             * FIXME: This needs to take in hourly rate * elapsed time
-             */
             double amount = Math.round(hourlyRate * elapsedTimeOfSession * 100.0) / 100.0;
             rec.setAmount(amount);
             rec.setEmail(email);
@@ -1902,7 +1900,7 @@ public class Tut4YouApp {
 
     /**
      * Gets a list of payments based on a user's email
-     *
+     * 
      * @return paymentList - a list of payments
      */
     @PermitAll
@@ -1958,11 +1956,12 @@ public class Tut4YouApp {
     }
 
     /**
-     * This will get the details of the payment using the paykey
-     *
+     * This will get the details of the payment using the paykey.
+     * PostMan has a feature where it can create a wrapper of a curl command (the curl command is from the resource (below)).
+     * source: https://developer.paypal.com/docs/classic/api/adaptive-payments/PaymentDetails_API_Operation
      * @param payKey payKey used to get details of the payment
      *
-     * @return map - mpa that contains name-value pairs of the payment details
+     * @return map - map that contains name-value pairs of the payment details
      */
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)

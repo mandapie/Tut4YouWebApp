@@ -1,18 +1,26 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Licensed under the Academic Free License (AFL 3.0).
+ *     http://opensource.org/licenses/AFL-3.0
+ * 
+ *  This code has been developed by a group of CSULB students working on their 
+ *  Computer Science senior project called Tutors4You.
+ *  
+ *  Tutors4You is a web application that students can utilize to find a tutor and
+ *  ask them to meet at any location of their choosing. Students that struggle to understand 
+ *  the courses they are taking would benefit from this peer to peer tutoring service.
+ 
+ *  2017 Amanda Pan <daikiraidemodaisuki@gmail.com>
+ *  2017 Andrew Kaichi <ahkaichi@gmail.com>
+ *  2017 Keith Tran <keithtran25@gmail.com>
+ *  2017 Syed Haider <shayder426@gmail.com>
  */
 package json;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.IllegalFormatException;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -34,17 +42,16 @@ import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
-import json.CourseList;
-import json.TutorList;
 import tut4you.model.Availability;
 import tut4you.model.Course;
 import tut4you.model.Subject;
 import tut4you.model.Tutor;
 
 /**
- *
- * @author Syed Haider
+ * Tut4YouApi is the API that we implemented which will display subjects and courses based on specific criteria
+ * @author Syed Haider <shayder426@gmail.com>
  */
+
 @Path("/api")
 @Stateless
 public class Tutors4YouAPI {
@@ -52,6 +59,13 @@ public class Tutors4YouAPI {
     @PersistenceContext(unitName = "tut4youWebAppPU")
     private EntityManager em;
 
+    /**
+     * This return a list of the subjects and
+     * the courses associated with the specific subject.
+     * 
+     * 
+     * @return a list of subjects and courses
+     */
     @GET
     @Path("/subjects")
     @Produces({MediaType.APPLICATION_JSON})
@@ -91,6 +105,13 @@ public class Tutors4YouAPI {
         return jsonInString;
     }
 
+    /**
+     * This will return a list of courses
+     * with a subject as a parameter.
+     *
+     * @param subject
+     * @return a list of courses
+     */
     @GET
     @Path("/course")
     @Produces({MediaType.APPLICATION_JSON})
@@ -109,6 +130,13 @@ public class Tutors4YouAPI {
         return createJsonInString(courses);
     }
 
+    /**
+     * Returns the courses a tutor
+     * teaches based off their username
+     * 
+     * @param username
+     * @return a list of courses
+     */
     @GET
     @Path("/tutor")
     @Produces({MediaType.APPLICATION_JSON})
@@ -128,6 +156,14 @@ public class Tutors4YouAPI {
 
     }
 
+    /**
+     * This will utilize the CourseList POJO (Plain Old Java Object)
+     * and format the data to be returned as a JSON string
+     * @source:https://www.mkyong.com/java/jackson-2-convert-java-object-to-from-json/
+     * 
+     * @param courses
+     * @return json string of courses
+     */
     public String createJsonInString(List<Course> courses) {
         List<CourseList> cc = new ArrayList<>();
         for (int x = 0; x < courses.size(); x++) {
@@ -148,6 +184,16 @@ public class Tutors4YouAPI {
         return jsonInString;
     }
 
+    /**
+     * Returns a list of tutors based
+     * off a specific course, day of week,
+     * and zipcode
+     *
+     * @param course
+     * @param dayOfWeek
+     * @param zipCode
+     * @return a list of tutors
+     */
     @GET
     @Path("/request")
     @Produces({MediaType.APPLICATION_JSON})
@@ -233,7 +279,12 @@ public class Tutors4YouAPI {
         return jsonInString;
     }
 
-    
+    /**
+     * Formats time into a hh:mm:ss
+     *
+     * @return the current time of a request
+     * @throws ParseException
+     */
     public Date getCurrentTime() throws ParseException {
         String stringCurrentTime = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
         SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
